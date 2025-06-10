@@ -1,0 +1,20 @@
+package com.example.lms.dto;
+
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
+public class TeacherDTO {
+	private int teacherNo;		// teacher_no
+	private int courseId;		// course_id	
+	private String teacherId;	// teacher_id
+	private String password;	// password
+	private String name;		// name
+	private String sn;			// sn 주민번호
+	private String address;		// adress
+	private String email;		// email
+	private String phone;		// phone
+	private Date regDate;		// reg_date
+	private String temp_code;	// temp_code
+}
