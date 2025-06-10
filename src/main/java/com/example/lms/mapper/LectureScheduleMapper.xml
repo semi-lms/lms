@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.lms.mapper.LectureScheduleMapper">
+
+  <select id="selectLectureScheduleList" parameterType="map" resultType="com.example.lms.dto.LectureScheduleDTO">
+    SELECT date_no, course_id, start_date AS startDate, end_date AS endDate, memo
+    FROM calendar
+    WHERE course_id = #{courseId}
+      AND (
+        (start_date BETWEEN #{startDate} AND #{endDate})
+        OR (end_date BETWEEN #{startDate} AND #{endDate})
+        OR (start_date &lt;= #{startDate} AND end_date &gt;= #{endDate})
+      )
+    ORDER BY startDate, endDate
+  </select>
+
+  <select id="selectLectureScheduleById" parameterType="int" resultType="com.example.lms.dto.LectureScheduleDTO"> 
+    SELECT date_no, course_id, start_date, end_date, memo
+    FROM calendar
+    WHERE date_no = #{dateNo}
+  </select>
+
+  <insert id="insertLectureSchedule" parameterType="com.example.lms.dto.LectureScheduleDTO" useGeneratedKeys="true" keyProperty="dateNo">
+    INSERT INTO calendar (course_id, start_date, end_date, memo)
+    VALUES (#{courseId}, #{startDate}, #{endDate}, #{memo})
+  </insert>
+
+  <update id="updateLectureSchedule" parameterType="com.example.lms.dto.LectureScheduleDTO">
+    UPDATE calendar
+    SET start_date = #{startDate},
+        end_date = #{endDate},
+        memo = #{memo}
+    WHERE date_no = #{dateNo}
+  </update>
+
+  <delete id="deleteLectureSchedule" parameterType="int">
+    DELETE FROM calendar
+    WHERE date_no = #{dateNo}
+  </delete>
+
+</mapper>
