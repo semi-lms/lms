@@ -12,5 +12,7 @@
 </head>
 <body>
 	<h1>LMS </h1>
+	<h1>로그인 만들어주세요 ㅠ</h1>
+	<a href="/lectureSchedule?courseId=1&year=2025&month=6">강의일정</a>
 </body>
 </html>
