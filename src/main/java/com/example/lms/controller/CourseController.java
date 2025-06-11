@@ -52,6 +52,8 @@ public class CourseController {
 		List<CourseDTO> list = course.selectCourseList(param);
 	    model.addAttribute("courseList", list);
 	    model.addAttribute("page", page);
+	    model.addAttribute("searchCourse", searchCourse);
+	    model.addAttribute("searchCourseOption", searchCourseOption);
 	    model.addAttribute("startPage", startPage);
 	    model.addAttribute("endPage", endPage);
 	    log.info("searchCourseOption : "+searchCourseOption);
