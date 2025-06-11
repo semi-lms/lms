@@ -50,17 +50,30 @@
 	
 <!-- 중앙 : 이미지, 로그인 버튼 -->
 <div class="section">
-	<img src="/img/logo.png" alt="학원이미지" width="600" height="340">
-	<br><br>
-	<div style="text-align: right; width: 600px; margin: 0 auto;">
-		<a href="/login"><button>통합 로그인</button></a>
-		<a href="/logout"><button>로그아웃</button></a>
-		<h1>꼬북꼬북</h1>
+	<img src="<c:url value='/img/.png'/>" alt="로고이미지" width="600" height="340" >
+	 <div style="float: right; margin: 20px; border: 2px solid #ddd; padding: 20px; width: 250px;
+            border-radius: 10px; background-color: #f9f9f9; box-shadow: 2px 2px 8px rgba(0,0,0,0.1);">
+		<c:if test="${loginUser == null}">
+		    <a href="/login">🔐 통합 로그인</a>
+		</c:if>
+		
+		<c:if test="${loginUser != null}">
+		   
+		        <h1>꼬북꼬북</h1>
+		        <p><strong>${loginUser.name}</strong> 님 반갑습니다!</p>
+		
+		        <div style="margin-top: 10px;">
+		            <a href="/mypage" style="display: inline-block; margin-bottom: 5px;">📂 마이페이지</a><br>
+		            <a href="/logout" style="display: inline-block;">🚪 로그아웃</a>
+		        </div>
+		    </div>
+		</c:if>
+		
 	</div>
-</div>
 
 <!-- 하단 풋터 공통 포함 -->
+<div style="clear: both;">
 <jsp:include page="/WEB-INF/views/footer.jsp" />
-
+</div>
 </body>
 </html>

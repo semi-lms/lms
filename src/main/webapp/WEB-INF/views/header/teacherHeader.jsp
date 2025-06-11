@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <div class="header">
-  <div><img src="/img/logo.png" width="50"> <strong>LMS</strong></div>
+   <div><img src="<c:url value='/img/logo.png'/>" width="50"> <strong>LMS</strong></div>
   <div class="nav">
     	<a href="/">강의목록</a>
     	<a href="/">관리목록</a>
