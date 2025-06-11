@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lms.mapper.CourseMapper">
+	<select id="selectCourseList"
+		resultType="com.example.lms.dto.CourseDTO">
+		SELECT
+			t.`name` AS teacherName,
+			c.course_name AS courseName,
+			CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
+			c.classroom,
+			CONCAT(COUNT(ca.course_id),' / ',c.max_person) AS maxPerson
+		FROM course c
+			INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+			LEFT JOIN course_apply ca ON c.course_id = ca.course_id
+		GROUP BY c.course_id
+	</select>
+</mapper>

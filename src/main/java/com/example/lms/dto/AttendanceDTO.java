@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class AttendanceDTO {
-	public String attendanceNo;
-	public String studentNo;
-	public String courseId;
+	public int attendanceNo;
+	public int studentNo;
+	public int courseId;
 	public String date;
 	public String status;
 }
