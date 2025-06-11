@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ClassDTO {
-	public int classNo;
-	public String classroom;
-	public int maxPerson;
+	private int classNo;
+	private String classroom;
+	private int maxPerson;
 }

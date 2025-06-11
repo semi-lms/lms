@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CourseApplyDTO {
-	public int studentNo;
-	public int courseId;
-	public String applyDate;
+	private int studentNo;
+	private int courseId;
+	private String applyDate;
 }

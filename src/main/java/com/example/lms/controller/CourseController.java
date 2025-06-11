@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
@@ -41,15 +42,29 @@ public class CourseController {
 	@GetMapping("/admin/insertCourse")
 	public String insertCourse(Model model) {
 		List<TeacherDTO> teacherList = course.selectTeacherList();
+		for (TeacherDTO t : teacherList) {
+		    System.out.println("teacherNo: " + t.getTeacherNo() + ", name: " + t.getName());
+		}
 		List<ClassDTO> classList = course.selectClassList();
-		model.addAttribute("teacher", teacherList);
-		model.addAttribute("class", classList);
+		model.addAttribute("teacherList", teacherList);
+		model.addAttribute("classList", classList);
+		System.out.println("class테스트"+classList);
 		return "/admin/insertCourse";
 	}
+	
+	@GetMapping("/admin/getMaxPerson")
+	@ResponseBody
+	public int getMaxPerson(@RequestParam("classNo") int classNo) {
+	    ClassDTO classDto = course.selectClassByNo(classNo);
+	    if (classDto == null) return 0;
+	    return classDto.getMaxPerson();
+	}
+	
 	
 	@PostMapping("/admin/insertCourse")
 	public String insertCourse(CourseDTO courseDto) {
 		course.insertCourse(courseDto);
+	    System.out.println("넘어온 teacherNo = " + courseDto.getTeacherNo());
 		return "redirect:/admin/courseList";
 	}
 }

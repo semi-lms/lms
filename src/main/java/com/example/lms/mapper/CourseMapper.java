@@ -18,4 +18,6 @@ public interface CourseMapper {
 	List<TeacherDTO> selectTeacherList();
 	
 	List<ClassDTO> selectClassList();
+
+	ClassDTO selectClassByNo(int classNo);
 }

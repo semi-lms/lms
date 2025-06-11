@@ -4,14 +4,14 @@ import lombok.Data;
 
 @Data
 public class CourseDTO {
-	public int courseId;
-	public String courseName;
-	public String description;
-	public int classNo;
-	public String startDate;
-	public String endDate;
-	public int teacherNo;
-	public String teacherName;
-	public String applyPerson;
-	public String classroom;
+	private int courseId;
+	private String courseName;
+	private String description;
+	private int classNo;
+	private String startDate;
+	private String endDate;
+	private int teacherNo;
+	private String teacherName;
+	private String applyPerson;
+	private String classroom;
 }

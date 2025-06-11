@@ -31,6 +31,10 @@ public class CourseServiceImpl {
 
 		return courseMapper.selectClassList();
 	}
+	public ClassDTO selectClassByNo(int classNo) {
+		
+		return courseMapper.selectClassByNo(classNo);
+	}
 
 
 }

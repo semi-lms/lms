@@ -1,50 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.CourseMapper">
-	<select id="selectCourseList" resultType="com.example.lms.dto.CourseDTO" parameterType="map">
+<resultMap id="classMap" type="com.example.lms.dto.ClassDTO">
+    <result property="classNo" column="class_no"/>
+    <result property="classroom" column="classroom"/>
+    <result property="maxPerson" column="max_person"/>
+</resultMap>
+
+	<select id="selectCourseList"
+		resultType="com.example.lms.dto.CourseDTO" parameterType="map">
 		SELECT
-			t.`name` AS teacherName,
-			c.course_name AS courseName,
-			cl.classroom as classroom,
-			CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
-			CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
+		t.`name` AS teacherName,
+		c.course_name AS courseName,
+		cl.classroom as classroom,
+		CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
+		CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
 		FROM course c
-			INNER JOIN class cl ON c.class_no = cl.class_no
-			INNER JOIN teacher t ON c.teacher_no = t.teacher_no
-			LEFT JOIN course_apply ca ON c.course_id = ca.course_id
+		INNER JOIN class cl ON c.class_no = cl.class_no
+		INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+		LEFT JOIN course_apply ca ON c.course_id = ca.course_id
 		<where>
 			<if test="searchCourseOption == 'all'">
 				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
-				OR c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+				OR
+				c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
 			</if>
-			<if test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
+			<if
+				test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
 				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
 			</if>
-			<if test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
+			<if
+				test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
 				AND c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
 			</if>
 		</where>
 		GROUP BY c.course_id
 	</select>
-	
+
 	<insert id="insertCourse">
 		INSERT INTO course
-		(course_name, description
-		, classroom	,start_date, end_date
-		, max_person, teacher_no)
+		(course_name, description,class_no
+		,start_date, end_date, teacher_no)
 		VALUES
-		(#{courseName}, #{description}
-		, #{classroom}, #{startDate}, #{endDate}
-		, #{maxPerson}, 2)		
+		(#{courseName}, #{description}, #{classNo}
+		, #{startDate}, #{endDate}, #{teacherNo})
 	</insert>
-	
+
 	<select id="selectTeacherList" parameterType="map">
-		select name
+		select teacher_no AS teacherNo,
+		name
 		from teacher
 	</select>
-	
-	<select id="selectClassList" parameterType="map">
-		select classroom, max_person
+
+	<select id="selectClassList" parameterType="map" resultMap="classMap">
+		select class_no,
+		classroom, max_person
 		from class
 	</select>
+
+	<select id="selectClassByNo" parameterType="int" resultMap="classMap">
+		SELECT class_no, classroom, max_person
+		FROM class
+		WHERE class_no = #{classNo}
+	</select>
+
 </mapper>
