@@ -1,0 +1,15 @@
+package com.example.lms.dto;
+
+import lombok.Data;
+
+@Data
+public class CourseDTO {
+	public String courseId;
+	public String courseName;
+	public String description;
+	public String classroom;
+	public String startDate;
+	public String endDate;
+	public String maxPerson;
+	public String teacherNo;
+}
