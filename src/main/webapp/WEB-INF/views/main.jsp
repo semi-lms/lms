@@ -17,17 +17,19 @@
         .content { display: flex; justify-content: space-around; padding: 20px; }
         .box { width: 30%; }
 
-        /* 마리오 커서 스타일 */
+        /* 꼬부기 커서 스타일 */
         * {
-            cursor: url(https://cur.cursors-4u.net/games/gam-1/gam62.cur), auto !important;
+            cursor: url(https://cur.cursors-4u.net/games/gam-13/gam1244.ani), 
+                    url(https://cur.cursors-4u.net/games/gam-13/gam1244.png), 
+                    auto !important;
         }
     </style>
 </head>
 <body>
 
-<!-- 마리오 커서 출처 및 아이콘 -->
-<a href="https://www.cursors-4u.com/cursor/2006/03/26/gam62.html" target="_blank" title="Mario">
-    <img src="https://cur.cursors-4u.net/cursor.png" border="0" alt="Mario" style="position:absolute; top: 0px; right: 0px;" />
+<!-- 커서 출처 이미지 링크 -->
+<a href="https://www.cursors-4u.com/cursor/2011/03/13/squirtle-loading.html" target="_blank" title="Squirtle - Loading">
+    <img src="https://cur.cursors-4u.net/cursor.png" border="0" alt="Squirtle - Loading" style="position:absolute; top: 0px; right: 0px;" />
 </a>
 
 <!-- 헤더 : 로고와 사이트명 -->
@@ -53,6 +55,7 @@
 	<div style="text-align: right; width: 600px; margin: 0 auto;">
 		<a href="/login"><button>통합 로그인</button></a>
 		<a href="/logout"><button>로그아웃</button></a>
+		<h1>꼬북꼬북</h1>
 	</div>
 </div>
 
