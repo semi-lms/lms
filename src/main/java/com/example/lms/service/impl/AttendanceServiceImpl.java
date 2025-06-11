@@ -17,4 +17,9 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<AttendanceDTO> getTodayAttendance() {
         return attendanceMapper.getTodayAttendance();
     }
+	@Override
+	public List<AttendanceDTO> getAttendanceListByStudentId(int studentId) {
+		return attendanceMapper.selectAttendanceListByStudentId(studentId);
+	}
+	
 }

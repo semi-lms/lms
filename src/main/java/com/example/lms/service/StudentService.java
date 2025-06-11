@@ -6,4 +6,5 @@ import com.example.lms.dto.StudentDTO;
 
 public interface StudentService {
 	List<StudentDTO> getStudentListByCourseId(int courseId);
+	
 }

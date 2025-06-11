@@ -9,4 +9,6 @@ import com.example.lms.dto.AttendanceDTO;
 @Mapper
 public interface AttendanceMapper {
 	List<AttendanceDTO> getTodayAttendance();
+
+	List<AttendanceDTO> selectAttendanceListByStudentId(int studentId);
 }

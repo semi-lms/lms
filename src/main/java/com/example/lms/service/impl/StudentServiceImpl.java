@@ -19,4 +19,9 @@ public class StudentServiceImpl implements StudentService {
 	public List<StudentDTO> getStudentListByCourseId(int courseId) {
 		return studentMapper.selectStudentListByCourseId(courseId);
 	}
+
+	
+
+	
+	
 }

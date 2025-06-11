@@ -13,4 +13,10 @@
 		GROUP BY a.course_id, courseName
 		ORDER BY a.course_id; 
 	</select>
+		<!-- 학생(본인) 출석 현황 -->
+	<select id="selectAttendanceListByStudentId" parameterType="map" resultType="com.example.lms.dto.AttendanceDTO">
+	SELECT attendance_no AS attendanceNo , student_no AS studentNo , course_id AS courseId , DATE , STATUS
+	FROM attendance
+	WHERE student_no = #{studentNo}
+	</select>
 </mapper>

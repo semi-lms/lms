@@ -9,4 +9,6 @@ import com.example.lms.dto.StudentDTO;
 @Mapper
 public interface StudentMapper {
 	List<StudentDTO> selectStudentListByCourseId(int courseId);
+	
+	List<StudentDTO> selectAttendanceListByStudentId(int studentNo);
 }

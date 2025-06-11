@@ -120,39 +120,43 @@
             background-color: #eee;
         }
     </style>
-    <script>
-        const courseId = '${courseId}';
+  <script>
+    const courseId = '${courseId}';
+    const isTeacher = '${sessionScope.loginUser.role}' === 'teacher';
 
-        function prevMonth() {
-            let y = ${year}, m = ${month} - 1;
-            if (m < 1) { y--; m = 12; }
-            location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
-        }
+    function prevMonth() {
+        let y = ${year}, m = ${month} - 1;
+        if (m < 1) { y--; m = 12; }
+        location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
+    }
 
-        function nextMonth() {
-            let y = ${year}, m = ${month} + 1;
-            if (m > 12) { y++; m = 1; }
-            location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
-        }
+    function nextMonth() {
+        let y = ${year}, m = ${month} + 1;
+        if (m > 12) { y++; m = 1; }
+        location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
+    }
 
-        function goToForm(dateNo) {
-            location.href = '/lectureSchedule/lectureScheduleForm?courseId=' + courseId + '&dateNo=' + dateNo;
-        }
+    function goToForm(dateNo) {
+        if (!isTeacher) return;  // teacher가 아니면 아무 동작도 하지 않음
+        location.href = '/lectureSchedule/lectureScheduleForm?courseId=' + courseId + '&dateNo=' + dateNo;
+    }
 
-        function deleteMemo(event, dateNo) {
-            event.stopPropagation();
-            if (!confirm('정말 삭제할시겠습니까?')) return;
-            fetch('/lectureSchedule/delete?dateNo=' + dateNo + '&courseId=' + courseId, { method: 'POST' })
-                .then(res => {
-                    if (res.ok) {
-                        alert('삭제 되었습니다');
-                        location.reload();
-                    } else {
-                        alert('삭제 실패하였습니다');
-                    }
-                });
-        }
-    </script>
+    function deleteMemo(event, dateNo) {
+        event.stopPropagation();
+        if (!isTeacher) return;
+        if (!confirm('정말 삭제할시겠습니까?')) return;
+        fetch('/lectureSchedule/delete?dateNo=' + dateNo + '&courseId=' + courseId, { method: 'POST' })
+            .then(res => {
+                if (res.ok) {
+                    alert('삭제 되었습니다');
+                    location.reload();
+                } else {
+                    alert('삭제 실패하였습니다');
+                }
+            });
+    }
+</script>
+
 </head>
 <body>
     <div class="calendar-container">
@@ -181,12 +185,18 @@
                             <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
                                 <div>${day.day}</div>
 
-                                <c:forEach var="memoDto" items="${dateToMemoList[day.dateStr]}">
-                                    <div class="memo" onclick="goToForm(${memoDto.dateNo})" style="cursor: pointer;">
-                                        ${memoDto.memo}
-                                        <button class="delete-btn" onclick="deleteMemo(event, ${memoDto.dateNo})">삭제</button>
-                                    </div>
-                                </c:forEach>
+                               <c:forEach var="memoDto" items="${dateToMemoList[day.dateStr]}">
+    <div class="memo"
+         <c:if test="${loginUser.role == 'teacher'}">
+             onclick="goToForm(${memoDto.dateNo})" style="cursor: pointer;"
+         </c:if>>
+        ${memoDto.memo}
+
+        <c:if test="${loginUser.role == 'teacher'}">
+            <button class="delete-btn" onclick="deleteMemo(event, ${memoDto.dateNo})">삭제</button>
+        </c:if>
+    </div>
+</c:forEach>
 
                             </td>
                         </c:forEach>
@@ -194,10 +204,13 @@
                 </c:forEach>
             </tbody>
         </table>
-
-     <%--    <c:if test="${not empty teacherId}"> --%>
-            <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">일정 등록</button>
-     <%--    </c:if> --%>
+	
+					
+      
+         <c:if test="${loginUser.role == 'teacher'}">
+    <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">일정 등록</button>
+</c:if>
+   
     </div>
 </body>
 </html>

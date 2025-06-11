@@ -32,19 +32,10 @@ public class LectureScheduleController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
     }
 
-    /**
-     * 강의 일정 달력 페이지 표시
-     * @param courseId 강좌 ID
-     * @param year 년도 (선택)
-     * @param month 월 (선택)
-     * @param session 로그인 세션
-     * @param model 뷰에 전달할 데이터
-     * @return 달력 페이지 뷰 이름
-     */
     @GetMapping
-    public String showLectureSchedulePage(@RequestParam("courseId") int courseId,
-                                          @RequestParam(value = "year", required = false) Integer year,
-                                          @RequestParam(value = "month", required = false) Integer month,
+    public String showLectureSchedulePage(@RequestParam int courseId,
+                                          @RequestParam(required = false) Integer year,
+                                          @RequestParam(required = false) Integer month,
                                           HttpSession session,
                                           Model model) {
 
@@ -150,13 +141,6 @@ public class LectureScheduleController {
     }
 
 
-    /**
-     * 일정 등록/수정 폼 페이지로 이동
-     * @param courseId 강좌 ID
-     * @param dateNo 수정할 일정 번호 (등록 시 null)
-     * @param model 뷰에 전달할 데이터
-     * @return 폼 페이지 뷰 이름
-     */
     @GetMapping("/lectureScheduleForm")
     public String showScheduleForm(@RequestParam int courseId,
                                    @RequestParam(required = false) Integer dateNo,
@@ -180,11 +164,7 @@ public class LectureScheduleController {
         return "lectureSchedule/lectureScheduleForm";
     }
 
-    /**
-     * 일정 저장 (등록 또는 수정)
-     * @param scheduleDto 저장할 일정 DTO
-     * @return 달력 페이지로 리다이렉트
-     */
+   
     @PostMapping("/save")
     public String saveSchedule(@ModelAttribute LectureScheduleDTO scheduleDto) {
         if (scheduleDto.getDateNo() != null) {
@@ -196,12 +176,7 @@ public class LectureScheduleController {
         return "redirect:/lectureSchedule?courseId=" + scheduleDto.getCourseId();
     }
 
-    /**
-     * 일정 삭제 처리
-     * @param dateNo 삭제할 일정 번호
-     * @param courseId 강좌 ID (리다이렉트용)
-     * @return 달력 페이지로 리다이렉트
-     */
+   
     @PostMapping("/delete")
     public String deleteSchedule(@RequestParam int dateNo, @RequestParam int courseId) {
         lectureScheduleService.removeLectureSchedule(dateNo);
