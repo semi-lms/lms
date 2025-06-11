@@ -23,7 +23,15 @@
 			</tr>
 			<tr>
 				<th>강의명</th>
-				<td><input type="text" name="courseName" id="courseName"></td>
+				<td>
+					<input type="text" name="courseName" id="courseName">
+				</td>
+			</tr>
+			<tr>
+				<th>강의 설명</th>
+				<td>
+					<input type="text" name="description" id="description">
+				</td>
 			</tr>
 			<tr>
 				<th>시작일</th>
@@ -36,11 +44,14 @@
 			<tr>
 				<th>강의실</th>
 				<td>
-					<select>
-						<option>강의실 선택</option>
-						<option>빈 강의실로 알아서 잘 골라봐요</option>
-						<option id="classroom">C반</option>
-					</select>
+			        <select name="classroom" required>
+			            <option value="">강의실 선택</option>
+			            <option value="C반">A반</option>
+			            <option value="C반">B반</option>
+			            <option value="C반">C반</option>
+			            <option value="D반">D반</option>
+			            <option value="D반">E반</option>
+			        </select>
 				</td>
 			</tr>
 			<tr>

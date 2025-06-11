@@ -1,8 +1,7 @@
 package com.example.lms.service.impl;
 
 import java.util.List;
-
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +13,13 @@ import com.example.lms.mapper.CourseMapper;
 public class CourseServiceImpl {
 
 	@Autowired CourseMapper courseMapper;
-	public List<CourseDTO> selectCourseList(CourseDTO courseDto) {
+	public List<CourseDTO> selectCourseList(Map<String, Object> param) {
 		
-		return courseMapper.selectCourseList(courseDto);
+		return courseMapper.selectCourseList(param);
+	}
+	public int insertCourse(CourseDTO courseDto) {
+		
+		return courseMapper.insertCourse(courseDto);
 	}
 
 

@@ -2,16 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.CourseMapper">
 	<select id="selectCourseList"
-		resultType="com.example.lms.dto.CourseDTO">
+		resultType="com.example.lms.dto.CourseDTO"
+		parameterType="map">
 		SELECT
 			t.`name` AS teacherName,
 			c.course_name AS courseName,
 			CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
 			c.classroom,
-			CONCAT(COUNT(ca.course_id),' / ',c.max_person) AS maxPerson
+			CONCAT(COUNT(ca.course_id),' / ',c.max_person) AS applyPerson
 		FROM course c
 			INNER JOIN teacher t ON c.teacher_no = t.teacher_no
 			LEFT JOIN course_apply ca ON c.course_id = ca.course_id
+		<where>
+			<if test="searchCourseOption == 'all'">
+				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+				OR c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+			<if test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
+				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+			<if test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
+				AND c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+		</where>
 		GROUP BY c.course_id
 	</select>
+	
+	<insert id="insertCourse">
+		INSERT INTO course
+		(course_name, description
+		, classroom	,start_date, end_date
+		, max_person, teacher_no)
+		VALUES
+		(#{courseName}, #{description}
+		, #{classroom}, #{startDate}, #{endDate}
+		, #{maxPerson}, 2)		
+	</insert>
 </mapper>

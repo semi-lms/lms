@@ -13,4 +13,5 @@ public class CourseDTO {
 	public int maxPerson;
 	public int teacherNo;
 	public String teacherName;
+	public String applyPerson;
 }

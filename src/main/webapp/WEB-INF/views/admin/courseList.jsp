@@ -9,7 +9,7 @@
 </head>
 <body>
 	<h1>강의 목록</h1>
-	<form method="post">
+	<form method="get">
 	<table border="1">
 		<tr>
 			<th>담당 강사</th>
@@ -28,16 +28,16 @@
 						${course.classroom }
 					</a>	
 				</td>
-				<td>${course.maxPerson }</td>
+				<td>${course.applyPerson }</td>
 			</tr>
 		</c:forEach>
 	</table>
 		<button type="button" id="insertCourse">강의 등록</button>
 		<br>
-		<select id="searchCourseOption">
-			<option id="all">전체</option>
-			<option id="teacher">강사</option>
-			<option id="courseName">강의명</option>
+		<select name="searchCourseOption" id="searchCourseOption">
+			<option value="all">전체</option>
+			<option value="teacherName">강사</option>
+			<option value="courseName">강의명</option>
 		</select>
 		<input type="text" name="searchCourse" id="searchCourse" placeholder="검색">
 		<button type="submit" id="searchBtn">검색</button>
