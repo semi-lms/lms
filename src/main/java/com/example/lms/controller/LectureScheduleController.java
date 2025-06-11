@@ -45,25 +45,31 @@ public class LectureScheduleController {
     public String showLectureSchedulePage(@RequestParam("courseId") int courseId,
                                           @RequestParam(value = "year", required = false) Integer year,
                                           @RequestParam(value = "month", required = false) Integer month,
-                                        
                                           HttpSession session,
                                           Model model) {
 
-        // 현재 날짜 기준으로 연도/월 초기화
         Calendar cal = Calendar.getInstance();
         int displayYear = (year != null) ? year : cal.get(Calendar.YEAR);
         int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
 
-        // 해당 월의 1일로 설정 후, 해당 주의 일요일부터 시작하도록 조정
+   
+     // 1일 셋팅
         cal.set(displayYear, displayMonth - 1, 1);
         int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-        int startOffset = firstDayOfWeek - 1;  // 일요일: 0
+
+        // 일요일이면 offset 0, 아니면 (요일 - 2)로 계산 (월=0, ... 일=6)
+        int startOffset = (firstDayOfWeek == Calendar.SUNDAY) ? 0 : firstDayOfWeek - 2;
+        if (startOffset < 0) startOffset = 6;  // 일요일일 때 음수 방지
+
+        // 달력 시작 날짜 = 1일 - startOffset 일
         cal.add(Calendar.DATE, -startOffset);
 
-        // 5주치 날짜를 생성
         List<Map<String, Object>> weeks = new ArrayList<>();
-        for (int w = 0; w < 5; w++) {
+        
+        for (int w = 0; w < 6; w++) {
             List<Map<String, Object>> days = new ArrayList<>();
+            boolean hasCurrentMonthDate = false;
+
             for (int d = 0; d < 7; d++) {
                 Date date = cal.getTime();
                 Calendar tmpCal = Calendar.getInstance();
@@ -72,43 +78,45 @@ public class LectureScheduleController {
                 int y = tmpCal.get(Calendar.YEAR);
                 int m = tmpCal.get(Calendar.MONTH) + 1;
                 int day = tmpCal.get(Calendar.DAY_OF_MONTH);
-                int dayOfWeek = tmpCal.get(Calendar.DAY_OF_WEEK);
+
+                boolean isCurrentMonth = (m == displayMonth);
+                if (isCurrentMonth) hasCurrentMonthDate = true;
 
                 String dateStr = String.format("%04d-%02d-%02d", y, m, day);
-                boolean isCurrentMonth = (m == displayMonth);
 
                 Map<String, Object> dayMap = new HashMap<>();
                 dayMap.put("dateStr", dateStr);
                 dayMap.put("day", day);
-                dayMap.put("dayOfWeek", dayOfWeek);
                 dayMap.put("isCurrentMonth", isCurrentMonth);
-             
-            
-
+                dayMap.put("dayOfWeek", d + 1);
                 days.add(dayMap);
-             
-                cal.add(Calendar.DATE, 1);  // 다음 날짜로 이동
+
+                cal.add(Calendar.DATE, 1);
             }
-            Map<String, Object> weekMap = new HashMap<>();
-            weekMap.put("days", days);
-            weeks.add(weekMap);
+
+            if (hasCurrentMonthDate) {
+                weeks.add(Map.of("days", days));
+            }
+            // hasCurrentMonthDate == false 인 경우, weeks에 안 넣으므로 빈 줄 제거됨
         }
 
-        // 일정 조회 범위 설정 (해당 월의 시작~끝)
-        Date startDate = new GregorianCalendar(displayYear, displayMonth - 1, 1).getTime();
+
+        // 시작, 끝 날짜 계산 (현재 월 1일 ~ 말일)
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(displayYear, displayMonth - 1, 1);
+        Date startDate = startCal.getTime();
+
         Calendar endCal = Calendar.getInstance();
-        endCal.set(displayYear, displayMonth - 1, 1);
         int lastDay = endCal.getActualMaximum(Calendar.DAY_OF_MONTH);
         endCal.set(displayYear, displayMonth - 1, lastDay);
         Date endDate = endCal.getTime();
-        // DB에서 해당 강의의 일정 조회
+
         List<LectureScheduleDTO> schedules = lectureScheduleService.getLectureSchedules(Map.of(
                 "courseId", courseId,
                 "startDate", startDate,
                 "endDate", endDate
         ));
 
-        // 날짜별로 일정 리스트를 분류
         Map<String, List<LectureScheduleDTO>> dateToMemoList = new HashMap<>();
         Calendar dayCal = Calendar.getInstance();
 
@@ -116,7 +124,6 @@ public class LectureScheduleController {
             Date start = dto.getStartDate();
             Date end = dto.getEndDate();
 
-            // 일정이 시작일~종료일까지 있는 경우, 모든 날짜에 매핑
             if (start != null && end != null) {
                 dayCal.setTime(start);
                 while (!dayCal.getTime().after(end)) {
@@ -130,7 +137,6 @@ public class LectureScheduleController {
             }
         }
 
-        // 뷰에 데이터 전달
         model.addAttribute("weeks", weeks);
         model.addAttribute("dateToMemoList", dateToMemoList);
         model.addAttribute("year", displayYear);
@@ -142,6 +148,7 @@ public class LectureScheduleController {
 
         return "lectureSchedule/lectureCalendar";
     }
+
 
     /**
      * 일정 등록/수정 폼 페이지로 이동

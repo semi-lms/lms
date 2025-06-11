@@ -4,14 +4,14 @@
 <html>
 <head>
     <title>강의 일정</title>
-    <style>
+   <style>
         body {
             display: flex;
             justify-content: center;
             margin-top: 30px;
         }
         .calendar-container {
-        margin-left: 240px;
+            margin-left: 240px;
             width: 70%;
             text-align: center;
         }
@@ -20,7 +20,19 @@
             width: 100%;
             margin: 0 auto;
         }
-        .calendar th, .calendar td {
+ 
+        .calendar thead th {
+            border: 1px solid #ccc;
+            width: 13%;
+            height: 40px;  
+            font-size: 18px; 
+            color: black;
+            background-color: #f9f9f9;
+            vertical-align: middle;
+            padding: 5px;
+        }
+   
+        .calendar tbody td {
             border: 1px solid #ccc;
             width: 13%;
             height: 130px;
@@ -32,7 +44,10 @@
         }
         .sunday { color: red !important; }
         .saturday { color: blue !important; }
-        .other-month { color: #ccc; }
+        .other-month {
+            color: #ccc;
+            opacity: 0.5;
+        }
         .memo {
             font-size: 16px;
             color: black;
@@ -113,24 +128,27 @@
             if (m < 1) { y--; m = 12; }
             location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
         }
+
         function nextMonth() {
             let y = ${year}, m = ${month} + 1;
             if (m > 12) { y++; m = 1; }
             location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
         }
+
         function goToForm(dateNo) {
             location.href = '/lectureSchedule/lectureScheduleForm?courseId=' + courseId + '&dateNo=' + dateNo;
         }
+
         function deleteMemo(event, dateNo) {
             event.stopPropagation();
-            if (!confirm('정말 삭제할래?')) return;
+            if (!confirm('정말 삭제할시겠습니까?')) return;
             fetch('/lectureSchedule/delete?dateNo=' + dateNo + '&courseId=' + courseId, { method: 'POST' })
                 .then(res => {
                     if (res.ok) {
-                        alert('삭제 완료');
+                        alert('삭제 되었습니다');
                         location.reload();
                     } else {
-                        alert('삭제 실패');
+                        alert('삭제 실패하였습니다');
                     }
                 });
         }
@@ -157,29 +175,29 @@
                 </tr>
             </thead>
             <tbody>
-              <c:forEach var="week" items="${weeks}">
-    <tr>
-        <c:forEach var="day" items="${week.days}">
-            <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
-                <div>${day.day}</div>
+                <c:forEach var="week" items="${weeks}">
+                    <tr>
+                        <c:forEach var="day" items="${week.days}">
+                            <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
+                                <div>${day.day}</div>
 
-                <c:forEach var="memoDto" items="${dateToMemoList[day.dateStr]}">
-                    <div class="memo" onclick="goToForm(${memoDto.dateNo})" style="cursor: pointer;">
-                        ${memoDto.memo}
-                        <button class="delete-btn" onclick="deleteMemo(event, ${memoDto.dateNo})">삭제</button>
-                    </div>
+                                <c:forEach var="memoDto" items="${dateToMemoList[day.dateStr]}">
+                                    <div class="memo" onclick="goToForm(${memoDto.dateNo})" style="cursor: pointer;">
+                                        ${memoDto.memo}
+                                        <button class="delete-btn" onclick="deleteMemo(event, ${memoDto.dateNo})">삭제</button>
+                                    </div>
+                                </c:forEach>
+
+                            </td>
+                        </c:forEach>
+                    </tr>
                 </c:forEach>
-
-            </td>
-        </c:forEach>
-    </tr>
-</c:forEach>
             </tbody>
         </table>
 
-        <%-- <c:if test="${not empty teacherId}"> --%>
-        <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">등록</button>
-        <%-- </c:if> --%>
+     <%--    <c:if test="${not empty teacherId}"> --%>
+            <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">일정 등록</button>
+     <%--    </c:if> --%>
     </div>
 </body>
 </html>
