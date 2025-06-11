@@ -5,7 +5,7 @@
 <mapper namespace="com.example.lms.mapper.LectureScheduleMapper">
 
   <select id="selectLectureScheduleList" parameterType="map" resultType="com.example.lms.dto.LectureScheduleDTO">
-    SELECT date_no, course_id, start_date AS startDate, end_date AS endDate, memo
+    SELECT date_no AS dateNo, course_id, start_date AS startDate, end_date AS endDate, memo
     FROM calendar
     WHERE course_id = #{courseId}
       AND (
@@ -17,7 +17,7 @@
   </select>
 
   <select id="selectLectureScheduleById" parameterType="int" resultType="com.example.lms.dto.LectureScheduleDTO"> 
-    SELECT date_no, course_id, start_date, end_date, memo
+    SELECT date_no AS dateNo, course_id AS courseId, start_date, end_date, memo
     FROM calendar
     WHERE date_no = #{dateNo}
   </select>
