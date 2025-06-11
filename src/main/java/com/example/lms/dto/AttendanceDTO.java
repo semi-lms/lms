@@ -9,4 +9,7 @@ public class AttendanceDTO {
 	private int courseId;
 	private String date;
 	private String status;
+	private String courseName;  // 과정명
+    private int total;          // 총 인원
+    private int attended;       // 출석 인원
 }

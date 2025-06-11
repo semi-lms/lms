@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.NoticeDTO;
 import com.example.lms.dto.QnaDTO;
+import com.example.lms.service.AttendanceService;
 import com.example.lms.service.NoticeService;
 import com.example.lms.service.QnaService;
 
@@ -20,10 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping({ "/", "/main" })
 public class MainController {
 
-	@Autowired
-	private NoticeService noticeService;
-	@Autowired
-	private QnaService qnaService;
+	@Autowired private NoticeService noticeService;
+	@Autowired private QnaService qnaService;
+	@Autowired private AttendanceService attendanceService;
 	
 	@GetMapping
 	public String main(Model model) {
@@ -36,8 +37,11 @@ public class MainController {
         List<QnaDTO> qnaList = qnaService.selectLatestQna(5);
         model.addAttribute("qnaBoard", qnaList);
         
+        // 오늘의 출석 통계 (관리자)
+        List<AttendanceDTO> list = attendanceService.getTodayAttendance();
+        model.addAttribute("list", list);
+        
         return "main";
 	}
-	
-	
+		
 }
