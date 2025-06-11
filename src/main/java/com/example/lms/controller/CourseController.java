@@ -29,7 +29,7 @@ public class CourseController {
 	@GetMapping("/admin/courseList")
 	public String courseList(Model model
 							,@RequestParam(defaultValue = "1") int currentPage
-							,@RequestParam(defaultValue = "5") int rowPerPage
+							,@RequestParam(defaultValue = "10") int rowPerPage
 							,@RequestParam(value="searchCourseOption", required=false, defaultValue="all") String searchCourseOption
 							,@RequestParam(value="searchCourse", required=false, defaultValue="") String searchCourse) {
 	    int totalCount = course.getTotalCount(searchCourseOption, searchCourse);
