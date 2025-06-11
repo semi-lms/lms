@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lms.mapper.StudentMapper">
+	<!-- 강의별 학생 조회 -->
+	<select id="selectStudentListByCourseId" parameterType="int" resultType="com.example.lms.dto.StudentDTO">
+		SELECT name, SUBSTRING(CAST(sn AS CHAR), 1, 6) AS birth
+		, case when SUBSTRING(CAST(sn AS CHAR), 7, 1) IN ('1', '3') then '남' ELSE '여' END AS gender
+		, email, phone FROM student WHERE course_id = #{course_id}
+	</select>
+</mapper>

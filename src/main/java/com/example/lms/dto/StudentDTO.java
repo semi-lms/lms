@@ -17,4 +17,6 @@ public class StudentDTO {
 	private String phone;		// phone
 	private Date regDate;		// reg_date
 	private String tempCode;	// temp_code
+	private String gender;		// 성별
+	private String birth;		// 생년월일
 }
