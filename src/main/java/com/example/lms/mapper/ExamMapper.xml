@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.ExamMapper">
+	<!-- 성적 리스트 -->
 	<select id="selectScoreList" parameterType="map" resultType="com.example.lms.dto.ExamSubmissionDTO">
 		SELECT st.name, s.score, s.submit_date submitDate FROM student st
 		LEFT JOIN exam_submission s ON st.student_no = s.student_no
 		WHERE st.course_id = #{courseId} AND (exam_id = #{examId} OR exam_id IS NULL)
+	</select>
+	
+	<!-- 시험 리스트 -->
+	<select id="selectExamList" parameterType="int" resultType="com.example.lms.dto.ExamDTO">
+		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate FROM exam WHERE course_id = #{courseId}
 	</select>
 </mapper>
