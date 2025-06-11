@@ -51,6 +51,7 @@ public class LoginController {
             if (admin != null && passwordEncoder.matches(pw, admin.getPassword())) {
             	sessionUser = new SessionUserDTO(); // 최소한의 역할만 유지
                 sessionUser.setRole("admin");
+                sessionUser.setAdminId(admin.getAdminId());
             }
         } else if ("teacher".equals(role)) {
             TeacherDTO teacherDto = new TeacherDTO();
@@ -60,6 +61,7 @@ public class LoginController {
             if (teacher != null) {
                 sessionUser = new SessionUserDTO();
                 sessionUser.setRole("teacher");
+                sessionUser.setTeacherId(teacher.getTeacherId());
                 sessionUser.setCourseId(teacher.getCourseId());
                 sessionUser.setName(teacher.getName());
                 sessionUser.setEmail(teacher.getEmail());
@@ -73,6 +75,7 @@ public class LoginController {
             if (student != null) {
                 sessionUser = new SessionUserDTO();
                 sessionUser.setRole("student");
+                sessionUser.setStudentId(student.getStudentId());
                 sessionUser.setCourseId(student.getCourseId());
                 sessionUser.setName(student.getName());
                 sessionUser.setEmail(student.getEmail());
