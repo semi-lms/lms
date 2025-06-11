@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.lms.dto.CourseDTO;
+import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.impl.CourseServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,6 @@ public class CourseController {
 	    return "/admin/courseList";
 	}
 	
-	@GetMapping("/admin/insertCourse")
-	public String insertCourse() {
-		return "/admin/insertCourse";
-	}
 	
 	@PostMapping("/admin/insertCourse")
 	public String insertCourse(CourseDTO courseDto) {

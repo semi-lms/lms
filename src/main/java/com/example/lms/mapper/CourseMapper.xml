@@ -7,10 +7,11 @@
 		SELECT
 			t.`name` AS teacherName,
 			c.course_name AS courseName,
+			cl.classroom as classroom,
 			CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
-			c.classroom,
-			CONCAT(COUNT(ca.course_id),' / ',c.max_person) AS applyPerson
+			CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
 		FROM course c
+			INNER JOIN class cl ON c.class_no = cl.class_no
 			INNER JOIN teacher t ON c.teacher_no = t.teacher_no
 			LEFT JOIN course_apply ca ON c.course_id = ca.course_id
 		<where>

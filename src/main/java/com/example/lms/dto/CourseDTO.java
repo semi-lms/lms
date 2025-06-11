@@ -7,11 +7,11 @@ public class CourseDTO {
 	public int courseId;
 	public String courseName;
 	public String description;
-	public String classroom;
+	public int classNo;
 	public String startDate;
 	public String endDate;
-	public int maxPerson;
 	public int teacherNo;
 	public String teacherName;
 	public String applyPerson;
+	public String classroom;
 }
