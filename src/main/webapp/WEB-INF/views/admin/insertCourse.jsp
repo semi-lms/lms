@@ -63,12 +63,8 @@
     <button type="submit">강의 등록</button>
 </form>
 	<script>
-	$('form').on('submit', function(e) {
-	    alert($('select[name="teacherNo"]').val());
-	});
 		$('select[name="classNo"]').change(function(){
 			var classNo = $(this).val();
-			alert(classNo);
 			if(classNo) {
 				$.ajax({
 					url: '/admin/getMaxPerson',

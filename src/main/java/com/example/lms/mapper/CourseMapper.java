@@ -20,4 +20,6 @@ public interface CourseMapper {
 	List<ClassDTO> selectClassList();
 
 	ClassDTO selectClassByNo(int classNo);
+
+	int getTotalCount(String searchCourseOption, String searchCourse);
 }

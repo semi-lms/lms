@@ -35,6 +35,10 @@ public class CourseServiceImpl {
 		
 		return courseMapper.selectClassByNo(classNo);
 	}
+	public int getTotalCount(String searchCourseOption, String searchCourse) {
+
+		return courseMapper.getTotalCount(searchCourseOption, searchCourse);
+	}
 
 
 }

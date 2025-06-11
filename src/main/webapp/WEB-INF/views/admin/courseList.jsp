@@ -42,6 +42,26 @@
 		<input type="text" name="searchCourse" id="searchCourse" placeholder="검색">
 		<button type="submit" id="searchBtn">검색</button>
 	</form>
+	
+	<c:if test="${page.lastPage > 1 }">
+		<c:if test="${startPage > 1 }">
+			<a href="/admin/courseList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchCourseOption=${page.searchCourseOption}&searchCourse=${searchCourse}">[이전]</a>
+		</c:if>
+	</c:if>
+	<c:forEach var="i" begin="${startPage}" end="${endPage}">
+		<c:choose>
+			<c:when test="${i == page.currentPage }">
+				<span>[${i}]</span>
+			</c:when>
+			<c:otherwise>
+				<a href="/admin/courseList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchCourseOption=${page.searchCourseOption}&searchCourse=${searchCourse}">[${i}]</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
+	
+	<c:if test="${endPage < page.lastPage }">
+		<a href="/admin/courseList?${endPage+1}&rowPerPage=${page.rowPerPage}&searchCourseOption=${page.searchCourseOption}&searchCourse=${searchCourse}">[다음]</a>
+	</c:if>
 	<script>
 		$("#insertCourse").click(function(){
 		    window.location = "insertCourse";

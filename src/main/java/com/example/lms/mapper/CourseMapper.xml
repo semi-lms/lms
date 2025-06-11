@@ -35,6 +35,8 @@
 			</if>
 		</where>
 		GROUP BY c.course_id
+		ORDER BY c.course_id DESC
+    	LIMIT #{startRow}, #{rowPerPage}
 	</select>
 
 	<insert id="insertCourse">
@@ -64,4 +66,26 @@
 		WHERE class_no = #{classNo}
 	</select>
 
+
+	<select id="getTotalCount">
+		SELECT COUNT(*)
+		FROM course c
+		INNER JOIN class cl ON c.class_no = cl.class_no
+    	INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+		<where>
+			<if test="searchCourseOption == 'all'">
+				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+				OR
+				c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+			<if
+				test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
+				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+			<if
+				test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
+				AND c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+			</if>
+		</where>
+	</select>
 </mapper>

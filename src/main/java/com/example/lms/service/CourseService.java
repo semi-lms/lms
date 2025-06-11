@@ -18,4 +18,6 @@ public interface CourseService {
 	public List<ClassDTO> selectClassList();
 	
 	public ClassDTO selectClassByNo(int classNo);
+	
+	public int getTotalCount(String searchCourseOption, String searchCourse);
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
+import com.example.lms.dto.Page;
 import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.impl.CourseServiceImpl;
 
@@ -27,13 +28,32 @@ public class CourseController {
 	
 	@GetMapping("/admin/courseList")
 	public String courseList(Model model
-							,@RequestParam(value="searchCourseOption", required=false, defaultValue="") String searchCourseOption
+							,@RequestParam(defaultValue = "1") int currentPage
+							,@RequestParam(defaultValue = "5") int rowPerPage
+							,@RequestParam(value="searchCourseOption", required=false, defaultValue="all") String searchCourseOption
 							,@RequestParam(value="searchCourse", required=false, defaultValue="") String searchCourse) {
-	    Map<String, Object> param = new HashMap<>();
+	    int totalCount = course.getTotalCount(searchCourseOption, searchCourse);
+	    Page page = new Page(rowPerPage, currentPage, totalCount, searchCourseOption, searchCourse);
+		
+	    int pageSize = 5;
+	    int startPage = ((currentPage-1) / pageSize) * pageSize + 1;
+	    int endPage = startPage + pageSize -1;
+	    if(endPage > page.getLastPage()) {
+	    	endPage = page.getLastPage();
+	    }
+	    int startRow = (currentPage - 1) * rowPerPage;
+	    
+		Map<String, Object> param = new HashMap<>();
 	    param.put("searchCourseOption", searchCourseOption);
 	    param.put("searchCourse", searchCourse);
+	    param.put("startRow", startRow);      // ★추가
+	    param.put("rowPerPage", rowPerPage);  // ★추가
+	    
 		List<CourseDTO> list = course.selectCourseList(param);
 	    model.addAttribute("courseList", list);
+	    model.addAttribute("page", page);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
 	    log.info("searchCourseOption : "+searchCourseOption);
 	    log.info("searchCourse : "+searchCourse);
 	    return "/admin/courseList";
