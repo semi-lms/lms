@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.CourseMapper">
-	<select id="selectCourseList"
-		resultType="com.example.lms.dto.CourseDTO"
-		parameterType="map">
+	<select id="selectCourseList" resultType="com.example.lms.dto.CourseDTO" parameterType="map">
 		SELECT
 			t.`name` AS teacherName,
 			c.course_name AS courseName,
@@ -39,4 +37,14 @@
 		, #{classroom}, #{startDate}, #{endDate}
 		, #{maxPerson}, 2)		
 	</insert>
+	
+	<select id="selectTeacherList" parameterType="map">
+		select name
+		from teacher
+	</select>
+	
+	<select id="selectClassList" parameterType="map">
+		select classroom, max_person
+		from class
+	</select>
 </mapper>

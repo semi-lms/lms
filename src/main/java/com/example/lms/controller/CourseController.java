@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.impl.CourseServiceImpl;
@@ -37,6 +38,14 @@ public class CourseController {
 	    return "/admin/courseList";
 	}
 	
+	@GetMapping("/admin/insertCourse")
+	public String insertCourse(Model model) {
+		List<TeacherDTO> teacherList = course.selectTeacherList();
+		List<ClassDTO> classList = course.selectClassList();
+		model.addAttribute("teacher", teacherList);
+		model.addAttribute("class", classList);
+		return "/admin/insertCourse";
+	}
 	
 	@PostMapping("/admin/insertCourse")
 	public String insertCourse(CourseDTO courseDto) {

@@ -15,9 +15,9 @@
 				<th>담당 강사</th>
 				<td>
 					<select>
-						<option>강 사 선 택</option>
-						<option>등록된 강사중 고르셈</option>
-						<option id="teacherName">노민혁</option>
+						<c:forEach var="teacher" items="${teacher}">
+							<option value=${teacher}>${teacher.name}</option>
+						</c:forEach>
 					</select>
 				</td>
 			</tr>
@@ -44,14 +44,9 @@
 			<tr>
 				<th>강의실</th>
 				<td>
-			        <select name="classroom" required>
-			            <option value="">강의실 선택</option>
-			            <option value="C반">A반</option>
-			            <option value="C반">B반</option>
-			            <option value="C반">C반</option>
-			            <option value="D반">D반</option>
-			            <option value="D반">E반</option>
-			        </select>
+					<c:forEach var="class" items="${class}">
+						<option value=${class}>${class.classroom}</option>
+					</c:forEach>
 				</td>
 			</tr>
 			<tr>
