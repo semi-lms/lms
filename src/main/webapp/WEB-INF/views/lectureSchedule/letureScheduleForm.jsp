@@ -7,12 +7,12 @@
 </head>
 <body>
     <h2>강의 일정 등록/수정</h2>
-	<p>디버그용: dateNo = ${schedule.dateNo}</p>
+
     <form action="/lectureSchedule/save" method="post">
       
         <input type="hidden" name="dateNo" value="${schedule.dateNo}" />
 
-        <input type="hidden" name="courseId" value="${schedule.courseId}" />
+        <input type="hidden" name="courseId" value="${courseId}" />
 
         <label>시작 날짜: </label>
         <input type="date" name="startDate" value="${schedule.startDate}" required /><br/>

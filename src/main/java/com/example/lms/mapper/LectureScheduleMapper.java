@@ -1,6 +1,5 @@
 package com.example.lms.mapper;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +16,9 @@ public interface LectureScheduleMapper {
 
     LectureScheduleDTO selectLectureScheduleById(int dateNo);
 
-    int insertLectureSchedule(LectureScheduleDTO LectureScheduleDto);
+    int insertLectureSchedule(LectureScheduleDTO dto);
 
-    int updateLectureSchedule(LectureScheduleDTO LectureScheduleDto);
+    int updateLectureSchedule(LectureScheduleDTO dto);
 
     int deleteLectureSchedule(int dateNo);
-
-	List<LectureScheduleDTO> selectScheduleByDateAndCourse(LectureScheduleDTO LectureScheduleDto);
 }

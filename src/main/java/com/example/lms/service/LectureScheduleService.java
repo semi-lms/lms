@@ -16,8 +16,4 @@ public interface LectureScheduleService {
     int modifyLectureSchedule(LectureScheduleDTO dto);
 
     int removeLectureSchedule(int dateNo);
-
-	LectureScheduleDTO getScheduleByDateNo(int dateNo);
-    
- 
 }

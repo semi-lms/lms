@@ -6,7 +6,6 @@ import com.example.lms.mapper.LectureScheduleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -27,22 +26,17 @@ public class LectureScheduleServiceImpl implements LectureScheduleService {
     }
 
     @Override
-    public int addLectureSchedule(LectureScheduleDTO LectureScheduleDto) {
-        return lectureScheduleMapper.insertLectureSchedule(LectureScheduleDto);
+    public int addLectureSchedule(LectureScheduleDTO dto) {
+        return lectureScheduleMapper.insertLectureSchedule(dto);
     }
 
     @Override
-    public int modifyLectureSchedule(LectureScheduleDTO LectureScheduleDto) {
-        return lectureScheduleMapper.updateLectureSchedule(LectureScheduleDto);
+    public int modifyLectureSchedule(LectureScheduleDTO dto) {
+        return lectureScheduleMapper.updateLectureSchedule(dto);
     }
 
     @Override
     public int removeLectureSchedule(int dateNo) {
         return lectureScheduleMapper.deleteLectureSchedule(dateNo);
     }
-    @Override
-    public LectureScheduleDTO getScheduleByDateNo(int dateNo) {
-        return lectureScheduleMapper.selectLectureScheduleById(dateNo);
-    }
-    
 }
