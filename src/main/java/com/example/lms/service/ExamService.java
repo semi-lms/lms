@@ -7,9 +7,13 @@ import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 
 public interface ExamService {
-	// 강사-시험성적리스트
+	// 강사-시험성적리스트 조회
 	List<ExamSubmissionDTO> getScoreList(Map<String, Object> params);
 	
-	// 시험 리스트
+	// 시험 리스트 조회
 	List<ExamDTO> getExamList(int courseId);
+	// 시험 리스트 수정
+	int modifyExam(ExamDTO examDto);
+	// 시험 리스트 삭제
+	int removeExam(int examId);
 }

@@ -8,8 +8,19 @@
 		WHERE st.course_id = #{courseId} AND (exam_id = #{examId} OR exam_id IS NULL)
 	</select>
 	
-	<!-- 시험 리스트 -->
+	<!-- 시험 리스트 조회 -->
 	<select id="selectExamList" parameterType="int" resultType="com.example.lms.dto.ExamDTO">
-		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate FROM exam WHERE course_id = #{courseId}
+		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate, exam_id examId FROM exam WHERE course_id = #{courseId}
 	</select>
+	<!-- 시험 리스트 수정 -->
+	<update id="updateExam" parameterType="com.example.lms.dto.ExamDTO">
+		UPDATE exam
+		SET title = #{title}, exam_start_date = #{examStartDate}, exam_end_date = #{examEndDate}
+		WHERE exam_id = #{examId}
+	</update>
+	<!-- 시험 리스트 삭제 -->
+	<delete id="deleteExam" parameterType="int">
+		DELETE FROM exam
+		WHERE exam_id = #{examId}
+	</delete>
 </mapper>

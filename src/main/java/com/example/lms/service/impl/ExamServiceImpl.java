@@ -25,4 +25,14 @@ public class ExamServiceImpl implements ExamService{
 	public List<ExamDTO> getExamList(int courseId) {
 		return examMapper.selectExamList(courseId);
 	}
+	
+	@Override
+	public int modifyExam(ExamDTO examDto) {
+		return examMapper.updateExam(examDto);
+	}
+	
+	@Override
+	public int removeExam(int examId) {
+		return examMapper.deleteExam(examId);
+	}
 }
