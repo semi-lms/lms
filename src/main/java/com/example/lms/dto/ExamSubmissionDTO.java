@@ -8,5 +8,6 @@ public class ExamSubmissionDTO {
 	private int examId;
 	private int studentNo;
 	private String submitDate;
-	private int score;
+	private Integer score;
+	private String name;		// 학생 이름
 }
