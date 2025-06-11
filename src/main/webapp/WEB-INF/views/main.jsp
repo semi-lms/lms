@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <!DOCTYPE html>
@@ -9,12 +10,44 @@
     <meta charset="UTF-8">
     <title>Insert title here</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+        /* 간단한 레이아웃 스타일 */
+        .header, .footer { display: flex; justify-content: space-between; padding: 10px; }
+        .nav a { margin-right: 15px; }
+        .section { text-align: center; margin-top: 30px; }
+        .content { display: flex; justify-content: space-around; padding: 20px; }
+        .box { width: 30%; }
+    </style>
 </head>
 <body>
-	<h1>LMS </h1>
-	<h1>로그인 만들어주세요 ㅠ</h1>
-	<a href="/lectureSchedule?courseId=1&year=2025&month=6">강의일정</a>
-	<br>
-	<a href="/admin/courseList">등록된 강의 목록</a>
+
+<!-- 헤더 : 로고와 사이트명 -->
+<c:choose>
+  <c:when test="${sessionScope.loginUser.role eq 'admin'}">
+    <jsp:include page="/WEB-INF/views/header/adminHeader.jsp" />
+  </c:when>
+  <c:when test="${sessionScope.loginUser.role eq 'teacher'}">
+    <jsp:include page="/WEB-INF/views/header/teacherHeader.jsp" />
+  </c:when>
+  <c:when test="${sessionScope.loginUser.role eq 'student'}">
+    <jsp:include page="/WEB-INF/views/header/studentHeader.jsp" />
+  </c:when>
+  <c:otherwise>
+    <jsp:include page="/WEB-INF/views/header/mainHeader.jsp" />
+  </c:otherwise>
+</c:choose>
+	
+<!-- 중앙 : 이미지, 로그인 버튼 -->
+<div class="section">
+	<img src="/img/logo.png" alt="학원이미지" width="600" height="340">
+	<br><br>
+	<div style="text-align: right; width: 600px; margin: 0 auto;">
+	<a href="/login"><button>통합 로그인</button></a>
+	<a href="/logout"><button>로그아웃</button></a>
+</div>
+
+</div>
+ <!-- 하단 풋터 공통 포함 -->
+  <jsp:include page="/WEB-INF/views/footer.jsp" />
 </body>
 </html>

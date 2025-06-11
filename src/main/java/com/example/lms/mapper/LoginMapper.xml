@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.example.lms.mapper.LoginMapper">
+
+	<!-- 로그인 -->
+	<!-- 관리자 -->
+	<select id="loginAdmin"
+		parameterType="com.example.lms.dto.AdminDTO"
+		resultType="com.example.lms.dto.AdminDTO">
+		SELECT admin_id AS adminId
+		FROM admin
+		WHERE admin_id = #{adminId} AND password = #{password}
+	</select>
+	
+	<!-- 강사 -->
+	<select id="loginTeacher"
+		parameterType="com.example.lms.dto.TeacherDTO"
+		resultType="com.example.lms.dto.TeacherDTO">
+		SELECT teacher_no AS teacherNo,
+				course_id AS courseId,
+				teacher_id AS teacherId,
+				name,
+				sn,
+				address,
+				email,
+				phone,
+				reg_date AS regDate,
+				temp_code AS tempCode
+		FROM teacher
+		WHERE teacher_id = #{teacherId} AND password = #{password}
+	</select>
+	
+	<!-- 학생 -->
+	<select id="loginStudent"
+		parameterType="com.example.lms.dto.StudentDTO"
+		resultType="com.example.lms.dto.StudentDTO">
+		SELECT student_no AS studentNo,
+				course_id AS courseId,
+				student_id AS studentId,
+				name,
+				sn,
+				address,
+				email,
+				phone,
+				reg_date AS regDate,
+				temp_code AS tempCode
+		FROM student
+		WHERE student_id = #{studentId} AND password = #{password}
+	</select>
+	
+	
+	
+	
+</mapper>

@@ -8,7 +8,7 @@ import lombok.Data;
 public class StudentDTO {	
 	private int studentNo;		// student_no
 	private int courseId;		// course_id
-	private int studentId;		// student_id
+	private String studentId;		// student_id
 	private String password;	// password
 	private String name;		// name
 	private String sn;			// sn 주민번호
