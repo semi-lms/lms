@@ -126,13 +126,13 @@
         function prevMonth() {
             let y = ${year}, m = ${month} - 1;
             if (m < 1) { y--; m = 12; }
-            location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
+            location.href = '/student/myAttendance?studentId=' + studentId + '&year=' + y + '&month=' + m;
         }
 
         function nextMonth() {
             let y = ${year}, m = ${month} + 1;
             if (m > 12) { y++; m = 1; }
-            location.href = '/lectureSchedule?courseId=' + courseId + '&year=' + y + '&month=' + m;
+            location.href = '/student/myAttendance?studentId=' + studentId+ '&year=' + y + '&month=' + m;
         }
 
     </script>
@@ -161,17 +161,15 @@
                 <c:forEach var="week" items="${weeks}">
                     <tr>
                         <c:forEach var="day" items="${week.days}">
-                            <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
-                                <div>${day.day}</div>
+                           <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
+    <div>${day.day}</div>
 
-                                <%-- <c:forEach var="memoDto" items="${dateToMemoList[day.dateStr]}">
-                                    <div class="memo" onclick="goToForm(${memoDto.dateNo})" style="cursor: pointer;">
-                                        ${memoDto.memo}
-                                       
-                                    </div>
-                                </c:forEach> --%>
-
-                            </td>
+    <c:if test="${not empty attendanceMap[day.dateStr]}">
+        <div class="memo">
+            출석: ${attendanceMap[day.dateStr]}
+        </div>
+    </c:if>
+</td>
                         </c:forEach>
                     </tr>
                 </c:forEach>
