@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping
 public class LoginController {
 	@Autowired LoginService loginService;
+	@Autowired PasswordEncoder passwordEncoder; // 암호화 필드 받기
 	
 	// 로그인
 	@GetMapping("/login")
@@ -46,7 +48,7 @@ public class LoginController {
             adminDto.setAdminId(id);
             adminDto.setPassword(pw);
             AdminDTO admin = loginService.loginAdmin(adminDto);
-            if (admin != null) {
+            if (admin != null && passwordEncoder.matches(pw, admin.getPassword())) {
             	sessionUser = new SessionUserDTO(); // 최소한의 역할만 유지
                 sessionUser.setRole("admin");
             }

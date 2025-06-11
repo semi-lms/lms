@@ -9,9 +9,9 @@
 	<select id="loginAdmin"
 		parameterType="com.example.lms.dto.AdminDTO"
 		resultType="com.example.lms.dto.AdminDTO">
-		SELECT admin_id AS adminId
+		SELECT admin_id AS adminId, password
 		FROM admin
-		WHERE admin_id = #{adminId} AND password = #{password}
+		WHERE admin_id = #{adminId}
 	</select>
 	
 	<!-- 강사 -->
