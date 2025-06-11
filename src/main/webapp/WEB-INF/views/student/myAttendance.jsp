@@ -121,12 +121,14 @@
         }
     </style>
     <script>
-        const courseId = '${courseId}';
-
+    const studentId = '${studentId}'; 
+    console.log('학생아이디' , ${studnentId})
+	
         function prevMonth() {
             let y = ${year}, m = ${month} - 1;
             if (m < 1) { y--; m = 12; }
             location.href = '/student/myAttendance?studentId=' + studentId + '&year=' + y + '&month=' + m;
+       
         }
 
         function nextMonth() {
