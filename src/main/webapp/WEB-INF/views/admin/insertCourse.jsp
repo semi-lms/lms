@@ -6,8 +6,29 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<style>
+	.container {
+	    display: flex;
+	    flex-direction: row;
+	    align-items: flex-start;
+	}
+	
+	.sidebar {
+	    min-width: 200px; /* 메뉴 폭은 취향껏 */
+	    margin-right: 30px;
+	}
+	
+	.main-content {
+	    flex: 1;
+	}
+	</style>
 </head>
 <body>
+    <div class="container">
+        <div class="sidebar">
+            <jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
+        </div>
+        <div class="main-content">
 	<h1>강의 등록</h1>
 	<form action="insertCourse" method="post">
     <table border="1">
@@ -80,5 +101,7 @@
 			}
 		})	
 	</script>
+	    </div>
+    </div>
 </body>
 </html>

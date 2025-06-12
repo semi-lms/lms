@@ -6,12 +6,33 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<style>
+	.container {
+	    display: flex;
+	    flex-direction: row;
+	    align-items: flex-start;
+	}
+	
+	.sidebar {
+	    min-width: 200px; /* 메뉴 폭은 취향껏 */
+	    margin-right: 30px;
+	}
+	
+	.main-content {
+	    flex: 1;
+	}
+	</style>
 </head>
 <body>
+    <div class="container">
+        <div class="sidebar">
+            <!-- 기존 왼쪽 메뉴 jsp 인클루드 -->
+            <jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
+        </div>
+        <div class="main-content">
 	<h1>강의 목록</h1>
-	<form method="get">
+	<form method="get"> 
 		<table border="1">
 			<tr>
 				<th>담당 강사</th>
@@ -63,6 +84,8 @@
 		<a
 			href="/admin/courseList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchCourseOption=${searchCourseOption}&searchCourse=${searchCourse}">[다음]</a>
 	</c:if>
+    </div>
+    </div>
 
 	<script>
 		$("#insertCourse").click(function(){
