@@ -26,7 +26,7 @@
 		INNER JOIN class AS cl ON c.class_no = cl.class_no
 		WHERE DATE = CURDATE()
 		GROUP BY a.course_id, classroom
-		ORDER BY a.course_id;
+		ORDER BY classroom;
     </select>
 
     <!-- 학생(본인) 출석 현황 (그대로) -->
