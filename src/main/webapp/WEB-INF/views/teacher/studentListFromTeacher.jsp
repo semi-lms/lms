@@ -26,5 +26,15 @@
 			</tr>
 		</c:forEach>
 	</table>
+	<c:forEach var="i" begin="1" end="${endPage}">
+		<c:choose>
+			<c:when test="${i == currentPage}">
+				<span>[${i}]</span>
+			</c:when>
+			<c:otherwise>
+				<a href="/studentListFromTeacher?currentPage=${i}">[${i}]</a>
+			</c:otherwise>
+		</c:choose>
+	</c:forEach>
 </body>
 </html>

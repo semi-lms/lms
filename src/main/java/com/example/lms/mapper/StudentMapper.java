@@ -1,6 +1,7 @@
 package com.example.lms.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -8,7 +9,10 @@ import com.example.lms.dto.StudentDTO;
 
 @Mapper
 public interface StudentMapper {
-	List<StudentDTO> selectStudentListByCourseId(int courseId);
+	// 강의별 학생 조회
+	List<StudentDTO> selectStudentListByCourseId(Map<String, Object> params);
+	// 페이징
+	int getStudentCntByCourseId(int courseId);
 	
 	List<StudentDTO> selectAttendanceListByStudentId(int studentNo);
 	

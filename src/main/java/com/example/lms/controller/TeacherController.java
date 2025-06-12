@@ -36,9 +36,36 @@ public class TeacherController {
 	// 학생 리스트
 	@GetMapping("/studentListFromTeacher")
 	public String studentListFromTeacher(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
+										, @RequestParam(defaultValue = "1") int currentPage
+										, @RequestParam(defaultValue = "10") int rowPerPage
 										, Model model) {
-		List<StudentDTO> students = studentService.getStudentListByCourseId(courseId);
+		// 페이징
+		int totalCnt = studentService.getStudentCntByCourseId(courseId);
+		int lastPage = totalCnt / rowPerPage;
+		if(totalCnt % rowPerPage != 0) {
+			lastPage += 1;
+		};
+		int startRow = (currentPage - 1) * rowPerPage;
+		int startPage = ((currentPage-1) / rowPerPage) * rowPerPage + 1;
+		int endPage = startPage + rowPerPage -1;
+		if(endPage >lastPage) {
+			endPage = lastPage;
+		};
+		
+		Map<String, Object> studentMap = new HashMap<>();
+		studentMap.put("courseId", courseId);
+		studentMap.put("startRow", startRow);
+		studentMap.put("rowPerPage", rowPerPage);
+		
+		List<StudentDTO> students = studentService.getStudentListByCourseId(studentMap);
+		
 		model.addAttribute("students", students);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("courseId", courseId);
+		
 		return "teacher/studentListFromTeacher";
 	}
 	
@@ -104,9 +131,6 @@ public class TeacherController {
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("currentPage", currentPage);
 		model.addAttribute("courseId", courseId);
-		
-		
-		
 		
 		return "teacher/examList";
 		}
