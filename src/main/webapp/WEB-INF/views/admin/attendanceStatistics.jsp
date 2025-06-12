@@ -1,74 +1,80 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>출석 통계 페이지</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
+body {
+  margin: 0;
+  padding: 0;
+}
 .container {
-	display: flex;
+  display: flex;
+  width: 100%;
 }
-
 .sidebar {
-	min-width: 200px;
+  min-width: 220px;   /* 필요시 사이드바 너비 늘리세요 */
+  background: #fafafa;
+  height: 100vh;
 }
-
+.chart-container {
+  margin-top: 32px;
+}
 .main-content {
-	flex: 1;
-	margin-left: 32px;
+  flex: 1;
+  background: #fff;
+  padding: 40px 40px 40px 300px; /* 왼쪽 패딩을 140px로 늘림 */
 }
 </style>
+</head>
 <body>
-	<div class="container">
-		<div class="sidebar">
-			<!-- 기존 왼쪽 메뉴 jsp 인클루드 -->
-			
-		</div>
-		<div class="main-content">
-			<h1>출석 통계 페이지</h1>
 
-			<!-- 1. 통계 테이블 -->
-			<table border="1">
-				<tr>
-					<th>반</th>
-					<th>실제 출석(지각 포함)</th>
-					<th>전체 출석 가능 횟수</th>
-					<th>출석률(%)</th>
-				</tr>
-				<c:forEach var="i" begin="0" end="${fn:length(classNames) - 1}">
-					<tr>
-						<td>${classNames[i]}</td>
-						<td>${actuals[i]}</td>
-						<td>${attendanceTotalCounts[i]}</td>
-						<td><c:choose>
-								<c:when test="${attendanceTotalCounts[i] > 0}">
-									<fmt:formatNumber
-										value="${(actuals[i] * 100.0) / attendanceTotalCounts[i]}"
-										pattern="0.0" />
-								</c:when>
-								<c:otherwise>0</c:otherwise>
-							</c:choose></td>
-					</tr>
-				</c:forEach>
-			</table>
+<div class="container">
+  <div class="sidebar">
+    <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
+  </div>
+  <div class="main-content">
+        <h1>출석 통계 페이지</h1>
 
-			<!-- 2. 그래프 영역 -->
-			<div class="chart-container">
-				<canvas id="attendanceChart" width="500" height="350"></canvas>
-			</div>
-		</div>
-	</div>
+        <!-- 1. 통계 테이블 -->
+        <table border="1">
+            <tr>
+                <th>반</th>
+                <th>실제 출석(지각 포함)</th>
+                <th>전체 출석 가능 횟수</th>
+                <th>출석률(%)</th>
+            </tr>
+            <c:forEach var="i" begin="0" end="${fn:length(classNames) - 1}">
+                <tr>
+                    <td>${classNames[i]}</td>
+                    <td>${actuals[i]}</td>
+                    <td>${attendanceTotalCounts[i]}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${attendanceTotalCounts[i] > 0}">
+                                <fmt:formatNumber value="${(actuals[i] * 100.0) / attendanceTotalCounts[i]}" pattern="0.0"/>
+                            </c:when>
+                            <c:otherwise>0</c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
 
-	<script>
+        <!-- 2. 그래프 영역 -->
+        <div class="chart-container">
+            <canvas id="attendanceChart" width="500" height="350"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
     // JSTL로 리스트 → JS 배열
     const labels = [
         <c:forEach var="n" items="${classNames}" varStatus="s">
@@ -144,6 +150,19 @@
             }
         }
     });
+    
+    document.getElementById('attendanceChart').onclick = function(evt) {
+        const points = attendanceChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const label = attendanceChart.data.labels[firstPoint.index];
+            window.location.href = '/admin/attendanceByClass'
+        }
+    }
+    
+    document.getElementById('attendanceChart').style.cursor = 'pointer';
+
 </script>
 </body>
 </html>
+

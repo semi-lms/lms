@@ -47,5 +47,10 @@ public class AttendanceController {
 
 	    return "/admin/attendanceStatistics";
 	}
-
+	
+	@GetMapping("/admin/attendanceByClass")
+	public String attendanceByClass() {
+		
+		return "/admin/attendanceByClass";
+	}
 }
