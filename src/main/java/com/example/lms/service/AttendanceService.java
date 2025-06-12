@@ -11,4 +11,5 @@ public interface AttendanceService {
     int getStudentCount(int courseId);
     int getAttendanceTotalCount(String startDate, String endDate, int studentCount, int courseId);
     int getActualAttendance(String startDate, String endDate, int courseId);
+    List<AttendanceDTO> getAttendanceByClass(int courseId);
 }

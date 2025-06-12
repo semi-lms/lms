@@ -49,4 +49,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         param.put("courseId", courseId);
         return attendanceMapper.getActualAttendance(param);
     }
+
+    public List<AttendanceDTO> getAttendanceByClass(int courseId) {
+    	
+        return attendanceMapper.getAttendanceByClass(courseId);
+    }
 }

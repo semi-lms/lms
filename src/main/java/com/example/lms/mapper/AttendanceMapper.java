@@ -21,4 +21,6 @@ public interface AttendanceMapper {
     int getAttendanceTotalCount(Map<String, Object> param);
 
     int getActualAttendance(Map<String, Object> param);
+
+    List<AttendanceDTO> getAttendanceByClass(int courseId);
 }

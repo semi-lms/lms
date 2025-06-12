@@ -93,7 +93,13 @@ body {
     ];
     // 출석률 (%) 배열 생성
     const rates = actuals.map((v, i) => totals[i] > 0 ? Math.round(v / totals[i] * 1000) / 10 : 0);
-
+    
+    const courseIds = [
+        <c:forEach var="id" items="${courseIds}" varStatus="s">
+            ${id}<c:if test="${!s.last}">,</c:if>
+        </c:forEach>
+    ];
+    
     const ctx = document.getElementById('attendanceChart').getContext('2d');
     const attendanceChart = new Chart(ctx, {
         type: 'bar',
@@ -155,8 +161,8 @@ body {
         const points = attendanceChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
         if (points.length) {
             const firstPoint = points[0];
-            const label = attendanceChart.data.labels[firstPoint.index];
-            window.location.href = '/admin/attendanceByClass'
+            const courseId = courseIds[firstPoint.index]; // 인덱스별 courseId 매핑
+            window.location.href = '/admin/attendanceByClass?courseId=' + courseId;
         }
     }
     

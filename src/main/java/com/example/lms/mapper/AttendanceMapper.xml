@@ -59,4 +59,15 @@
           AND (status = '출석' OR status = '지각')
           AND course_id = #{courseId}
     </select>
+    
+    <select id="getAttendanceByClass" parameterType="int" resultType="com.example.lms.dto.AttendanceDTO">
+	    SELECT cl.classroom, s.name, COUNT(a.`status`) AS attendanceCount
+	    FROM course c 
+	    INNER JOIN attendance a ON c.course_id = a.course_id
+	    INNER JOIN class cl ON cl.class_no = c.class_no
+	    INNER JOIN student s ON a.student_no = s.student_no
+	    WHERE c.course_id = #{courseId}
+	    GROUP BY cl.class_no, cl.classroom, s.student_no, s.name
+	    ORDER BY cl.class_no, s.name
+	</select>
 </mapper>

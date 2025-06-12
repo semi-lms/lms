@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.service.impl.AttendanceServiceImpl;
 
 @Controller
@@ -44,13 +46,15 @@ public class AttendanceController {
         model.addAttribute("studentCounts", studentCounts);
         model.addAttribute("attendanceTotalCounts", attendanceTotalCounts);
         model.addAttribute("actuals", actuals);
+        model.addAttribute("courseIds", courseIds);
 
 	    return "/admin/attendanceStatistics";
 	}
 	
 	@GetMapping("/admin/attendanceByClass")
-	public String attendanceByClass() {
-		
-		return "/admin/attendanceByClass";
+	public String attendanceByClass(@RequestParam int courseId, Model model) {
+	    List<AttendanceDTO> list = attendanceService.getAttendanceByClass(courseId);
+	    model.addAttribute("attendanceList", list);
+	    return "/admin/attendanceByClass";
 	}
 }
