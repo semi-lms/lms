@@ -13,6 +13,8 @@ public interface ExamService {
 	// 시험 리스트 조회
 	List<ExamDTO> getExamList(Map<String, Object> params);
 	int getExamCnt(int courseId);
+	// 시험 리스트 등록
+	int addExam(ExamDTO examDto);
 	// 시험 리스트 수정
 	int modifyExam(ExamDTO examDto);
 	// 시험 리스트 삭제

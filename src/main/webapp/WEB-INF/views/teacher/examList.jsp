@@ -50,7 +50,7 @@
 	
 			<!-- 수정 모드 행 -->
 			<tr id="editRow-${exam.examId}" style="display:none;">
-				<form method="post" action="/updateExam">
+				<form method="post" action="/updateExam" onsubmit="return validateEditForm(this)">
 					<td><input type="text" name="title" value="${exam.title}" /></td>
 					<td>${exam.status}</td>
 					<td><input type="date" name="examStartDate" value="${exam.examStartDate}" /></td>
@@ -75,5 +75,63 @@
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
+	<p>
+	<button type="button" onclick="openPopup()">시험등록</button>
+	
+	<!-- 등록용 모달 폼 -->
+	<div id="examPopup" style="display:none; position:fixed; top:30%; left:40%; background:white; padding:20px; border:1px solid #ccc; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); z-index:1000;">
+		<form method="post" action="/insertExam" onsubmit="return validateInsertForm()">
+			<h3>시험 등록</h3>
+			<label>제목: <input type="text" name="title" required></label><br><br>
+			<label>시작일: <input type="date" name="examStartDate" id="insertStartDate" required></label><br><br>
+			<label>종료일: <input type="date" name="examEndDate" id="insertEndDate" required></label><br><br>
+			<input type="hidden" name="courseId" value="${courseId}">
+			<button type="submit">등록</button>
+			<button type="button" onclick="closePopup()">닫기</button>
+		</form>
+	</div>
+	<!-- 삭제 시 post용 폼 -->
+	<form id="deleteForm" method="post" action="/removeExam" style="display:none;">
+		<input type="hidden" name="examId" id="deleteExamId">
+	</form>
+	
+	<script>
+		// 수정 팝업 열고 닫는 JS
+		function openPopup() {
+			document.getElementById("examPopup").style.display = "block";
+		}
+		function closePopup() {
+			document.getElementById("examPopup").style.display = "none";
+		}
+		// 삭제
+		function deleteExam(examId) {
+			if (confirm("정말 삭제하시겠습니까?")) {
+				// 숨겨진 폼에 examId 설정 후 제출
+				document.getElementById("deleteExamId").value = examId;
+				document.getElementById("deleteForm").submit();
+			}
+		}
+		
+		// 수정, 등록 유효성 검사
+		function validateInsertForm() {
+			const start = document.getElementById("insertStartDate").value;
+			const end = document.getElementById("insertEndDate").value;
+			if (start > end) {
+				alert("시작일은 종료일보다 빠르거나 같아야 합니다.");
+				return false;
+			}
+			return true;
+		}
+	
+		function validateEditForm(form) {
+			const start = form.querySelector("[name='examStartDate']").value;
+			const end = form.querySelector("[name='examEndDate']").value;
+			if (start > end) {
+				alert("시작일은 종료일보다 빠르거나 같아야 합니다.");
+				return false;
+			}
+			return true;
+		}
+	</script>
 </body>
 </html>

@@ -103,6 +103,8 @@ public class TeacherController {
 		model.addAttribute("lastPage", lastPage);
 		model.addAttribute("endPage", endPage);
 		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("courseId", courseId);
+		
 		
 		
 		
@@ -118,6 +120,12 @@ public class TeacherController {
 	@PostMapping("/removeExam")
 	public String removeExam(@RequestParam("examId") int examId) {
 		examService.removeExam(examId);
+		return "redirect:/examList";
+	}
+	
+	@PostMapping("/insertExam")
+	public String insertExam(@ModelAttribute ExamDTO examDto) {
+		examService.addExam(examDto);
 		return "redirect:/examList";
 	}
 }

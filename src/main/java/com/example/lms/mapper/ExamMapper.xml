@@ -16,6 +16,11 @@
 	<select id="getExamCnt" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM exam WHERE course_id = #{courseId}
 	</select>
+	<!-- 시험 리스트 등록 -->
+	<insert id="insertExam" parameterType="com.example.lms.dto.ExamDTO">
+		INSERT INTO exam (course_id, title, exam_start_date, exam_end_date)
+		VALUES (#{courseId}, #{title}, #{examStartDate}, #{examEndDate})
+	</insert>
 	<!-- 시험 리스트 수정 -->
 	<update id="updateExam" parameterType="com.example.lms.dto.ExamDTO">
 		UPDATE exam

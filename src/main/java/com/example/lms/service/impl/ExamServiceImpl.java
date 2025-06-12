@@ -32,6 +32,11 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
+	public int addExam(ExamDTO examDto) {
+		return examMapper.insertExam(examDto);
+	}
+	
+	@Override
 	public int modifyExam(ExamDTO examDto) {
 		return examMapper.updateExam(examDto);
 	}
