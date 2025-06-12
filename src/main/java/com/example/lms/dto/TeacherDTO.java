@@ -17,4 +17,8 @@ public class TeacherDTO {
 	private String phone;		// phone
 	private Date regDate;		// reg_date
 	private String temp_code;	// temp_code
+	private String courseName;	// course_name 조인한테이블 결과 넣을 값
+	private String oldTeacherId; // 변경 전 아이디
+	private String newPw;		// 새 비밀번호
+	private String currentPassword;
 }

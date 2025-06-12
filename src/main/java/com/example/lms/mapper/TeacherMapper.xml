@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lms.mapper.TeacherMapper">
+
+	<!-- 개인정보 조회 -->
+	<select id="selectTeacherById" parameterType="string" resultType="com.example.lms.dto.TeacherDTO">
+		SELECT
+	        t.teacher_no AS teacherNo,
+	        t.course_id AS courseId,
+	        t.teacher_id AS teacherId,
+	        t.password,
+	        t.name,
+	        t.sn,
+	        t.address,
+	        t.email,
+	        t.phone,
+	        t.reg_date AS regDate,
+	        t.temp_code AS tempCode,
+	        c.course_name AS courseName
+		FROM teacher t
+		JOIN course c ON t.course_id = c.course_id
+		WHERE t.teacher_id = #{teacherId}
+	</select>
+	
+	<!-- 아이디 중복확인 -->
+	<!-- 아이디 있는 행을 찾아서 맞으면 1 아니면 0으로 확인 -->
+	<select id="isTeacherIdExist" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM teacher
+		WHERE teacher_id = #{teacherId}
+	</select>
+	
+	<!-- 비밀번호 확인 -->
+	<select id="selectPasswordById" parameterType="string" resultType="string">
+		SELECT password
+		FROM teacher
+		WHERE teacher_id = #{teacherId}
+	</select>
+	
+	<!-- 개인정보 수정-->
+	<update id="updateTeacherInfo" parameterType="com.example.lms.dto.TeacherDTO">
+		UPDATE teacher
+		SET 
+			teacher_id = #{teacherId},
+			email = #{email},
+			phone = #{phone},	
+			password = #{password}
+		WHERE teacher_No = #{teacherNo}
+	</update>
+	
+
+</mapper>
