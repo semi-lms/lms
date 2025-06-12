@@ -17,4 +17,26 @@
 		LIMIT #{count}
 	</select>
 	
+	<!-- 전체 개수 -->
+	<select id="totalCount" parameterType="map" resultType="int">
+	  SELECT COUNT(*)
+	  FROM notice
+	  WHERE title LIKE CONCAT('%', #{keyword}, '%')
+	</select>
+	
+	<!-- 공지사항 리스트 -->
+	<select id="selectNoticeList" resultType="com.example.lms.dto.NoticeDTO">
+		SELECT
+			notice_id AS noticeId,
+			admin_id AS adminId,
+			title,
+			content,
+			create_date As createDate,
+			update_date AS updateDate
+		FROM notice
+		WHERE title LIKE CONCAT('%', #{keyword}, '%')
+		ORDER BY create_date DESC
+		LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	
 </mapper>

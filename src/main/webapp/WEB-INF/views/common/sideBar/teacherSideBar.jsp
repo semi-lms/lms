@@ -18,7 +18,7 @@
 		  <a href="/manage/stat" class="submenu-link">• 시험</a>
 		</div>
     <a href="/lectureSchedule?=${loginuser.courseId }&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
-    <a href="/mypage/schedule"><button class="sidebar-btn">공지사항</button></a><br><br>
+    <button class="sidebar-btn" onclick="loadContent('/mypage/noticeList')">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>

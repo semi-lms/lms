@@ -63,7 +63,7 @@ public class MypageController {
 		}
 
 		// jsp에서 사용할 데이터 전달
-		return "ajax/info";
+		return "mypage/info";
 	}
 	
 	// 아이디 중복확인

@@ -31,6 +31,11 @@
 </div>
 
 <script>
+
+function loadContent(url) {
+	  $('#contentArea').load(url);
+	}
+	
 $(document).ready(function () {
 	  $('#contentArea').load('/mypage/info', function () {
 		 const role = '${loginUser.role}'; // JSP에서 세션 정보 출력
@@ -141,6 +146,7 @@ $(document).ready(function () {
 	    	    alert("수정 실패");
 	    	  }
 	    	});
+	      
 	    });
 	  });
 	});
