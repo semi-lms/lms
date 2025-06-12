@@ -13,7 +13,7 @@
     <a href="/mypage/attendance"><button class="sidebar-btn">출석현황</button></a><br><br>
     <a href="/mypage/courses"><button class="sidebar-btn">수강과목</button></a><br><br>
     <a href="/mypage/exam"><button class="sidebar-btn">시험문제</button></a><br><br>
-  <a href="/lectureSchedule?=${loginUser.courseId }&year=2025&month=6">강의일정<button class="sidebar-btn">강의일정</button></a><br><br>
+  <a href="/lectureSchedule?courseId=${loginUser.courseId }&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
     <a href="/mypage/schedule"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>

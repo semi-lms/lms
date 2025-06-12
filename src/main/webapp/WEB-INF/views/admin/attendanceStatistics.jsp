@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,7 @@
 	<div class="container">
 		<div class="sidebar">
 			<!-- 기존 왼쪽 메뉴 jsp 인클루드 -->
-			<jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
+			
 		</div>
 		<div class="main-content">
 			<h1>출석 통계 페이지</h1>

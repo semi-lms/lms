@@ -8,7 +8,7 @@
     	<a href="/student/myAttendance?studentId=${loginUser.studentNo}&year=2025&month=6">출석현황</a>
     	<a href="/">수강과목</a>
     	<a href="/">시험문제</a>
-    	<a href="/lectureSchedule?=${loginUser.courseId}&year=2025&month=6">강의일정</a>
+    	<a href="/lectureSchedule?courseId=${loginUser.courseId}&year=2025&month=6">강의일정</a>
     	<a href="/notice">공지사항</a>
 		<a href="/qna">QNA</a>
 		<a href="/fileBoard">자료실</a>
