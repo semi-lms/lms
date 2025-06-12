@@ -19,4 +19,5 @@ public class StudentDTO {
 	private String tempCode;	// temp_code
 	private String gender;		// 성별
 	private String birth;		// 생년월일
+	private String courseName;	// course_name 테이블 조인한 결과 넣을 값
 }

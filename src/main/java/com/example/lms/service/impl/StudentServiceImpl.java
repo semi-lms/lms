@@ -19,6 +19,12 @@ public class StudentServiceImpl implements StudentService {
 	public List<StudentDTO> getStudentListByCourseId(int courseId) {
 		return studentMapper.selectStudentListByCourseId(courseId);
 	}
+	
+	// 개인정보 조회
+	@Override
+	public StudentDTO getStudentById(String studentId) {
+		return studentMapper.selectStudentById(studentId);
+	}
 
 	
 

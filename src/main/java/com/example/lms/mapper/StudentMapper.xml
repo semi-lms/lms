@@ -8,4 +8,16 @@
 		, email, phone FROM student WHERE course_id = #{course_id}
 	</select>
 	
+	<!-- 학생 개인정보 조회 -->
+	<select id="selectStudentById" parameterType="string" resultType="com.example.lms.dto.StudentDTO">
+		SELECT s.student_id,
+				s.name,
+				s.email,
+				s.phone,
+				s.course_id,
+				c.course_name
+		FROM student s
+		JOIN course c ON s.course_id = c.course_id
+		WHERE s.student_id = #{studentId}
+	</select>
 </mapper>

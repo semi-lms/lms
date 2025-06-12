@@ -11,4 +11,7 @@ public interface StudentMapper {
 	List<StudentDTO> selectStudentListByCourseId(int courseId);
 	
 	List<StudentDTO> selectAttendanceListByStudentId(int studentNo);
+	
+	// 개인정보 조회
+	StudentDTO selectStudentById(String studentId);
 }
