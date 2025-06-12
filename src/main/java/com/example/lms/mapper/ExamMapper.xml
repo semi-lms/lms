@@ -9,8 +9,12 @@
 	</select>
 	
 	<!-- 시험 리스트 조회 -->
-	<select id="selectExamList" parameterType="int" resultType="com.example.lms.dto.ExamDTO">
-		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate, exam_id examId FROM exam WHERE course_id = #{courseId}
+	<select id="selectExamList" parameterType="map" resultType="com.example.lms.dto.ExamDTO">
+		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate, exam_id examId FROM exam WHERE course_id = #{courseId} ORDER BY exam_end_date ASC LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	<!-- 페이징 위한 총 데이터수 -->
+	<select id="getExamCnt" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM exam WHERE course_id = #{courseId}
 	</select>
 	<!-- 시험 리스트 수정 -->
 	<update id="updateExam" parameterType="com.example.lms.dto.ExamDTO">

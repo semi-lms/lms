@@ -19,51 +19,61 @@
 </head>
 <body>
 <h1>시험 리스트</h1>
-<table border="1">
-	<tr>
-		<th>제목</th>
-		<th>진행도</th>
-		<th>시작일</th>
-		<th>종료일</th>
-		<th>수정</th>
-		<th>삭제</th>
-	</tr>
-
-	<c:forEach var="exam" items="${exams}">
-		<!-- 보기 모드 행 -->
-		<tr id="viewRow-${exam.examId}">
-			<td>${exam.title}</td>
-			<td>${exam.status}</td>
-			<td>${exam.examStartDate}</td>
-			<td>${exam.examEndDate}</td>
-			<td>
-				<c:if test="${exam.status eq '예정'}">
-					<button type="button" onclick="enterEditMode(${exam.examId})">수정</button>
-				</c:if>
-			</td>
-			<td>
-				<c:if test="${exam.status eq '예정'}">
-					<button type="button" onclick="deleteExam(${exam.examId})">삭제</button>
-				</c:if>
-			</td>
+	<table border="1">
+		<tr>
+			<th>제목</th>
+			<th>진행도</th>
+			<th>시작일</th>
+			<th>종료일</th>
+			<th>수정</th>
+			<th>삭제</th>
 		</tr>
-
-		<!-- 수정 모드 행 -->
-		<tr id="editRow-${exam.examId}" style="display:none;">
-			<form method="post" action="/updateExam">
-				<td><input type="text" name="title" value="${exam.title}" /></td>
+	
+		<c:forEach var="exam" items="${exams}">
+			<!-- 보기 모드 행 -->
+			<tr id="viewRow-${exam.examId}">
+				<td>${exam.title}</td>
 				<td>${exam.status}</td>
-				<td><input type="date" name="examStartDate" value="${exam.examStartDate}" /></td>
-				<td><input type="date" name="examEndDate" value="${exam.examEndDate}" /></td>
+				<td>${exam.examStartDate}</td>
+				<td>${exam.examEndDate}</td>
 				<td>
-					<input type="hidden" name="examId" value="${exam.examId}" />
-					<button type="submit">저장</button>
-					<button type="button" onclick="cancelEdit(${exam.examId})">취소</button>
+					<c:if test="${exam.status eq '예정'}">
+						<button type="button" onclick="enterEditMode(${exam.examId})">수정</button>
+					</c:if>
 				</td>
-				<td></td>
-			</form>
-		</tr>
+				<td>
+					<c:if test="${exam.status eq '예정'}">
+						<button type="button" onclick="deleteExam(${exam.examId})">삭제</button>
+					</c:if>
+				</td>
+			</tr>
+	
+			<!-- 수정 모드 행 -->
+			<tr id="editRow-${exam.examId}" style="display:none;">
+				<form method="post" action="/updateExam">
+					<td><input type="text" name="title" value="${exam.title}" /></td>
+					<td>${exam.status}</td>
+					<td><input type="date" name="examStartDate" value="${exam.examStartDate}" /></td>
+					<td><input type="date" name="examEndDate" value="${exam.examEndDate}" /></td>
+					<td>
+						<input type="hidden" name="examId" value="${exam.examId}" />
+						<button type="submit">저장</button>
+						<button type="button" onclick="cancelEdit(${exam.examId})">취소</button>
+					</td>
+					<td></td>
+				</form>
+			</tr>
+		</c:forEach>
+	</table>
+	<c:forEach var="i" begin="1" end="${endPage}">
+		<c:choose>
+			<c:when test="${i == currentPage}">
+				<span>[${i}]</span>
+			</c:when>
+			<c:otherwise>
+				<a href="/examList?currentPage=${i}">[${i}]</a>
+			</c:otherwise>
+		</c:choose>
 	</c:forEach>
-</table>
 </body>
 </html>

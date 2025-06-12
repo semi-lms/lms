@@ -11,7 +11,8 @@ public interface ExamService {
 	List<ExamSubmissionDTO> getScoreList(Map<String, Object> params);
 	
 	// 시험 리스트 조회
-	List<ExamDTO> getExamList(int courseId);
+	List<ExamDTO> getExamList(Map<String, Object> params);
+	int getExamCnt(int courseId);
 	// 시험 리스트 수정
 	int modifyExam(ExamDTO examDto);
 	// 시험 리스트 삭제

@@ -22,8 +22,13 @@ public class ExamServiceImpl implements ExamService{
 	}
 	
 	@Override
-	public List<ExamDTO> getExamList(int courseId) {
-		return examMapper.selectExamList(courseId);
+	public List<ExamDTO> getExamList(Map<String, Object> params) {
+		return examMapper.selectExamList(params);
+	}
+	
+	@Override
+	public int getExamCnt(int courseId) {
+		return examMapper.getExamCnt(courseId);
 	}
 	
 	@Override

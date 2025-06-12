@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
+import com.example.lms.dto.Page;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.ExamService;
 import com.example.lms.service.StudentService;
@@ -29,6 +30,10 @@ public class TeacherController {
 	@Autowired
 	private ExamService examService;
 	
+	// 강의 리스트
+	
+	
+	// 학생 리스트
 	@GetMapping("/studentListFromTeacher")
 	public String studentListFromTeacher(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
 										, Model model) {
@@ -37,6 +42,7 @@ public class TeacherController {
 		return "teacher/studentListFromTeacher";
 	}
 	
+	// 성적 리스트
 	@GetMapping("/scoreList")
 	public String scoreList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
 							, @RequestParam(name = "examId", required = false, defaultValue = "1") int examId
@@ -51,13 +57,37 @@ public class TeacherController {
 		return "teacher/scoreList";
 	}
 	
+	// 시험 리스트
 	@GetMapping("/examList")
 	public String examList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
+							, @RequestParam(defaultValue = "1") int currentPage
+							, @RequestParam(defaultValue = "10") int rowPerPage
 							, Model model) {
-		List<ExamDTO> exams = examService.getExamList(courseId);
 		
+		// 페이징
+		int totalCnt = examService.getExamCnt(courseId);
+		int lastPage = totalCnt / rowPerPage;
+		if(totalCnt % rowPerPage != 0) {
+			lastPage += 1;
+		};
+		int startRow = (currentPage - 1) * rowPerPage;
+		int startPage = ((currentPage-1) / rowPerPage) * rowPerPage + 1;
+		int endPage = startPage + rowPerPage -1;
+		if(endPage >lastPage) {
+			endPage = lastPage;
+		};
+		
+		Map<String, Object> examMap = new HashMap<>();
+		examMap.put("courseId", courseId);
+		examMap.put("startRow", startRow);
+		examMap.put("rowPerPage", rowPerPage);
+		
+		// 리스트 조회
+		List<ExamDTO> exams = examService.getExamList(examMap);
+		
+		// 진행도 표시
 		LocalDate today = LocalDate.now();
-
+		
 		for (ExamDTO exam : exams) {
 		    if (today.isBefore(exam.getExamStartDate())) {
 		        exam.setStatus("예정");
@@ -69,6 +99,12 @@ public class TeacherController {
 		}
 		
 		model.addAttribute("exams", exams);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("endPage", endPage);
+		model.addAttribute("currentPage", currentPage);
+		
+		
 		
 		return "teacher/examList";
 		}
@@ -79,4 +115,9 @@ public class TeacherController {
 		return "redirect:/examList";
 	}
 	
+	@PostMapping("/removeExam")
+	public String removeExam(@RequestParam("examId") int examId) {
+		examService.removeExam(examId);
+		return "redirect:/examList";
+	}
 }
