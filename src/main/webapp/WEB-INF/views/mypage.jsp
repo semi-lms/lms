@@ -42,13 +42,13 @@
   <div class="sidebar">
     <c:choose>
       <c:when test="${loginUser.role eq 'admin'}">
-        <jsp:include page="/WEB-INF/views/header/mypageHeaderAdmin.jsp" />
+    <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
       </c:when>
       <c:when test="${loginUser.role eq 'teacher'}">
-        <jsp:include page="/WEB-INF/views/header/mypageHeaderTeacher.jsp" />
+   <jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
       </c:when>
       <c:when test="${loginUser.role eq 'student'}">
-        <jsp:include page="/WEB-INF/views/header/mypageHeaderStudent.jsp" />
+     <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
       </c:when>
     </c:choose>
   </div>

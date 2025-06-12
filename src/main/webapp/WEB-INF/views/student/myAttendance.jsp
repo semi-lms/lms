@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -140,7 +141,10 @@
     </script>
 </head>
 <body>
+
+
     <div class="calendar-container">
+    
         <div class="month-nav">
             <button class="btn-month" onclick="prevMonth()">&lt;</button>
             <span class="header">${year}년 ${month}월</span>

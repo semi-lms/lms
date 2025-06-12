@@ -34,16 +34,16 @@
 <!-- 헤더 : 로고와 사이트명 -->
 <c:choose>
   <c:when test="${sessionScope.loginUser.role eq 'admin'}">
-    <jsp:include page="/WEB-INF/views/header/adminHeader.jsp" />
+    <jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
   </c:when>
   <c:when test="${sessionScope.loginUser.role eq 'teacher'}">
-    <jsp:include page="/WEB-INF/views/header/teacherHeader.jsp" />
+    <jsp:include page="/WEB-INF/views/common/header/teacherHeader.jsp" />
   </c:when>
   <c:when test="${sessionScope.loginUser.role eq 'student'}">
-    <jsp:include page="/WEB-INF/views/header/studentHeader.jsp" />
+    <jsp:include page="/WEB-INF/views/common/header/studentHeader.jsp" />
   </c:when>
   <c:otherwise>
-    <jsp:include page="/WEB-INF/views/header/mainHeader.jsp" />
+    <jsp:include page="/WEB-INF/views/common/header/mainHeader.jsp" />
   </c:otherwise>
 </c:choose>
 	
