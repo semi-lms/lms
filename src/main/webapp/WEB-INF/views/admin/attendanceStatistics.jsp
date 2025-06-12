@@ -46,15 +46,15 @@ body {
         <table border="1">
             <tr>
                 <th>반</th>
-                <th>실제 출석(지각 포함)</th>
                 <th>전체 출석 가능 횟수</th>
+                <th>실제 출석(지각 포함)</th>
                 <th>출석률(%)</th>
             </tr>
             <c:forEach var="i" begin="0" end="${fn:length(classNames) - 1}">
                 <tr>
                     <td>${classNames[i]}</td>
-                    <td>${actuals[i]}</td>
                     <td>${attendanceTotalCounts[i]}</td>
+                    <td>${actuals[i]}</td>
                     <td>
                         <c:choose>
                             <c:when test="${attendanceTotalCounts[i] > 0}">
@@ -107,18 +107,18 @@ body {
             labels: labels,
             datasets: [
                 {
-                    label: '실제 출석',
-                    data: actuals,
+                    label: '전체 출석 가능',
+                    data: totals,
                     backgroundColor: '#1e90ffcc',
                     borderColor: '#1e90ff',
                     borderWidth: 2,
                     yAxisID: 'y',
                 },
                 {
-                    label: '전체 출석 가능',
-                    data: totals,
-                    backgroundColor: '#ff3b30cc',
-                    borderColor: '#ff3b30',
+                    label: '실제 출석',
+                    data: actuals,
+                    backgroundColor: '#ffd600cc',
+                    borderColor: '#ffd600',        
                     borderWidth: 2,
                     yAxisID: 'y',
                 },
