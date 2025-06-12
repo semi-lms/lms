@@ -126,55 +126,62 @@
 <!-- 오늘의 출석 통계 -->
 <c:if test="${sessionScope.loginUser.role eq 'admin'}">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script>
-	    const courseNames = [
-	        <c:forEach var="item" items="${list}" varStatus="status">
-	            "${item.courseName}"<c:if test="${!status.last}">,</c:if>
-	        </c:forEach>
-	    ];
-	
-	    const totalCounts = [
-	        <c:forEach var="item" items="${list}" varStatus="status">
-	            ${item.total}<c:if test="${!status.last}">,</c:if>
-	        </c:forEach>
-	    ];
-	
-	    const attendedCounts = [
-	        <c:forEach var="item" items="${list}" varStatus="status">
-	            ${item.attended}<c:if test="${!status.last}">,</c:if>
-	        </c:forEach>
-	    ];
-	
-	    new Chart(document.getElementById('attendanceChart'), {
-	        type: 'bar',
-	        data: {
-	            labels: courseNames,
-	            datasets: [
-	                {
-	                    label: '총원',
-	                    data: totalCounts,
-	                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
-	                },
-	                {
-	                    label: '출석',
-	                    data: attendedCounts,
-	                    backgroundColor: 'rgba(75, 192, 192, 0.5)'
-	                }
-	            ]
-	        },
-	        options: {
-	            responsive: false,
-	            maintainAspectRatio: false,
-	            plugins: {
-	                legend: { display: false },
-	                title: { display: false }
-	            },
-	            scales: {
-	                y: { beginAtZero: true }
-	            }
-	        }
-	    });
-	</script>
+<script>
+    const courseNames = [
+        <c:forEach var="item" items="${list}" varStatus="status">
+            "${item.courseName}"<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    const totalCounts = [
+        <c:forEach var="item" items="${list}" varStatus="status">
+            ${item.total}<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    const attendedCounts = [
+        <c:forEach var="item" items="${list}" varStatus="status">
+            ${item.attended}<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+
+    // === Chart 객체 변수 따로 저장(아래서 써야 함) ===
+    const chartCanvas = document.getElementById('attendanceChart');
+    const myChart = new Chart(chartCanvas, {
+        type: 'bar',
+        data: {
+            labels: courseNames,
+            datasets: [
+                {
+                    label: '총원',
+                    data: totalCounts,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                },
+                {
+                    label: '출석',
+                    data: attendedCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                }
+            ]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                title: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // === 여기서 chartCanvas로 클릭 이벤트! ===
+    chartCanvas.onclick = function(evt) {
+        window.location.href = '/admin/attendanceStatistics';
+    };
+</script>
 </c:if>
 </body>
 </html>
