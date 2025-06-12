@@ -96,4 +96,50 @@
 			</if>
 		</where>
 	</select>
+	
+	
+	
+	<!-- 강사별 강의리스트 -->
+	<select id="selectCourseListByTeacherNo" parameterType="map" resultType="com.example.lms.dto.CourseDTO">
+		SELECT course_id courseId, course_name courseName,
+		       CASE 
+		           WHEN start_date > CURDATE() THEN '예정'
+		           WHEN end_date &lt; CURDATE() THEN '완료'
+		           ELSE '진행중'
+		       END AS courseActive,
+		       start_date startDate, end_date endDate
+		FROM course
+		WHERE teacher_no = #{teacherNo}
+		<choose>
+			<when test="filter == '예정'">
+				AND start_date > CURDATE()
+			</when>
+			<when test="filter == '진행중'">
+				AND start_date &lt;= CURDATE() AND end_date >= CURDATE()
+			</when>
+			<when test="filter == '완료'">
+				AND end_date &lt; CURDATE()
+			</when>
+			<!-- 전체일 경우 조건 없음 -->
+		</choose>
+		ORDER BY end_date ASC
+		LIMIT #{startRow}, #{rowPerPage}
+		</select>
+	<!-- 강사별 강의리스트 cnt -->
+	<select id="getCountCourseListByTeacherNo" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM course
+		WHERE teacher_no = #{teacherNo}
+		<choose>
+			<when test="filter == '예정'">
+				AND start_date > CURDATE()
+			</when>
+			<when test="filter == '진행중'">
+				AND start_date &lt;= CURDATE() AND end_date >= CURDATE()
+			</when>
+			<when test="filter == '완료'">
+				AND end_date &lt; CURDATE()
+			</when>
+		</choose>
+	</select>
 </mapper>

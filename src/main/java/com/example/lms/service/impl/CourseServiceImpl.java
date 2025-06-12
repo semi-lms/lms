@@ -10,35 +10,59 @@ import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.TeacherDTO;
 import com.example.lms.mapper.CourseMapper;
+import com.example.lms.service.CourseService;
 
 @Service
-public class CourseServiceImpl {
+public class CourseServiceImpl implements CourseService{
 
-	@Autowired CourseMapper courseMapper;
+	@Autowired
+	private CourseMapper courseMapper;
+	
+	@Override
 	public List<CourseDTO> selectCourseList(Map<String, Object> param) {
 		
 		return courseMapper.selectCourseList(param);
 	}
+	
+	@Override
 	public int insertCourse(CourseDTO courseDto) {
 		
 		return courseMapper.insertCourse(courseDto);
 	}
+	
+	@Override
 	public List<TeacherDTO> selectTeacherList() {
 
 		return courseMapper.selectTeacherList();
 	}
+	
+	@Override
 	public List<ClassDTO> selectClassList() {
 
 		return courseMapper.selectClassList();
 	}
+	
+	@Override
 	public ClassDTO selectClassByNo(int classNo) {
 		
 		return courseMapper.selectClassByNo(classNo);
 	}
+	
+	@Override
 	public int getTotalCount(String searchCourseOption, String searchCourse) {
 
 		return courseMapper.getTotalCount(searchCourseOption, searchCourse);
 	}
-
-
+	
+	// 강사별 강의리스트
+	@Override
+	public List<CourseDTO> getCourseListByTeacherNo(Map<String, Object> params) {
+		return courseMapper.selectCourseListByTeacherNo(params);
+	}
+	// 페이징
+	@Override
+	public int getCountCourseListByTeacherNo(int teacherNo, String filter) {
+		return courseMapper.getCountCourseListByTeacherNo(teacherNo, filter);
+	}
+	
 }

@@ -20,4 +20,9 @@ public interface CourseService {
 	public ClassDTO selectClassByNo(int classNo);
 	
 	public int getTotalCount(String searchCourseOption, String searchCourse);
+	
+	// 강사별 강의리스트
+	public List<CourseDTO> getCourseListByTeacherNo(Map<String, Object> params);
+	//페이징
+	public int getCountCourseListByTeacherNo(int teacherNo, String filter);
 }

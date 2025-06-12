@@ -22,4 +22,9 @@ public interface CourseMapper {
 	ClassDTO selectClassByNo(int classNo);
 
 	int getTotalCount(String searchCourseOption, String searchCourse);
+	
+	// 강사별 강의리스트
+	List<CourseDTO> selectCourseListByTeacherNo(Map<String, Object> params);
+	// 페이징
+	int getCountCourseListByTeacherNo(int teacherNo, String filter);
 }

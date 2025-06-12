@@ -14,4 +14,6 @@ public class CourseDTO {
 	private String teacherName;
 	private String applyPerson;
 	private String classroom;
+	
+	private String courseActive; // 진행중, 예정, 완료 로 구분
 }

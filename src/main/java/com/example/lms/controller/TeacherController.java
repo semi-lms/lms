@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
-import com.example.lms.dto.Page;
 import com.example.lms.dto.StudentDTO;
+import com.example.lms.service.CourseService;
 import com.example.lms.service.ExamService;
 import com.example.lms.service.StudentService;
 
@@ -29,9 +30,48 @@ public class TeacherController {
 	private StudentService studentService;
 	@Autowired
 	private ExamService examService;
+	@Autowired
+	private CourseService courseService;
 	
 	// 강의 리스트
-	
+	@GetMapping("/courseListFromTeacher")
+	public String courseListFromTeacher(@RequestParam(name = "teacherNo", required = false, defaultValue = "1") int teacherNo
+										, @RequestParam(defaultValue = "1") int currentPage
+										, @RequestParam(defaultValue = "10") int rowPerPage
+										, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter
+										, Model model) {
+		// 페이징
+		int totalCnt = courseService.getCountCourseListByTeacherNo(teacherNo, filter);
+		int lastPage = totalCnt / rowPerPage;
+		if(totalCnt % rowPerPage != 0) {
+			lastPage += 1;
+		};
+		int startRow = (currentPage - 1) * rowPerPage;
+		int startPage = ((currentPage-1) / rowPerPage) * rowPerPage + 1;
+		int endPage = startPage + rowPerPage -1;
+		if(endPage >lastPage) {
+			endPage = lastPage;
+		};
+		
+		// 조회
+		Map<String, Object> courseMap = new HashMap<>();
+	    courseMap.put("teacherNo", teacherNo);
+	    courseMap.put("filter", filter);
+	    courseMap.put("startRow", startRow);
+	    courseMap.put("rowPerPage", rowPerPage);
+		
+	    List<CourseDTO> courses = courseService.getCourseListByTeacherNo(courseMap);
+	    
+	    model.addAttribute("courses", courses);
+	    model.addAttribute("teacherNo", teacherNo);
+	    model.addAttribute("filter", filter);
+	    model.addAttribute("currentPage", currentPage);
+	    model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("endPage", endPage);
+	    
+		return "teacher/courseListFromTeacher";
+	}
 	
 	// 학생 리스트
 	@GetMapping("/studentListFromTeacher")
@@ -52,6 +92,7 @@ public class TeacherController {
 			endPage = lastPage;
 		};
 		
+		// 조회
 		Map<String, Object> studentMap = new HashMap<>();
 		studentMap.put("courseId", courseId);
 		studentMap.put("startRow", startRow);
@@ -152,4 +193,6 @@ public class TeacherController {
 		examService.addExam(examDto);
 		return "redirect:/examList";
 	}
+	
+	
 }
