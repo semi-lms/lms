@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +28,7 @@
 </head>
 <body>
 
-
+<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
     <div class="calendar-container">
     
         <div class="month-nav">
