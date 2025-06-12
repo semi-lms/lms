@@ -59,7 +59,6 @@
 
         <!-- 출석 통계 그래프 -->
         <div class="box" style="width: 30%;">
-          <h4 style="text-align: center;">오늘의 출석 통계</h4>
           <canvas id="attendanceChart" width="300" height="250"></canvas>
         </div>
 
@@ -127,9 +126,9 @@
 <c:if test="${sessionScope.loginUser.role eq 'admin'}">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const courseNames = [
+    const classroom = [
         <c:forEach var="item" items="${list}" varStatus="status">
-            "${item.courseName}"<c:if test="${!status.last}">,</c:if>
+            "${item.classroom}"<c:if test="${!status.last}">,</c:if>
         </c:forEach>
     ];
 
@@ -150,7 +149,7 @@
     const myChart = new Chart(chartCanvas, {
         type: 'bar',
         data: {
-            labels: courseNames,
+            labels: classroom,
             datasets: [
                 {
                     label: '총원',
@@ -169,7 +168,12 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: { display: false },
-                title: { display: false }
+                title: { 
+					display: true,
+                    text: '오늘의 출석 통계',
+                    font: { size: 16 },
+                    padding: { top: 10, bottom: 10 }
+                }
             },
             scales: {
                 y: { beginAtZero: true }
