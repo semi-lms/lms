@@ -35,7 +35,7 @@ public class TeacherController {
 	
 	// 강의 리스트
 	@GetMapping("/courseListFromTeacher")
-	public String courseListFromTeacher(@RequestParam(name = "teacherNo", required = false, defaultValue = "1") int teacherNo
+	public String courseListFromTeacher(@RequestParam(name = "teacherNo", required = false, defaultValue = "7") int teacherNo
 										, @RequestParam(defaultValue = "1") int currentPage
 										, @RequestParam(defaultValue = "10") int rowPerPage
 										, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter

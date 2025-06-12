@@ -5,51 +5,103 @@
 <head>
 <meta charset="UTF-8">
 <title>강사-강의리스트</title>
+<style>
+	.container {
+		display: flex;
+		min-height: 100vh;
+		font-family: 'Segoe UI', sans-serif;
+		background-color: #f0f0f0;
+	}
+	
+	.sidebar {
+		width: 220px;
+		background-color: #333;
+		color: white;
+		padding: 20px;
+		box-sizing: border-box;
+	}
+	
+	.main-content {
+		margin-left: 230px;
+		flex-grow: 1;
+		padding: 30px;
+		background-color: white;
+	}
+	
+	button {
+		margin-right: 10px;
+		padding: 6px 12px;
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 20px;
+		background-color: #fff;
+	}
+	
+	th, td {
+		border: 1px solid #ccc;
+		padding: 10px;
+		text-align: center;
+	}
+	
+	th {
+		background-color: #eee;
+	}
+</style>
 </head>
 <body>
-	<h1>강의 리스트</h1>
-	<form method="get" action="/courseListFromTeacher">
-		<input type="hidden" name="teacherNo" value="${teacherNo}" />
-		<input type="hidden" name="currentPage" value="${currentPage}" />
-		<button type="submit" name="filter" value="전체" ${filter == '전체' ? 'disabled' : ''}>전체</button>
-		<button type="submit" name="filter" value="예정" ${filter == '예정' ? 'disabled' : ''}>예정</button>
-		<button type="submit" name="filter" value="진행중" ${filter == '진행중' ? 'disabled' : ''}>진행중</button>
-		<button type="submit" name="filter" value="완료" ${filter == '완료' ? 'disabled' : ''}>완료</button>
-	</form>
-
-	<table border="1">
-		<tr>
-			<th>과정명</th>
-			<th>시작일</th>
-			<th>종료일</th>
-			<th>진행상태</th>
-		</tr>
-		<c:forEach var="course" items="${courses}">
+<div class="container">
+	<div class="sidebar">
+		<jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
+	</div>
+	<div class="main-content">
+		<h1>강의 리스트</h1>
+		<form method="get" action="/courseListFromTeacher">
+			<input type="hidden" name="teacherNo" value="${teacherNo}" />
+			<input type="hidden" name="currentPage" value="${currentPage}" />
+			<button type="submit" name="filter" value="전체" ${filter == '전체' ? 'disabled' : ''}>전체</button>
+			<button type="submit" name="filter" value="예정" ${filter == '예정' ? 'disabled' : ''}>예정</button>
+			<button type="submit" name="filter" value="진행중" ${filter == '진행중' ? 'disabled' : ''}>진행중</button>
+			<button type="submit" name="filter" value="완료" ${filter == '완료' ? 'disabled' : ''}>완료</button>
+		</form>
+	
+		<table border="1">
 			<tr>
-				<td>${course.courseName}</td>
-				<td>${course.startDate}</td>
-				<td>${course.endDate}</td>
-				<td>${course.courseActive}</td>
+				<th>과정명</th>
+				<th>시작일</th>
+				<th>종료일</th>
+				<th>진행상태</th>
 			</tr>
-		</c:forEach>
-	</table>
-	<c:if test="${lastPage > 1 }">
-		<c:if test="${startPage > 1 }">
-			<a href="/teacher/courseListFromTeacher?currentPage=${startPage - 1}&rowPerPage=${rowPerPage}&filter=${filter}">[이전]</a>
+			<c:forEach var="course" items="${courses}">
+				<tr>
+					<td>${course.courseName}</td>
+					<td>${course.startDate}</td>
+					<td>${course.endDate}</td>
+					<td>${course.courseActive}</td>
+				</tr>
+			</c:forEach>
+		</table>
+		<c:if test="${lastPage > 1 }">
+			<c:if test="${startPage > 1 }">
+				<a href="/teacher/courseListFromTeacher?currentPage=${startPage - 1}&rowPerPage=${rowPerPage}&filter=${filter}">[이전]</a>
+			</c:if>
 		</c:if>
-	</c:if>
-	<c:forEach var="i" begin="${startPage}" end="${endPage}">
-		<c:choose>
-			<c:when test="${i == currentPage }">
-				<span>[${i}]</span>
-			</c:when>
-			<c:otherwise>
-				<a href="/teacher/courseListFromTeacher?currentPage=${i}&rowPerPage=${rowPerPage}&filter=${filter}">[${i}]</a>
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
-	<c:if test="${endPage < lastPage }">
-		<a href="/teacher/courseListFromTeacher?currentPage=${endPage+1}&rowPerPage=${rowPerPage}&filter=${filter}">[다음]</a>
-	</c:if>
+		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+			<c:choose>
+				<c:when test="${i == currentPage }">
+					<span>[${i}]</span>
+				</c:when>
+				<c:otherwise>
+					<a href="/teacher/courseListFromTeacher?currentPage=${i}&rowPerPage=${rowPerPage}&filter=${filter}">[${i}]</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${endPage < lastPage }">
+			<a href="/teacher/courseListFromTeacher?currentPage=${endPage+1}&rowPerPage=${rowPerPage}&filter=${filter}">[다음]</a>
+		</c:if>
+	</div>
+</div>
 </body>
 </html>
