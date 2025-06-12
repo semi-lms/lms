@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
-    <p class="user-name"><strong>${loginUser.name}</strong> 님</p>
+    <p class="user-name"><strong>${loginUser.name}</strong> 김예진/노민혁 님</p>
     <p class="title">마이페이지</p>
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>

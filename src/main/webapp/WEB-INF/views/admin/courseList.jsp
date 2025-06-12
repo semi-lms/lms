@@ -19,16 +19,19 @@
 	    margin-right: 30px;
 	}
 	
-	.main-content {
-	    flex: 1;
-	}
+  .main-content {
+    flex: 1;
+    padding: 32px 24px 24px 300px; /* 좌우여백 */
+    overflow-x: auto;
+    background: #fafbfc;
+  }
 	</style>
 </head>
 <body>
     <div class="container">
         <div class="sidebar">
             <!-- 기존 왼쪽 메뉴 jsp 인클루드 -->
-            <jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
+            <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
         </div>
         <div class="main-content">
 	<h1>강의 목록</h1>
