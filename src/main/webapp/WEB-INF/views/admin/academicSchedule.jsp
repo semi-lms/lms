@@ -1,0 +1,70 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
+<!DOCTYPE html>
+<html>
+
+<head>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+    <title>학원 일정</title>
+ 
+  <script>
+    function prevMonth() {
+        let y = ${year}, m = ${month} - 1;
+        if (m < 1) { y--; m = 12; }
+        location.href = '/admin/academicSchedule?year=' + y + '&month=' + m;
+    }
+
+    function nextMonth() {
+        let y = ${year}, m = ${month} + 1;
+        if (m > 12) { y++; m = 1; }
+        location.href = '/admin/academicSchedule?year=' + y + '&month=' + m;
+    }
+</script>
+
+</head>
+<body>
+    <div class="calendar-container">
+        <div class="month-nav">
+            <button class="btn-month" onclick="prevMonth()">&lt;</button>
+            <span class="header">${year}년 ${month}월</span>
+            <button class="btn-month" onclick="nextMonth()">&gt;</button>
+        </div>
+
+        <table class="calendar">
+            <thead>
+                <tr>
+                    <th class="sunday">일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th class="saturday">토</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="week" items="${weeks}">
+                    <tr>
+                        <c:forEach var="day" items="${week.days}">
+                            <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
+                                <div>${day.day}</div>
+
+                               <c:forEach var="memoDto" items="${dateScheduleMap[day.dateStr]}">
+                                   <div class="memo">
+                                       ${memoDto.memo}
+                                   </div>
+                               </c:forEach>
+                            </td>
+                        </c:forEach>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+	
+					
+    <button class="register-button" onclick="location.href='/'">일정 등록</button>
+   
+    </div>
+</body>
+</html>
