@@ -1,0 +1,41 @@
+@charset "UTF-8";
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    border-right: 2px solid #ddd;
+    padding: 30px 10px 10px 10px;
+    background-color: #fff;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 0;
+}
+
+.sidebar .user-name {
+    font-size: 18px;
+}
+
+.sidebar .title {
+    margin-bottom: 10px;
+}
+
+.sidebar-btn {
+    width: 80%;
+    font-size: 16px;
+    padding: 8px;
+    margin: 4px 0;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.sidebar-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.sidebar-btn.home {
+    font-size: 20px;
+}

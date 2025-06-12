@@ -1,22 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div style="position: fixed; top: 0; left: 0;
-    width: 250px; height: 100vh;
-    border-right: 2px solid #ddd;
-    padding: 30px 10px 10px 10px;
-    background-color: #fff;
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
-    text-align: center; border-radius: 0;">
     
-    <p style="font-size: 18px;"><strong>${loginUser.name}</strong> 님</p>
-    <p style="margin-bottom: 10px;">마이페이지</p>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
-    <a href="/main"><button style="font-size: 20px;">🏠 홈</button></a><br><br>
+<div class="sidebar">
+    <p class="user-name"><strong>${loginUser.name}</strong> 님</p>
+    <p class="title">마이페이지</p>
 
-    <button onclick="loadContent('/mypage/info')">개인정보</button><br><br>
-   
-    <a href="/mypage/schedule"><button>공지사항</button></a><br><br>
-    <a href="/qna"><button>QNA</button></a><br><br>
-    <a href="/fileBoard"><button>자료실</button></a><br><br>
-    <a href="/logout"><button>로그아웃</button></a>
+    <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
+    <button class="sidebar-btn" onclick="loadContent('/mypage/info')">개인정보</button><br><br>
+    <a href="/mypage/schedule"><button class="sidebar-btn">공지사항</button></a><br><br>
+    <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
+    <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
+    <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
