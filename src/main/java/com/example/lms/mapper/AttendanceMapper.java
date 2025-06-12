@@ -1,5 +1,6 @@
 package com.example.lms.mapper;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.StudentDTO;
 
 @Mapper
 public interface AttendanceMapper {
@@ -23,4 +25,8 @@ public interface AttendanceMapper {
     int getActualAttendance(Map<String, Object> param);
 
     List<AttendanceDTO> getAttendanceByClass(int courseId);
+
+	List<StudentDTO> getStudentListByCourse(int courseId);
+
+	List<Date> getHolidayList();
 }

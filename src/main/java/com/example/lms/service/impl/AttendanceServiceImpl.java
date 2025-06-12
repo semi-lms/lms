@@ -1,5 +1,6 @@
 package com.example.lms.service.impl;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.StudentDTO;
 import com.example.lms.mapper.AttendanceMapper;
 import com.example.lms.service.AttendanceService;
 
@@ -54,4 +56,14 @@ public class AttendanceServiceImpl implements AttendanceService {
     	
         return attendanceMapper.getAttendanceByClass(courseId);
     }
+
+	public List<StudentDTO> getStudentListByCourse(int courseId) {
+
+		return attendanceMapper.getStudentListByCourse(courseId);
+	}
+
+	public List<Date> getHolidayList() {
+
+		return attendanceMapper.getHolidayList();
+	}
 }

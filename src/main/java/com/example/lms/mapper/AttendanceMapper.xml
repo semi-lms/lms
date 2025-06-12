@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.AttendanceMapper">
-
+	<resultMap id="attendanceMap" type="com.example.lms.dto.AttendanceDTO">
+	    <result property="classroom" column="classroom"/>
+	    <result property="studentNo" column="student_no"/>
+	    <result property="name" column="name"/>
+	    <result property="date" column="date"/>
+	    <result property="status" column="status"/>
+	</resultMap>
+	
+	<resultMap id="studentMap" type="com.example.lms.dto.StudentDTO">
+		<result property="studentNo" column="student_no"/>
+		<result property="name" column="name"/>
+    	<result property="classroom" column="classroom"/>
+	</resultMap>
     <!-- 오늘 출석현황 (그대로) -->
     <select id="getTodayAttendance" resultType="com.example.lms.dto.AttendanceDTO">
         SELECT
@@ -60,14 +72,34 @@
           AND course_id = #{courseId}
     </select>
     
-    <select id="getAttendanceByClass" parameterType="int" resultType="com.example.lms.dto.AttendanceDTO">
-	    SELECT cl.classroom, s.name, COUNT(a.`status`) AS attendanceCount
-	    FROM course c 
+    <select id="getAttendanceByClass" parameterType="int" resultMap="attendanceMap">
+	    SELECT
+	        cl.classroom,
+	        s.student_no,
+	        s.name,
+	        a.date,
+	        a.status
+	    FROM course c
 	    INNER JOIN attendance a ON c.course_id = a.course_id
 	    INNER JOIN class cl ON cl.class_no = c.class_no
 	    INNER JOIN student s ON a.student_no = s.student_no
 	    WHERE c.course_id = #{courseId}
-	    GROUP BY cl.class_no, cl.classroom, s.student_no, s.name
-	    ORDER BY cl.class_no, s.name
+	    ORDER BY s.student_no, a.date
+	</select>
+	
+	<select id="getStudentListByCourse" resultMap="studentMap" parameterType="int">
+        SELECT s.student_no, s.name, cl.classroom
+	    FROM attendance a
+	    INNER JOIN student s ON a.student_no = s.student_no
+	    INNER JOIN course c ON a.course_id = c.course_id
+	    INNER JOIN class cl ON c.class_no = cl.class_no
+	    WHERE a.course_id = #{courseId}
+	    GROUP BY s.student_no, s.name, cl.classroom
+	    ORDER BY s.name
+	</select>
+	
+	<select id="getHolidayList">
+		SELECT date
+		FROM holidays
 	</select>
 </mapper>
