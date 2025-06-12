@@ -10,6 +10,8 @@ public class SessionUserDTO {
 	private String adminId;
 	private String teacherId;
 	private String studentId;
+	private int studentNo;
+	private int teacherNo;
 	private int courseId;		// course_id
 	private String name;		// name
 	private String email;		// email

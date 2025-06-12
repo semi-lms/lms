@@ -6,4 +6,5 @@ import lombok.Data;
 public class AdminDTO {
 	private String adminId;		// admin_id
 	private String password;	// password
+	
 }

@@ -20,7 +20,7 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceMapper.getTodayAttendance();
     }
 	@Override
-	public List<AttendanceDTO> getAttendanceListByStudentId(int studentId) {
+	public List<AttendanceDTO> getAttendanceListByStudentId(String studentId) {
 		return attendanceMapper.selectAttendanceListByStudentId(studentId);
 	}
 	

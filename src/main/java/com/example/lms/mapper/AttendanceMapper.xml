@@ -23,7 +23,7 @@
 		AS courseId , DATE , STATUS
 		FROM attendance
 		WHERE
-		student_no = #{studentNo}
+		student_id = #{studentId}
 	</select>
 
        <!-- 전체 출석 레코드 수 -->

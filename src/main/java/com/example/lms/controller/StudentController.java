@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AttendanceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -36,11 +37,12 @@ public class StudentController {
 	    }
 	 
 	@GetMapping("/student/myAttendance")
-	public String getMyAttendance(@RequestParam int studentId,
+	public String getMyAttendance(@RequestParam String studentId,
 	                              @RequestParam(required = false) Integer year,
 	                              @RequestParam(required = false) Integer month,
 	                              HttpSession session,
 	                              Model model) {
+
 	    Calendar cal = Calendar.getInstance();
 	    int displayYear = (year != null) ? year : cal.get(Calendar.YEAR);
 	    int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
