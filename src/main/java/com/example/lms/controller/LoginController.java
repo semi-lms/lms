@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping
 public class LoginController {
 	@Autowired LoginService loginService;
-	@Autowired PasswordEncoder passwordEncoder; // 암호화 필드 받기
+	@Autowired PasswordEncoder passwordEncoder; // 암호화 필드 받기 // com.example.lms.config.SecurityConfig
 	
 	// 로그인
 	@GetMapping("/login")
@@ -36,29 +36,29 @@ public class LoginController {
 	
 	// 관리자
 	@PostMapping("/login")
-    public String login(@ModelAttribute LoginDTO loginDTO, HttpSession session, Model model) {
-        String role = loginDTO.getRole();
-        String id = loginDTO.getId();
-        String pw = loginDTO.getPw();
+    public String login(@ModelAttribute LoginDTO loginDtO, HttpSession session, Model model) { // loginDto에 자동으로 바인딩 // 로그인 성공시 저장 // 로그인 실패시 에러메세지 사용
+        String role = loginDtO.getRole();		// 로그인 대상 누군지 확인
+        String id = loginDtO.getId();			// 입력한 id, pw 
+        String pw = loginDtO.getPw();
 
-        SessionUserDTO sessionUser = null;
+        SessionUserDTO sessionUser = null;		// 로그인 성공시 세션에 저장할 사용자 정보 담을 객체 SessionUserDTO , 실패 시 null 상태
 
-        if ("admin".equals(role)) {
+        if ("admin".equals(role)) {				// 로그인한 대상이 관리자일 경우 AdminDTO 객체를 만들어 로그인
             AdminDTO adminDto = new AdminDTO();
-            adminDto.setAdminId(id);
+            adminDto.setAdminId(id);			// 입력값으로부터 id, pw 담음
             adminDto.setPassword(pw);
-            AdminDTO admin = loginService.loginAdmin(adminDto);
-            if (admin != null && passwordEncoder.matches(pw, admin.getPassword())) {
-            	sessionUser = new SessionUserDTO(); // 최소한의 역할만 유지
+            AdminDTO admin = loginService.loginAdmin(adminDto);		// DB에 id/pw를 넘겨서 관리자 정보가 있는지 확인
+            if (admin != null && passwordEncoder.matches(pw, admin.getPassword())) {	// 로그인 성공 - DB에서 조회한 관리자 정보가 존재 && 입력한 비밀번호가 암호화된 비밀번호와 일치할 경우
+            	sessionUser = new SessionUserDTO(); // // 세션에 저장할 정보만 담는 DTO
                 sessionUser.setRole("admin");
-                sessionUser.setAdminId(admin.getAdminId ());
+                sessionUser.setAdminId(admin.getAdminId());
             }
-        } else if ("teacher".equals(role)) {
-            TeacherDTO teacherDto = new TeacherDTO();
+        } else if ("teacher".equals(role)) {			// 강사도 동일
+            TeacherDTO teacherDto = new TeacherDTO();	
             teacherDto.setTeacherId(id);
             teacherDto.setPassword(pw);
-            TeacherDTO teacher = loginService.loginTeacher(teacherDto);
-            if (teacher != null) {
+            TeacherDTO teacher = loginService.loginTeacher(teacherDto);		// 서비스에서 해당 아이디/비밀번호로 선생님 조회
+            if (teacher != null) {											// 비밀번호, 주소, 주민번호는 보안상 저장 x
                 sessionUser = new SessionUserDTO();
                 sessionUser.setRole("teacher");
                 sessionUser.setTeacherId(teacher.getTeacherId());
@@ -68,7 +68,7 @@ public class LoginController {
                 sessionUser.setEmail(teacher.getEmail());
                 sessionUser.setRegDate(teacher.getRegDate());
             }
-        } else if ("student".equals(role)) {
+        } else if ("student".equals(role)) {				// 학생 동일
             StudentDTO studentDto = new StudentDTO();
             studentDto.setStudentId(id);
             studentDto.setPassword(pw);
@@ -85,12 +85,12 @@ public class LoginController {
             }
         }
 
-        if (sessionUser == null) {
+        if (sessionUser == null) {			// 로그인 성공하지 못하면 sessionUser는 null
             model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
             return "login";
         }
 
-        session.setAttribute("loginUser", sessionUser);
+        session.setAttribute("loginUser", sessionUser);		// 로그인 성공시 메인페이지로 리다이렉트
         return "redirect:/main";
     }
 

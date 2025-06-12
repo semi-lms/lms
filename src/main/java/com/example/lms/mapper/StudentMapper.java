@@ -18,4 +18,11 @@ public interface StudentMapper {
 	
 	// 개인정보 조회
 	StudentDTO selectStudentById(String studentId);
+	
+	// 아이디 중복확인
+	int isStudentIdExist(String studentId);
+	
+	// 비밀번호 확인 및 개인정보 수정
+	String selectPasswordById(String studentId);
+	int updateStudentInfo(StudentDTO studentDto);
 }

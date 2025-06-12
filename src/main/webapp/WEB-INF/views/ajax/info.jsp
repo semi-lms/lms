@@ -14,7 +14,7 @@
           <input type="text" id="userIdInput" name="teacherId" value="${loginUser.teacherId}" />
         </c:when>
         <c:when test="${loginUser.role eq 'student'}">
-          <input type="text" id="userIdInput" name="id" value="${loginUser.studentId}" readonly />
+          <input type="text" id="userIdInput" name="studentId" value="${loginUser.studentId}" readonly />
         </c:when>
       </c:choose>
       <button type="button" id="checkBtn">중복확인</button>

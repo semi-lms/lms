@@ -15,14 +15,51 @@
 	
 	<!-- 학생 개인정보 조회 -->
 	<select id="selectStudentById" parameterType="string" resultType="com.example.lms.dto.StudentDTO">
-		SELECT s.student_id,
-				s.name,
-				s.email,
-				s.phone,
-				s.course_id,
-				c.course_name
+		SELECT 
+			s.student_no AS studentNo,
+   			s.student_id AS studentId,
+			s.name,
+			s.email,
+			s.phone,
+			s.course_id AS courseId,
+			c.course_name AS courseName
 		FROM student s
 		JOIN course c ON s.course_id = c.course_id
 		WHERE s.student_id = #{studentId}
 	</select>
+	
+	<!-- 아이디  중복확인 -->
+	<!-- 아이디 있는 행을 찾아서 맞으면 1 아니면 0으로 확인 -->
+	<select id="isStudentIdExist" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM student
+		WHERE student_id = #{studentId}
+	</select>
+	
+	<!-- 비밀번호 확인 -->
+	<select id="selectPasswordById" parameterType="string" resultType="string">
+		SELECT password
+		FROM student
+		WHERE student_id = #{studentId}
+	</select>
+	
+	<!-- 개인정보 수정 -->
+	<update id="updateStudentInfo" parameterType="com.example.lms.dto.TeacherDTO">
+		UPDATE student
+		SET
+			student_id = #{studentId},
+			email = #{email},
+			phone = #{phone},
+			password = #{password}
+		WHERE student_no = #{studentNo}
+	</update>
+	
 </mapper>
+
+
+
+
+
+
+
+

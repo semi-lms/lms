@@ -11,6 +11,5 @@ public interface StudentService {
 	// 페이징
 	int getStudentCntByCourseId(int courseId);
 	
-	// 개인정보 조회
-	StudentDTO getStudentById(String studentId);
+
 }

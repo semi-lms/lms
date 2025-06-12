@@ -27,11 +27,7 @@ public class StudentServiceImpl implements StudentService {
 		return studentMapper.getStudentCntByCourseId(courseId);
 	}
 	
-	// 개인정보 조회
-	@Override
-	public StudentDTO getStudentById(String studentId) {
-		return studentMapper.selectStudentById(studentId);
-	}
+
 
 	
 

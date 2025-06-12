@@ -45,7 +45,7 @@
 			email = #{email},
 			phone = #{phone},	
 			password = #{password}
-		WHERE teacher_No = #{teacherNo}
+		WHERE teacher_no = #{teacherNo}
 	</update>
 	
 

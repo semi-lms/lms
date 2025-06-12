@@ -33,6 +33,9 @@
 <script>
 $(document).ready(function () {
 	  $('#contentArea').load('/mypage/info', function () {
+		 const role = '${loginUser.role}'; // JSP에서 세션 정보 출력
+		 const updateUrl = role === 'student' ? '/mypage/updateStudentInfo' : '/mypage/updateInfo';
+
 	    let idCleared = false;
 
 	    // 아이디 수정 가능하게 (최초 클릭 시에만)
@@ -119,7 +122,7 @@ $(document).ready(function () {
 	      if (hasError) return;
 
 	      $.ajax({
-	    	  url: '/mypage/updateInfo',
+	    	  url: updateUrl,
 	    	  method: 'POST',
 	    	  data: $('#updateForm').serialize(),
 	    	  success: function (data) {

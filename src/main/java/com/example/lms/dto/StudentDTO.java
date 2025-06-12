@@ -21,4 +21,7 @@ public class StudentDTO {
 	private String birth;		// 생년월일
 	private String courseName;	// course_name 테이블 조인한 결과 넣을 값
 	private String classroom; // 테이블에 넣으려고 필요한 값
+	private String oldTeacherId; // 변경 전 아이디
+	private String newPw;		// 새 비밀번호
+	private String currentPassword;
 }
