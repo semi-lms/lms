@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lms.mapper.HolidaysMapper">
+	
+	<!-- 휴강 삭제 -->
+	<delete id="deleteHoliday" parameterType="com.example.lms.dto.HolidaysDTO">
+		DELETE FROM holidays
+		WHERE date = #{date}
+	</delete>
+
+	<!-- 휴강 등록 -->
+	<insert id="insertHoliday" parameterType="com.example.lms.dto.HolidaysDTO">
+		INSERT INTO holidays (date, name)
+		VALUES (#{date}, '학원 휴강')
+	</insert>
+	
+	<!-- 휴강 날짜 수정 (삭제 후 재등록: delete -> insert) -->
+</mapper>
