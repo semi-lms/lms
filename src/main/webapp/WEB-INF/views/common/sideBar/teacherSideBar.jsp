@@ -11,15 +11,15 @@
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
     <button type="button" class="sidebar-btn" onclick="goToInfo()">개인정보</button><br><br>
-    <a href="/courseListFromTeacher?teacherNo=${loginuser.teacherNo}"><button class="sidebar-btn">강의목록</button></a><br><br>
+    <a href="/courseListFromTeacher?teacherNo=${loginUser.teacherNo}"><button class="sidebar-btn">강의목록</button></a><br><br>
     <button class="sidebar-btn" onclick="toggleSubmenu()">관리목록</button><br><br>
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
-		  <a href="/attendanceList?courseId=${loginuser.courseId}" class="submenu-link">• 출결</a>
-		  <a href="/studentListFromTeacher?courseId=${loginuser.courseId}" class="submenu-link">• 학생</a>
-		  <a href="/examList?courseId=${loginuser.courseId}" class="submenu-link">• 시험</a>
+		  <a href="/attendanceList?courseId=${loginUser.courseId}" class="submenu-link">• 출결</a>
+		  <a href="/studentListFromTeacher?courseId=${loginUser.courseId}" class="submenu-link">• 학생</a>
+		  <a href="/examList?courseId=${loginUser.courseId}" class="submenu-link">• 시험</a>
 		</div>
-    <a href="/lectureSchedule?courseId=${loginuser.courseId}&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
+    <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
      <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/file/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
