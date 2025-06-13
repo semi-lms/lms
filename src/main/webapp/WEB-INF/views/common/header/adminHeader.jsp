@@ -10,8 +10,8 @@
     	<a href="/admin/teacherList">강사관리</a>
     	<a href="/admin/courseList">강의관리</a>
     	<a href="/admin/attendanceStatistics">출석통계</a>
-    	<a href="/mypage/noticeList">공지사항</a>
-		<a href="/qna">QNA</a>
-		<a href="/fileBoard">자료실</a>
+    	<a href="/notice/noticeList">공지사항</a>
+		<a href="/qna/qnaList">QNA</a>
+		<a href="/file/fileBoard">자료실</a>
   </div>
 </div>

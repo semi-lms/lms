@@ -36,7 +36,7 @@
 				<c:forEach var="notice" items="${noticeList}">
 					<tr>
 						<td>${notice.noticeId}</td>
-						<td><a href="noticeOne"> ${notice.title} </a></td>
+						<td><a href="/notice/noticeOne?noticeId=${notice.noticeId}">${notice.title} </a></td>
 						<td>${notice.adminId}</td>
 						<td>${notice.createDate}</td>
 					</tr>

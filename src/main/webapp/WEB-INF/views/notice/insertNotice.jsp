@@ -27,26 +27,31 @@
  <div class="notice-content" >
   <form method="post" action="${pageContext.request.contextPath}/notice/insertNotice">
 
-    <!-- 1. 관리자 아이디 표시 (readonly) -->
+    <!-- 관리자 아이디 표시 (readonly) -->
     <div class="form-group">
       <label>작성자</label>
       <input type="text" class="form-control" value="${loginUser.adminId}" readonly>
       <input type="hidden" name="adminId" value="${loginUser.adminId}">
     </div>
 
-    <!-- 2. 제목 입력 -->
+    <!-- 제목 입력 -->
     <div class="form-group">
       <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요.">
     </div>
 
-    <!-- 3. 내용 입력 -->
+    <!-- 내용 입력 -->
     <div class="form-group">
       <textarea name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요."></textarea>
     </div>
 
-    <!-- 4. 등록 버튼 -->
+    <!-- 등록 버튼 -->
     <div class="form-group">
       <button type="submit" class="btn-submit">등록</button>
+    </div>
+    
+    <!-- 돌아가기 버튼 -->
+    <div class="form-group">
+      <a href="${pageContext.request.contextPath}/notice/noticeList" class="btn-submit">돌아가기</a>
     </div>
 
   </form>

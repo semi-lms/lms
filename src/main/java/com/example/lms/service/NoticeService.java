@@ -18,4 +18,13 @@ public interface NoticeService {
 	
 	// 작성
 	int insertNotice(NoticeDTO noticeDto);
+	
+	// 상세보기
+	NoticeDTO selectNoticeOne(int noticeId);
+	
+	// 수정
+	int updateNotice(NoticeDTO noticeDto);
+	
+	// 삭제
+	int deleteNotice(int noticeDto);
 }

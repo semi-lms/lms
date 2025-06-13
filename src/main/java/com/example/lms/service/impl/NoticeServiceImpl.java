@@ -39,7 +39,25 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeMapper.insertNotice(noticeDto);
 		
 	}
+	// 상세보기
+	@Override
+	public NoticeDTO selectNoticeOne(int noticeId) {
+		return noticeMapper.selectNoticeOne(noticeId);
+	}
 
+	// 수정
+	@Override
+	public int updateNotice(NoticeDTO noticeDto) {
+		return noticeMapper.updateNotice(noticeDto);
+	}
+
+	@Override
+	public int deleteNotice(int noticeDto) {
+		return noticeMapper.deleteNotice(noticeDto);
+	}
+	
+
+	
 
     
     

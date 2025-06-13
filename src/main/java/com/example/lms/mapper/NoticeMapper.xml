@@ -46,7 +46,7 @@
 	</insert>
 	
 	<!-- 상세보기 -->
-	<select id="NoticeOne" parameterType="int" resultType="com.example.lms.dto.NoticeDTO">
+	<select id="selectNoticeOne" parameterType="int" resultType="com.example.lms.dto.NoticeDTO">
 		SELECT
 			notice_id AS noticeId,
 			admin_id AS adminId,
@@ -58,13 +58,17 @@
 		WHERE notice_id = #{noticeId}
 	</select>
 	<!-- 수정 -->
-	<update id="updateNotice">
-	
+	<update id="updateNotice" parameterType="com.example.lms.dto.NoticeDTO"> 	<!-- 영향을 받은 행의 개수를 반환하기때문에 resultType필요없다 -->
+		UPDATE notice
+		SET title = #{title}, content = #{content}
+		WHERE notice_id = #{noticeId}
 	</update>
 	
 	<!-- 삭제 -->
-	<delete id="">
-	
+	<delete id="deleteNotice" parameterType="com.example.lms.dto.NoticeDTO">
+		DELETE 
+		FROM notice
+		WHERE notice_id = #{noticeId}
 	</delete>
 	
 </mapper>
