@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.ui.Model;
 
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
 
 @Mapper
@@ -31,6 +33,8 @@ public interface StudentMapper {
 	
 	int getTotalCount(String searchOption, String keyword);
 	
-	String insertStudentList(List<StudentDTO> studentList);
+	int insertStudentList(List<StudentDTO> studentList);
+	
+	List<CourseDTO> selectCourse();
 
 }

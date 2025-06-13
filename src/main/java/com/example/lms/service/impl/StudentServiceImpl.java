@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.mapper.StudentMapper;
 import com.example.lms.service.StudentService;
@@ -40,9 +42,15 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public String insertStudentList(List<StudentDTO> studentList) {
+	public int insertStudentList(List<StudentDTO> studentList) {
 		
 		return studentMapper.insertStudentList(studentList);
+	}
+	
+	@Override
+	public List<CourseDTO> selectCourse() {
+
+		return studentMapper.selectCourse();
 	}
 	
 	

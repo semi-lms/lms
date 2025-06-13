@@ -3,6 +3,7 @@ package com.example.lms.service;
 import java.util.List;
 import java.util.Map;
 
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
 
 public interface StudentService {
@@ -15,6 +16,8 @@ public interface StudentService {
 	
 	int getTotalCount(String searchOption, String keyword);
 	
-	String insertStudentList(List<StudentDTO> studentList);
+	int insertStudentList(List<StudentDTO> studentList);
+	
+	List<CourseDTO> selectCourse();
 	
 }

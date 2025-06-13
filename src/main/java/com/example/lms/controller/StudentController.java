@@ -20,23 +20,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.dto.Page;
 import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
-import com.example.lms.service.AttendanceService;
-import com.example.lms.service.ExamService;
+import com.example.lms.dto.StudentListForm;
 import com.example.lms.service.impl.AttendanceServiceImpl;
 import com.example.lms.service.impl.ExamServiceImpl;
+import com.example.lms.service.impl.QnaServiceImpl;
 import com.example.lms.service.impl.StudentServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Controller
 public class StudentController {
+
+    private final QnaServiceImpl qnaServiceImpl;
 	
 	@Autowired 
 	private StudentServiceImpl studentService;
@@ -44,6 +48,10 @@ public class StudentController {
 	private AttendanceServiceImpl attendanceService;
 	@Autowired
 	private ExamServiceImpl examService;
+
+    StudentController(QnaServiceImpl qnaServiceImpl) {
+        this.qnaServiceImpl = qnaServiceImpl;
+    }
 	@InitBinder
 	    public void initBinder(WebDataBinder binder) {
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -191,13 +199,16 @@ public class StudentController {
     }
 	
     @GetMapping("/admin/insertStudent")
-    public String insertStudent() {
+    public String insertStudent(Model model) {
+    	List<CourseDTO> course = studentService.selectCourse();
+    	model.addAttribute("course", course);
     	return "/admin/insertStudent";
     }
     
     @PostMapping("/admin/insertStudent")
-    public String insertStudent(@ModelAttribute("studentList") List<StudentDTO> studentList) {
+    public String insertStudent(@ModelAttribute StudentListForm form) {
+    	List<StudentDTO> studentList = form.getStudentList();
         studentService.insertStudentList(studentList);
-        return "/admin/insertStudent";
+        return "/admin/studentList";
     }
 }

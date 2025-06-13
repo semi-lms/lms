@@ -42,9 +42,12 @@ body {
 		<div class="main-content">
 			<h1>학생 등록 페이지</h1>
 			<form action="/admin/insertStudent" method="post">
-				<select id="chooseCourse">
-					<option>강의 선택</option>
-				</select>
+		    <select name="studentList[0].courseId" required>
+		      <option value="">강의 선택</option>
+		      <c:forEach var="course" items="${course}">
+		        <option value="${course.courseId}">${course.courseName}</option>
+		      </c:forEach>
+		    </select>
 				<table border="1">
 					<tr>
 						<th>이름</th>
