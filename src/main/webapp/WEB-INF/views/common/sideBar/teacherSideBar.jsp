@@ -22,7 +22,7 @@
     <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
      <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
-    <a href="/file/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
+    <a href="/file/fileBoardList"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

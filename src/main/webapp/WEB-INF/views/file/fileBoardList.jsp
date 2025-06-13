@@ -5,8 +5,8 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <meta charset="UTF-8">
-<title>공지사항 리스트</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
+<title>자료실 리스트</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
   <!-- 왼쪽 메뉴 -->
@@ -23,8 +23,8 @@
       </c:when>
     </c:choose>
   </div>
-	  <div class="notice-content" >
-		<h1>공지사항</h1>
+	  <div class="fileBoard-content" >
+		<h1>자료실</h1>
 		<form method="get" > 
 			<table border="1">
 				<tr>
@@ -33,37 +33,37 @@
 					<th>작성자</th>
 					<th>작성일</th>
 				</tr>
-				<c:forEach var="notice" items="${noticeList}">
+				<c:forEach var="fileBoard" items="${fileBoardList}">
 					<tr>
-						<td>${notice.noticeId}</td>
-						<td><a href="/notice/noticeOne?noticeId=${notice.noticeId}">${notice.title} </a></td>
+						<td>${fileBoard.fileBoardNo}</td>
+						<td><a href="/file/fileBoardOne?fileBoardNo=${fileBoard.fileBoardNo}">${fileBoard.title} </a></td>
 					<!-- 작성자 admin이면 '관리자'로 출력 -->
 					<td>
 						<c:choose>
-							<c:when test="${notice.adminId eq 'admin'}">김예진/노민혁</c:when>
-							<c:otherwise>${notice.adminId}</c:otherwise>
+							<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
+							<c:otherwise>${fileBoard.adminId}</c:otherwise>
 						</c:choose>
 					</td>
-						<td>${notice.createDate}</td>
+						<td>${fileBoard.createDate}</td>
 					</tr>
 				</c:forEach>
 			</table>
 			<br>
 				<c:if test="${loginUser.role eq 'admin'}">
-				   <a href="/notice/insertNotice"><button type="button">작성</button></a><br>
+				   <a href="/file/insertFileBoard"><button type="button">작성</button></a><br>
 				</c:if>
 			 	<select name="searchOption" id="searchOption">
 				<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
 				<option value="title"
 					${searchOption == 'title' ? 'selected' : ''}>제목</option>
-				</select> <input type="text" name="keyword" id="searchNotice"
-					value="${searchNotice}" placeholder="검색">
+				</select> <input type="text" name="keyword" id="searchOption"
+					value="${searchFileBoard}" placeholder="검색">
 				<button type="submit" id="searchBtn">검색</button>
 		 </form>
 		 	<c:if test="${page.lastPage > 1 }">
 				<c:if test="${startPage > 1 }">
 					<a
-						href="/notice/noticeList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchNotice=${searchNotice}">[이전]</a>
+						href="/file/fileBoardList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchFileBoard=${searchFileBoard}">[이전]</a>
 				</c:if>
 			</c:if>
 			<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -73,13 +73,13 @@
 					</c:when>
 					<c:otherwise>
 						<a
-							href="/notice/noticeList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchNotice=${searchNotice}">${i}</a>
+							href="/file/fileBoardList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchFileBoard=${searchFileBoard}">${i}</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:if test="${endPage < page.lastPage }">
 				<a
-					href="/notice/noticeList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchNotice=${searchNotice}">[다음]</a>
+					href="/file/fileBoardList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchFileBoard=${searchFileBoard}">[다음]</a>
 			</c:if>
 		</div>
 	</div>

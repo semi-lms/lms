@@ -31,7 +31,13 @@
   <table border="1" cellpadding="10">
     <tr>
       <th>작성자</th>
-      <td>${notice.adminId}</td>
+		<!-- 작성자 admin이면 '관리자'로 출력 -->
+		<td>
+			<c:choose>
+				<c:when test="${notice.adminId eq 'admin'}">김예진/노민혁</c:when>
+				<c:otherwise>${notice.adminId}</c:otherwise>
+			</c:choose>
+		</td>
     </tr>
     <tr>
       <th>제목</th>

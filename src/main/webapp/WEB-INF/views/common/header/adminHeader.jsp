@@ -12,6 +12,6 @@
     	<a href="/admin/attendanceStatistics">출석통계</a>
     	<a href="/notice/noticeList">공지사항</a>
 		<a href="/qna/qnaList">QNA</a>
-		<a href="/file/fileBoard">자료실</a>
+		<a href="/file/fileBoardList">자료실</a>
   </div>
 </div>

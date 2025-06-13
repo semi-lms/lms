@@ -14,4 +14,5 @@
 		Insert INTO admin (admin_id, password)
 		VALUES (#{adminId}, #{password})
 	</insert>
+	
 </mapper>

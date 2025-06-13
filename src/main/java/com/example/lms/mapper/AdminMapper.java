@@ -12,4 +12,5 @@ public interface AdminMapper {
 
     // 관리자 추가
     int insertAdmin(AdminDTO admin);
+    
 }

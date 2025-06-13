@@ -4,8 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공지사항 작성</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
+<title>자료실 작성</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
   <!-- 왼쪽 메뉴 -->
@@ -23,10 +23,10 @@
     </c:choose>
   </div>
   
-  <h2>공지사항 작성</h2>
- <div class="notice-content" >
+  <h2>자료실 작성</h2>
+ <div class="fileBoard-content" >
   <form method="post" 
-  		action="${pageContext.request.contextPath}/notice/insertNotice"
+  		action="${pageContext.request.contextPath}/file/insertFileBoard"
   		onsubmit="return validateForm()">
 
     <!-- 관리자 아이디 표시 (readonly) -->
@@ -55,13 +55,13 @@
     
     <!-- 돌아가기 버튼 -->
     <div class="form-group">
-      <a href="${pageContext.request.contextPath}/notice/noticeList" class="btn-submit">돌아가기</a>
+      <a href="${pageContext.request.contextPath}/file/fileBoardList" class="btn-submit">돌아가기</a>
     </div>
 
   </form>
  </div>
- <!-- 제목 내용을 입력하지 않을경우 -->
-  <script>
+  <!-- 제목 내용을 입력하지 않을경우 -->
+ <script>
 	function validateForm() {
 	  const title = document.getElementById("title").value.trim();
 	  const content = document.getElementById("content").value.trim();

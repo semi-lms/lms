@@ -28,11 +28,11 @@
 	<select id="selectNoticeList" resultType="com.example.lms.dto.NoticeDTO">
 		SELECT
 			notice_id AS noticeId,
-			admin_id AS adminId,
-			title,
-			content,
-			create_date AS createDate,
-			update_date AS updateDate
+	        admin_id AS adminId,
+	        title,
+	        content,
+	        create_date AS createDate,
+	        update_date AS updateDate
 		FROM notice
 		WHERE title LIKE CONCAT('%', #{keyword}, '%')
 		ORDER BY create_date DESC

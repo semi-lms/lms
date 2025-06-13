@@ -4,8 +4,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>공지사항 수정</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
+  <title>자료실 수정</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
 
@@ -19,15 +19,15 @@
 </div>
 
 <!-- 본문 -->
-<div class="notice-content">
+<div class="fileBoard-content">
   <h2>공지사항 수정</h2>
 
-  <form method="post"
-        action="${pageContext.request.contextPath}/notice/updateNotice"
-        onsubmit="return validateForm()">
+  <form method="post" 
+  		action="${pageContext.request.contextPath}/file/updateFileBoard"
+  		onsubmit="return validateForm()">
     
     <!-- 숨겨진 공지 ID -->
-    <input type="hidden" name="noticeId" value="${notice.noticeId}">
+    <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
 	<div class="form-group">
       <label>작성자</label>
       <input type="text" value="김예진/노민혁" class="form-control" readonly>
@@ -35,13 +35,13 @@
     <!-- 제목 -->
     <div class="form-group">
       <label for="title">제목</label>
-      <input type="text" id="title" name="title" value="${notice.title}" class="form-control">
+      <input type="text" id="title" name="title" value="${fileBoard.title}" class="form-control">
     </div>
 
     <!-- 내용 -->
 	<div class="form-group">
 	  <label for="content">내용</label>
-	  <textarea id="content" name="content" rows="10" cols="50">${notice.content}</textarea>
+	  <textarea id="content" name="content" rows="10" cols="50">${fileBoard.content}</textarea>
 	</div>
 
     <!-- 수정 버튼 -->
@@ -51,7 +51,7 @@
 
     <!-- 뒤로가기 -->
     <div class="form-group">
-      <a href="${pageContext.request.contextPath}/notice/noticeOne?noticeId=${notice.noticeId}">
+      <a href="${pageContext.request.contextPath}/file/fileBoardOne?fileBoardNo=${fileBoard.fileBoardNo}">
         <button type="button" class="btn-submit">돌아가기</button>
       </a>
     </div>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.lms.dto.AdminDTO;
 import com.example.lms.dto.Page;
 import com.example.lms.dto.QnaDTO;
 import com.example.lms.dto.SessionUserDTO;
+import com.example.lms.dto.StudentDTO;
+import com.example.lms.service.AdminService;
+import com.example.lms.service.MypageService;
 import com.example.lms.service.QnaService;
+import com.example.lms.service.StudentService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +32,12 @@ import jakarta.servlet.http.HttpSession;
 public class QnaController {
 		@Autowired
 		private QnaService qnaService;
+		@Autowired
+		private MypageService mypageService;
+		@Autowired
+		private AdminService adminService;
+		@Autowired
+		private PasswordEncoder passwordEncoder; // 암호화 필드 받기 // com.example.lms.config.SecurityConfig
 		
 		// qna 리스트
 		@GetMapping("/qnaList")
@@ -121,16 +134,44 @@ public class QnaController {
 			return "redirect:/qna/qnaOne?qnaId=" + qnaDto.getQnaId();// 상세보기로 리다이렉트
 		}
 		
+		
 		// 삭제
 		@PostMapping("/deleteQna")
-		public String deleteQna(@RequestParam("qnaId") int qnaId) {
-			// 파라미터로 전달된 noticeId 값을 받아 int 타입 변수에 저장
-			
-			// noticeService를 호출해서 해당 Id의 공지사항을 삭제함
-			qnaService.deleteQna(qnaId);
-			
-			// 삭제 완료 후 공지사항리스트로 이동
-			return "redirect:/qna/qnaList";
+		public String deleteQna(@RequestParam int qnaId,
+		                        @RequestParam String pw,
+		                        HttpSession session,
+		                        RedirectAttributes ra) {
+
+		    // 로그인한 관리자 세션 정보 가져오기
+		    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+		    // 로그인 안 되어 있으면 로그인 페이지로
+		    if (loginUser == null || loginUser.getStudentId() == null && loginUser.getAdminId() == null) {
+		        ra.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
+		        return "redirect:/login";
+		    }
+		    
+		    // DB에서 로그인한 학생의 비밀번호 가져오기 (암호화 안 된 평문)
+		    String dbPw = "";
+
+		    if (loginUser.getAdminId() != null) {
+		        dbPw = adminService.getAdminById(loginUser.getAdminId()).getPassword();
+		    } else {
+		        dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
+		    }
+		   /* // 1. DB에서 로그인한 학생의 암호화된 비밀번호 가져오기
+		    String dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
+
+		    // 입력한 비밀번호와 비교
+		    if (!passwordEncoder.matches(pw, dbPw)) {
+		        ra.addFlashAttribute("errorMsg", "비밀번호가 일치하지 않습니다.");
+		        return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+		    }
+		    */
+		    // 3. 삭제 수행
+		    qnaService.deleteQna(qnaId);
+
+		    return "redirect:/qna/qnaList";
 		}
 	
 }

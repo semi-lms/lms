@@ -4,8 +4,8 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>qna 상세보기</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
+  <title>자료실 상세보기</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
 
@@ -25,62 +25,54 @@
 </div>
 
 <!-- 본문 -->
-<div class="notice-content">
-  <h2>공지사항 상세보기</h2>
+<div class="fileBoard-content">
+  <h2>자료실 상세보기</h2>
 
   <table border="1" cellpadding="10">
     <tr>
       <th>작성자</th>
-      <td>${qna.studentName}</td>
+		<!-- 작성자 admin이면 '관리자'로 출력 -->
+		<td>
+			<c:choose>
+				<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
+				<c:otherwise>${fileBoard.adminId}</c:otherwise>
+			</c:choose>
+		</td>
     </tr>
     <tr>
       <th>제목</th>
-      <td>${qna.title}</td>
+      <td>${fileBoard.title}</td>
     </tr>
     <tr>
       <th>내용</th>
-      <td style="white-space: pre-wrap;">${qna.content}</td>
+      <td style="white-space: pre-wrap;">${fileBoard.content}</td>
     </tr>
     <tr>
       <th>작성일</th>
-      <td>${qna.createDate}</td>
+      <td>${fileBoard.createDate}</td>
     </tr>
   </table>
 
   <br>
 
-<!-- 학생인 경우: 수정 + 삭제 버튼 나란히 -->
-<c:if test="${loginUser.role eq 'student' && loginUser.studentNo eq qna.studentNo}">
-  <div style="display: flex; gap: 10px;">
-    <!-- 수정 버튼 -->
-    <form method="get" action="${pageContext.request.contextPath}/qna/updateQna">
-      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+  <c:if test="${loginUser.role eq 'admin'}">
+    <!-- 관리자만 수정/삭제 가능 -->
+    <form method="get" action="${pageContext.request.contextPath}/file/updateFileBoard">
+      <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
       <button type="submit">수정</button>
     </form>
 
-    <!-- 삭제 버튼 -->
-    <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna">
-      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+    <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/file/deletefileBoard">
+      <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
       <!-- 삭제할경우 비밀번호 입력 -->
       <input type="hidden" name="pw" id="pw"> <!-- JS에서 값 넣을 자리 -->
       <button type="button" onclick="handleDelete()">삭제</button>
+      
     </form>
-  </div>
-</c:if>
-
-<!-- 관리자일 경우: 삭제만 가능 -->
-<c:if test="${loginUser.role eq 'admin'}">
-  <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna">
-    <input type="hidden" name="qnaId" value="${qna.qnaId}">
-      <!-- 삭제할경우 비밀번호 입력 -->
-      <input type="hidden" name="pw" id="pw"> <!-- JS에서 값 넣을 자리 -->
-      <button type="button" onclick="handleDelete()">삭제</button>
-  </form>
-</c:if>
- 
+  </c:if>
 
   <br>
-  <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>
+  <a href="${pageContext.request.contextPath}/file/fileBoardList"><button>목록으로</button></a>
 </div>
 	<script>
 		function handleDelete() {

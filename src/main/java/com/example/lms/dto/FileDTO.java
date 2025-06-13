@@ -11,5 +11,5 @@ public class FileDTO {
 	private String adminId;				// admin_id
 	private String fileName;			// file_name
 	private String filePath;			// file_path
-	private LocalDateTime uploadDate;	// upload_date Spring Boot는 기본적으로 LocalDateTime을 ISO-8601 형식 ("2025-06-11T08:30:00")으로 직렬화/역직렬화 함.
+	private String uploadDate;	// upload_date Spring Boot는 기본적으로 LocalDateTime을 ISO-8601 형식 ("2025-06-11T08:30:00")으로 직렬화/역직렬화 함.
 }
