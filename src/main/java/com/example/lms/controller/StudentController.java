@@ -24,9 +24,12 @@ import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.dto.Page;
+import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.ExamService;
+import com.example.lms.service.impl.AttendanceServiceImpl;
+import com.example.lms.service.impl.ExamServiceImpl;
 import com.example.lms.service.impl.StudentServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
@@ -37,8 +40,10 @@ public class StudentController {
 	
 	@Autowired 
 	private StudentServiceImpl studentService;
-	private AttendanceService attendanceService;
-	private ExamService examService;
+	@Autowired
+	private AttendanceServiceImpl attendanceService;
+	@Autowired
+	private ExamServiceImpl examService;
 	@InitBinder
 	    public void initBinder(WebDataBinder binder) {
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -117,25 +122,40 @@ public class StudentController {
 	    return "student/myAttendance";
 	}
 	 // 문제 페이지 보여주기
-    @GetMapping("/take")
-    public String takeExam(@RequestParam int examId, @RequestParam int page, Model model) {
-        List<ExamQuestionDTO> questions = examService.getQuestionsByPage(examId, page);
+    @GetMapping("/student/takeExam")
+    public String takeExam(@RequestParam int examId, @RequestParam int page, Model model, HttpSession session) {
+    	//문제 페이지 갯수 
+        List<ExamQuestionDTO> questions = examService.getQuestionsByPage(examId, page); 
+        @SuppressWarnings("unchecked")
+        //정답 임시 저장 
+		Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers"); 
+        if (temp == null) temp = new HashMap<>();
+
         model.addAttribute("questions", questions);
         model.addAttribute("examId", examId);
         model.addAttribute("page", page);
-        return "exam/takeExam"; 
+        model.addAttribute("isLastPage", page == 10); //10페이지가 마지막 (고정)
+        model.addAttribute("tempAnswers", temp); //정답 임시 저장 (페이지 넘어갔다가 다시 돌아와도 남아있음)
+        return "student/takeExam"; 
     }
 
     // 최종 제출 처리
-    @PostMapping("/submit")
-    public String submitExam(@ModelAttribute ExamSubmissionDTO submission,
-                             @RequestParam List<ExamAnswerDTO> answers,
-                             Model model) {
+    @PostMapping("/student/submitExam")
+    public String submitExam(@ModelAttribute ExamSubmissionDTO submission, HttpSession session, Model model) {
+        SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
+
+        submission.setStudentNo(loginUser.getStudentNo());
+        List<ExamAnswerDTO> answers = submission.getAnswers();
         int score = examService.submitExam(submission, answers);
         model.addAttribute("score", score);
-        return "exam/submitResult";
+        return "redirect:/examList";
     }
-    
+
+	
+
     @GetMapping("/admin/studentList")
     public String studentList(Model model
 							,@RequestParam(defaultValue = "1") int currentPage

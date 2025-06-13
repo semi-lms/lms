@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
+import com.example.lms.dto.ExamOptionDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 
@@ -38,6 +39,6 @@ public interface ExamMapper {
 	
 
 	List<ExamQuestionDTO> getQuestionsByExamId(int examId);
-
-	
+   
+	List<ExamOptionDTO> getOptionsByQuestionId(int qeustionId);
 }

@@ -37,8 +37,7 @@
 		UPDATE exam
 		SET title = #{title}, exam_start_date =
 		#{examStartDate}, exam_end_date = #{examEndDate}
-		WHERE exam_id =
-		#{examId}
+		WHERE exam_id = #{examId}
 	</update>
 	<!-- 시험 리스트 삭제 -->
 	<delete id="deleteExam" parameterType="int">
@@ -47,19 +46,25 @@
 		exam_id = #{examId}
 	</delete>
 	<!--  시험 제출 등록 -->
-	<insert id="insertSubmission"> 
-		parameterType="com.example.lms.dto.ExamDTO"
-		useGeneratedKeys="true" keyProperty="submissionId">
-		INSERT INTO exam_submission (exam_id, student_no)
-		VALUES (#{examId}, #{studentNo})
+	<insert id="insertSubmission" parameterType="com.example.lms.dto.ExamSubmissionDTO" useGeneratedKeys="true" keyProperty="submissionId">
+	 INSERT INTO exam_submission (submission_id, exam_id, student_no, submit_date, score)
+	 VALUES (#{submissionId}, #{examId}, #{studentNo}, now(), 0)
 	</insert>
 	<!-- 시험문제 가져오기  -->
 	<select id="getQuestionsByExamId" resultType="com.example.lms.dto.ExamQuestionDTO">
-    SELECT * FROM exam_question
+    SELECT question_id AS questionId , exam_id AS examId , question_no questionNo , 
+    question_title AS questionTitle, question_text AS questionText, correct_no AS correctNo
+   	FROM exam_question
     WHERE exam_id = #{examId}
     ORDER BY question_no ASC
 	</select>
-
+	<!-- 보기 불러오기 -->
+	<select id="getOptionsByQuestionId" resultType="com.example.lms.dto.ExamOptionDTO">
+    SELECT question_id AS questionId, option_no AS optionNo ,option_text as optionText
+    FROM exam_option
+    WHERE question_id = #{questionId}
+    ORDER BY option_no ASC
+	</select>
 	<!-- 개별 응답 저장 -->
 	<insert id="insertAnswer"
 		parameterType="com.example.lms.dto.ExamAnswerDTO">
@@ -68,14 +73,15 @@
 	</insert>
 
 	<!-- 전체 응답 일괄 저장 -->
-	<insert id="insertAnswers" parameterType="java.util.List">
-		INSERT INTO exam_answer (submission_id, question_id, answer_no)
-		VALUES
-		<foreach collection="list" item="answer" separator=",">
-			(#{answer.submissionId}, #{answer.questionId}, #{answer.answerNo})
-		</foreach>
-	</insert>
+<insert id="insertAnswers" parameterType="java.util.List">
+    INSERT INTO exam_answer (submission_id, question_id, answer_no)
+    VALUES
+    <foreach collection="list" item="answer" separator=",">
+        (#{answer.submissionId}, #{answer.questionId}, #{answer.answerNo})
+    </foreach>
+</insert>
 
+	
 	<!-- 자동 채점  -->
 	<select id="calculateScore" parameterType="int" resultType="int">
 		SELECT COUNT(*)
@@ -84,8 +90,9 @@
 		WHERE ea.submission_id = #{submissionId}
 		AND ea.answer_no = eq.correct_no
 	</select>
-
 	<!-- 점수 반영 -->
+
+	
 	<update id="updateScore" parameterType="map">
 		UPDATE exam_submission
 		SET score = #{score}

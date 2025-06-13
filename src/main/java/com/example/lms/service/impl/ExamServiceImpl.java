@@ -1,13 +1,16 @@
 package com.example.lms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
+import com.example.lms.dto.ExamOptionDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.mapper.ExamMapper;
@@ -47,8 +50,9 @@ public class ExamServiceImpl implements ExamService{
 	public int removeExam(int examId) {
 		return examMapper.deleteExam(examId);
 	}
+	@Transactional
 	@Override
-	public int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers) {
+	public int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers ) {
 	    // 1. 시험 제출 등록
 	    examMapper.insertSubmission(submission);  // examMapper 인스턴스로 호출해야 함
 
@@ -70,10 +74,28 @@ public class ExamServiceImpl implements ExamService{
 	    return score; 
 	}
 	public List<ExamQuestionDTO> getQuestionsByPage(int examId, int page) {
-	    int rowPerPage = 5; // 한 페이지에 5문제씩
-	    int beginRow = (page - 1) * rowPerPage;
-	    return examMapper.selectQuestionsByPage(examId, beginRow, rowPerPage);
+	    List<ExamQuestionDTO> allQuestions = examMapper.getQuestionsByExamId(examId);
+	    
+	    int pageSize = 1; // 페이지당 문제 수
+	    int fromIndex = (page - 1) * pageSize;
+	    int toIndex = Math.min(fromIndex + pageSize, allQuestions.size());
+	    
+	    if (fromIndex >= allQuestions.size()) {
+	        return new ArrayList<>();
+	    }
+
+	    List<ExamQuestionDTO> pagedQuestions = allQuestions.subList(fromIndex, toIndex);
+	    
+	
+	    for (ExamQuestionDTO question : pagedQuestions) {
+	        List<ExamOptionDTO> options = examMapper.getOptionsByQuestionId(question.getQuestionId());
+	        question.setOptions(options);
+	    }
+
+
+	    return pagedQuestions;
 	}
+
 	@Override
     public boolean saveAnswerTemporary(ExamAnswerDTO answer) {
         //  세션이나 DB 임시 테이블에 저장 처리

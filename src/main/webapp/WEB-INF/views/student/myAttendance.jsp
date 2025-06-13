@@ -5,6 +5,8 @@
 <html>
 <head>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+
+</style>
     <title>강의 일정</title>
    
     <script>
@@ -58,7 +60,7 @@
 
     <c:if test="${not empty attendanceMap[day.dateStr]}">
         <div class="memo">
-            출석: ${attendanceMap[day.dateStr]}
+            ${attendanceMap[day.dateStr]}
         </div>
     </c:if>
 </td>
