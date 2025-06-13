@@ -31,9 +31,9 @@
 
 .header .nav {
     display: flex;
-    gap: 60px;
+    gap: 30px;
     position: absolute;
-    right: 230px;
+    right: 100px;
     top: 50%;
     transform: translateY(-50%);
 }
