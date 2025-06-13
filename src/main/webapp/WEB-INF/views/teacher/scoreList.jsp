@@ -80,24 +80,16 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<c:if test="${lastPage > 1 }">
-			<c:if test="${startPage > 1 }">
-				<a href="/teacher/scoreList?currentPage=${startPage - 1}&rowPerPage=${rowPerPage}&filter=${filter}">[이전]</a>
-			</c:if>
-		</c:if>
-		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+		<c:forEach var="i" begin="1" end="${lastPage}">
 			<c:choose>
 				<c:when test="${i == currentPage }">
 					<span>[${i}]</span>
 				</c:when>
 				<c:otherwise>
-					<a href="/teacher/scoreList?currentPage=${i}&rowPerPage=${rowPerPage}&filter=${filter}">[${i}]</a>
+					<a href="/scoreList?currentPage=${i}&filter=${filter}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
-		<c:if test="${endPage < lastPage }">
-			<a href="/teacher/scoreList?currentPage=${endPage+1}&rowPerPage=${rowPerPage}&filter=${filter}">[다음]</a>
-		</c:if>
 	</div>
 </div>
 </body>
