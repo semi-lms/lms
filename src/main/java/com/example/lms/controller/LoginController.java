@@ -17,6 +17,7 @@ import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.LoginService;
+import com.example.lms.service.MailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 	@Autowired LoginService loginService;
 	@Autowired PasswordEncoder passwordEncoder; // 암호화 필드 받기 // com.example.lms.config.SecurityConfig
-	
+	@Autowired MailService mailService;
 	// 로그인
 	@GetMapping("/login")
 	public String loginForm() {
@@ -113,15 +114,57 @@ public class LoginController {
     
     @PostMapping("/findId")
     @ResponseBody
-    public String findId(@RequestParam String findIdByName
-    					,@RequestParam String findIdByEmail) {
-    	
-    	String studentId = loginService.findIdByNameEmail(findIdByName, findIdByEmail);
-        if (studentId != null) {
-            return studentId; // 아이디 그대로 리턴 (JSON 아니라면 이렇게)
+    public String findId(@RequestParam String findIdByName,
+                         @RequestParam String findIdByEmail) {
+        String userId = loginService.findIdByNameEmail(findIdByName, findIdByEmail);
+        if (userId != null) {
+            mailService.sendIdMail(findIdByEmail, findIdByName, userId); // 이메일 전송
+            return "SEND_SUCCESS";
         } else {
-            return "NOT_FOUND"; // 실패 시 구분
+            return "NOT_FOUND";
         }
     }
+    
+    @GetMapping("/findPw")
+    public String findPw() {
+    	
+    	return "/findPw";
+    }
+    
+    @PostMapping("/findPw")
+    @ResponseBody
+    public String findPw(@RequestParam String findPwByName,
+                         @RequestParam String findPwById,
+                         @RequestParam String findPwByEmail) {
+        // 일치 여부 확인 후
+        String pw = loginService.findPwByNameIdEmail(findPwByName, findPwById, findPwByEmail);
+        if (pw != null) { // 값이 있으면 유효한 사용자
+            String tempPw = mailService.createTempPassword(10); // 임시 비번 생성
+            loginService.updatePassword(findPwById, tempPw); // DB에 임시 비번으로 변경
+            mailService.sendTempPasswordMail(findPwByEmail, findPwByName, tempPw); // 메일 전송
+            return "SEND_SUCCESS";
+        } else {
+            return "NOT_FOUND";
+        }
+    }
+
+    
+    @GetMapping("/changePw")
+    public String changePw() {
+    	
+    	return "/changePw";
+    }
+    
+    @PostMapping("/changePw")
+    public String changePw(@RequestParam String pw
+    						,@RequestParam String tempPw) {
+    
+    	int row = loginService.updatePwByTempPw(pw,tempPw);
+    	if(row > 0) {
+    		return "/main";
+    	} else {
+    		return "changePw";
+    	}
+	}
 }
     

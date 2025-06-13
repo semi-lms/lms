@@ -12,4 +12,7 @@ public interface LoginMapper {
 		TeacherDTO loginTeacher(TeacherDTO teacherDto);	// 강사 로그인
 		StudentDTO loginStudent(StudentDTO studentDto); // 학생 로그인
 		String findIdByNameEmail(String findIdByName, String findIdByEmail);
+		String findPwByNameIdEmail(String findPwByName, String findPwById, String findPwByEmail);
+		void updatePassword(String findPwById, String tempPw);
+		int updatePwByTempPw(String pw, String tempPw);
 	}

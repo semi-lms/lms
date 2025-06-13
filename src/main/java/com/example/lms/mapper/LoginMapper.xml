@@ -57,5 +57,24 @@
 		AND email=#{findIdByEmail}
 	</select>
 	
+	<select id="findPwByNameIdEmail" resultType="String">
+		SELECT password
+		FROM student
+		WHERE 
+		name = #{findPwByName}
+		AND student_id = #{findPwById}
+		AND email= #{findPwByEmail}
+	</select>
 	
+	<update id="updatePassword">
+	    UPDATE student
+	    SET password = #{tempPw}
+	    WHERE student_id = #{findPwById}
+	</update>
+	
+	<update id="updatePwByTempPw">
+		UPDATE student
+		SET password = #{pw}
+		WHERE password = #{tempPw}
+	</update>
 </mapper>
