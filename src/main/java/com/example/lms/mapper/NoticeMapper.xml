@@ -4,7 +4,7 @@
 <mapper namespace="com.example.lms.mapper.NoticeMapper">
 
 	<!-- 푸터용 공지사항 최신 n개 미리보기 -->
-	<select id="selectLatestNotices" resultType="com.example.lms.dto.NoticeDTO" parameterType="int">
+	<select id="selectLatestNotices" parameterType="int" resultType="com.example.lms.dto.NoticeDTO" >
 		SELECT
 			notice_id AS noticeId,
 	        admin_id AS adminId,
@@ -31,7 +31,7 @@
 			admin_id AS adminId,
 			title,
 			content,
-			create_date As createDate,
+			create_date AS createDate,
 			update_date AS updateDate
 		FROM notice
 		WHERE title LIKE CONCAT('%', #{keyword}, '%')
@@ -39,4 +39,41 @@
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
+	<!-- 작성 -->
+	<insert id="insertNotice" parameterType="com.example.lms.dto.NoticeDTO">
+		INSERT INTO notice (title, content, admin_id, create_date)
+			VALUES(#{title}, #{content}, #{adminId}, NOW())
+	</insert>
+	
+	<!-- 상세보기 -->
+	<select id="NoticeOne" parameterType="int" resultType="com.example.lms.dto.NoticeDTO">
+		SELECT
+			notice_id AS noticeId,
+			admin_id AS adminId,
+			title,
+			content,
+			create_date AS createDate,
+			update_date AS upadateDate
+		FROM notice
+		WHERE notice_id = #{noticeId}
+	</select>
+	<!-- 수정 -->
+	<update id="updateNotice">
+	
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="">
+	
+	</delete>
+	
 </mapper>
+
+
+
+
+
+
+
+
+

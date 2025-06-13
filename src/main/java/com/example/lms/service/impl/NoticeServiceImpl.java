@@ -32,6 +32,13 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<NoticeDTO> selectNoticeList(Map<String, Object> param) {
 		return noticeMapper.selectNoticeList(param);
 	}
+	
+	// 작성
+	@Override
+	public int insertNotice(NoticeDTO noticeDto) {
+		return noticeMapper.insertNotice(noticeDto);
+		
+	}
 
 
     

@@ -20,5 +20,8 @@ public interface NoticeMapper {
 		
 	// 공지사항 리스트
 	List<NoticeDTO> selectNoticeList(Map<String, Object> param);
+	
+	// 작성
+	int insertNotice(NoticeDTO noticeDto);
 
 }

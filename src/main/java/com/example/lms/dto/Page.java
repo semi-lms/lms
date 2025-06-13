@@ -9,32 +9,16 @@ public class Page {
 	
 	private int beginRow;
 	private int totalCount;	
-	private String searchCourse;
-	private String searchCourseOption;
-	private String keyword;					// 공지사항, qna, 자료실 검색 공통
-	private String searchOption;			// 공지사항, qna, 자료실 검색 공통
-	private String searchStudent;
-	private String searchStudentOption;
+	private String keyword;					// 검색 공통
+	private String searchOption;			// 검색 공통
 	
-	public void setSearchOption(String searchCourseOption, String searchOption) {
-	    this.searchCourseOption = searchCourseOption;
-	    this.searchOption = searchOption;
-	}
 	
-	public void setSearchStudentOption(String searchStudentOption) {
-		this.searchStudentOption = searchStudentOption;
-	}
-	
-	public Page(int rowPerPage, int currentPage, int totalCount, String searchCourse, String searchCourseOption, String keyword, String searchOption, String searchStudent, String searchStudentOption) {
+	public Page(int rowPerPage, int currentPage, int totalCount,  String keyword, String searchOption) {
 		this.rowPerPage = rowPerPage;
 		this.currentPage = currentPage;
 		this.totalCount = totalCount;
-		this.searchCourse = searchCourse;
-		this.searchCourseOption = searchCourseOption;
 		this.keyword = keyword;
 		this.searchOption = searchOption;
-		this.searchStudent = searchStudent;
-		this.searchStudentOption = searchStudentOption;
 		this.beginRow = (currentPage - 1) * rowPerPage;
 	}
 	

@@ -22,9 +22,9 @@
       </c:when>
     </c:choose>
   </div>
-	  <div class="notice-content">
+	  <div class="notice-content" >
 		<h1>공지사항</h1>
-		<form method="get"> 
+		<form method="get" > 
 			<table border="1">
 				<tr>
 					<th>번호</th>
@@ -43,7 +43,7 @@
 			</table>
 			<br>
 				<c:if test="${loginUser.role eq 'admin'}">
-				    <button type="button" id="insertNotice">작성</button><br>
+				   <a href="/notice/insertNotice"><button type="button">작성</button></a><br>
 				</c:if>
 			 	<select name="searchOption" id="searchOption">
 				<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
@@ -56,7 +56,7 @@
 		 	<c:if test="${page.lastPage > 1 }">
 				<c:if test="${startPage > 1 }">
 					<a
-						href="/mypage/noticeList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchNotice=${searchNotice}">[이전]</a>
+						href="/notice/noticeList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchNotice=${searchNotice}">[이전]</a>
 				</c:if>
 			</c:if>
 			<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -66,13 +66,13 @@
 					</c:when>
 					<c:otherwise>
 						<a
-							href="/mypage/noticeList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchNoticeOption}&searchNotice=${searchNotice}">${i}</a>
+							href="/notice/noticeList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchNoticeOption}&searchNotice=${searchNotice}">${i}</a>
 					</c:otherwise>
 				</c:choose>
 			</c:forEach>
 			<c:if test="${endPage < page.lastPage }">
 				<a
-					href="/mypage/noticeList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchNoticeOption}&searchNotice=${searchNotice}">[다음]</a>
+					href="/notice/noticeList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchNoticeOption}&searchNotice=${searchNotice}">[다음]</a>
 			</c:if>
 		</div>
 	</div>
