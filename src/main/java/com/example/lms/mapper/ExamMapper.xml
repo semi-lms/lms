@@ -58,6 +58,8 @@
     WHERE exam_id = #{examId}
     ORDER BY question_no ASC
 	</select>
+	
+
 	<!-- 보기 불러오기 -->
 	<select id="getOptionsByQuestionId" resultType="com.example.lms.dto.ExamOptionDTO">
     SELECT question_id AS questionId, option_no AS optionNo ,option_text as optionText

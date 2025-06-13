@@ -1,0 +1,162 @@
+@charset "UTF-8";
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: #f5f7fa;
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	background-color: #343a40;
+	color: white;
+	padding: 15px 30px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.main-section {
+    max-width: 1200px;
+    margin: 40px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+}
+
+.card.video-card {
+    flex: 2;
+    max-width: 900px;
+    height: 440px;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    animation: fadeInScale 1s ease forwards;
+}
+
+.card.video-card video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card.mypage-box {
+    flex: 1;
+    max-width: 320px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: fadeInUp 1s ease forwards;
+}
+
+.mypage-box h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+    color: #333;
+}
+
+.mypage-box p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+a.btn {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: white;
+    background-color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+a.btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+a.btn.logout {
+    background-color: #dc3545;
+}
+
+a.btn.logout:hover {
+    background-color: #b52d3b;
+    transform: scale(1.05);
+}
+
+/* 애니메이션 정의 */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+canvas {
+	max-width: 100%;
+	height: auto;
+}
+
+/* 공통 메인 하단 스타일 */
+.commonMain {
+	max-width: 1200px;
+	margin: 60px auto 40px;
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+}
+
+.commonMain .box {
+	background-color: white;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+	flex: 1;
+}
+
+.commonMain h3 {
+	margin-top: 0;
+	font-size: 1.2em;
+	color: #333;
+}
+
+.commonMain ul {
+	list-style: none;
+	padding: 0;
+}
+
+.commonMain li {
+	padding: 4px 0;
+	font-size: 0.95em;
+}
+
+.commonMain button {
+	margin-top: 10px;
+	padding: 6px 12px;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}

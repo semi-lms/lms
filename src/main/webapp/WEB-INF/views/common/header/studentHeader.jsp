@@ -4,8 +4,9 @@
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyy" var="currentYear" />
 <fmt:formatDate value="${now}" pattern="M" var="currentMonth" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css">
 <div class="header">
- <div><img src="<c:url value='/img/logo.png'/>" width="50"> <strong>LMS</strong></div>
+ <div><img src="<c:url value='/img/logo.png'/>" width="80" height="80"> </div>
  
 
   <div class="nav">

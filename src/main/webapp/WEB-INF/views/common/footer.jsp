@@ -1,39 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- 메인 하단에 보여지는 공통 푸터 여러페이지에 있으므로 따로 생성 -->
-
-<!-- footer.jsp: 하단 미리보기 출력 전용 값 -->
-<div class="footer content">
-    <!-- 공지사항 -->
-    <div class="box">
-        <h3>공지사항</h3>
-        <ul>
-            <c:forEach var="n" items="${noticeBoard}">
-                <li>${n.noticeId} ${n.title}</li>
-            </c:forEach>
-        </ul>
-        <a href="/notice"><button>View details</button></a>
-    </div>
-
-    <!-- QNA -->
-    <div class="box">
-        <h3>QNA</h3>
-        <ul>
-            <c:forEach var="q" items="${qnaBoard}">
-                <li>${q.qnaId} ${q.title}</li>
-            </c:forEach>
-        </ul>
-        <a href="/qnaBoard"><button>View details</button></a>
-    </div>
-
-    <!-- 자료실 -->
-    <div class="box">
-        <h3>자료실</h3>
-        <ul>
-            <c:forEach var="f" items="${fileBoard}">
-                <li>${f.title}</li>
-            </c:forEach>
-        </ul>
-        <a href="/fileBoard"><button>View details</button></a>
-    </div>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- footer.jsp -->
+<div style="max-width: 1000px; margin: 0 auto; font-size: 14px; padding: 20px 0; color: #333; text-align: center; border-top: 1px solid #ccc;">
+    <p>상호명 : 구디아카데미</p>
+    <p>대표자 : 이승엽ㅤ전화 : 02-818-7950ㅤ팩스 : 02-818-7964</p>
+    <p>개발자 : 최윤석 장지영 김예진 노민혁 송성인</p>
+    <p>본관 : (08505) 서울특별시 금천구 가산디지털2로 95(가산동, km타워) 2층, 3층</p>
+    <p style="margin-top: 10px;">Copyright ⓒ GooDee Academy. All rights reserved.</p>
 </div>
+
