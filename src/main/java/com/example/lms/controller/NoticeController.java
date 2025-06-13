@@ -33,8 +33,8 @@ public class NoticeController {
 	@GetMapping("/noticeList")
 	   public String noticeList (Model model,
 	            @RequestParam(defaultValue = "1") int currentPage,
-	            @RequestParam(defaultValue = "title") String searchOption,
-	            @RequestParam(defaultValue = "") String keyword,
+	            @RequestParam(value="searchOption", required=false, defaultValue="all") String searchOption,
+				@RequestParam(value="keyword", required=false, defaultValue="") String keyword,
 	   			@RequestParam(defaultValue = "10") int rowPerPage) {
 			
 			int totalCount = noticeService.totalCount(searchOption, keyword);

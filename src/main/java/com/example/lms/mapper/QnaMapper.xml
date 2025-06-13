@@ -16,4 +16,83 @@
 		ORDER BY create_date DESC
 		LIMIT #{count}
 	</select>
+	
+	<!-- 전체 개수 -->
+	<select id="totalCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM qna
+		WHERE title LIke CONCAT('%', #{keyword}, '%')
+	</select>
+	
+	<!-- qna 리스트 -->
+	<select id="selectQnaList" resultType="com.example.lms.dto.QnaDTO">
+		SELECT
+			q.qna_id AS qnaId,
+			q.student_no AS studentNo,
+			q.title,
+			s.name AS studentName,
+			q.content,
+			q.create_date AS createDate,
+			q.update_date AS updateDate
+		FROM qna q
+		JOIN student s ON q.student_no = s.student_no
+		WHERE 
+		(
+			((title LIKE CONCAT('%', #{keyword}, '%') OR s.name LIKE CONCAT('%', #{keyword}, '%')) AND #{searchOption} = 'all')
+			OR
+			(title LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'title')
+			OR
+			(s.name LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'studentNo')
+			
+		)
+		ORDER BY q.create_date DESC
+		LIMIT #{startRow}, #{rowPerPage} 
+	</select>
+	
+	<!-- 작성 -->
+	<insert id="insertQna" parameterType="com.example.lms.dto.QnaDTO">
+		INSERT INTO qna (title, content, student_no, create_date)
+			VALUES(#{title}, #{content}, #{studentNo}, NOW())
+	</insert>
+	
+	<!-- 상세보기 -->
+	<select id="selectQnaOne" parameterType="int" resultType="com.example.lms.dto.QnaDTO">
+		SELECT
+			q.qna_id AS qnaId,
+			q.student_no AS studentNo,
+			q.title,
+			s.name AS studentName,
+			q.content,
+			q.create_date AS createDate,
+			q.update_date AS updateDate
+		FROM qna q
+		JOIN student s ON q.student_no = s.student_no
+		WHERE qna_id = #{qnaId}
+	</select>
+	
+	<!-- 수정 -->
+	<update id="updateQna" parameterType="com.example.lms.dto.QnaDTO">
+		UPDATE qna
+		SET title = #{title}, content = #{content}
+		WHERE qna_id = #{qnaId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteQna" parameterType="com.example.lms.dto.QnaDTO">
+		DELETE
+		FROM qna
+		WHERE qna_id = #{qnaId}
+	</delete>
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+

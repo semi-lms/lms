@@ -23,8 +23,8 @@
 		  <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}" class="submenu-link">• 강의일정</a>
 		</div>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
-    <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
-    <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
+    <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
+    <a href="/file/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
 <script>
