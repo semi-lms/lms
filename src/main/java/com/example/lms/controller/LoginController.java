@@ -1,8 +1,5 @@
 package com.example.lms.controller;
 
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AdminDTO;
 import com.example.lms.dto.LoginDTO;
@@ -18,6 +17,7 @@ import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.LoginService;
+import com.example.lms.service.MailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 	@Autowired LoginService loginService;
 	@Autowired PasswordEncoder passwordEncoder; // 암호화 필드 받기 // com.example.lms.config.SecurityConfig
-	
+	@Autowired MailService mailService;
 	// 로그인
 	@GetMapping("/login")
 	public String loginForm() {
@@ -106,6 +106,65 @@ public class LoginController {
         return "main";
     }
 
+    @GetMapping("/findId")
+    public String findId() {
+    	
+    	return "/findId";
+    }
+    
+    @PostMapping("/findId")
+    @ResponseBody
+    public String findId(@RequestParam String findIdByName,
+                         @RequestParam String findIdByEmail) {
+        String userId = loginService.findIdByNameEmail(findIdByName, findIdByEmail);
+        if (userId != null) {
+            mailService.sendIdMail(findIdByEmail, findIdByName, userId); // 이메일 전송
+            return "SEND_SUCCESS";
+        } else {
+            return "NOT_FOUND";
+        }
+    }
+    
+    @GetMapping("/findPw")
+    public String findPw() {
+    	
+    	return "/findPw";
+    }
+    
+    @PostMapping("/findPw")
+    @ResponseBody
+    public String findPw(@RequestParam String findPwByName,
+                         @RequestParam String findPwById,
+                         @RequestParam String findPwByEmail) {
+        // 일치 여부 확인 후
+        String pw = loginService.findPwByNameIdEmail(findPwByName, findPwById, findPwByEmail);
+        if (pw != null) { // 값이 있으면 유효한 사용자
+            String tempPw = mailService.createTempPassword(10); // 임시 비번 생성
+            loginService.updatePassword(findPwById, tempPw); // DB에 임시 비번으로 변경
+            mailService.sendTempPasswordMail(findPwByEmail, findPwByName, tempPw); // 메일 전송
+            return "SEND_SUCCESS";
+        } else {
+            return "NOT_FOUND";
+        }
+    }
 
+    
+    @GetMapping("/changePw")
+    public String changePw() {
+    	
+    	return "/changePw";
+    }
+    
+    @PostMapping("/changePw")
+    public String changePw(@RequestParam String pw
+    						,@RequestParam String tempPw) {
+    
+    	int row = loginService.updatePwByTempPw(pw,tempPw);
+    	if(row > 0) {
+    		return "/main";
+    	} else {
+    		return "changePw";
+    	}
+	}
 }
     

@@ -29,4 +29,27 @@ public class LoginServiceImpl implements LoginService {
 	public StudentDTO loginStudent(StudentDTO studentDto) {
 		return loginMapper.loginStudent(studentDto);
 	}
+
+	@Override
+	public String findIdByNameEmail(String findIdByName, String findIdByEmail) {
+		
+		return loginMapper.findIdByNameEmail(findIdByName, findIdByEmail);
+	}
+
+	@Override
+	public String findPwByNameIdEmail(String findPwByName, String findPwById, String findPwByEmail) {
+
+		return loginMapper.findPwByNameIdEmail(findPwByName, findPwById, findPwByEmail);
+	}
+
+	@Override
+	public void updatePassword(String findPwById, String tempPw) {
+		loginMapper.updatePassword(findPwById, tempPw);
+	}
+
+	@Override
+	public int updatePwByTempPw(String pw, String tempPw) {
+		
+		return loginMapper.updatePwByTempPw(pw, tempPw);
+	}
 }
