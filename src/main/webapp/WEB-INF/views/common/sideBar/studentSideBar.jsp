@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+ <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="now" class="java.util.Date" />
+<fmt:formatDate value="${now}" pattern="yyyy" var="currentYear" />
+<fmt:formatDate value="${now}" pattern="M" var="currentMonth" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
@@ -16,8 +19,8 @@
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
 		  <a href="/manage/course" class="submenu-link">• 수강과목</a>
-		  <a href="/manage/member" class="submenu-link">• 시험문제</a>
-		  <a href="/lectureSchedule?courseId=${loginUser.courseId }&year=2025&month=6" class="submenu-link">• 강의일정</a>
+		  <a href="/examList?courseId=${loginUser.courseId }" class="submenu-link">• 시험문제</a>
+		  <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}" class="submenu-link">• 강의일정</a>
 		</div>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
