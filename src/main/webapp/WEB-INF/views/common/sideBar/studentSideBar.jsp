@@ -5,17 +5,44 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
+ 	<div class="user-role">${loginUser.role}</div>
     <p class="user-name"><strong>${loginUser.name}</strong> 님</p>
     <p class="title">마이페이지</p>
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
-    <button class="sidebar-btn" onclick="loadContent('/mypage/info')">개인정보</button><br><br>
+    <button type="button" class="sidebar-btn" onclick="goToInfo()">개인정보</button><br><br>
     <a href="/mypage/attendance"><button class="sidebar-btn">출석현황</button></a><br><br>
-    <a href="/mypage/courses"><button class="sidebar-btn">수강과목</button></a><br><br>
-    <a href="/mypage/exam"><button class="sidebar-btn">시험문제</button></a><br><br>
-  <a href="/lectureSchedule?courseId=${loginUser.courseId }&year=2025&month=6"><button class="sidebar-btn">강의일정</button></a><br><br>
-    <a href="/mypage/schedule"><button class="sidebar-btn">공지사항</button></a><br><br>
+    <button class="sidebar-btn" onclick="toggleSubmenu()">관리목록</button><br><br>
+    <!-- 하위 메뉴: 기본은 숨김 -->
+		<div id="submenu">
+		  <a href="/manage/course" class="submenu-link">• 수강과목</a>
+		  <a href="/manage/member" class="submenu-link">• 시험문제</a>
+		  <a href="/lectureSchedule?courseId=${loginUser.courseId }&year=2025&month=6" class="submenu-link">• 강의일정</a>
+		</div>
+    <a href="/mypage/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
+<script>
+function toggleSubmenu() {
+	  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
+	}
+	
+function goToInfo() {
+  // 현재 페이지가 mypage.jsp가 아니라면 먼저 이동
+  if (!document.getElementById('contentArea')) {
+    location.href = '/mypage'; // 이동 후 document.ready에서 info 자동 로딩됨
+  } else {
+    loadContent('/mypage/info'); // 이미 mypage.jsp면 바로 AJAX 로딩
+  }
+}
+
+function loadContent(url) {
+  fetch(url)
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('contentArea').innerHTML = html;
+    });
+}
+</script>

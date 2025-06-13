@@ -33,7 +33,7 @@ public class CourseController {
 							,@RequestParam(value="searchCourseOption", required=false, defaultValue="all") String searchCourseOption
 							,@RequestParam(value="searchCourse", required=false, defaultValue="") String searchCourse) {
 	    int totalCount = course.getTotalCount(searchCourseOption, searchCourse);
-	    Page page = new Page(rowPerPage, currentPage, totalCount, searchCourseOption, searchCourse);
+	    Page page = new Page(rowPerPage, currentPage, totalCount, searchCourseOption, searchCourse, null, null);
 		
 	    int pageSize = 5;
 	    int startPage = ((currentPage-1) / pageSize) * pageSize + 1;

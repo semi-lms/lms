@@ -16,7 +16,7 @@
 		  <a href="/manage/stat" class="submenu-link">• 강의</a>
 		</div>
     <a href="/mypage/schedule"><button class="sidebar-btn">출석통계</button></a><br><br>
-    <a href="/mypage/schedule"><button class="sidebar-btn">공지사항</button></a><br><br>
+    <a href="/mypage/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>

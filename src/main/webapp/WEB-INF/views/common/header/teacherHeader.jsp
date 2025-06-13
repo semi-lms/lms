@@ -6,7 +6,7 @@
     	<a href="/">강의목록</a>
     	<a href="/">관리목록</a>
     	<a href="/lectureSchedule?=${loginuser.courseId }&year=2025&month=6">강의일정</a>
-    	<a href="/notice">공지사항</a>
+    	<a href="/mypage/noticeList">공지사항</a>
 		<a href="/qna">QNA</a>
 		<a href="/fileBoard">자료실</a>
   </div>
