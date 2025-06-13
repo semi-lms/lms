@@ -60,16 +60,43 @@ body {
 				</tr>
 				</c:forEach>
 			</table>
-			<select id="searchStudentOption">
-				<option value="all">전체</option>
-				<option value="studentName">이름</option>
-				<option value="courseName">수강과목</option>
+			<button type="button" id="insertStudent">학생등록</button><br>
+			
+			<select name="searchStudentOption">
+				<option value="all" ${searchStudentOption == 'all' ? 'selected' : ''}>전체</option>
+				<option value="studentName" ${searchStudentOption == 'studentName' ? 'selected' : ''}>이름</option>
+				<option value="courseName" ${searchStudentOption == 'courseName' ? 'selected' : ''}>수강과목</option>
 			</select>
 			<input type="text" name="searchStudent" id="searchStudent">
 			<button type="submit" id="searchStudentBtn">검색</button>
 		</form>
+		
+		<c:if test="${page.lastPage>1}">
+			<c:if test="${startPage>1}">
+				<a href="/admin/studentList?currentPage=${startPage-1}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[이전]</a>
+			</c:if>
+		</c:if>
+		
+		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+			<c:choose>
+				<c:when test="${i == page.currentPage }">
+					<span>[${i}]</span>
+				</c:when>
+				<c:otherwise>
+					<a href="/admin/studentList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[${i}]</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		
+		<c:if test="${endPage < page.lastPage}">
+			<a href="/admin/studentList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[다음]</a>
+		</c:if>
     </div>
 </div>
-	
+<script>
+	$("#insertStudent").click(function(){
+		window.location = "insertStudent";
+	})
+</script>
 </body>
 </html>

@@ -141,7 +141,7 @@ public class StudentController {
 							,@RequestParam(defaultValue = "1") int currentPage
 							,@RequestParam(defaultValue = "5") int rowPerPage
     						,@RequestParam(value="searchStudentOption", required=false, defaultValue="all") String searchStudentOption
-    						,@RequestParam(value="searchStudent", required=false, defaultValue="all") String searchStudent) {
+    						,@RequestParam(value="searchStudent", required=false, defaultValue="") String searchStudent) {
     	
     	int totalCount = studentService.getTotalCount(searchStudentOption, searchStudent);
     	Page page = new Page(rowPerPage, currentPage, totalCount, searchStudentOption, searchStudent, null, null, null, null);
@@ -159,7 +159,7 @@ public class StudentController {
     	map.put("startRow", startRow);
     	map.put("rowPerPage", rowPerPage);
     	
-    	List<StudentDTO> list = studentService.getStudentList();
+    	List<StudentDTO> list = studentService.getStudentList(map);
     	model.addAttribute("studentList", list);
     	model.addAttribute("page", page);
     	model.addAttribute("searchStudentOption", searchStudentOption);
@@ -170,4 +170,9 @@ public class StudentController {
     	return "/admin/studentList";
     }
 	
+    @GetMapping("/admin/insertStudent")
+    public String insertStudent() {
+    	
+    	return "/admin/insertStudent";
+    }
 }

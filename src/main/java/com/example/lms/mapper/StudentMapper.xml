@@ -54,17 +54,47 @@
 		WHERE student_no = #{studentNo}
 	</update>
 	
-	<select id="getStudentList" parameterType="String" resultType="com.example.lms.dto.StudentDTO">
+	<select id="getStudentList" parameterType="map" resultType="com.example.lms.dto.StudentDTO">
 		SELECT s.name, s.phone, s.sn, s.address
 			, s.email, s.student_id AS studentId
 			, c.course_name AS courseName
 		FROM student s INNER JOIN course c
 		ON s.course_id = c.course_id
+		<where>
+			<if test="searchStudentOption == 'all' and searchStudent != null and searchStudent != '' ">
+				AND (s.name LIKE CONCAT('%', #{searchStudent}, '%')
+				OR
+				c.course_name LIKE CONCAT('%', #{searchStudent}, '%'))
+			</if>
+			<if test="searchStudentOption == 'studentName' and searchStudent != null and searchStudent != '' ">
+				AND s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			</if>
+			<if test="searchStudentOption == 'courseName' and searchStudent != null and searchStudent != ''">
+				AND c.course_name LIKE CONCAT('%', #{searchStudent}, '%')
+			</if>
+		</where>
+		ORDER BY s.name DESC
+		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
 	<select id="getTotalCount" resultType="int">
 		SELECT COUNT(*)
-		FROM student
+		FROM student s
+		INNER JOIN course c
+		ON s.course_id = c.course_id
+		<where>
+			<if test="searchStudentOption == 'all' and searchStudent != null and searchStudent != '' ">
+				AND (s.name LIKE CONCAT('%', #{searchStudent}, '%')
+				OR
+				c.course_name LIKE CONCAT('%', #{searchStudent}, '%'))
+			</if>
+			<if test="searchStudentOption == 'studentName' and searchStudent != null and searchStudent != '' ">
+				AND s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			</if>
+			<if test="searchStudentOption == 'courseName' and searchStudent != null and searchStudent != ''">
+				AND c.course_name LIKE CONCAT('%', #{searchStudent}, '%')
+			</if>
+		</where>
 	</select>
 </mapper>
 

@@ -28,9 +28,9 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
-	public List<StudentDTO> getStudentList() {
+	public List<StudentDTO> getStudentList(Map<String, Object> map) {
 
-		return studentMapper.getStudentList();
+		return studentMapper.getStudentList(map);
 	}
 	
 	@Override

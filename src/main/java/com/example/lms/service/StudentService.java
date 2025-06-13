@@ -11,7 +11,7 @@ public interface StudentService {
 	// 페이징
 	int getStudentCntByCourseId(int courseId);
 	
-	List<StudentDTO> getStudentList();
+	List<StudentDTO> getStudentList(Map<String, Object> map);
 	
 	int getTotalCount(String searchStudentOption, String searchStudent);
 	
