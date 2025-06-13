@@ -36,7 +36,7 @@ public class NoticeController {
 	   			@RequestParam(defaultValue = "10") int rowPerPage) {
 			
 			int totalCount = noticeService.totalCount(searchOption, keyword);
-		    Page page = new Page(rowPerPage, currentPage, totalCount, null, null, searchOption, keyword);
+		    Page page = new Page(rowPerPage, currentPage, totalCount, null, null, searchOption, keyword, null, null);
 			int startRow = (currentPage - 1) * rowPerPage;
 	        
 	        Map<String, Object> param = new HashMap<>();

@@ -25,4 +25,10 @@ public interface StudentMapper {
 	// 비밀번호 확인 및 개인정보 수정
 	String selectPasswordById(String studentId);
 	int updateStudentInfo(StudentDTO studentDto);
+
+	List<StudentDTO> getStudentList();
+	
+	int getTotalCount(String searchStudentOption, String searchStudent);
+
+
 }

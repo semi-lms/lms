@@ -27,6 +27,18 @@ public class StudentServiceImpl implements StudentService {
 		return studentMapper.getStudentCntByCourseId(courseId);
 	}
 	
+	@Override
+	public List<StudentDTO> getStudentList() {
+
+		return studentMapper.getStudentList();
+	}
+	
+	@Override
+	public int getTotalCount(String searchStudentOption, String searchStudent) {
+		// TODO Auto-generated method stub
+		return studentMapper.getTotalCount(searchStudentOption, searchStudent);
+	}
+	
 
 
 	

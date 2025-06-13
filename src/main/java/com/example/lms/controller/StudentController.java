@@ -18,13 +18,16 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
+import com.example.lms.dto.Page;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.ExamService;
+import com.example.lms.service.impl.StudentServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -33,10 +36,10 @@ import lombok.extern.slf4j.Slf4j;
 public class StudentController {
 	
 	@Autowired 
-	
+	private StudentServiceImpl studentService;
 	private AttendanceService attendanceService;
 	private ExamService examService;
-	 @InitBinder
+	@InitBinder
 	    public void initBinder(WebDataBinder binder) {
 	        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	        sdf.setLenient(false);
@@ -131,6 +134,40 @@ public class StudentController {
         int score = examService.submitExam(submission, answers);
         model.addAttribute("score", score);
         return "exam/submitResult";
+    }
+    
+    @GetMapping("/admin/studentList")
+    public String studentList(Model model
+							,@RequestParam(defaultValue = "1") int currentPage
+							,@RequestParam(defaultValue = "5") int rowPerPage
+    						,@RequestParam(value="searchStudentOption", required=false, defaultValue="all") String searchStudentOption
+    						,@RequestParam(value="searchStudent", required=false, defaultValue="all") String searchStudent) {
+    	
+    	int totalCount = studentService.getTotalCount(searchStudentOption, searchStudent);
+    	Page page = new Page(rowPerPage, currentPage, totalCount, searchStudentOption, searchStudent, null, null, null, null);
+    	int pageSize = 5;
+    	int startPage = ((currentPage - 1) / pageSize) * pageSize + 1;
+    	int endPage = startPage + pageSize - 1;
+    	if(endPage > page.getLastPage()) {
+    		endPage = page.getLastPage();
+    	}
+    	int startRow = (currentPage - 1) * rowPerPage;
+    	
+    	Map<String, Object> map = new HashMap<>();
+    	map.put("searchStudentOption", searchStudentOption);
+    	map.put("searchStudent", searchStudent);
+    	map.put("startRow", startRow);
+    	map.put("rowPerPage", rowPerPage);
+    	
+    	List<StudentDTO> list = studentService.getStudentList();
+    	model.addAttribute("studentList", list);
+    	model.addAttribute("page", page);
+    	model.addAttribute("searchStudentOption", searchStudentOption);
+    	model.addAttribute("searchStudent", searchStudent);
+    	model.addAttribute("startPage", startPage);
+    	model.addAttribute("endPage", endPage);
+    	
+    	return "/admin/studentList";
     }
 	
 }

@@ -11,11 +11,11 @@
     <button class="sidebar-btn" onclick="toggleSubmenu()">관리목록</button><br><br>
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
-		  <a href="/manage/course" class="submenu-link">• 학생</a>
-		  <a href="/manage/member" class="submenu-link">• 강사</a>
-		  <a href="/manage/stat" class="submenu-link">• 강의</a>
+		  <a href="/admin/studentList" class="submenu-link">• 학생</a>
+		  <a href="/admin/teacherList" class="submenu-link">• 강사</a>
+		  <a href="/admin/courseList" class="submenu-link">• 강의</a>
 		</div>
-    <a href="/mypage/schedule"><button class="sidebar-btn">출석통계</button></a><br><br>
+    <a href="/admin/attendanceStatistics"><button class="sidebar-btn">출석통계</button></a><br><br>
     <a href="/mypage/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/fileBoard"><button class="sidebar-btn">자료실</button></a><br><br>
