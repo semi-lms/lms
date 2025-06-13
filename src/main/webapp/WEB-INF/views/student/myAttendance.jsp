@@ -1,15 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/calendar.css">
 
-</style>
-    <title>강의 일정</title>
-   
-    <script>
+<title>강의 일정</title>
+
+<script>
     const studentId = '${studentId}'; 
     console.log('학생아이디' , ${studnentId})
 	
@@ -30,47 +30,43 @@
 </head>
 <body>
 
-<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
-    <div class="calendar-container">
-    
-        <div class="month-nav">
-            <button class="btn-month" onclick="prevMonth()">&lt;</button>
-            <span class="header">${year}년 ${month}월</span>
-            <button class="btn-month" onclick="nextMonth()">&gt;</button>
-        </div>
+	<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+	<div class="calendar-container">
 
-        <table class="calendar">
-            <thead>
-                <tr>
-                    <th class="sunday">일</th>
-                    <th>월</th>
-                    <th>화</th>
-                    <th>수</th>
-                    <th>목</th>
-                    <th>금</th>
-                    <th class="saturday">토</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="week" items="${weeks}">
-                    <tr>
-                        <c:forEach var="day" items="${week.days}">
-                           <td class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
-    <div>${day.day}</div>
+		<div class="month-nav">
+			<button class="btn-month" onclick="prevMonth()">&lt;</button>
+			<span class="header">${year}년 ${month}월</span>
+			<button class="btn-month" onclick="nextMonth()">&gt;</button>
+		</div>
 
-    <c:if test="${not empty attendanceMap[day.dateStr]}">
-        <div class="memo">
-            ${attendanceMap[day.dateStr]}
-        </div>
-    </c:if>
-</td>
-                        </c:forEach>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-
- 
-    </div>
+		<table class="calendar">
+			<thead>
+				<tr>
+					<th class="sunday">일</th>
+					<th>월</th>
+					<th>화</th>
+					<th>수</th>
+					<th>목</th>
+					<th>금</th>
+					<th class="saturday">토</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="week" items="${weeks}">
+					<tr>
+						<c:forEach var="day" items="${week.days}">
+							<td
+								class="${day.dayOfWeek == 1 ? 'sunday' : day.dayOfWeek == 7 ? 'saturday' : ''} ${!day.isCurrentMonth ? 'other-month' : ''}">
+								<div>${day.day}</div> <c:if
+									test="${not empty attendanceMap[day.dateStr]}">
+									<div class="memo">${attendanceMap[day.dateStr]}</div>
+								</c:if>
+							</td>
+						</c:forEach>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>

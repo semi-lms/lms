@@ -43,15 +43,15 @@
 				<div class="card mypage-box">
 					<h2>${loginUser.name}님</h2>
 					<p>역할: ${loginUser.role}</p>
-					<a href="/mypage" class="btn">📂 마이페이지</a>
-					<a href="/logout" class="btn logout">🚪 로그아웃</a>
+					<a href="/mypage" class="btn">마이페이지</a>
+					<a href="/logout" class="btn logout">로그아웃</a>
 				</div>
 			</c:when>
 			<c:otherwise>
 				<div class="card mypage-box">
 					<h2>환영합니다!</h2>
 					<p>로그인이 필요합니다.</p>
-					<a href="/login" class="btn">🔐 로그인</a>
+					<a href="/login" class="btn">로그인</a>
 				</div>
 			</c:otherwise>
 		</c:choose>
@@ -127,7 +127,7 @@
 
 	<!-- 공통 하단 컨텐츠 include -->
 	<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />
-	<!--  -->
+	<!-- footer -->
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>
