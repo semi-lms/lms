@@ -21,7 +21,7 @@ public interface CourseMapper {
 
 	ClassDTO selectClassByNo(int classNo);
 
-	int getTotalCount(String searchCourseOption, String searchCourse);
+	int getTotalCount(String searchOption, String keyword);
 	
 	// 강사별 강의리스트
 	List<CourseDTO> selectCourseListByTeacherNo(Map<String, Object> params);

@@ -20,18 +20,18 @@
 		INNER JOIN teacher t ON c.teacher_no = t.teacher_no
 		LEFT JOIN course_apply ca ON c.course_id = ca.course_id
 		<where>
-			<if test="searchCourseOption == 'all' and searchCourse != null and searchCourse != '' ">
-				AND (t.name LIKE CONCAT('%', #{searchCourse}, '%')
+			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
+				AND (t.name LIKE CONCAT('%', #{keyword}, '%')
 				OR
-				c.course_name LIKE CONCAT('%', #{searchCourse}, '%'))
+				c.course_name LIKE CONCAT('%', #{keyword}, '%'))
 			</if>
 			<if
-				test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
-				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+				test="searchOption == 'teacherName' and keyword != null and keyword != '' ">
+				AND t.name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if
-				test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
-				AND c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+				test="searchOption == 'courseName' and keyword != null and keyword != '' ">
+				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 		GROUP BY c.course_id
@@ -81,18 +81,18 @@
 		INNER JOIN class cl ON c.class_no = cl.class_no
     	INNER JOIN teacher t ON c.teacher_no = t.teacher_no
 		<where>
-			<if test="searchCourseOption == 'all' and searchCourse != null and searchCourse != '' ">
-				AND (t.name LIKE CONCAT('%', #{searchCourse}, '%')
+			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
+				AND (t.name LIKE CONCAT('%', #{keyword}, '%')
 				OR
-				c.course_name LIKE CONCAT('%', #{searchCourse}, '%'))
+				c.course_name LIKE CONCAT('%', #{keyword}, '%'))
 			</if>
 			<if
-				test="searchCourseOption == 'teacherName' and searchCourse != null and searchCourse != '' ">
-				AND t.name LIKE CONCAT('%', #{searchCourse}, '%')
+				test="searchOption == 'teacherName' and keyword != null and keyword != '' ">
+				AND t.name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 			<if
-				test="searchCourseOption == 'courseName' and searchCourse != null and searchCourse != '' ">
-				AND c.course_name LIKE CONCAT('%', #{searchCourse}, '%')
+				test="searchOption == 'courseName' and keyword != null and keyword != '' ">
+				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 	</select>

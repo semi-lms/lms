@@ -34,15 +34,16 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
-	public int getTotalCount(String searchStudentOption, String searchStudent) {
-		// TODO Auto-generated method stub
-		return studentMapper.getTotalCount(searchStudentOption, searchStudent);
+	public int getTotalCount(String searchOption, String keyword) {
+
+		return studentMapper.getTotalCount(searchOption, keyword);
 	}
-	
 
-
-	
-
+	@Override
+	public String insertStudentList(List<StudentDTO> studentList) {
+		
+		return studentMapper.insertStudentList(studentList);
+	}
 	
 	
 }

@@ -160,11 +160,11 @@ public class StudentController {
     public String studentList(Model model
 							,@RequestParam(defaultValue = "1") int currentPage
 							,@RequestParam(defaultValue = "5") int rowPerPage
-    						,@RequestParam(value="searchStudentOption", required=false, defaultValue="all") String searchStudentOption
-    						,@RequestParam(value="searchStudent", required=false, defaultValue="") String searchStudent) {
+    						,@RequestParam(value="searchOption", required=false, defaultValue="all") String searchOption
+    						,@RequestParam(value="keyword", required=false, defaultValue="") String keyword) {
     	
-    	int totalCount = studentService.getTotalCount(searchStudentOption, searchStudent);
-    	Page page = new Page(rowPerPage, currentPage, totalCount, searchStudentOption, searchStudent, null, null, null, null);
+    	int totalCount = studentService.getTotalCount(searchOption, keyword);
+    	Page page = new Page(rowPerPage, currentPage, totalCount, keyword, searchOption);
     	int pageSize = 5;
     	int startPage = ((currentPage - 1) / pageSize) * pageSize + 1;
     	int endPage = startPage + pageSize - 1;
@@ -174,16 +174,16 @@ public class StudentController {
     	int startRow = (currentPage - 1) * rowPerPage;
     	
     	Map<String, Object> map = new HashMap<>();
-    	map.put("searchStudentOption", searchStudentOption);
-    	map.put("searchStudent", searchStudent);
+    	map.put("searchOption", searchOption);
+    	map.put("keyword", keyword);
     	map.put("startRow", startRow);
     	map.put("rowPerPage", rowPerPage);
     	
     	List<StudentDTO> list = studentService.getStudentList(map);
     	model.addAttribute("studentList", list);
     	model.addAttribute("page", page);
-    	model.addAttribute("searchStudentOption", searchStudentOption);
-    	model.addAttribute("searchStudent", searchStudent);
+    	model.addAttribute("searchOption", searchOption);
+    	model.addAttribute("keyword", keyword);
     	model.addAttribute("startPage", startPage);
     	model.addAttribute("endPage", endPage);
     	
@@ -192,7 +192,12 @@ public class StudentController {
 	
     @GetMapping("/admin/insertStudent")
     public String insertStudent() {
-    	
     	return "/admin/insertStudent";
+    }
+    
+    @PostMapping("/admin/insertStudent")
+    public String insertStudent(@ModelAttribute("studentList") List<StudentDTO> studentList) {
+        studentService.insertStudentList(studentList);
+        return "/admin/insertStudent";
     }
 }

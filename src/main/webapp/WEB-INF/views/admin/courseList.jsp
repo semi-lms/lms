@@ -54,22 +54,19 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<button type="button" id="insertCourse">강의 등록</button>
-		<br> <select name="searchCourseOption" id="searchCourseOption">
-			<option value="all" ${searchCourseOption == 'all' ? 'selected' : ''}>전체</option>
-			<option value="teacherName"
-				${searchCourseOption == 'teacherName' ? 'selected' : ''}>강사</option>
-			<option value="courseName"
-				${searchCourseOption == 'courseName' ? 'selected' : ''}>강의명</option>
-		</select> <input type="text" name="searchCourse" id="searchCourse"
-			value="${searchCourse}" placeholder="검색">
+		<button type="button" id="insertCourse">강의 등록</button><br> 
+		<select name="searchOption" id="searchOption">
+			<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
+			<option value="teacherName"	${searchOption == 'teacherName' ? 'selected' : ''}>강사</option>
+			<option value="courseName"	${searchOption == 'courseName' ? 'selected' : ''}>강의명</option>
+		</select> <input type="text" name="keyword" id="keyword" value="${keyword}" placeholder="검색">
 		<button type="submit" id="searchBtn">검색</button>
 	</form>
 
 	<c:if test="${page.lastPage > 1 }">
 		<c:if test="${startPage > 1 }">
 			<a
-				href="/admin/courseList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchCourseOption=${searchCourseOption}&searchCourse=${searchCourse}">[이전]</a>
+				href="/admin/courseList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[이전]</a>
 		</c:if>
 	</c:if>
 	<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -78,14 +75,12 @@
 				<span>[${i}]</span>
 			</c:when>
 			<c:otherwise>
-				<a
-					href="/admin/courseList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchCourseOption=${searchCourseOption}&searchCourse=${searchCourse}">[${i}]</a>
+				<a href="/admin/courseList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[${i}]</a>
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
 	<c:if test="${endPage < page.lastPage }">
-		<a
-			href="/admin/courseList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchCourseOption=${searchCourseOption}&searchCourse=${searchCourse}">[다음]</a>
+		<a href="/admin/courseList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[다음]</a>
 	</c:if>
     </div>
     </div>

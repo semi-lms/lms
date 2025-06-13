@@ -62,18 +62,18 @@ body {
 			</table>
 			<button type="button" id="insertStudent">학생등록</button><br>
 			
-			<select name="searchStudentOption">
-				<option value="all" ${searchStudentOption == 'all' ? 'selected' : ''}>전체</option>
-				<option value="studentName" ${searchStudentOption == 'studentName' ? 'selected' : ''}>이름</option>
-				<option value="courseName" ${searchStudentOption == 'courseName' ? 'selected' : ''}>수강과목</option>
+			<select name="searchOption">
+				<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
+				<option value="studentName" ${searchOption == 'studentName' ? 'selected' : ''}>이름</option>
+				<option value="courseName" ${searchOption == 'courseName' ? 'selected' : ''}>수강과목</option>
 			</select>
-			<input type="text" name="searchStudent" id="searchStudent">
-			<button type="submit" id="searchStudentBtn">검색</button>
+			<input type="text" name="keyword" id="keyword">
+			<button type="submit" id="keyword">검색</button>
 		</form>
 		
 		<c:if test="${page.lastPage>1}">
 			<c:if test="${startPage>1}">
-				<a href="/admin/studentList?currentPage=${startPage-1}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[이전]</a>
+				<a href="/admin/studentList?currentPage=${startPage-1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[이전]</a>
 			</c:if>
 		</c:if>
 		
@@ -83,13 +83,13 @@ body {
 					<span>[${i}]</span>
 				</c:when>
 				<c:otherwise>
-					<a href="/admin/studentList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[${i}]</a>
+					<a href="/admin/studentList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>
 		
 		<c:if test="${endPage < page.lastPage}">
-			<a href="/admin/studentList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchStudentOption=${searchStudentOption}&searchStudent=${searchStudent}">[다음]</a>
+			<a href="/admin/studentList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[다음]</a>
 		</c:if>
     </div>
 </div>

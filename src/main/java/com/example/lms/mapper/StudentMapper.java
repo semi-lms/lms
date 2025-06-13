@@ -29,7 +29,8 @@ public interface StudentMapper {
 
 	List<StudentDTO> getStudentList(Map<String, Object> map);
 	
-	int getTotalCount(String searchStudentOption, String searchStudent);
-
+	int getTotalCount(String searchOption, String keyword);
+	
+	String insertStudentList(List<StudentDTO> studentList);
 
 }

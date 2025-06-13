@@ -30,10 +30,10 @@ public class CourseController {
 	public String courseList(Model model
 							,@RequestParam(defaultValue = "1") int currentPage
 							,@RequestParam(defaultValue = "10") int rowPerPage
-							,@RequestParam(value="searchCourseOption", required=false, defaultValue="all") String searchCourseOption
-							,@RequestParam(value="searchCourse", required=false, defaultValue="") String searchCourse) {
-	    int totalCount = course.getTotalCount(searchCourseOption, searchCourse);
-	    Page page = new Page(rowPerPage, currentPage, totalCount, searchCourseOption, searchCourse, null, null, null, null);
+							,@RequestParam(value="searchOption", required=false, defaultValue="all") String searchOption
+							,@RequestParam(value="keyword", required=false, defaultValue="") String keyword) {
+	    int totalCount = course.getTotalCount(searchOption, keyword);
+	    Page page = new Page(rowPerPage, currentPage, totalCount, searchOption, keyword);
 		
 	    int pageSize = 5;
 	    int startPage = ((currentPage-1) / pageSize) * pageSize + 1;
@@ -44,20 +44,20 @@ public class CourseController {
 	    int startRow = (currentPage - 1) * rowPerPage;
 	    
 		Map<String, Object> param = new HashMap<>();
-	    param.put("searchCourseOption", searchCourseOption);
-	    param.put("searchCourse", searchCourse);
+	    param.put("searchOption", searchOption);
+	    param.put("keyword", keyword);
 	    param.put("startRow", startRow);      // ★추가
 	    param.put("rowPerPage", rowPerPage);  // ★추가
 	    
 		List<CourseDTO> list = course.selectCourseList(param);
 	    model.addAttribute("courseList", list);
 	    model.addAttribute("page", page);
-	    model.addAttribute("searchCourse", searchCourse);
-	    model.addAttribute("searchCourseOption", searchCourseOption);
+	    model.addAttribute("searchCourse", keyword);
+	    model.addAttribute("searchCourseOption", searchOption);
 	    model.addAttribute("startPage", startPage);
 	    model.addAttribute("endPage", endPage);
-	    log.info("searchCourseOption : "+searchCourseOption);
-	    log.info("searchCourse : "+searchCourse);
+	    log.info("searchCourseOption : "+searchOption);
+	    log.info("searchCourse : "+keyword);
 	    return "/admin/courseList";
 	}
 	

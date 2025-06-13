@@ -61,16 +61,16 @@
 		FROM student s INNER JOIN course c
 		ON s.course_id = c.course_id
 		<where>
-			<if test="searchStudentOption == 'all' and searchStudent != null and searchStudent != '' ">
-				AND (s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
+				AND (s.name LIKE CONCAT('%', #{keyword}, '%')
 				OR
-				c.course_name LIKE CONCAT('%', #{searchStudent}, '%'))
+				c.course_name LIKE CONCAT('%', #{keyword}, '%'))
 			</if>
-			<if test="searchStudentOption == 'studentName' and searchStudent != null and searchStudent != '' ">
-				AND s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'studentName' and keyword != null and keyword != '' ">
+				AND s.name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="searchStudentOption == 'courseName' and searchStudent != null and searchStudent != ''">
-				AND c.course_name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'courseName' and keyword != null and keyword != ''">
+				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 		ORDER BY s.name DESC
@@ -83,19 +83,30 @@
 		INNER JOIN course c
 		ON s.course_id = c.course_id
 		<where>
-			<if test="searchStudentOption == 'all' and searchStudent != null and searchStudent != '' ">
-				AND (s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
+				AND (s.name LIKE CONCAT('%', #{keyword}, '%')
 				OR
-				c.course_name LIKE CONCAT('%', #{searchStudent}, '%'))
+				c.course_name LIKE CONCAT('%', #{keyword}, '%'))
 			</if>
-			<if test="searchStudentOption == 'studentName' and searchStudent != null and searchStudent != '' ">
-				AND s.name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'studentName' and keyword != null and keyword != '' ">
+				AND s.name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
-			<if test="searchStudentOption == 'courseName' and searchStudent != null and searchStudent != ''">
-				AND c.course_name LIKE CONCAT('%', #{searchStudent}, '%')
+			<if test="searchOption == 'courseName' and keyword != null and keyword != ''">
+				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
 	</select>
+	
+	  <insert id="insertStudentList" parameterType="list">
+	    INSERT INTO student (student_id, course_id, password, name, sn, email, phone, reg_date)
+	    VALUES
+	    <foreach collection="list" item="student" separator=",">
+	      (#{student.studentId}, #{student.courseId}, #{student.password}, #{student.name},
+	       REPLACE(#{student.sn}, '-', ''), #{student.email}, #{student.phone}, NOW())
+	    </foreach>
+	  </insert>
+	
+	
 </mapper>
 
 

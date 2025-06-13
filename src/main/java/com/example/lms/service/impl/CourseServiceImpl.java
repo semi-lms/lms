@@ -49,9 +49,9 @@ public class CourseServiceImpl implements CourseService{
 	}
 	
 	@Override
-	public int getTotalCount(String searchCourseOption, String searchCourse) {
+	public int getTotalCount(String searchOption, String keyword) {
 
-		return courseMapper.getTotalCount(searchCourseOption, searchCourse);
+		return courseMapper.getTotalCount(searchOption, keyword);
 	}
 	
 	// 강사별 강의리스트
