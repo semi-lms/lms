@@ -228,6 +228,7 @@ public class TeacherController {
 		return "redirect:/examList";
 	}
 	
+	// 출결 관리
 	@GetMapping("/attendanceList")
 	public String attendanceByClass(
 		@RequestParam(required = false, defaultValue = "1") int courseId, // 강의/반 ID, URL 파라미터로 받음
