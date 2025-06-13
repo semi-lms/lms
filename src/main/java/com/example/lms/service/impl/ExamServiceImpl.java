@@ -25,7 +25,12 @@ public class ExamServiceImpl implements ExamService{
 	public List<ExamSubmissionDTO> getScoreList(Map<String, Object> params) {
 		return examMapper.selectScoreList(params);
 	}
-
+	
+	@Override
+	public int getScoreCnt(int courseId, int examId, String filter) {
+		return examMapper.getScoreCnt(courseId, examId, filter);
+	}
+	
 	@Override
 	public List<ExamDTO> getExamList(Map<String, Object> params) {
 		return examMapper.selectExamList(params);

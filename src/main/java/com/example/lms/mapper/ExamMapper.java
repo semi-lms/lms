@@ -16,7 +16,9 @@ import com.example.lms.dto.ExamSubmissionDTO;
 public interface ExamMapper {
 	// 성적 리스트 조회
 	List<ExamSubmissionDTO> selectScoreList(Map<String, Object> params);
-
+	// 페이징
+	int getScoreCnt(int courseId, int examId, String filter);
+	
 	// 시험 리스트 조회
 	List<ExamDTO> selectExamList(Map<String, Object> params);
 	int getExamCnt(int courseId);

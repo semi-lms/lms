@@ -121,14 +121,41 @@ public class TeacherController {
 	@GetMapping("/scoreList")
 	public String scoreList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
 							, @RequestParam(name = "examId", required = false, defaultValue = "1") int examId
+							, @RequestParam(defaultValue = "1") int currentPage
+							, @RequestParam(defaultValue = "10") int rowPerPage
+							, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter
 							, Model model) {
+		// 페이징
+		int totalCnt = examService.getScoreCnt(courseId, examId, filter);
+		int lastPage = totalCnt / rowPerPage;
+		if(totalCnt % rowPerPage != 0) {
+			lastPage += 1;
+		};
+		int startRow = (currentPage - 1) * rowPerPage;
+		int startPage = ((currentPage-1) / rowPerPage) * rowPerPage + 1;
+		int endPage = startPage + rowPerPage -1;
+		if(endPage >lastPage) {
+			endPage = lastPage;
+		};
+		
 		Map<String, Object> scoreMap = new HashMap<>();
 		scoreMap.put("courseId", courseId);
 		scoreMap.put("examId", examId);
+		scoreMap.put("filter", filter);
+		scoreMap.put("startRow", startRow);
+		scoreMap.put("rowPerPage", rowPerPage);
 		
 		log.info("map" + scoreMap.toString());
 		List<ExamSubmissionDTO> scores = examService.getScoreList(scoreMap);
 		model.addAttribute("scores", scores);
+		model.addAttribute("courseId", courseId);
+		model.addAttribute("examId", examId);
+		model.addAttribute("filter", filter);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("lastPage", lastPage);
+		model.addAttribute("endPage", endPage);
+		
 		return "teacher/scoreList";
 	}
 	

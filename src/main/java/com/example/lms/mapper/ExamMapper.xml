@@ -9,6 +9,33 @@
 		LEFT JOIN exam_submission s ON st.student_no = s.student_no
 		WHERE st.course_id = #{courseId} AND (exam_id = #{examId} OR exam_id
 		IS NULL)
+		<choose>
+			<when test="filter == '미제출'">
+				AND s.score is null
+			</when>
+			<when test="filter == '제출'">
+				AND s.score is not null
+			</when>
+			<!-- 전체일 경우 조건 없음 -->
+		</choose>
+		ORDER BY st.name ASC
+		LIMIT #{startRow}, #{rowPerPage}
+	</select>
+	<!-- 페이징 -->
+	<select id="getScoreCnt" parameterType="map" resultType="int">
+		SELECT COUNT(*) from student st
+		LEFT JOIN exam_submission s ON st.student_no = s.student_no
+		WHERE st.course_id = #{courseId} AND (exam_id = #{examId} OR exam_id
+		IS NULL)
+		<choose>
+			<when test="filter == '미제출'">
+				AND s.score is null
+			</when>
+			<when test="filter == '제출'">
+				AND s.score is not null
+			</when>
+			<!-- 전체일 경우 조건 없음 -->
+		</choose>
 	</select>
 
 	<!-- 시험 리스트 조회 -->
