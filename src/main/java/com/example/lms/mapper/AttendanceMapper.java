@@ -29,4 +29,12 @@ public interface AttendanceMapper {
 	List<StudentDTO> getStudentListByCourse(int courseId);
 
 	List<Date> getHolidayList();
+	
+	// 출결 관리
+	// 데이터 있는지 확인
+	int isAttendance(AttendanceDTO attendanceDto);
+	// 있으면 수정
+	int updateAttendance(AttendanceDTO attendanceDto);
+	// 없으면 입력
+	int insertAttendance(AttendanceDTO attendanceDto);
 }

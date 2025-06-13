@@ -66,4 +66,15 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 		return attendanceMapper.getHolidayList();
 	}
+	
+	// 출결 관리
+	public int isAttendance(AttendanceDTO attendanceDto) {
+		return attendanceMapper.isAttendance(attendanceDto);
+	}
+	public int insertAttendance(AttendanceDTO attendanceDto) {
+		return attendanceMapper.insertAttendance(attendanceDto);
+	}
+	public int updateAttendance(AttendanceDTO attendanceDto) {
+		return attendanceMapper.updateAttendance(attendanceDto);
+	}
 }

@@ -296,6 +296,17 @@ public class TeacherController {
 		return "/teacher/attendanceList";
 	}
 	
-	
+	@PostMapping("/manageAttendance")
+	public String manageAttendance(@ModelAttribute AttendanceDTO attendanceDto) {
+		// 데이터 값이 있으면 수정 없으면 입력
+		int hasAttendance = attendanceService.isAttendance(attendanceDto);
+		if(hasAttendance == 0) {
+			attendanceService.insertAttendance(attendanceDto);
+		} else {
+			attendanceService.updateAttendance(attendanceDto);
+		};
+		
+		return "redirect:/attendanceList";
+	}
 	
 }

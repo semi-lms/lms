@@ -84,10 +84,11 @@
 									data-has-doc="${attendanceDocMap[student.studentNo][date] != null}">
 									<c:choose>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}">●</c:when>
-										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">△</c:when>
+										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">지각</c:when>
+										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '조퇴'}">조퇴</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}">✗</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">공결</c:when>
-										<c:otherwise>미출석</c:otherwise>
+										<c:otherwise>-</c:otherwise>
 									</c:choose>
 								</td>
 							</c:forEach>
@@ -97,14 +98,17 @@
 			</table>
 		</div>
 	</div>
+	<!-- 출결 등록 -->
 	<div id="attendanceModal" style="display:none; position:fixed; top:20%; left:35%; background:#fff; border:1px solid #ccc; padding:20px; z-index:10;">
-		<form id="attendanceForm" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="studentNo" />
-			<input type="hidden" name="date" />
+		<form id="attendanceForm" method="post" action="/manageAttendance" enctype="multipart/form-data">
+			<input type="hidden" name="studentNo" value="${studentNo}">
+			<input type="hidden" name="date" value="${date}">
+			<input type="hidden" name="courseId" value="${courseId}">
 			<label>상태:
 				<select name="status">
 					<option value="출석">출석</option>
 					<option value="지각">지각</option>
+					<option value="지각">조퇴</option>
 					<option value="결석">결석</option>
 					<option value="공결">공결</option>
 				</select>

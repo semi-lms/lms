@@ -104,4 +104,21 @@
 		SELECT date
 		FROM holidays
 	</select>
+	
+	<!-- 출결 등록 / 수정 -->
+	<!-- 데이터 있는지 확인 -->
+	<select id="isAttendance" parameterType="com.example.lms.dto.AttendanceDTO" resultType="int">
+		SELECT COUNT(*) FROM attendance
+		WHERE student_no = #{studentNo} AND course_id = #{courseId} AND date = #{date}
+	</select>
+	<!-- 데이터가 있으면 수정 없으면 등록 -->
+	<insert id="insertAttendance" parameterType="com.example.lms.dto.AttendanceDTO">
+		INSERT INTO attendance (student_no, course_id, date, status)
+		VALUES (#{studentNo}, #{courseId}, #{date}, #{status})
+	</insert>
+	<update id="updateAttendance" parameterType="com.example.lms.dto.AttendanceDTO">
+		UPDATE attendance
+		SET status = #{status}
+		WHERE student_no = #{studentNo} AND course_id = #{courseId} AND date = #{date}
+	</update>
 </mapper>

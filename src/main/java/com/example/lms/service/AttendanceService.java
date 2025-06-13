@@ -16,4 +16,9 @@ public interface AttendanceService {
     List<AttendanceDTO> getAttendanceByClass(int courseId);
     List<StudentDTO> getStudentListByCourse(int courseId);
     List<Date> getHolidayList();
+    
+    // 출결 관리
+    int isAttendance(AttendanceDTO attendanceDto);
+    int updateAttendance(AttendanceDTO attendanceDto);
+    int insertAttendance(AttendanceDTO attendanceDto);
 }

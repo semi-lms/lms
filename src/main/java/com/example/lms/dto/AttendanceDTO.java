@@ -2,6 +2,8 @@ package com.example.lms.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +11,7 @@ public class AttendanceDTO {
 	private int attendanceNo;
 	private int studentNo;
 	private int courseId;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	private String status;
     private int total;          // 총 학생수
