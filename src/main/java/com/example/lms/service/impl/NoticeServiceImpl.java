@@ -22,12 +22,12 @@ public class NoticeServiceImpl implements NoticeService {
     public List<NoticeDTO> selectLatestNotices(int count) {
         return noticeMapper.selectLatestNotices(count);
 	}
-
+    // 전체개수
 	@Override
 	public int totalCount(String searchOption, String keyword) {
 		return noticeMapper.totalCount(searchOption, keyword);
 	}
-
+	// 리스트
 	@Override
 	public List<NoticeDTO> selectNoticeList(Map<String, Object> param) {
 		return noticeMapper.selectNoticeList(param);
@@ -50,7 +50,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public int updateNotice(NoticeDTO noticeDto) {
 		return noticeMapper.updateNotice(noticeDto);
 	}
-
+	// 삭제
 	@Override
 	public int deleteNotice(int noticeDto) {
 		return noticeMapper.deleteNotice(noticeDto);

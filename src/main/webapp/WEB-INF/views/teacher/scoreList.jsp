@@ -58,6 +58,14 @@
 	</div>
 	<div class="main-content">
 		<h1>성적 리스트</h1>
+		<form method="get" action="/scoreList">
+			<input type="hidden" name="examId" value="${examId}" />
+			<input type="hidden" name="courseId" value="${courseId}" />
+			<input type="hidden" name="currentPage" value="${currentPage}" />
+			<button type="submit" name="filter" value="전체" ${filter == '전체' ? 'disabled' : ''}>전체</button>
+			<button type="submit" name="filter" value="미제출" ${filter == '미제출' ? 'disabled' : ''}>미제출</button>
+			<button type="submit" name="filter" value="제출" ${filter == '제출' ? 'disabled' : ''}>제출</button>
+		</form>
 		<table border="1">
 			<tr>
 				<th>이름</th>
@@ -72,6 +80,16 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<c:forEach var="i" begin="1" end="${lastPage}">
+			<c:choose>
+				<c:when test="${i == currentPage }">
+					<span>[${i}]</span>
+				</c:when>
+				<c:otherwise>
+					<a href="/scoreList?currentPage=${i}&filter=${filter}">[${i}]</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
 	</div>
 </div>
 </body>
