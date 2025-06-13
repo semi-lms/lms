@@ -8,6 +8,7 @@
     <p class="title">마이페이지</p>
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
+    <a href="/admin/academicSchedule"><button class="sidebar-btn">전체일정</button></a><br><br>
     <button class="sidebar-btn" onclick="toggleSubmenu()">관리목록</button><br><br>
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">

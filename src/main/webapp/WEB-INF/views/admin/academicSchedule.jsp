@@ -5,6 +5,7 @@
 <html>
 
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/calendar.css">
     <title>학원 일정</title>
  

@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <meta charset="UTF-8">
 <title>공지사항 리스트</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
