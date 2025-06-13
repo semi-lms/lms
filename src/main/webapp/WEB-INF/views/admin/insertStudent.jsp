@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -6,14 +6,26 @@
 <meta charset="UTF-8">
 <title>학생 등록 페이지</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
 <style>
 body { margin: 0; padding: 0; }
 .container { display: flex; width: 100%; }
 .sidebar { min-width: 220px; background: #fafafa; height: 100vh; }
 .chart-container { margin-top: 32px; }
 .main-content { flex: 1; background: #fff; padding: 40px 40px 40px 300px; }
+.remove-row-btn {
+    background: none;
+    border: none;
+    color: #f44336;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1;
+}
+.remove-row-btn:hover {
+    color: #b71c1c;
+}
 </style>
+</head>
 <body>
 <div class="container">
     <div class="sidebar">
@@ -31,6 +43,7 @@ body { margin: 0; padding: 0; }
             <table border="1" id="studentTable">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>이름</th>
                         <th>전화번호</th>
                         <th>주민번호</th>
@@ -42,6 +55,7 @@ body { margin: 0; padding: 0; }
                 </thead>
                 <tbody id="studentTableBody">
                     <tr>
+                        <td></td>
                         <td><input type="text" name="studentList[0].name"></td>
                         <td><input type="text" name="studentList[0].phone" class="phone-input"></td>
                         <td><input type="text" name="studentList[0].sn"></td>
@@ -70,9 +84,11 @@ function randomId(len = 6) {
 }
 
 $(function() {
+    // 행 추가 버튼
     $("#insertRowBtn").click(function(){
         let html = `
             <tr>
+                <td><button type="button" class="remove-row-btn" title="행 삭제">&times;</button></td>
                 <td><input type="text" name="studentList[${rowIdx}].name"></td>
                 <td><input type="text" name="studentList[${rowIdx}].phone" class="phone-input"></td>
                 <td><input type="text" name="studentList[${rowIdx}].sn"></td>
@@ -86,7 +102,12 @@ $(function() {
         rowIdx++;
     });
 
-    // 모든 .phone-input에 대해 input 이벤트 위임
+    // 삭제 버튼 이벤트 위임
+    $("#studentTableBody").on("click", ".remove-row-btn", function() {
+        $(this).closest("tr").remove();
+    });
+
+    // 자동 아이디/비번
     $("#studentTableBody").on('input', '.phone-input', function() {
         const $row = $(this).closest('tr');
         const phone = this.value.replace(/[^0-9]/g, "");
@@ -97,6 +118,25 @@ $(function() {
         } else {
             $row.find("input[name$='.password']").val('');
             $row.find("input[name$='.studentId']").val('');
+        }
+    });
+
+    // 등록 전 빈 칸 체크
+    $("form").on("submit", function(e) {
+        let isEmpty = false;
+        $("#studentTableBody tr").each(function() {
+            $(this).find("input[type='text']:not([readonly]), input[type='email']").each(function() {
+                if (!$(this).val().trim()) {
+                    isEmpty = true;
+                    $(this).css("border", "2px solid red");
+                } else {
+                    $(this).css("border", "");
+                }
+            });
+        });
+        if (isEmpty) {
+            alert("어허! 공백이 생기면 쓰나!! 뗶!!");
+            e.preventDefault();
         }
     });
 });
