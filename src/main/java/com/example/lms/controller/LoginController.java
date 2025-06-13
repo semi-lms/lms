@@ -1,8 +1,5 @@
 package com.example.lms.controller;
 
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -11,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AdminDTO;
 import com.example.lms.dto.LoginDTO;
@@ -106,6 +105,23 @@ public class LoginController {
         return "main";
     }
 
-
+    @GetMapping("/findId")
+    public String findId() {
+    	
+    	return "/findId";
+    }
+    
+    @PostMapping("/findId")
+    @ResponseBody
+    public String findId(@RequestParam String findIdByName
+    					,@RequestParam String findIdByEmail) {
+    	
+    	String studentId = loginService.findIdByNameEmail(findIdByName, findIdByEmail);
+        if (studentId != null) {
+            return studentId; // 아이디 그대로 리턴 (JSON 아니라면 이렇게)
+        } else {
+            return "NOT_FOUND"; // 실패 시 구분
+        }
+    }
 }
     

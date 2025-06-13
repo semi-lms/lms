@@ -50,7 +50,12 @@
 		WHERE student_id = #{studentId} AND password = #{password}
 	</select>
 	
-	
+	<select id="findIdByNameEmail" resultType="String">
+		SELECT student_id
+		FROM student
+		WHERE NAME=#{findIdByName}
+		AND email=#{findIdByEmail}
+	</select>
 	
 	
 </mapper>

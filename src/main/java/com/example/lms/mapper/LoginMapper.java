@@ -11,4 +11,5 @@ public interface LoginMapper {
 		AdminDTO loginAdmin(AdminDTO adminDto); 		// 관리자 로그인
 		TeacherDTO loginTeacher(TeacherDTO teacherDto);	// 강사 로그인
 		StudentDTO loginStudent(StudentDTO studentDto); // 학생 로그인
+		String findIdByNameEmail(String findIdByName, String findIdByEmail);
 	}

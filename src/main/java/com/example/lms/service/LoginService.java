@@ -9,5 +9,6 @@ public interface LoginService {
 	AdminDTO loginAdmin(AdminDTO adminDto);
 	TeacherDTO loginTeacher(TeacherDTO teacherDto);
 	StudentDTO loginStudent(StudentDTO studentDto);
+	String findIdByNameEmail(String findIdByName, String findIdByEmail);
 	
 }

@@ -29,4 +29,10 @@ public class LoginServiceImpl implements LoginService {
 	public StudentDTO loginStudent(StudentDTO studentDto) {
 		return loginMapper.loginStudent(studentDto);
 	}
+
+	@Override
+	public String findIdByNameEmail(String findIdByName, String findIdByEmail) {
+		
+		return loginMapper.findIdByNameEmail(findIdByName, findIdByEmail);
+	}
 }

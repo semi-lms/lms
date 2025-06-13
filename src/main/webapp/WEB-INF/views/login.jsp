@@ -61,8 +61,9 @@
 				        <label class="btn btn-outline-success" for="student">학생</label>
 				    </div>
 			   </div>
-            
         </form>
+				<a href="/findId"><button type="submit">아이디 찾기</button></a>
+				<a href="/findPw"><button type="submit">비밀번호 찾기</button></a>
     </div>
 </div>
 
