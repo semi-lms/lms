@@ -160,3 +160,14 @@ canvas {
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+
+
+/* 상담문의 배너 스타일 */
+.floBanPc3 {
+  position: fixed;
+  top: 400px; /* 윗쪽 끝에서부터의 거리 */
+  right: 4PX;
+  z-index: 9999;
+  border-radius : 100px;
+}

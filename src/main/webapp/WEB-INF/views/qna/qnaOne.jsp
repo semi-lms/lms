@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
 </head>
 <body>
-
+<fmt:setTimeZone value="Asia/Seoul" />
 <!-- 사이드바 -->
 <div class="sidebar">
   <c:choose>
@@ -26,7 +27,7 @@
 
 <!-- 본문 -->
 <div class="notice-content">
-  <h2>공지사항 상세보기</h2>
+  <h2>qna 상세보기</h2>
 
   <table border="1" cellpadding="10">
     <tr>
@@ -77,7 +78,30 @@
       <button type="button" onclick="handleDelete()">삭제</button>
   </form>
 </c:if>
- 
+
+<!-- ✨ QnA 답변 댓글 영역 -->
+<hr>
+<h4>💬 답변</h4>
+ <!-- 댓글 목록 -->
+<c:forEach var="comment" items="${commentList}">
+  <div class="comment-box">
+    <p><strong>${comment.writerRole}:</strong> ${comment.content}</p>
+    <p class="date">
+  <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+</p>
+  </div>
+</c:forEach>
+
+<!-- 댓글 작성 폼 (작성자 본인, 강사, 관리자만) -->
+<c:if test="${loginUser.role eq 'admin' 
+           || loginUser.role eq 'teacher' 
+           || loginUser.studentId eq qna.studentId}">
+  <form action="${pageContext.request.contextPath}/qna/insertQnaComment" method="post">
+    <input type="hidden" name="qnaId" value="${qna.qnaId}">
+    <textarea name="content" rows="4" cols="60" placeholder="답변을 입력하세요" required></textarea><br>
+    <button type="submit">답변 등록</button>
+  </form>
+</c:if>
 
   <br>
   <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>

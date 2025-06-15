@@ -7,32 +7,32 @@
     <div class="box">
         <h3>공지사항</h3>
         <ul>
-            <c:forEach var="n" items="${noticeBoard}">
-                <li>${n.noticeId} ${n.title}</li>
+            <c:forEach var="n" items="${noticeList}">
+                <li>🔸${n.title}</li>
             </c:forEach>
         </ul>
-        <a href="/notice"><button>View details</button></a>
+        <a href="/notice/noticeList"><button>View details</button></a>
     </div>
 
     <!-- QNA -->
     <div class="box">
         <h3>QNA</h3>
         <ul>
-            <c:forEach var="q" items="${qnaBoard}">
-                <li>${q.qnaId} ${q.title}</li>
+            <c:forEach var="q" items="${qnaList}">
+                <li>🔹${q.title}</li>
             </c:forEach>
         </ul>
-        <a href="/qnaBoard"><button>View details</button></a>
+        <a href="qna/qnaList"><button>View details</button></a>
     </div>
 
     <!-- 자료실 -->
     <div class="box">
         <h3>자료실</h3>
         <ul>
-            <c:forEach var="f" items="${fileBoard}">
-                <li>${f.title}</li>
+            <c:forEach var="f" items="${fileBoardList}">
+                <li>📎${f.title}</li>
             </c:forEach>
         </ul>
-        <a href="/fileBoard"><button>View details</button></a>
+        <a href="file/fileBoardList"><button>View details</button></a>
     </div>
 </div>

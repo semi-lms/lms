@@ -53,7 +53,7 @@ public class QnaServiceImpl implements QnaService {
 
 	// 삭제
 	@Override
-	public int deleteQna(int qnaDto) {
+	public int deleteQna(QnaDTO qnaDto) {
 		return qnaMapper.deleteQna(qnaDto);
 	}
 

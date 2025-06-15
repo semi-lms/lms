@@ -124,7 +124,12 @@
     };
   </script>
 	</c:if>
-
+	<!-- 삼담문의 배너 -->
+	<div class="floBanPc3">
+	  <a href="tel:028187950">
+	    <img src="https://cdn.imweb.me/upload/S202407158b5a524da5594/40ffd7b4f910b.png" width="150px" height="150px">
+	  </a>
+	</div>
 	<!-- 공통 하단 컨텐츠 include -->
 	<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />
 	<!-- footer -->

@@ -26,5 +26,5 @@ public interface QnaService {
 	int updateQna(QnaDTO qnaDto);
 	
 	// 삭제
-	int deleteQna(int qnaDto);
+	int deleteQna(QnaDTO qnaDto);
 }

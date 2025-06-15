@@ -25,7 +25,7 @@
 	</select>
 	
 	<!-- qna 리스트 -->
-	<select id="selectQnaList" resultType="com.example.lms.dto.QnaDTO">
+	<select id="selectQnaList" parameterType="map" resultType="com.example.lms.dto.QnaDTO">
 		SELECT
 			q.qna_id AS qnaId,
 			q.student_no AS studentNo,

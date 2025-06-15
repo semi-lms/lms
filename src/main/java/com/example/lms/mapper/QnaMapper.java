@@ -31,5 +31,5 @@ public interface QnaMapper {
 	int updateQna(QnaDTO qnaDto);
 	
 	// 삭제
-	int deleteQna(int qnaId);
+	int deleteQna(QnaDTO qnaDto);
 }

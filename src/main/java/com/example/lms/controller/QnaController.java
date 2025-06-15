@@ -17,11 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.lms.dto.AdminDTO;
 import com.example.lms.dto.Page;
+import com.example.lms.dto.QnaCommentDTO;
 import com.example.lms.dto.QnaDTO;
 import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AdminService;
 import com.example.lms.service.MypageService;
+import com.example.lms.service.QnaCommentService;
 import com.example.lms.service.QnaService;
 import com.example.lms.service.StudentService;
 
@@ -36,6 +38,8 @@ public class QnaController {
 		private MypageService mypageService;
 		@Autowired
 		private AdminService adminService;
+		@Autowired
+		private QnaCommentService qnaCommentService;
 		@Autowired
 		private PasswordEncoder passwordEncoder; // 암호화 필드 받기 // com.example.lms.config.SecurityConfig
 		
@@ -107,6 +111,10 @@ public class QnaController {
 			
 			model.addAttribute("qna", qnaDto);
 			
+		    // 댓글 리스트도 같이 가져오기
+		    List<QnaCommentDTO> commentList = qnaCommentService.selectQnaCommentList(Map.of("qnaId", qnaId));
+		    model.addAttribute("commentList", commentList);
+			
 			return "qna/qnaOne";
 		}
 		
@@ -137,7 +145,7 @@ public class QnaController {
 		
 		// 삭제
 		@PostMapping("/deleteQna")
-		public String deleteQna(@RequestParam int qnaId,
+		public String deleteQna(@RequestParam QnaDTO qnaDto,
 		                        @RequestParam String pw,
 		                        HttpSession session,
 		                        RedirectAttributes ra) {
@@ -169,7 +177,7 @@ public class QnaController {
 		    }
 		    */
 		    // 3. 삭제 수행
-		    qnaService.deleteQna(qnaId);
+		    qnaService.deleteQna(qnaDto);
 
 		    return "redirect:/qna/qnaList";
 		}
