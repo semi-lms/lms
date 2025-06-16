@@ -20,9 +20,15 @@
 		
 		SELECT 
 		    date,
-		    name AS memo
+		    name AS memo  
 		FROM holidays
-		WHERE name LIKE '%휴강%'
 		ORDER BY date ASC
+	</select>
+	
+	<!-- 휴강 등록 시 날짜 중복 유효성 검사 -->
+	<select id="countByDate" resultType="int">
+		SELECT COUNT(*)
+		FROM holidays
+		WHERE date = #{date}
 	</select>
 </mapper>

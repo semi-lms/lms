@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AcademicScheduleDTO;
 import com.example.lms.dto.HolidaysDTO;
@@ -132,6 +133,14 @@ public class AcademicScheduleController {
 		holidaysService.insertHoliday(holidaysDTO);
 		model.addAttribute("success", true);
 		return "admin/insertHolidayForm";  // 리다이렉트로 할 경우 팝업창 닫는 JS 실행 불가능
+	}
+	
+	
+	// 휴강 등록 시 날짜 중복 유효성 검사
+	@GetMapping("/academicSchedule/exists")
+	@ResponseBody
+	public boolean existsByDate(@RequestParam("date") String date) {
+		return academicScheduleService.existsByDate(date);
 	}
 	
 	

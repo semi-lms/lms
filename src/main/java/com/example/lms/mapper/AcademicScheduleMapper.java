@@ -9,4 +9,5 @@ import com.example.lms.dto.AcademicScheduleDTO;
 @Mapper
 public interface AcademicScheduleMapper {
 	List<AcademicScheduleDTO> getAcademicSchedules();
+	int countByDate(String date);
 }
