@@ -34,7 +34,9 @@ body {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<h1>시험 응시</h1>
+<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+<br>
+
 	<p>문제 ${page} / 10 (시험 ID: ${examId})</p>
 	<p>응시자번호 ${loginUser.studentNo } </p>
 	<form id="examForm" method="post" action="/student/submitExam">
