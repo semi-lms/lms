@@ -31,8 +31,14 @@ public class QnaCommentServiceImpl implements QnaCommentService {
 	}
 
 	@Override
-	public int deleteQnaComment(QnaCommentDTO qnaCommentDto) {
-		return qnaCommentMapper.deleteQnaComment(qnaCommentDto);
+	public int deleteQnaComment(int commentId) {
+		return qnaCommentMapper.deleteQnaComment(commentId);
+	}
+	
+	// 댓글 1개조회
+	@Override
+	public QnaCommentDTO selectQnaCommentById(int commentId) {
+		return qnaCommentMapper.selectQnaCommentById(commentId);
 	}
 
 }

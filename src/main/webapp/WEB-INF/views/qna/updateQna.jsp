@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>공지사항 수정</title>
+  <title>qna 수정</title>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
 </head>
 <body>
@@ -19,16 +19,16 @@
 </div>
 
 <!-- 본문 -->
-<div class="notice-content">
-  <h2>공지사항 수정</h2>
+<div class="qna-content">
+  <h2>qna 수정</h2>
 
   <form method="post" action="${pageContext.request.contextPath}/qna/updateQna">
     
-    <!-- 숨겨진 공지 ID -->
-    <input type="hidden" name="noticeId" value="${qna.qnaId}">
+    <!-- 숨겨진 qna ID -->
+    <input type="hidden" name="qnaId" value="${qna.qnaId}">
 	<div class="form-group">
       <label>작성자</label>
-      <input type="text" name="noticeId" value="${qna.studentName}" class="form-control" readonly>
+      <input type="text" value="${qna.studentName}" class="form-control" readonly>
     </div>
     <!-- 제목 -->
     <div class="form-group">
@@ -48,11 +48,9 @@
     </div>
 
     <!-- 뒤로가기 -->
-    <div class="form-group">
-      <a href="${pageContext.request.contextPath}/qna/qnaOne?noticeId=${qna.qnaId}">
-        <button type="button" class="btn-submit">돌아가기</button>
-      </a>
-    </div>
+ <div class="form-group">
+  <a class="btn-submit" href="${pageContext.request.contextPath}/qna/qnaOne?qnaId=${qna.qnaId}">돌아가기</a>
+</div>
 
   </form>
 </div>

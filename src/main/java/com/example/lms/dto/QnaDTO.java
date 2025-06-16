@@ -1,5 +1,6 @@
 package com.example.lms.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import lombok.Data;
@@ -10,7 +11,8 @@ public class QnaDTO {
 	private int studentNo;				// student_no
 	private String title;				// title
 	private String content;				// content
-	private String createDate;			// create_date
-	private String updateDate;			// update_date
+	private Timestamp createDate;			// create_date
+	private Timestamp updateDate;			// update_date
 	private String studentName;				// student_name
+	private String isSecret;				// 'Y' 면 비밀글 'N' 이면 공개글
 }

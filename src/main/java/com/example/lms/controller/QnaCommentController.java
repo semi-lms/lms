@@ -12,13 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.lms.dto.QnaCommentDTO;
+import com.example.lms.dto.QnaDTO;
 import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.service.QnaCommentService;
+import com.example.lms.service.QnaService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -27,6 +32,8 @@ import jakarta.servlet.http.HttpSession;
 public class QnaCommentController {
 	@Autowired
 	private QnaCommentService qnaCommentService;
+	@Autowired
+	private QnaService qnaService;
 	
 	// 댓글 리스트
 	@GetMapping("/qnaCommentList")
@@ -93,7 +100,81 @@ public class QnaCommentController {
 	    // 저장이 끝난 후 다시 qna 상세 페이지로 리다이렉트
 	    // 새로 작성된 댓글이 포함된 상세페이지를 다시 보여주기 위해
 	    return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+	}    
+	 
+     //댓글 수정
+    @PostMapping("/updateQnaComment")
+    public String updateQnaComment(@ModelAttribute QnaCommentDTO qnaCommentDto,
+                                   HttpSession session,
+                                   RedirectAttributes ra) {
+        SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+        if (loginUser == null) {
+            ra.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+
+        QnaCommentDTO original = qnaCommentService.selectQnaCommentById(qnaCommentDto.getCommentId());
+        if (original == null) {
+            ra.addFlashAttribute("errorMsg", "댓글을 찾을 수 없습니다.");
+            return "redirect:/qna/qnaList";
+        }
+
+        boolean isOwner = loginUser.getRole().equals(original.getWriterRole()) &&
+                          loginUser.getStudentId().equals(original.getWriterId());
+        boolean isAdminOrTeacher = "admin".equals(loginUser.getRole()) || "teacher".equals(loginUser.getRole());
+
+        if (!(isOwner || isAdminOrTeacher)) {
+            ra.addFlashAttribute("errorMsg", "수정 권한이 없습니다.");
+            return "redirect:/qna/qnaOne?qnaId=" + original.getQnaId();
+        }
+
+        qnaCommentService.updateQnaComment(qnaCommentDto);
+        return "redirect:/qna/qnaOne?qnaId=" + original.getQnaId();
+    }
+    
+    // 댓글 삭제
+    @PostMapping("/deleteQnaComment")
+    public String deleteQnaComment(@RequestParam("commentId") int commentId,
+						            @RequestParam("qnaId") int qnaId, // 다시 돌아가기 위한 정보
+						            HttpSession session,
+						            RedirectAttributes ra) {
+    	System.out.println("🟢 deleteQnaComment 들어옴"); // 로그 확인용
+	// 로그인 유저 정보 가져오기
+	SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+	
+	// 로그인 안 돼있으면 로그인 페이지로 이동
+	if (loginUser == null) {
+	ra.addFlashAttribute("errorMsg", "로그인이 필요합니다.");
+	return "redirect:/login";
 	}
+	
+	// 삭제할 댓글 정보 가져오기
+	QnaCommentDTO comment = qnaCommentService.selectQnaCommentById(commentId);
+	if (comment == null) {
+	ra.addFlashAttribute("errorMsg", "댓글을 찾을 수 없습니다.");
+	return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+	}
+	
+	// 삭제 권한 확인
+	boolean isOwner = loginUser.getRole().equals(comment.getWriterRole()) &&
+	   loginUser.getStudentId() != null &&
+	   loginUser.getStudentId().equals(comment.getWriterId());
+	
+	boolean isAdminOrTeacher = "admin".equals(loginUser.getRole()) || "teacher".equals(loginUser.getRole());
+	
+	if (!(isOwner || isAdminOrTeacher)) {
+	ra.addFlashAttribute("errorMsg", "삭제 권한이 없습니다.");
+	return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+	}
+	
+	// 삭제 수행
+	qnaCommentService.deleteQnaComment(commentId);
+	
+	// 댓글 삭제 후 원래 QnA 상세 페이지로 리다이렉트
+	return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+	}
+	
 }
 
 

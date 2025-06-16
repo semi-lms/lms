@@ -10,6 +10,7 @@
 	        student_no AS studentNo,
 	        title,
 	        content,
+	        is_secret AS isSecret,
 	        create_date AS createDate,
 	        update_date AS updateDate
 		FROM qna
@@ -32,6 +33,7 @@
 			q.title,
 			s.name AS studentName,
 			q.content,
+			q.is_secret AS isSecret,
 			q.create_date AS createDate,
 			q.update_date AS updateDate
 		FROM qna q
@@ -51,8 +53,8 @@
 	
 	<!-- 작성 -->
 	<insert id="insertQna" parameterType="com.example.lms.dto.QnaDTO">
-		INSERT INTO qna (title, content, student_no, create_date)
-			VALUES(#{title}, #{content}, #{studentNo}, NOW())
+		INSERT INTO qna (title, content, student_no, create_date, is_secret)
+			VALUES(#{title}, #{content}, #{studentNo}, NOW() + INTERVAL 9 HOUR, #{isSecret})
 	</insert>
 	
 	<!-- 상세보기 -->
@@ -63,6 +65,7 @@
 			q.title,
 			s.name AS studentName,
 			q.content,
+			q.is_secret AS isSecret,
 			q.create_date AS createDate,
 			q.update_date AS updateDate
 		FROM qna q
@@ -83,6 +86,7 @@
 		FROM qna
 		WHERE qna_id = #{qnaId}
 	</delete>
+	
 </mapper>
 
 

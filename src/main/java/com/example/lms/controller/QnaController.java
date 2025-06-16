@@ -1,5 +1,8 @@
 package com.example.lms.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +98,15 @@ public class QnaController {
 			// 현재 로그인한 사용자 정보를 세션에서 꺼냄
 			SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
 			
+			if(qnaDto.getIsSecret() == null) {			// 비밀글
+				qnaDto.setIsSecret("N");
+			}
+			System.out.println("isSecret = " + qnaDto.getIsSecret());
 			qnaDto.setStudentNo(loginUser.getStudentNo());		// 작성자를 qna 객체에 세팅함
+			
+			 // 한국 시간 기준으로 createDate 지정
+		    LocalDateTime nowKorea = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+		    qnaDto.setCreateDate(Timestamp.valueOf(nowKorea));
 			
 			qnaService.insertQna(qnaDto);		// 작성된 공지사항을 DB에 저장 요청
 			
@@ -103,19 +114,84 @@ public class QnaController {
 		}
 		
 		// 상세보기
+		// GET 방식: 관리자, 강사 등 비밀번호 없이 접근하는 경우
 		@GetMapping("/qnaOne")
-		public String qnaOne(@RequestParam("qnaId") int qnaId, Model model) {
+		public String qnaOne(@RequestParam("qnaId") int qnaId,
+							 @RequestParam(required = false) Integer editCommentId,
+		                     HttpSession session,
+		                     Model model,
+		                     RedirectAttributes ra) {
 			
-			// DB에서 qnaId와 일치하는 행을 조회하여 DTO에 담아 반환
-			QnaDTO qnaDto = qnaService.selectQnaOne(qnaId);
-			
-			model.addAttribute("qna", qnaDto);
-			
-		    // 댓글 리스트도 같이 가져오기
+			// 로그인 한 유저정보 세션에서 꺼냄
+		    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+		    // 글 번호에 해당하는 qna 글을 DB에서 가져옴
+		    QnaDTO qnaDto = qnaService.selectQnaOne(qnaId);
+		    
+		    // 만약 해당 글이 존재하지 않으면 에러 메시지를 주고 리스트로 되돌린다
+		    if (qnaDto == null) {
+		        ra.addFlashAttribute("errorMsg", "글을 찾을 수 없습니다.");
+		        return "redirect:/qna/qnaList";
+		    }
+
+		    Integer loginStudentNo = loginUser.getStudentNo();  // Integer 타입
+		    Integer writerStudentNo = qnaDto.getStudentNo();    // Integer 타입
+		    // 비밀글인데 로그인한 사용자가 학생이면 접근 불가 -> 차단 후 리스트로 되돌린다
+		    if ("Y".equals(qnaDto.getIsSecret())) {
+		    	boolean isWriter = loginStudentNo != null && loginStudentNo.equals(writerStudentNo);
+		        boolean isAdmin = "admin".equals(loginUser.getRole());
+		        boolean isTeacher = "teacher".equals(loginUser.getRole());
+
+		        if (!(isWriter || isAdmin || isTeacher)) {
+		            ra.addFlashAttribute("errorMsg", "비밀글은 접근할 수 없습니다.");
+		            return "redirect:/qna/qnaList";
+		        }
+		    }
+		    
+		    // 위 조건을 모두 통과하면 글 내용을 모델에 담아서 jsp로 전달
+		    model.addAttribute("qna", qnaDto);
+		    model.addAttribute("editCommentId", editCommentId);
+		    // 댓글 목록도 함꼐 조회해서 모델에 담는다.
 		    List<QnaCommentDTO> commentList = qnaCommentService.selectQnaCommentList(Map.of("qnaId", qnaId));
 		    model.addAttribute("commentList", commentList);
+
+		    return "qna/qnaOne";
+		}
+		
+		// POST 방식: 학생이 비밀번호 입력하고 들어오는 경우
+		@PostMapping("/qnaOne")
+		public String qnaOnePost(@RequestParam("qnaId") int qnaId,
+		                         @RequestParam("pw") String pw,
+		                         HttpSession session,
+		                         Model model,
+		                         RedirectAttributes ra) {
 			
-			return "qna/qnaOne";
+			// 로그인 한 사용자 정보를 세션에서 가져옴
+		    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+		    // 오직 학생만 비밀번호 열람하는방식이라서 관리자나 강사가 접근한경우 get방식으로 리다이렉트
+		    if (!"student".equals(loginUser.getRole())) {
+		        return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+		    }
+
+		    // DB에서 현재 로그인한 학생의 실제 비밀번호를 가져온다(지금은 평문과 비교 /추후에 암호화된 비밀번호로 비교)
+		    String dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
+		    
+		    // 사용자가 입력한 비밀번호를 DB 비밀번호와 다르면 -> 접근 차단 후 오류 메시지 전달
+		    if (!pw.equals(dbPw)) {
+		        ra.addFlashAttribute("errorMsg", "비밀번호가 일치하지 않습니다.");
+		        return "redirect:/qna/qnaList";
+		    }
+
+		    // 비밀번호가 일치하면 해당 qna 글을 가져옴
+		    QnaDTO qnaDto = qnaService.selectQnaOne(qnaId);
+		    model.addAttribute("qna", qnaDto);
+
+		    // 해당 글에 달린 댓글 목록도 함꼐 가져옴
+		    List<QnaCommentDTO> commentList = qnaCommentService.selectQnaCommentList(Map.of("qnaId", qnaId));
+		    model.addAttribute("commentList", commentList);
+
+		    return "qna/qnaOne";
 		}
 		
 		// 수정
@@ -129,8 +205,8 @@ public class QnaController {
 			QnaDTO qna = qnaService.selectQnaOne(qnaId);
 			
 		    // 작성자 본인이 아니면 차단
-		    if (!loginUser.getStudentId().equals(qna.getStudentName())) {
-		        return "qna/qnaList";
+		    if (loginUser.getStudentNo() != qna.getStudentNo()) {
+		        return "redirect:/qna/qnaList";
 		    }
 			model.addAttribute("qna", qna);
 			return "qna/updateQna";
@@ -145,7 +221,7 @@ public class QnaController {
 		
 		// 삭제
 		@PostMapping("/deleteQna")
-		public String deleteQna(@RequestParam QnaDTO qnaDto,
+		public String deleteQna(@ModelAttribute QnaDTO qnaDto,
 		                        @RequestParam String pw,
 		                        HttpSession session,
 		                        RedirectAttributes ra) {

@@ -21,5 +21,8 @@ public interface QnaCommentMapper {
 	int updateQnaComment(QnaCommentDTO qnaCommentDto);
 	
 	// 댓글 삭제
-	int deleteQnaComment(QnaCommentDTO qnaCommentDto);
+	int deleteQnaComment(int qnaCommentDto);
+	
+	// 댓글 1개조회
+	QnaCommentDTO selectQnaCommentById(int commentId);
 }

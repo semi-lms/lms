@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
 </head>
 <body>
+<fmt:setTimeZone value="Asia/Seoul" />
   <!-- 왼쪽 메뉴 -->
   <div class="sidebar">
     <c:choose>
@@ -24,7 +26,7 @@
   </div>
   
   <h2>qna 작성</h2>
- <div class="notice-content" >
+ <div class="qna-content" >
   <form method="post" action="${pageContext.request.contextPath}/qna/insertQna">
 
     <!-- 관리자 아이디 표시 (readonly) -->
@@ -38,6 +40,10 @@
     <div class="form-group">
     <label for="title">제목</label>
       <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요.">
+        <!-- 비밀글 설정 -->
+    <label>
+    	<input type="checkbox" name="isSecret" value="Y"> 비밀글
+    </label>
     </div>
 
     <!-- 내용 입력 -->

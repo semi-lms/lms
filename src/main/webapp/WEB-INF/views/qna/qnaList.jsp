@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
 </head>
 <body>
+<fmt:setTimeZone value="Asia/Seoul" />
   <!-- 왼쪽 메뉴 -->
   <div class="sidebar">
     <c:choose>
@@ -23,7 +25,7 @@
       </c:when>
     </c:choose>
   </div>
-	  <div class="notice-content" >
+	  <div class="qna-content" >
 		<h1>qna</h1>
 		<form method="get" > 
 			<table border="1">
@@ -36,9 +38,20 @@
 				<c:forEach var="qna" items="${qnaList}">
 					<tr>
 						<td>${qna.qnaId}</td>
-						<td><a href="/qna/qnaOne?qnaId=${qna.qnaId}">${qna.title} </a></td>
+						<td>
+					      <c:choose>
+				        <c:when test="${qna.isSecret eq 'Y'}">
+				        <!-- 비밀글인 경우 -->
+				          <a href="#" onclick="handleSecretQna(${qna.qnaId}, '${loginUser.role}')">🔒 ${qna.title}</a>
+				        </c:when>
+						    <c:otherwise>
+						    <!--  공개글 -->
+						      <a href="/qna/qnaOne?qnaId=${qna.qnaId}">${qna.title}</a>
+						    </c:otherwise>
+						  </c:choose>
+						</td>
 						<td>${qna.studentName}</td>
-						<td>${qna.createDate}</td>
+						<td><fmt:formatDate value="${qna.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -79,5 +92,43 @@
 			</c:if>
 		</div>
 	</div>
+	<c:if test="${not empty errorMsg}">
+		<script>
+		    alert("${errorMsg}");
+		</script>
+	</c:if>
+	<script>
+		function handleSecretQna(qnaId, role) {
+		  if (role === 'student') {
+		    const pw = prompt('비밀글입니다. 비밀번호를 입력하세요:');
+		    if (pw && pw.trim() !== '') {
+		      // 비밀번호와 함께 form 제출 or 파라미터 넘기기
+		      const form = document.createElement('form');
+		      form.method = 'post';
+		      form.action = '/qna/qnaOne';
+		
+		      const qnaInput = document.createElement('input');
+		      qnaInput.type = 'hidden';
+		      qnaInput.name = 'qnaId';
+		      qnaInput.value = qnaId;
+		      form.appendChild(qnaInput);
+		
+		      const pwInput = document.createElement('input');
+		      pwInput.type = 'hidden';
+		      pwInput.name = 'pw';
+		      pwInput.value = pw;
+		      form.appendChild(pwInput);
+		
+		      document.body.appendChild(form);
+		      form.submit();
+		    } else {
+		      alert('비밀번호를 입력해주세요.');
+		    }
+		  } else {
+		    // 관리자 또는 강사 → 그냥 이동
+		    location.href = '/qna/qnaOne?qnaId=' + qnaId;
+		  }
+		}
+	</script>
 </body>
 </html>
