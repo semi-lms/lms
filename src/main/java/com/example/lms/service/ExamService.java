@@ -23,12 +23,17 @@ public interface ExamService {
 	int modifyExam(ExamDTO examDto);
 	// 시험 리스트 삭제
 	int removeExam(int examId);
-
+	// 시험 제출
 	int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers);
-
+	// 시험 임시 저장
 	boolean saveAnswerTemporary(ExamAnswerDTO answer);
-
+	// 페이지별 문제 출력
+	Map<Integer, String> getSubmitStatusMap(int studentNo, List<Integer> examIdList);
+	
 	List<ExamQuestionDTO> getQuestionsByPage(int examId, int page);
 	
+	List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage);
+	
+	int getExamListCountByStudent(int studentNo);
 	
 }

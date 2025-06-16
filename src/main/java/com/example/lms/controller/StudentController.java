@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,7 +35,6 @@ import com.example.lms.dto.StudentDTO;
 import com.example.lms.dto.StudentListForm;
 import com.example.lms.service.impl.AttendanceServiceImpl;
 import com.example.lms.service.impl.ExamServiceImpl;
-import com.example.lms.service.impl.QnaServiceImpl;
 import com.example.lms.service.impl.StudentServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
@@ -44,7 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class StudentController {
 
-	private final QnaServiceImpl qnaServiceImpl;
 
 	@Autowired 
 	private StudentServiceImpl studentService;
@@ -55,9 +54,7 @@ public class StudentController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	StudentController(QnaServiceImpl qnaServiceImpl) {
-		this.qnaServiceImpl = qnaServiceImpl;
-	}
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -153,54 +150,66 @@ public class StudentController {
 		return "student/takeExam"; 
 	}
 	@GetMapping("/student/examList")
-	public String examList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
-			, @RequestParam(defaultValue = "1") int currentPage
-			, @RequestParam(defaultValue = "10") int rowPerPage
-			, Model model) {
+	public String examList(@RequestParam(required = false) Integer studentNo,
+	                       @RequestParam(required = false) Integer examId,
+	                       @RequestParam(defaultValue = "1") int currentPage,
+	                       @RequestParam(defaultValue = "10") int rowPerPage,
+	                       Model model,
+	                       HttpSession session) {
 
-		// 페이징
-		int totalCnt = examService.getExamCnt(courseId);
-		int lastPage = totalCnt / rowPerPage;
-		if(totalCnt % rowPerPage != 0) {
-			lastPage += 1;
-		};
-		int startRow = (currentPage - 1) * rowPerPage;
-		int startPage = ((currentPage-1) / rowPerPage) * rowPerPage + 1;
-		int endPage = startPage + rowPerPage -1;
-		if(endPage >lastPage) {
-			endPage = lastPage;
-		};
+	    // 로그인한 사용자 정보에서 courseId 가져오기
+	    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+	    if (loginUser == null || loginUser.getCourseId() == 0) {
+	        return "redirect:/login"; // 로그인 안 되어있거나 courseId 없으면 로그인 페이지로 리다이렉트
+	    }
+	    int courseId = loginUser.getCourseId();
 
-		Map<String, Object> examMap = new HashMap<>();
-		examMap.put("courseId", courseId);
-		examMap.put("startRow", startRow);
-		examMap.put("rowPerPage", rowPerPage);
+	    // 페이징 처리
+	    int totalCnt = examService.getExamCnt(courseId);
+	    int lastPage = (int) Math.ceil((double) totalCnt / rowPerPage);
+	    int startRow = (currentPage - 1) * rowPerPage;
+	    int startPage = ((currentPage - 1) / rowPerPage) * rowPerPage + 1;
+	    int endPage = Math.min(startPage + rowPerPage - 1, lastPage);
 
-		// 리스트 조회
-		List<ExamDTO> exams = examService.getExamList(examMap);
+	    Map<String, Object> examMap = new HashMap<>();
+	    examMap.put("courseId", courseId);
+	    examMap.put("startRow", startRow);
+	    examMap.put("rowPerPage", rowPerPage);
 
-		// 진행도 표시
-		LocalDate today = LocalDate.now();
+	    // 시험 목록 조회
+	    List<ExamDTO> exams = examService.getExamListByStudent(endPage, startRow, rowPerPage);
 
-		for (ExamDTO exam : exams) {
-			if (today.isBefore(exam.getExamStartDate())) {
-				exam.setStatus("예정");
-			} else if (today.isAfter(exam.getExamEndDate())) {
-				exam.setStatus("완료");
-			} else {
-				exam.setStatus("진행중");
-			}
-		}
+		/*
+		 * // 시험 ID 리스트 List<Integer> examIdList = exams.stream()
+		 * .map(ExamDTO::getExamId) .collect(Collectors.toList());
+		 * 
+		 * // 응시 여부와 점수 Map<Integer, String> submitStatusMap =
+		 * examService.getSubmitStatusMap(studentNo, examIdList);
+		 * 
+		 * submitStatusMap = (submitStatusMap != null) ? submitStatusMap : new
+		 * HashMap<>();
+		 * 
+		 * LocalDate today = LocalDate.now(); for (ExamDTO exam : exams) { if
+		 * (today.isBefore(exam.getExamStartDate())) { exam.setStatus("응시불가"); } else if
+		 * (today.isAfter(exam.getExamEndDate())) { exam.setStatus("기간만료"); } else {
+		 * exam.setStatus("응시가능"); } String submitStatus =
+		 * submitStatusMap.getOrDefault(exam.getExamId(), "미응시");
+		 * exam.setSubmitStatus(submitStatus); }
+		 */
 
-		model.addAttribute("exams", exams);
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("lastPage", lastPage);
-		model.addAttribute("endPage", endPage);
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("courseId", courseId);
+	    // 모델에 값 추가
+	    model.addAttribute("exams", exams);
+	    model.addAttribute("courseId", courseId);
+	    model.addAttribute("studentNo", studentNo);
+	    model.addAttribute("currentPage", currentPage);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+	    model.addAttribute("lastPage", lastPage);
 
-		return "student/examList";
+	    return "student/examList";
 	}
+
+
 
 	// 최종 제출 처리
 	@PostMapping("/student/submitExam")
@@ -213,8 +222,8 @@ public class StudentController {
 		submission.setStudentNo(loginUser.getStudentNo());
 		List<ExamAnswerDTO> answers = submission.getAnswers();
 		int score = examService.submitExam(submission, answers);
-		model.addAttribute("score", score);
-		return "redirect:/examList";
+		model.addAttribute("score", score); 
+		return "redirect:/student/examList"; //추후 결과페이지로 수정할거
 	}
 
 
@@ -255,7 +264,7 @@ public class StudentController {
 		model.addAttribute("startPage", startPage);       // 페이지 네비 시작 번호
 		model.addAttribute("endPage", endPage);           // 페이지 네비 끝 번호
 
-
+		
 		return "/admin/studentList";
 	}
 

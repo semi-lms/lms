@@ -11,6 +11,7 @@ public class ExamDTO {
 	private String title;
 	private LocalDate examStartDate;
 	private LocalDate examEndDate;
-	
+	private String submitStatus; //응시 여부
 	private String status; // 진행도
+	 private Integer score; 
 }

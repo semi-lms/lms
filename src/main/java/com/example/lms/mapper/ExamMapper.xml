@@ -128,4 +128,42 @@
 		WHERE submission_id = #{submissionId}
 	</update>
 	
+	<!-- 학생 시험 리스트 (응시상태, 점수 포함) -->
+	<select id="selectExamListByStudentNo" resultType="com.example.lms.dto.ExamDTO">
+    SELECT 
+        e.exam_id,
+        e.title,
+        e.exam_start_date,
+        e.exam_end_date,
+        <!--응시 여부: exam_submission에 데이터 존재 여부  -->
+        CASE 
+            WHEN es.exam_id IS NOT NULL THEN '응시완료' 
+            ELSE '미응시' 
+        END AS submit_status,
+        <!-- 응시 가능 여부: 현재 시간이 시험 기간 안에 있으면 '가능'  -->
+        CASE 
+            WHEN NOW() BETWEEN e.exam_start_date AND e.exam_end_date THEN '가능' 
+            ELSE '불가' 
+        END AS status,
+        es.score
+    FROM 
+        exam e
+    LEFT JOIN 
+        exam_submission es 
+        ON e.exam_id = es.exam_id AND es.student_no = #{studentNo}
+    ORDER BY 
+        e.exam_start_date DESC
+    LIMIT #{startRow}, #{rowPerPage}
+</select>
+<!-- 한 학생의 시험갯수 -->
+<select id="countExamListByStudentNo" resultType="int">
+    SELECT COUNT(*) 
+    FROM exam
+    WHERE course_id = (
+        SELECT course_id
+        FROM student
+        WHERE student_no = #{studentNo}
+    )
+</select>
+
 </mapper>

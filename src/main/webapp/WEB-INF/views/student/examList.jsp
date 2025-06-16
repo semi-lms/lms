@@ -82,16 +82,19 @@
   <table>
     <tr>
       <th>제목</th>
-      <th>진행도</th>
       <th>시작일</th>
       <th>종료일</th>
+      <th>응시여부</th>     
+      <th>응시가능여부</th>
+      <th>점수</th>
     </tr>
     <c:forEach var="exam" items="${exams}">
       <tr onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
         <td>${exam.title}</td>
-        <td>${exam.status}</td>
         <td>${exam.examStartDate}</td>
         <td>${exam.examEndDate}</td>
+        <td>${exam.submitStatus}</td> 
+        <td>${exam.score}</td>
       </tr>
     </c:forEach>
   </table>

@@ -13,4 +13,5 @@ public class ExamSubmissionDTO {
 	private Integer score;
 	private String name;		// 학생 이름
 	private List<ExamAnswerDTO> answers;
+
 }

@@ -37,52 +37,56 @@ body {
 <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
 <br>
 
-	<p>문제 ${page} / 10 (시험 ID: ${examId})</p>
-	<p>응시자번호 ${loginUser.studentNo } </p>
-	<form id="examForm" method="post" action="/student/submitExam">
-		<input type="hidden" name="examId" value="${examId}" />
-<c:forEach var="q" items="${questions}" varStatus="status">
-  <div class="question">
-    <p><strong>${q.questionNo}. ${q.questionTitle}</strong></p>
-    <p>${q.questionText}</p>
+<p>문제 ${page} / 10 (시험 ID: ${examId})</p>
+<p>응시자번호 ${loginUser.studentNo }</p>
 
-    <!-- 배열 형태로 questionId 전송 -->
-    <input type="hidden" name="answers[${status.index}].questionId" value="${q.questionId}" />
+<form id="examForm" method="post" action="/student/submitExam">
+	<input type="hidden" name="examId" value="${examId}" />
 
-    <!-- 보기 반복 -->
-    <c:forEach var="opt" items="${q.options}">
-      <label>
-        <input type="radio"
-               class="answer-radio"
-               data-question-id="${q.questionId}"
-               name="answers[${status.index}].answerNo"
-               value="${opt.optionNo}"
-               <c:if test="${tempAnswers[q.questionId] == opt.optionNo}">checked</c:if> />
-        ${opt.optionText}
-      </label><br/>
-    </c:forEach>
-  </div>
-</c:forEach>
+	<c:forEach var="q" items="${questions}" varStatus="status">
+	  <div class="question">
+	    <p><strong>${q.questionNo}. ${q.questionTitle}</strong></p>
+	    <p>${q.questionText}</p>
 
-		<div>
-			<c:if test="${page > 1}">
-				<a href="?examId=${examId}&page=${page-1}" class="nav-btn">◀ 이전</a>
-			</c:if>
-			<c:if test="${page < 10}">
-				<a href="?examId=${examId}&page=${page+1}" class="nav-btn">다음 ▶</a>
-			</c:if>
-			<c:if test="${page == 10}">
-				<button type="submit" class="nav-btn">최종 제출</button>
-			</c:if>
-		</div>
+	    <!-- 배열 형태로 questionId 전송 -->
+	    <input type="hidden" name="answers[${status.index}].questionId" value="${q.questionId}" />
 
-	</form>
+	    <!-- 보기 반복 -->
+	    <c:forEach var="opt" items="${q.options}">
+	      <label>
+	        <input type="radio"
+	               class="answer-radio"
+	               data-question-id="${q.questionId}"
+	               name="answers[${status.index}].answerNo"
+	               value="${opt.optionNo}"
+	               <c:if test="${tempAnswers[q.questionId] == opt.optionNo}">checked</c:if> />
+	        ${opt.optionText}
+	      </label><br/>
+	    </c:forEach>
+	  </div>
+	</c:forEach>
+
+	<!-- 여기에 전체 저장된 답안을 숨겨서 넣을 공간 -->
+	<div id="hiddenAnswersContainer"></div>
+
+	<div>
+		<c:if test="${page > 1}">
+			<a href="?examId=${examId}&page=${page-1}" class="nav-btn">◀ 이전</a>
+		</c:if>
+		<c:if test="${page < 10}">
+			<a href="?examId=${examId}&page=${page+1}" class="nav-btn">다음 ▶</a>
+		</c:if>
+		<c:if test="${page == 10}">
+			<button type="submit" class="nav-btn">최종 제출</button>
+		</c:if>
+	</div>
+</form>
 
 <script>
   // 저장된 답안 객체
   const savedAnswers = {};
 
-  // 현재 체크된 답안들을 savedAnswers에 모으는 함수
+  // 현재 페이지에서 체크된 답안들 savedAnswers에 저장
   function collectAllCheckedAnswers() {
     $('input.answer-radio:checked').each(function () {
       const questionId = $(this).data('question-id');
@@ -91,14 +95,12 @@ body {
     });
   }
 
-  // 페이지 이동 버튼 누를 때 강제 저장
+  // 페이지 이동 버튼 누를 때 답안 임시 저장 후 페이지 이동
   $(document).on('click', 'a.nav-btn', function(e) {
-    e.preventDefault(); // 기본 링크 이동 막기
+    e.preventDefault();
 
-    // 체크된 답안들 갱신
     collectAllCheckedAnswers();
 
-    // 서버로 임시 저장 요청들
     const savePromises = [];
     for (const [questionId, answerNo] of Object.entries(savedAnswers)) {
       savePromises.push($.ajax({
@@ -109,13 +111,12 @@ body {
       }));
     }
 
-    // 저장 다 완료되면 페이지 이동
     Promise.all(savePromises).then(() => {
       window.location.href = $(this).attr('href');
     });
   });
 
-  // 라디오 버튼 변경 시 바로 서버로 임시 저장
+  // 라디오 버튼 변경 시 바로 임시 저장
   $(document).ready(function () {
     $('input.answer-radio').on('change', function () {
       const questionId = $(this).data('question-id');
@@ -133,7 +134,7 @@ body {
       });
     });
 
-    // 페이지 로드시 서버에 저장된 임시 답안 불러와서 체크 상태 복원
+    // 페이지 로드 시 서버에서 임시 답안 불러와서 savedAnswers에 저장 및 체크 표시
     $.ajax({
       url: '/exam/api/loadTemp',
       type: 'GET',
@@ -145,9 +146,23 @@ body {
         }
       }
     });
+
+    // 최종 제출 시 savedAnswers에 있는 모든 답안을 히든 인풋으로 폼에 추가
+    $('#examForm').on('submit', function(e) {
+      collectAllCheckedAnswers(); // 혹시 최신 상태 업데이트
+      const container = $('#hiddenAnswersContainer');
+      container.empty();
+      let idx = 0;
+      for (const [questionId, answerNo] of Object.entries(savedAnswers)) {
+        container.append(`
+          <input type="hidden" name="answers[${idx}].questionId" value="${questionId}" />
+          <input type="hidden" name="answers[${idx}].answerNo" value="${answerNo}" />
+        `);
+        idx++;
+      }
+    });
   });
 </script>
-
 
 </body>
 </html>
