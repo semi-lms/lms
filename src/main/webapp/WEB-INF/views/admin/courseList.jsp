@@ -48,7 +48,7 @@
 					<td>${course.teacherName}</td>
 					<td>${course.courseName}</td>
 					<td>${course.startDate}</td>
-					<td><a href="attendance"> ${course.classroom } </a></td>
+					<td><a href="/admin/attendanceByClass?courseId=${course.courseId }"> ${course.classroom } </a></td>
 					<td>${course.applyPerson }</td>
 				</tr>
 			</c:forEach>

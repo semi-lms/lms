@@ -13,6 +13,7 @@
 		t.`name` AS teacherName,
 		c.course_name AS courseName,
 		cl.classroom as classroom,
+		c.course_id AS courseID,
 		CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
 		CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
 		FROM course c
