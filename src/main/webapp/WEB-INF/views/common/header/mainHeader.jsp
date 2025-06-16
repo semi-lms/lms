@@ -5,7 +5,7 @@
   <div><img src="<c:url value='/img/logo.png'/>" width="80" height="80"> </div>
   <div class="nav">
     	<a href="/notice/noticeList">공지사항</a>
-		<a href="/qna">QNA</a>
-		<a href="/fileBoard">자료실</a>
+		<a href="/qna/qnaList">QNA</a>
+		<a href="/file/fileBoardList">자료실</a>
   </div>
 </div>

@@ -39,21 +39,34 @@
 		</div>
 
 		<c:choose>
-			<c:when test="${not empty loginUser}">
-				<div class="card mypage-box">
-					<h2>${loginUser.name}님</h2>
-					<p>역할: ${loginUser.role}</p>
-					<a href="/mypage" class="btn">마이페이지</a>
-					<a href="/logout" class="btn logout">로그아웃</a>
-				</div>
-			</c:when>
-			<c:otherwise>
-				<div class="card mypage-box">
-					<h2>환영합니다!</h2>
-					<p>로그인이 필요합니다.</p>
-					<a href="/login" class="btn">로그인</a>
-				</div>
-			</c:otherwise>
+		  <c:when test="${not empty loginUser}">
+		    <c:choose>
+		      <c:when test="${loginUser.role eq 'admin'}">
+		        <div class="card mypage-box">
+		          <h2>김예진/노민혁 님</h2>
+		          <p>역할: ${loginUser.role}</p>
+		          <a href="/mypage" class="btn">마이페이지</a>
+		          <a href="/logout" class="btn logout">로그아웃</a>
+		        </div>
+		      </c:when>
+		      <c:otherwise>
+		        <div class="card mypage-box">
+		          <h2>${loginUser.name}님</h2>
+		          <p>역할: ${loginUser.role}</p>
+		          <a href="/mypage" class="btn">마이페이지</a>
+		          <a href="/logout" class="btn logout">로그아웃</a>
+		        </div>
+		      </c:otherwise>
+		    </c:choose>
+		  </c:when>
+		
+		  <c:otherwise>
+		    <div class="card mypage-box">
+		      <h2>환영합니다!</h2>
+		      <p>로그인이 필요합니다.</p>
+		      <a href="/login" class="btn">로그인</a>
+		    </div>
+		  </c:otherwise>
 		</c:choose>
 	</div>
 
