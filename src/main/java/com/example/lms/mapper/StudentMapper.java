@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.ui.Model;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
@@ -36,5 +36,7 @@ public interface StudentMapper {
 	int insertStudentList(List<StudentDTO> studentList);
 	
 	List<CourseDTO> selectCourse();
+	
+	boolean checkId(@Param("studentId") String studentId);
 
 }

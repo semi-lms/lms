@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
@@ -51,6 +50,17 @@ public class StudentServiceImpl implements StudentService {
 	public List<CourseDTO> selectCourse() {
 
 		return studentMapper.selectCourse();
+	}
+	
+	@Override
+	public int checkId(List<StudentDTO> validList) {
+	    int count = 0;
+	    for(StudentDTO s : validList) {
+	        if(studentMapper.checkId(s.getStudentId())) {
+	            count++;
+	        }
+	    }
+	    return count;
 	}
 	
 	

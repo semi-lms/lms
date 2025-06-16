@@ -110,12 +110,8 @@
 		SELECT course_id AS courseId, course_name AS courseName
 		FROM course
 	</select>
+	
+	<select id="checkId" resultType="boolean" parameterType="String">
+		SELECT COUNT(*) > 0 FROM student WHERE student_id = #{studentId}
+	</select>
 </mapper>
-
-
-
-
-
-
-
-

@@ -242,9 +242,15 @@ public class StudentController {
             })
             // 3. collect: 결과를 리스트로 만듦
             .collect(Collectors.toList());
-
-        studentService.insertStudentList(validList);
-
-        return "redirect:/admin/studentList?searchOption=all&keyword=";
+        
+        int row = studentService.checkId(validList);
+        
+        if(row == 0) {
+        	studentService.insertStudentList(validList);
+        	return "redirect:/admin/studentList?searchOption=all&keyword=";
+        } else {
+        	return "/admin/insertStudent";
+        }
+        
     }
 }

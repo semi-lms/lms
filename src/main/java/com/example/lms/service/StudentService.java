@@ -20,4 +20,6 @@ public interface StudentService {
 	
 	List<CourseDTO> selectCourse();
 	
+	int checkId(List<StudentDTO> validList);
+	
 }
