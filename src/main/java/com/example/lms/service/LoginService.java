@@ -12,6 +12,6 @@ public interface LoginService {
 	String findIdByNameEmail(String findIdByName, String findIdByEmail);
 	String findPwByNameIdEmail(String findPwByName, String findPwById, String findPwByEmail);
 	void updatePassword(String findPwById, String tempPw);
-	int updatePwByTempPw(String pw, String tempPw);
+	int updatePwByTempPw(String encodedPw, String tempPw);
 	
 }

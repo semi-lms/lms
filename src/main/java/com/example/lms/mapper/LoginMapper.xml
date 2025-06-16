@@ -74,7 +74,7 @@
 	
 	<update id="updatePwByTempPw">
 		UPDATE student
-		SET password = #{pw}
+		SET password = #{encodedPw}
 		WHERE password = #{tempPw}
 	</update>
 </mapper>

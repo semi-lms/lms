@@ -158,8 +158,8 @@ public class LoginController {
     @PostMapping("/changePw")
     public String changePw(@RequestParam String pw
     						,@RequestParam String tempPw) {
-    
-    	int row = loginService.updatePwByTempPw(pw,tempPw);
+    	String encodedPw = passwordEncoder.encode(pw);
+    	int row = loginService.updatePwByTempPw(encodedPw,tempPw);
     	if(row > 0) {
     		return "/main";
     	} else {

@@ -48,8 +48,8 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	@Override
-	public int updatePwByTempPw(String pw, String tempPw) {
+	public int updatePwByTempPw(String encodedPw, String tempPw) {
 		
-		return loginMapper.updatePwByTempPw(pw, tempPw);
+		return loginMapper.updatePwByTempPw(encodedPw, tempPw);
 	}
 }
