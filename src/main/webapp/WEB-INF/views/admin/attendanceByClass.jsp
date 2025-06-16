@@ -69,7 +69,10 @@
                     </c:forEach>
                     <th>
                     	<!-- 날짜(일)만 출력: yyyy-MM-dd에서 일만 추출 -->
-                        <span><c:out value="${fn:substring(date, 8, 10)}"/></span><br>
+                        <span>
+                        	<c:out value="${fn:substring(date, 8, 10)}"/>
+                        </span>
+                        <br>
                         <!-- 요일은 아래 JS에서 동적으로 표시, 휴일은 빨간색 표시 -->
                         <span class="day-text${isHoliday ? ' holiday' : ''}" data-date="${date}"></span>
                     </th>

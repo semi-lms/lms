@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -49,6 +50,8 @@ public class StudentController {
 	private AttendanceServiceImpl attendanceService;
 	@Autowired
 	private ExamServiceImpl examService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
     StudentController(QnaServiceImpl qnaServiceImpl) {
         this.qnaServiceImpl = qnaServiceImpl;
@@ -220,20 +223,28 @@ public class StudentController {
                                 ,@RequestParam("courseId") int courseId) {
         List<StudentDTO> studentList = form.getStudentList();
 
-        // 행에 모든 칸에 공백이 없으면 선택된 courseId 넣어서 insert
+        // stream 처리 순서:
+        // 1. filter: 모든 필수 칸에 값이 있는 학생만 추림(공백/미입력 행은 제외)
+        // 2. peek: 남은 학생 객체에 선택된 courseId를 세팅하고, 비밀번호를 암호화해서 다시 세팅
+        //    (peek은 중간처리 - 값을 바꿀 때 주로 사용, 실제 객체 값 변경)
+        // 3. collect: 최종적으로 남은 학생들을 새 리스트로 반환(List<StudentDTO>)
         List<StudentDTO> validList = studentList.stream()
-				.filter(s -> s.getName() != null && !s.getName().trim().isEmpty() 
-						&& s.getPhone() != null && !s.getPhone().trim().isEmpty() 
-						&& s.getSn() != null && !s.getSn().trim().isEmpty()
-						&& s.getAddress() != null && !s.getAddress().trim().isEmpty() 
-						&& s.getEmail() != null	&& !s.getEmail().trim().isEmpty())
-                .peek(s -> s.setCourseId(courseId))
-                .collect(Collectors.toList());
+            // 1. 필수 칸(이름, 폰, 주민번호, 주소, 이메일) 모두 채워진 행만 남김
+            .filter(s -> s.getName() != null && !s.getName().trim().isEmpty() 
+                    && s.getPhone() != null && !s.getPhone().trim().isEmpty() 
+                    && s.getSn() != null && !s.getSn().trim().isEmpty()
+                    && s.getAddress() != null && !s.getAddress().trim().isEmpty() 
+                    && s.getEmail() != null	&& !s.getEmail().trim().isEmpty())
+            // 2. peek: 남은 학생마다 courseId 주입 + 비번 암호화
+            .peek(s -> {
+                s.setCourseId(courseId); // 선택한 강의로 매핑
+                s.setPassword(passwordEncoder.encode(s.getPassword())); // 비번 암호화
+            })
+            // 3. collect: 결과를 리스트로 만듦
+            .collect(Collectors.toList());
 
         studentService.insertStudentList(validList);
 
-        // 등록 후 학생 리스트로 이동
-        // 검색 옵션이랑 단어 넣어서 이동 시 전체리스트 보일 수 있게
         return "redirect:/admin/studentList?searchOption=all&keyword=";
     }
 }
