@@ -97,19 +97,19 @@
 		</where>
 	</select>
 	
-	  <insert id="insertStudentList" parameterType="list">
-	    INSERT INTO student (student_id, course_id, password, name, sn, address, email, phone, reg_date)
-	    VALUES
-	    <foreach collection="list" item="student" separator=",">
-	      (#{student.studentId}, #{student.courseId}, #{student.password}, #{student.name},
-	       REPLACE(#{student.sn}, '-', ''), #{student.address}, #{student.email}, #{student.phone}, NOW())
-	    </foreach>
-	  </insert>
-	
-		<select id="selectCourse"  resultType="com.example.lms.dto.CourseDTO">
+	<insert id="insertStudentList" parameterType="list">
+	  INSERT INTO student (student_id, course_id, password, name, sn, address, email, phone, reg_date)
+	  VALUES
+	  <foreach collection="list" item="student" separator=",">
+	    (#{student.studentId}, #{student.courseId}, #{student.password}, #{student.name},
+	     REPLACE(#{student.sn}, '-', ''), #{student.address}, #{student.email}, #{student.phone}, NOW())
+	  </foreach>
+	</insert>
+
+	<select id="selectCourse"  resultType="com.example.lms.dto.CourseDTO">
 		SELECT course_id AS courseId, course_name AS courseName
 		FROM course
-		</select>
+	</select>
 </mapper>
 
 

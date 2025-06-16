@@ -10,27 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-body {
-  margin: 0;
-  padding: 0;
-}
-.container {
-  display: flex;
-  width: 100%;
-}
-.sidebar {
-  min-width: 220px;   /* 필요시 사이드바 너비 늘리세요 */
-  background: #fafafa;
-  height: 100vh;
-}
-.chart-container {
-  margin-top: 32px;
-}
-.main-content {
-  flex: 1;
-  background: #fff;
-  padding: 40px 40px 40px 300px; /* 왼쪽 패딩을 140px로 늘림 */
-}
+body { margin: 0; padding: 0; }
+.container { display: flex; width: 100%; }
+.sidebar { min-width: 220px; background: #fafafa; height: 100vh; }
+.chart-container { margin-top: 32px; }
+.main-content { flex: 1; background: #fff; padding: 40px 40px 40px 300px; }
 </style>
 </head>
 <body>
@@ -41,8 +25,7 @@ body {
   </div>
   <div class="main-content">
         <h1>출석 통계 페이지</h1>
-
-        <!-- 1. 통계 테이블 -->
+        <!-- 통계 테이블 : 반별 출석 데이터 표로 출력 -->
         <table border="1">
             <tr>
                 <th>반</th>
@@ -50,12 +33,14 @@ body {
                 <th>실제 출석(지각 포함)</th>
                 <th>출석률(%)</th>
             </tr>
+            <!-- 각 반 별로 반복 -->
             <c:forEach var="i" begin="0" end="${fn:length(classNames) - 1}">
                 <tr>
                     <td>${classNames[i]}</td>
                     <td>${attendanceTotalCounts[i]}</td>
                     <td>${actuals[i]}</td>
                     <td>
+                        <!-- 0으로 나누는 오류 방지 -->
                         <c:choose>
                             <c:when test="${attendanceTotalCounts[i] > 0}">
                                 <fmt:formatNumber value="${(actuals[i] * 100.0) / attendanceTotalCounts[i]}" pattern="0.0"/>
@@ -67,7 +52,6 @@ body {
             </c:forEach>
         </table>
 
-        <!-- 2. 그래프 영역 -->
         <div class="chart-container">
             <canvas id="attendanceChart" width="500" height="350"></canvas>
         </div>
@@ -75,7 +59,7 @@ body {
 </div>
 
 <script>
-    // JSTL로 리스트 → JS 배열
+    // JSTL 배열을 JS 배열로 변환
     const labels = [
         <c:forEach var="n" items="${classNames}" varStatus="s">
             "${n}"<c:if test="${!s.last}">,</c:if>
@@ -91,15 +75,16 @@ body {
             ${v}<c:if test="${!s.last}">,</c:if>
         </c:forEach>
     ];
-    // 출석률 (%) 배열 생성
+    // 출석률(%) 계산 (정수 + 소수 1자리)
     const rates = actuals.map((v, i) => totals[i] > 0 ? Math.round(v / totals[i] * 1000) / 10 : 0);
-    
+    // 반별 courseId 배열 (차트 클릭 시 이동용)
     const courseIds = [
         <c:forEach var="id" items="${courseIds}" varStatus="s">
             ${id}<c:if test="${!s.last}">,</c:if>
         </c:forEach>
     ];
-    
+
+    // Chart.js 그래프 그리기
     const ctx = document.getElementById('attendanceChart').getContext('2d');
     const attendanceChart = new Chart(ctx, {
         type: 'bar',
@@ -157,18 +142,18 @@ body {
         }
     });
     
+    // 차트 클릭 시 해당 반 출석 상세로 이동
     document.getElementById('attendanceChart').onclick = function(evt) {
         const points = attendanceChart.getElementsAtEventForMode(evt, 'nearest', { intersect: true }, true);
         if (points.length) {
             const firstPoint = points[0];
-            const courseId = courseIds[firstPoint.index]; // 인덱스별 courseId 매핑
+            const courseId = courseIds[firstPoint.index];
             window.location.href = '/admin/attendanceByClass?courseId=' + courseId;
         }
     }
     
+    // 차트에 마우스 올리면 커서 변경
     document.getElementById('attendanceChart').style.cursor = 'pointer';
-
 </script>
 </body>
 </html>
-

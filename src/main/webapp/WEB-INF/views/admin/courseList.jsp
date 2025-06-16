@@ -30,7 +30,6 @@
 <body>
     <div class="container">
         <div class="sidebar">
-            <!-- 기존 왼쪽 메뉴 jsp 인클루드 -->
             <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
         </div>
         <div class="main-content">
@@ -65,8 +64,7 @@
 
 	<c:if test="${page.lastPage > 1 }">
 		<c:if test="${startPage > 1 }">
-			<a
-				href="/admin/courseList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[이전]</a>
+			<a href="/admin/courseList?currentPage=${startPage - 1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[이전]</a>
 		</c:if>
 	</c:if>
 	<c:forEach var="i" begin="${startPage}" end="${endPage}">
@@ -83,12 +81,12 @@
 		<a href="/admin/courseList?currentPage=${endPage+1}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&keyword=${keyword}">[다음]</a>
 	</c:if>
     </div>
-    </div>
+</div>
 
-	<script>
-		$("#insertCourse").click(function(){
-		    window.location = "insertCourse";
-		});
-	</script>
+<script>
+	$("#insertCourse").click(function(){
+	    window.location = "insertCourse";
+	});
+</script>
 </body>
 </html>

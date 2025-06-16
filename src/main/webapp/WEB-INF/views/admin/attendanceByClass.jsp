@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
@@ -78,13 +77,14 @@
             </tr>
         </thead>
         <tbody>
-        	<!-- 각 학생별 출석 현황 행(row) 생성 -->
+        	<!-- 각 학생별 출석 현황 행 생성 -->
             <c:forEach var="student" items="${studentList}">
                 <tr>
                     <td>${student.classroom}</td>
                     <td>${student.name}</td>
                     <c:forEach var="date" items="${dayList}">
                         <td>
+                        	<!-- 출석 status 상태에 따라 이모티콘 표시 -->
                             <c:choose>
                                 <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}">●</c:when>
                                 <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">△</c:when>
@@ -100,17 +100,17 @@
     </table>
       </div>
 </div>
-    <script>
-    <!-- 요일 정보 및 휴일(토/일) 표시용 JS -->
-        document.querySelectorAll("span.day-text").forEach(function(span) {
-            var dateStr = span.getAttribute('data-date'); // yyyy-MM-dd
-            var dateObj = new Date(dateStr);
-            var weekDay = ["일", "월", "화", "수", "목", "금", "토"][dateObj.getDay()];
-            span.textContent = weekDay;
-            if(weekDay === "일" || weekDay === "토") {
-                span.classList.add("holiday");
-            }
-        });
-    </script>
+<script>
+<!-- 요일 정보 및 휴일(토/일) 표시용 -->
+    document.querySelectorAll("span.day-text").forEach(function(span) {
+        var dateStr = span.getAttribute('data-date'); // yyyy-MM-dd
+        var dateObj = new Date(dateStr);
+        var weekDay = ["일", "월", "화", "수", "목", "금", "토"][dateObj.getDay()];
+        span.textContent = weekDay;
+        if(weekDay === "일" || weekDay === "토") {
+            span.classList.add("holiday");
+        }
+    });
+</script>
 </body>
 </html>

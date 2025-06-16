@@ -49,15 +49,15 @@ body {
 					<th>수강과목</th>
 				</tr>
 				<c:forEach var="sList" items="${studentList}">
-				<tr>
-					<td>${sList.name }</td>	
-					<td>${sList.phone }</td>	
-					<td>${sList.sn }</td>	
-					<td>${sList.address }</td>	
-					<td>${sList.email }</td>	
-					<td>${sList.studentId }</td>	
-					<td>${sList.courseName }</td>	
-				</tr>
+					<tr>
+						<td>${sList.name }</td>	
+						<td>${sList.phone }</td>	
+						<td>${sList.sn }</td>	
+						<td>${sList.address }</td>	
+						<td>${sList.email }</td>	
+						<td>${sList.studentId }</td>	
+						<td>${sList.courseName }</td>	
+					</tr>
 				</c:forEach>
 			</table>
 			<button type="button" id="insertStudent">학생등록</button><br>

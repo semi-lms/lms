@@ -46,24 +46,46 @@
         SELECT COUNT(*) FROM student WHERE course_id = #{courseId}
     </select>
 
-    <!-- 전체 출석 가능 횟수 (강의별) -->
-    <select id="getAttendanceTotalCount" parameterType="map" resultType="int">
-        WITH RECURSIVE calendar AS (
-            SELECT DATE(#{startDate}) AS dt
-            UNION ALL
-            SELECT dt + INTERVAL 1 DAY
-            FROM calendar
-            WHERE dt + INTERVAL 1 DAY &lt; #{endDate}
-        ),
-        workdays AS (
-            SELECT COUNT(*) AS day_count
-            FROM calendar
-            WHERE DAYOFWEEK(dt) BETWEEN 2 AND 6
-              AND dt NOT IN (SELECT date FROM holidays)
-        )
-        SELECT w.day_count * #{studentCount}
-        FROM workdays w
-    </select>
+	<!-- 
+	    전체 출석 가능 횟수(강의별)
+	    "한 달 동안(기간 내) 학생 모두가 출석할 수 있는 총 횟수"를 구하는 쿼리
+	
+	    ※ 예시: 평일 수업 20일 × 학생 10명 = 200 (이 달에 가능한 전체 출석횟수)
+	-->
+	<select id="getAttendanceTotalCount" parameterType="map" resultType="int">
+	    <!-- 
+	        [1] calendar CTE: 
+	        - startDate부터 endDate 하루 전까지, 날짜들을 한 줄씩 생성하는 재귀 쿼리
+	        - 예시: 2025-06-01 ~ 2025-06-30 이면, 6월 1일부터 29일까지 한 줄씩 생성
+	    -->
+	    WITH RECURSIVE calendar AS (
+	        SELECT DATE(#{startDate}) AS dt
+	        UNION ALL
+	        SELECT dt + INTERVAL 1 DAY
+	        FROM calendar
+	        WHERE dt + INTERVAL 1 DAY &lt; #{endDate}
+	    ),
+	    <!-- 
+	        [2] workdays CTE: 
+	        - calendar에서 주말(토, 일) 빼고, 공휴일 테이블(holidays)에 등록된 날도 제외
+	        - DAYOFWEEK: 2~6이 월~금 (일요일 1, 월 2, ..., 토 7)
+	        - dt NOT IN (SELECT date FROM holidays): 해당 날짜가 공휴일 테이블에 없을 때만 카운트
+	        - 결과적으로 "이번 달 실제 수업하는 평일"의 개수만 남음
+	    -->
+	    workdays AS (
+	        SELECT COUNT(*) AS day_count
+	        FROM calendar
+	        WHERE DAYOFWEEK(dt) BETWEEN 2 AND 6
+	        AND dt NOT IN (SELECT date FROM holidays)
+	    )
+	    <!-- 
+	        [3] 실제 리턴 
+	        - (실제 수업하는 평일 개수) × (학생 수) = 전체 출석 가능 횟수
+	        - ex) 19일 평일 수업 × 11명 학생 = 209
+	    -->
+	    SELECT w.day_count * #{studentCount}
+	    FROM workdays w
+	</select>
 
     <!-- 실제 출석(지각 포함, 강의별) -->
     <select id="getActualAttendance" parameterType="map" resultType="int">
