@@ -114,4 +114,14 @@
 	<select id="checkId" resultType="boolean" parameterType="String">
 		SELECT COUNT(*) > 0 FROM student WHERE student_id = #{studentId}
 	</select>
+	
+	<insert id="insertCourseApply">
+    INSERT INTO course_apply (student_no, course_id, apply_date)
+    VALUES (
+        (SELECT student_no FROM student WHERE student_id = #{studentId}),
+        #{courseId},
+        NOW()
+    )
+</insert>
+	
 </mapper>

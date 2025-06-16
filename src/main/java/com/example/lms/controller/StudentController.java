@@ -268,40 +268,40 @@ public class StudentController {
 		return "/admin/insertStudent";
 	}
 
-	// 학생 등록 처리
-	@PostMapping("/admin/insertStudent")
-	public String insertStudent(@ModelAttribute StudentListForm form
-			,@RequestParam("courseId") int courseId) {
-		List<StudentDTO> studentList = form.getStudentList();
+    // 학생 등록 처리
+    @PostMapping("/admin/insertStudent")
+    public String insertStudent(@ModelAttribute StudentListForm form
+                                ,@RequestParam("courseId") int courseId) {
+        List<StudentDTO> studentList = form.getStudentList();
 
-		// stream 처리 순서:
-		// 1. filter: 모든 필수 칸에 값이 있는 학생만 추림(공백/미입력 행은 제외)
-		// 2. peek: 남은 학생 객체에 선택된 courseId를 세팅하고, 비밀번호를 암호화해서 다시 세팅
-		//    (peek은 중간처리 - 값을 바꿀 때 주로 사용, 실제 객체 값 변경)
-		// 3. collect: 최종적으로 남은 학생들을 새 리스트로 반환(List<StudentDTO>)
-		List<StudentDTO> validList = studentList.stream()
-				// 1. 필수 칸(이름, 폰, 주민번호, 주소, 이메일) 모두 채워진 행만 남김
-				.filter(s -> s.getName() != null && !s.getName().trim().isEmpty() 
-				&& s.getPhone() != null && !s.getPhone().trim().isEmpty() 
-				&& s.getSn() != null && !s.getSn().trim().isEmpty()
-				&& s.getAddress() != null && !s.getAddress().trim().isEmpty() 
-				&& s.getEmail() != null	&& !s.getEmail().trim().isEmpty())
-				// 2. peek: 남은 학생마다 courseId 주입 + 비번 암호화
-				.peek(s -> {
-					s.setCourseId(courseId); // 선택한 강의로 매핑
-					s.setPassword(passwordEncoder.encode(s.getPassword())); // 비번 암호화
-				})
-				// 3. collect: 결과를 리스트로 만듦
-				.collect(Collectors.toList());
-
-		int row = studentService.checkId(validList);
-
-		if(row == 0) {
-			studentService.insertStudentList(validList);
-			return "redirect:/admin/studentList?searchOption=all&keyword=";
-		} else {
-			return "/admin/insertStudent";
-		}
-
-	}
+        // stream 처리 순서:
+        // 1. filter: 모든 필수 칸에 값이 있는 학생만 추림(공백/미입력 행은 제외)
+        // 2. peek: 남은 학생 객체에 선택된 courseId를 세팅하고, 비밀번호를 암호화해서 다시 세팅
+        //    (peek은 중간처리 - 값을 바꿀 때 주로 사용, 실제 객체 값 변경)
+        // 3. collect: 최종적으로 남은 학생들을 새 리스트로 반환(List<StudentDTO>)
+        List<StudentDTO> validList = studentList.stream()
+            // 1. 필수 칸(이름, 폰, 주민번호, 주소, 이메일) 모두 채워진 행만 남김
+            .filter(s -> s.getName() != null && !s.getName().trim().isEmpty() 
+                    && s.getPhone() != null && !s.getPhone().trim().isEmpty() 
+                    && s.getSn() != null && !s.getSn().trim().isEmpty()
+                    && s.getAddress() != null && !s.getAddress().trim().isEmpty() 
+                    && s.getEmail() != null	&& !s.getEmail().trim().isEmpty())
+            // 2. peek: 남은 학생마다 courseId 주입 + 비번 암호화
+            .peek(s -> {
+                s.setCourseId(courseId); // 선택한 강의로 매핑
+                s.setPassword(passwordEncoder.encode(s.getPassword())); // 비번 암호화
+            })
+            // 3. collect: 결과를 리스트로 만듦
+            .collect(Collectors.toList());
+        
+        int row = studentService.checkId(validList);
+        
+        if(row == 0) {
+        	studentService.insertStudentAndCourseApply(validList);
+        	return "redirect:/admin/studentList?searchOption=all&keyword=";
+        } else {
+        	return "/admin/insertStudent";
+        }
+        
+    }
 }

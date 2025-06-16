@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
@@ -61,6 +62,22 @@ public class StudentServiceImpl implements StudentService {
 	        }
 	    }
 	    return count;
+	}
+	
+	@Transactional
+	@Override
+	public void insertStudentAndCourseApply(List<StudentDTO> validList) {
+        // 1. 학생 insert
+        studentMapper.insertStudentList(validList);
+
+        // 2. course_apply insert
+        for (StudentDTO s : validList) {
+            // (student 테이블에 auto_increment로 student_no가 생성된 경우에는)
+            // selectKey 등으로 studentNo를 가져오거나, 
+            // 만약 student_id가 unique라면 student_id로 student_no select 후 사용
+        	studentMapper.insertCourseApply(s.getStudentId(), s.getCourseId());
+        }
+		
 	}
 	
 	

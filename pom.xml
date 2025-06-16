@@ -61,11 +61,6 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-websocket</artifactId>
 </dependency>
-<dependency>
-    <groupId>com.google.code.gson</groupId>
-    <artifactId>gson</artifactId>
-    <version>2.10.1</version>  
-</dependency>
       <dependency>
          <groupId>org.springframework.boot</groupId>
          <artifactId>spring-boot-starter-web</artifactId>
@@ -75,10 +70,7 @@
          <artifactId>mybatis-spring-boot-starter</artifactId>
          <version>3.0.4</version>
       </dependency>
-      <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-</dependency>
+
 
 		
  <!-- Spring Security (비밀번호 암호화) -->
@@ -120,11 +112,6 @@
          <artifactId>mybatis-spring-boot-starter-test</artifactId>
          <version>3.0.4</version>
          <scope>test</scope>
-      </dependency>
-      <dependency>
-      	<groupId>com.example</groupId>
-      	<artifactId>ajax</artifactId>
-      	<version>0.0.1-SNAPSHOT</version>
       </dependency>
    </dependencies>
 

@@ -38,5 +38,7 @@ public interface StudentMapper {
 	List<CourseDTO> selectCourse();
 	
 	boolean checkId(@Param("studentId") String studentId);
+	
+	void insertCourseApply(String studentId, int courseId);
 
 }

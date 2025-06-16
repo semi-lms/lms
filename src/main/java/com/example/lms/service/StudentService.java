@@ -22,4 +22,6 @@ public interface StudentService {
 	
 	int checkId(List<StudentDTO> validList);
 	
+	void insertStudentAndCourseApply(List<StudentDTO> validList);
+	
 }
