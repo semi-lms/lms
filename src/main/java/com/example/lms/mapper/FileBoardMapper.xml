@@ -39,9 +39,9 @@
 	</select>
 	
 	<!-- 작성 -->
-	<insert id="insertFileBoard" parameterType="com.example.lms.dto.FileBoardDTO">
+	<insert id="insertFileBoard" parameterType="com.example.lms.dto.FileBoardDTO"  useGeneratedKeys="true" keyProperty="fileBoardNo">
 		INSERT INTO file_board (title, content, admin_id, create_date)
-			VALUES(#{title}, #{content}, #{adminId}, NOW())
+			VALUES(#{title}, #{content}, #{adminId}, NOW() + INTERVAL 9 HOUR)
 	</insert>
 	
 	<!-- 상세보기 -->
@@ -72,3 +72,14 @@
 	</delete>
 
 </mapper>
+
+
+
+
+
+
+
+
+
+
+

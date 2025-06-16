@@ -27,7 +27,8 @@
  <div class="fileBoard-content" >
   <form method="post" 
   		action="${pageContext.request.contextPath}/file/insertFileBoard"
-  		onsubmit="return validateForm()">
+  		enctype="multipart/form-data"		
+  		onsubmit="return validateForm()">		<!-- enctype=파일 정송용 설정  input type="file" 사용할땐 무조건 enctype="multipart/form-data" 로 설정해야 서버가 파일을 제대로 받을 수 있다-->
 
     <!-- 관리자 아이디 표시 (readonly) -->
     <div class="form-group">
@@ -46,6 +47,14 @@
     <div class="form-group">
     <label>내용</label>
       <textarea id="content" name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요."></textarea>
+    </div>
+    
+    <!-- 파일올리기 -->
+    <div class="form-group">
+    <label>파일 선택</label>
+      <input type="file" id="file" name="uploadFile" multiple class="form-control">
+      <ul id="fileList"></ul>
+      <small>※ Ctrl(또는 Shift)를 누른 채 여러 개의 파일을 한 번에 선택하세요.</small>
     </div>
 
     <!-- 등록 버튼 -->
@@ -73,6 +82,18 @@
 	
 	  return true; // 정상 제출
 	}
+	
+	  document.getElementById('uploadFile').addEventListener('change', function(event) {
+		    const fileList = event.target.files;
+		    const ul = document.getElementById('fileList');
+		    ul.innerHTML = ""; // 기존 리스트 초기화
+
+		    for (let i = 0; i < fileList.length; i++) {
+		      const li = document.createElement('li');
+		      li.textContent = fileList[i].name;
+		      ul.appendChild(li);
+		    }
+		  });
 </script>
 </body>
 </html>

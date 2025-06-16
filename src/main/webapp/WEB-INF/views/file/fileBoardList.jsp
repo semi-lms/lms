@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
+<fmt:setTimeZone value="Asia/Seoul" />
   <!-- 왼쪽 메뉴 -->
   <div class="sidebar">
     <c:choose>
@@ -44,7 +46,7 @@
 							<c:otherwise>${fileBoard.adminId}</c:otherwise>
 						</c:choose>
 					</td>
-						<td>${fileBoard.createDate}</td>
+						<td><fmt:formatDate value="${fileBoard.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +9,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">
 </head>
 <body>
-
+<fmt:setTimeZone value="Asia/Seoul" />
 <!-- 사이드바 -->
 <div class="sidebar">
   <c:choose>
@@ -30,8 +31,16 @@
 
   <table border="1" cellpadding="10">
     <tr>
+      <th>번호</th>
+      <td>${fileBoard.fileBoardNo}</td>
+    </tr>
+    <tr>
       <th>작성자</th>
 		<!-- 작성자 admin이면 '관리자'로 출력 -->
+		    <form method="get" action="${pageContext.request.contextPath}/file/downloadAll">
+              <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
+              <button type="submit">전체 다운로드(추후구현?)</button>
+            </form>
 		<td>
 			<c:choose>
 				<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
@@ -48,8 +57,27 @@
       <td style="white-space: pre-wrap;">${fileBoard.content}</td>
     </tr>
     <tr>
+      <th>파일</th>
+  <td>
+        <c:choose>
+          <c:when test="${not empty fileList}">
+            <c:forEach var="file" items="${fileList}">
+              🔗 <a href="${pageContext.request.contextPath}/file/download?saveName=${file.saveName}">
+                ${file.fileName}
+              </a><br>
+            </c:forEach>
+            <br>
+        
+          </c:when>
+          <c:otherwise>
+            (첨부된 파일 없음)
+          </c:otherwise>
+        </c:choose>
+      </td>
+    </tr>
+    <tr>
       <th>작성일</th>
-      <td>${fileBoard.createDate}</td>
+      <td><fmt:formatDate value="${fileBoard.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
     </tr>
   </table>
 

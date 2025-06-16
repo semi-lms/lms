@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.lms.mapper.FileMapper">
+
+		<!-- 첨부파일 첨부 -->
+	<insert id="insertFile" parameterType="com.example.lms.dto.FileDTO">
+		INSERT INTO file (file_board_no, admin_id, file_name, save_name, file_path, upload_date)
+			VALUES(#{fileBoardNo}, #{adminId}, #{fileName}, #{saveName}, #{filePath}, NOW() + INTERVAL 9 HOUR)
+	</insert>
+	
+	<!-- 파일목록 보기 -->
+	<select id="selectFileListByBoardNo" parameterType="int" resultType="com.example.lms.dto.FileDTO">
+	  SELECT
+	    file_id AS fileId,
+	    file_board_no AS fileBoardNo,
+	    admin_id AS adminId,
+	    file_name AS fileName,
+	    save_name AS saveName,   
+	    file_path AS filePath,
+	    upload_date AS uploadDate
+	  FROM file
+	  WHERE file_board_no = #{fileBoardNo}
+	</select>
+	<!-- 저장된 파일 이름(save_name)으로 파일 정보 1개 조회 -->
+	<select id="selectFileBySaveName" parameterType="string" resultType="com.example.lms.dto.FileDTO">
+	  SELECT
+	    file_id AS fileId,
+	    file_board_no AS fileBoardNo,
+	    admin_id AS adminId,
+	    file_name AS fileName,       
+	    save_name AS saveName,        
+	    file_path AS filePath,
+	    upload_date AS uploadDate
+	  FROM file
+	  WHERE save_name = #{saveName}
+	</select>
+
+	<!-- 게시글 번호로 전체 파일 삭제 -->
+	<delete id="deleteFilesByBoardNo" parameterType="int">
+		DELETE
+		FROM file
+		WHERE file_board_no = #{fileBoardNo}
+	</delete>
+	
+	<!--  파일 개별 삭제 (다운로드 후 삭제 등) -->
+	<delete id="deleteFileBySaveName" parameterType="String">
+		DELETE
+		FROM file
+		WHERE save_name = #{saveName}
+	</delete>
+
+</mapper>
+
+
+
+
+
+
+

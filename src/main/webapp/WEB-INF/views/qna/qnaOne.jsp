@@ -44,7 +44,7 @@
     </tr>
     <tr>
       <th>작성일</th>
-      <td>${qna.createDate}</td>
+      <td><fmt:formatDate value="${qna.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
     </tr>
   </table>
 

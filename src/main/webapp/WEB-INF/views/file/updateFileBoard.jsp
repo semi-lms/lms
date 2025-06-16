@@ -20,10 +20,11 @@
 
 <!-- 본문 -->
 <div class="fileBoard-content">
-  <h2>공지사항 수정</h2>
+  <h2>자료실 수정</h2>
 
   <form method="post" 
   		action="${pageContext.request.contextPath}/file/updateFileBoard"
+  		enctype="multipart/form-data"
   		onsubmit="return validateForm()">
     
     <!-- 숨겨진 공지 ID -->
@@ -43,6 +44,24 @@
 	  <label for="content">내용</label>
 	  <textarea id="content" name="content" rows="10" cols="50">${fileBoard.content}</textarea>
 	</div>
+	
+	<!-- 기존 첨부파일 -->
+		<c:forEach var="file" items="${fileList}">
+		  <div>
+		    <a href="/file/download?saveName=${file.saveName}">${file.fileName}</a>
+		    <label>
+		      <input type="checkbox" name="deleteFileNames" value="${file.saveName}">
+		      삭제
+		    </label>
+		  </div>
+		</c:forEach>
+	
+	  <!-- 새로운 파일 추가 -->
+	  <div>
+	    새로운 첨부파일 추가
+	    <input type="file" name="uploadFile" multiple>
+	  </div>
+
 
     <!-- 수정 버튼 -->
     <div class="form-group">
