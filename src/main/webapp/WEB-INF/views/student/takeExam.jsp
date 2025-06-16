@@ -39,26 +39,27 @@ body {
 	<p>응시자번호 ${loginUser.studentNo } </p>
 	<form id="examForm" method="post" action="/student/submitExam">
 		<input type="hidden" name="examId" value="${examId}" />
-		<c:forEach var="q" items="${questions}" varStatus="status">
-	<div class="question">
-		<p><strong>${q.questionNo}. ${q.questionTitle}</strong></p>
-		<p>${q.questionText}</p>
+<c:forEach var="q" items="${questions}" varStatus="status">
+  <div class="question">
+    <p><strong>${q.questionNo}. ${q.questionTitle}</strong></p>
+    <p>${q.questionText}</p>
 
-		<!-- 고정된 hidden input (name=questionId) -->
-		<input type="hidden" class="qid" value="${q.questionId}" />
+    <!-- 배열 형태로 questionId 전송 -->
+    <input type="hidden" name="answers[${status.index}].questionId" value="${q.questionId}" />
 
-		<c:forEach var="opt" items="${q.options}">
-			<label>
-				<input type="radio"
-					class="answer-radio"
-					data-question-id="${q.questionId}"
-					name="radio_${q.questionId}"
-					value="${opt.optionNo}"
-					<c:if test="${tempAnswers[q.questionId] == opt.optionNo}">checked</c:if> />
-				${opt.optionText}
-			</label><br />
-		</c:forEach>
-	</div>
+    <!-- 보기 반복 -->
+    <c:forEach var="opt" items="${q.options}">
+      <label>
+        <input type="radio"
+               class="answer-radio"
+               data-question-id="${q.questionId}"
+               name="answers[${status.index}].answerNo"
+               value="${opt.optionNo}"
+               <c:if test="${tempAnswers[q.questionId] == opt.optionNo}">checked</c:if> />
+        ${opt.optionText}
+      </label><br/>
+    </c:forEach>
+  </div>
 </c:forEach>
 
 		<div>
@@ -76,9 +77,10 @@ body {
 	</form>
 
 <script>
-  // 답안 강제 저장 함수
-  
-  const  savedAnswers = {};
+  // 저장된 답안 객체
+  const savedAnswers = {};
+
+  // 현재 체크된 답안들을 savedAnswers에 모으는 함수
   function collectAllCheckedAnswers() {
     $('input.answer-radio:checked').each(function () {
       const questionId = $(this).data('question-id');
@@ -91,10 +93,10 @@ body {
   $(document).on('click', 'a.nav-btn', function(e) {
     e.preventDefault(); // 기본 링크 이동 막기
 
-    // 체크된 답안들을 savedAnswers에 반영
+    // 체크된 답안들 갱신
     collectAllCheckedAnswers();
 
-    // 서버로 임시 저장
+    // 서버로 임시 저장 요청들
     const savePromises = [];
     for (const [questionId, answerNo] of Object.entries(savedAnswers)) {
       savePromises.push($.ajax({
@@ -105,13 +107,13 @@ body {
       }));
     }
 
-    // 저장 완료되면 페이지 이동
+    // 저장 다 완료되면 페이지 이동
     Promise.all(savePromises).then(() => {
-      window.location.href = $(this).attr('href'); // 이동
+      window.location.href = $(this).attr('href');
     });
   });
 
-  // 기존 라디오 change 이벤트는 그대로 둬도 OK
+  // 라디오 버튼 변경 시 바로 서버로 임시 저장
   $(document).ready(function () {
     $('input.answer-radio').on('change', function () {
       const questionId = $(this).data('question-id');
@@ -128,8 +130,22 @@ body {
         }
       });
     });
+
+    // 페이지 로드시 서버에 저장된 임시 답안 불러와서 체크 상태 복원
+    $.ajax({
+      url: '/exam/api/loadTemp',
+      type: 'GET',
+      success: function(data) {
+        // data 예: { "10": "3", "11": "2", ... }
+        for (const [questionId, answerNo] of Object.entries(data)) {
+          savedAnswers[questionId] = answerNo;
+          $(`input.answer-radio[data-question-id="${questionId}"][value="${answerNo}"]`).prop('checked', true);
+        }
+      }
+    });
   });
 </script>
+
 
 </body>
 </html>

@@ -64,7 +64,7 @@ public class StudentController {
 	    }
 	 
 	@GetMapping("/student/myAttendance")
-	public String getMyAttendance(@RequestParam String studentId,
+	public String getMyAttendance(@RequestParam int studentNo,
 	                              @RequestParam(required = false) Integer year,
 	                              @RequestParam(required = false) Integer month,
 	                              HttpSession session,
@@ -116,7 +116,7 @@ public class StudentController {
 	    }
 
 	    // 출석 정보 조회 후 날짜별로 매핑
-	    List<AttendanceDTO> attendanceList = attendanceService.getAttendanceListByStudentId(studentId);
+	    List<AttendanceDTO> attendanceList = attendanceService.getAttendanceListByStudentNo(studentNo);
 	    Map<String, String> attendanceMap = new HashMap<>();
 
 	    for (AttendanceDTO dto : attendanceList) {

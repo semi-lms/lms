@@ -14,7 +14,7 @@ import com.example.lms.dto.StudentDTO;
 public interface AttendanceMapper {
     List<AttendanceDTO> getTodayAttendance();
 
-    List<AttendanceDTO> selectAttendanceListByStudentId(String studentId);
+    List<AttendanceDTO> selectAttendanceListByStudentNo(int studentNo);
 
     int getAttendanceCount(@Param("courseId") int courseId);
 

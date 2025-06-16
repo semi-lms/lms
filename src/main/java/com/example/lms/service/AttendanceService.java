@@ -8,7 +8,7 @@ import com.example.lms.dto.StudentDTO;
 
 public interface AttendanceService {
     List<AttendanceDTO> getTodayAttendance();
-    List<AttendanceDTO> getAttendanceListByStudentId(String studentId);
+    List<AttendanceDTO> getAttendanceListByStudentNo(int studentNo);
     int getAttendanceCount(int courseId);
     int getStudentCount(int courseId);
     int getAttendanceTotalCount(String startDate, String endDate, int studentCount, int courseId);

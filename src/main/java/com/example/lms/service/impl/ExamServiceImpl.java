@@ -58,9 +58,10 @@ public class ExamServiceImpl implements ExamService{
 	@Transactional
 	@Override
 	public int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers ) {
-		if (answers == null || answers.isEmpty()) {
-		    throw new IllegalArgumentException("답안이 제출되지 않았습니다.");
-		}
+		/*
+		 * if (answers == null || answers.isEmpty()) { throw new
+		 * IllegalArgumentException("답안이 제출되지 않았습니다."); }
+		 */
 	    // 1. 시험 제출 등록
 	    examMapper.insertSubmission(submission);  // examMapper 인스턴스로 호출해야 함
 	    
@@ -72,14 +73,18 @@ public class ExamServiceImpl implements ExamService{
 
 	    // 3. 응답 일괄 저장
 	    examMapper.insertAnswers(answers);
-
+	    for (ExamAnswerDTO answer : answers) {
+	        System.out.println("문제 ID: " + answer.getQuestionId() + ", 선택한 답: " + answer.getAnswerNo());
+	    }
 	    // 4. 자동 채점
 	    int score = examMapper.calculateScore(submissionId);
 
 	    // 5. 점수 업데이트
 	    examMapper.updateScore(submissionId, score);
-	    
+	    System.out.println("===== 제출된 답안 목록 =====");
+	   
 	    return score; 
+	    
 	}
 	public List<ExamQuestionDTO> getQuestionsByPage(int examId, int page) {
 	    List<ExamQuestionDTO> allQuestions = examMapper.getQuestionsByExamId(examId);

@@ -30,7 +30,7 @@
     </select>
 
     <!-- 학생(본인) 출석 현황 (그대로) -->
-    <select id="selectAttendanceListByStudentId" resultType="com.example.lms.dto.AttendanceDTO">
+    <select id="selectAttendanceListByStudentNo" resultType="com.example.lms.dto.AttendanceDTO">
         SELECT attendance_no AS attendanceNo, student_no AS studentNo, course_id AS courseId, DATE, STATUS
         FROM attendance
         WHERE student_no = #{studentNo}

@@ -10,9 +10,9 @@
  
 
   <div class="nav">
-    <a href="/student/myAttendance?studentId=${loginUser.studentNo}&year=${currentYear}&month=${currentMonth}">출석현황</a>
+    <a href="/student/myAttendance?studentNo=${loginUser.studentNo}&year=${currentYear}&month=${currentMonth}">출석현황</a>
     	<a href="/">수강과목</a>
-    	<a href="/examList?courseId=${loginUser.courseId }">시험문제</a>
+    	<a href="/student/examList?studentNo=${loginUser.studentNo }courseId=${loginUser.courseId }">시험문제</a>
     	<a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}">강의일정</a>
     	<a href="/notice/noticeList">공지사항</a>
 		<a href="/qna/qnaList">QNA</a>
