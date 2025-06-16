@@ -14,7 +14,8 @@
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
     <button type="button" class="sidebar-btn" onclick="goToInfo()">개인정보</button><br><br>
-    <a href="/mypage/attendance"><button class="sidebar-btn">출석현황</button></a><br><br>
+    <a href="/student/myAttendance?studentNo=${loginUser.studentNo}&year=${currentYear}&month=${currentMonth}"><button class="sidebar-btn">출석현황</button></a><br><br>
+
     <button class="sidebar-btn" onclick="toggleSubmenu()">관리목록</button><br><br>
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
