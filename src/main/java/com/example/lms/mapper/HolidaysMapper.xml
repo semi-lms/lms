@@ -14,5 +14,20 @@
 		VALUES (#{date}, '학원 휴강')
 	</insert>
 	
+	<!-- 휴강 등록 시 날짜 중복 유효성 검사 -->
+	<select id="getHolidayNameByDate" resultType="String">
+		SELECT name
+		FROM holidays
+		WHERE date = #{date}
+	</select>
+	
 	<!-- 휴강 날짜 수정 (삭제 후 재등록: delete -> insert) -->
+	
+	<!-- 휴강 날짜 수정 시 유효성 검사 -->
+	<select id="isDuplicateDateForUpdate" resultType="boolean">
+		SELECT COUNT(*) > 0
+		FROM holidays
+		WHERE date = #{date}
+		AND holiday_id = #{holidayId}
+	</select>
 </mapper>

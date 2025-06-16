@@ -23,12 +23,28 @@
 	    
 	    function openPopup() {
 		    window.open(
-		      '/admin/academicSchedule/insertHolidayForm',  // 이동할 경로
+		      '/admin/holidays/insertHolidayForm',  // 이동할 경로
 		      'insertHoliday',                              // 팝업 이름(내부 식별용)
 		      'width=500,height=300,left=100,top=100'       // 팝업창 크기 및 위치
 		    );
 		  }
     </script>
+    
+    <style>
+	    .memo.holiday {
+			background-color: #f08080;
+		}
+		
+		.memo.clickable {
+			cursor: pointer;
+			text-decoration: underline;
+		}
+		
+		.memo.disabled {
+			opacity: 0.6;
+			cursor: default;
+		}
+    </style>
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
@@ -66,10 +82,33 @@
                                 <div>${day.day}</div>
 
                                <c:forEach var="memoDto" items="${dateScheduleMap[day.dateStr]}">
-                                   <div class="memo">
-                                       ${memoDto.memo}
-                                   </div>
+                                   <c:choose>
+                                   
+                                       <%-- 휴강 --%>
+                                       <c:when test="${memoDto.type eq '휴강'}">
+                                           <div class="memo holiday clickable"
+                                               onclick="location.href='${pageContext.request.contextPath}/admin/holidays/updateHolidayDate?date=${day.dateStr}'">
+                                               ${memoDto.memo}
+                                           </div>
+                                       </c:when>
+                                       
+                                       <%-- 공휴일 --%>
+                                       <c:when test="${memoDto.type eq '공휴일'}">
+                                           <div class="memo holiday disabled">
+                                               ${memoDto.memo}
+                                           </div>
+                                       </c:when>
+                                       
+                                       <%-- 개강/종강 --%>
+                                       <c:otherwise>
+	                                       <div class="memo">
+		                                       ${memoDto.memo}
+		                                   </div>
+	                                   </c:otherwise>
+	                                   
+                                   </c:choose>
                                </c:forEach>
+                               
                             </td>
                         </c:forEach>
                     </tr>

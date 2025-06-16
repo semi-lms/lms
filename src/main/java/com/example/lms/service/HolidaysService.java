@@ -9,4 +9,8 @@ public interface HolidaysService {
 	public int insertHoliday(HolidaysDTO holidaysDTO);
 
 	void updateHolidayDate(HolidaysDTO holidaysDTO);  // 휴강 날짜 수정
+
+	String getDateType(String date);
+	
+	boolean isDuplicateDateForUpdate(HolidaysDTO holidaysDTO);
 }

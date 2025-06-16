@@ -17,9 +17,4 @@ public class AcademicScheduleServiceImpl implements AcademicScheduleService {
 	public List<AcademicScheduleDTO> getAcademicSchedules() {
 		return academicScheduleMapper.getAcademicSchedules();
 	}
-
-	@Override
-	public boolean existsByDate(String date) {
-		return academicScheduleMapper.countByDate(date) > 0;
-	}
 }

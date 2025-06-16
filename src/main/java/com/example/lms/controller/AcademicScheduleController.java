@@ -11,16 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AcademicScheduleDTO;
-import com.example.lms.dto.HolidaysDTO;
 import com.example.lms.service.AcademicScheduleService;
-import com.example.lms.service.HolidaysService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AcademicScheduleController {
 	
 	@Autowired private AcademicScheduleService academicScheduleService;
-	@Autowired private HolidaysService holidaysService;
 	
 	// 관리자 달력 (개강, 종강, 휴강)
 	@GetMapping("/academicSchedule")
@@ -120,48 +114,4 @@ public class AcademicScheduleController {
 
         return "admin/academicSchedule";
     }
-	
-	
-	// 휴강 등록 (팝업)
-	@GetMapping("/academicSchedule/insertHolidayForm")
-	public String insertHolidayForm() {
-		return "admin/insertHolidayForm";
-	}
-	
-	@PostMapping("/academicSchedule/insertHoliday")
-	public String insertHoliday(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
-		holidaysService.insertHoliday(holidaysDTO);
-		model.addAttribute("success", true);
-		return "admin/insertHolidayForm";  // 리다이렉트로 할 경우 팝업창 닫는 JS 실행 불가능
-	}
-	
-	
-	// 휴강 등록 시 날짜 중복 유효성 검사
-	@GetMapping("/academicSchedule/exists")
-	@ResponseBody
-	public boolean existsByDate(@RequestParam("date") String date) {
-		return academicScheduleService.existsByDate(date);
-	}
-	
-	
-	// 휴강 수정
-	@GetMapping("/academicSchedule/updateHolidayDate")
-	public String updateHolidayDate() {
-		return "admin/updateHolidayDate";
-	}
-	
-	@PostMapping("/academicSchedule/updateHolidayDate")
-	public String updateHolidayDate(@ModelAttribute HolidaysDTO holidaysDTO) {
-		holidaysService.updateHolidayDate(holidaysDTO);
-		return "redirect:/admin/academicSchedule";
-	}
-	
-	
-	// 휴강 삭제
-	@PostMapping("/academicSchedule/deleteHoliday")
-	public String deleteHoliiay(@ModelAttribute HolidaysDTO holidaysDTO) {
-		holidaysService.deleteHoliday(holidaysDTO);
-		return "redirect:/admin/academicSchedule";
-	}
-
 }
