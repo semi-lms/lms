@@ -5,7 +5,7 @@
 	<!-- 휴강 삭제 -->
 	<delete id="deleteHoliday" parameterType="com.example.lms.dto.HolidaysDTO">
 		DELETE FROM holidays
-		WHERE date = #{date}
+		WHERE holiday_id = #{holidayId}
 	</delete>
 
 	<!-- 휴강 등록 -->
@@ -28,6 +28,6 @@
 		SELECT COUNT(*) > 0
 		FROM holidays
 		WHERE date = #{date}
-		AND holiday_id = #{holidayId}
+		AND holiday_id != #{holidayId}
 	</select>
 </mapper>

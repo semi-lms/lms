@@ -88,23 +88,18 @@ public class AcademicScheduleController {
         // 시작, 끝 날짜 계산 (현재 월 1일 ~ 말일)
         Calendar startCal = Calendar.getInstance();
         startCal.set(displayYear, displayMonth - 1, 1);
-        Date startDate = startCal.getTime();
 
         Calendar endCal = Calendar.getInstance();
         int lastDay = endCal.getActualMaximum(Calendar.DAY_OF_MONTH);
         endCal.set(displayYear, displayMonth - 1, lastDay);
-        Date endDate = endCal.getTime();
 
         List<AcademicScheduleDTO> schedules = academicScheduleService.getAcademicSchedules();
      
         Map<String, List<AcademicScheduleDTO>> dateScheduleMap = new HashMap<>();
-        Calendar dayCal = Calendar.getInstance();
-
+        
         for (AcademicScheduleDTO dto : schedules) {
             String key = dto.getDate();
-            if (key != null) {
-            	dateScheduleMap.computeIfAbsent(key, k -> new ArrayList<>()).add(dto);
-            }
+            dateScheduleMap.computeIfAbsent(key, k -> new ArrayList<>()).add(dto);
         }
 
         model.addAttribute("weeks", weeks);

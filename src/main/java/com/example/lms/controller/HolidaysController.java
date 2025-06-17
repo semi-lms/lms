@@ -44,16 +44,21 @@ public class HolidaysController {
 	}
 	
 	
-	// 휴강 날짜 수정
-	@GetMapping("/holidays/updateHolidayDate")
-	public String updateHolidayDate() {
-		return "admin/updateHolidayDate";
+	// 휴강 날짜 수정 (팝업)
+	@GetMapping("/holidays/editHolidayForm")
+	public String editHoliday(@RequestParam("date") String date,
+							  @RequestParam("holidayId") Integer holidayId, 	
+						      Model model) {
+		model.addAttribute("date", date);
+		model.addAttribute("holidayId", holidayId);
+		return "admin/editHolidayForm";
 	}
 	
 	@PostMapping("/holidays/updateHolidayDate")
-	public String updateHolidayDate(@ModelAttribute HolidaysDTO holidaysDTO) {
+	public String updateHolidayDate(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
 		holidaysService.updateHolidayDate(holidaysDTO);
-		return "redirect:/admin/academicSchedule";
+		model.addAttribute("success", true);
+		return "admin/editHolidayForm";
 	}
 	
 	
@@ -69,10 +74,11 @@ public class HolidaysController {
 	}
 	
 	
-	// 휴강 삭제
-	@PostMapping("/academicSchedule/deleteHoliday")
-	public String deleteHoliiay(@ModelAttribute HolidaysDTO holidaysDTO) {
+	// 휴강 삭제 (팝업)
+	@PostMapping("/holidays/deleteHoliday")
+	public String deleteHoliday(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
 		holidaysService.deleteHoliday(holidaysDTO);
-		return "redirect:/admin/academicSchedule";
+		model.addAttribute("deleted", true);
+		return "admin/editHolidayForm";
 	}
 }

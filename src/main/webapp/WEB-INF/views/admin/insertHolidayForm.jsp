@@ -25,7 +25,14 @@
 	
 	
 	<script>
-		// 선택한 날짜가 이미 휴강 또는 공휴일인지 확인
+		// 주말 여부 확인
+		function isWeekend(dateStr) {
+			const day = new Date(dateStr).getDay();  // 0: 일요일, 6: 토요일
+			return day == 0 || day == 6;
+		}
+	
+		
+		// 선택한 날짜가 주말이거나, 이미 등록된 휴강 또는 공휴일인지 확인
 		$(document).ready(function() {
 			$('#insertForm').on('submit', function(e) {
 				e.preventDefault()  // 기본 등록 막기
@@ -33,11 +40,18 @@
 				const date = $('#holidayDate').val();
 				if(!date) return;
 				
+				// 1. 주말인지 확인
+				if(isWeekend(date)) {
+					alert("주말을 휴강으로 등록할 수 없습니다.");
+					return;
+				}
+				
+				// 2. 이미 등록된 휴강 또는 공휴일인지 확인
 				$.get("${pageContext.request.contextPath}/admin/holidays/dateType", {date: date}, function(type) {
 					if(type == "휴강") {
 						alert("이미 휴강으로 등록된 날짜입니다.");
 					} else if(type == "공휴일") {
-						alert("공휴일에는 휴강을 등록할 수 없습니다.");
+						alert("공휴일을 휴강으로 등록할 수 없습니다.");
 					} else {	
 						document.getElementById('insertForm').submit();  // '일정 없음'인 경우에만 등록
 					}	

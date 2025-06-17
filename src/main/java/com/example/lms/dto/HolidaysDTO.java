@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class HolidaysDTO {
-	private int holidayId;
-	public String date;
-	public String name;
+	private Integer holidayId;
+	private String date;
+	private String name;
 }

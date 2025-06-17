@@ -21,13 +21,22 @@
 	        location.href = '/admin/academicSchedule?year=' + y + '&month=' + m;
 	    }
 	    
-	    function openPopup() {
+	    // 등록 팝업창
+	    function openPopupForInsert() {
 		    window.open(
-		      '/admin/holidays/insertHolidayForm',  // 이동할 경로
-		      'insertHoliday',                              // 팝업 이름(내부 식별용)
-		      'width=500,height=300,left=100,top=100'       // 팝업창 크기 및 위치
+		      '/admin/holidays/insertHolidayForm',       // 이동할 경로
+		      'insertHoliday',                           // 팝업 이름(내부 식별용)
+		      'width=500,height=300,left=100,top=100'  // 팝업창 크기 및 위치
 		    );
 		  }
+	    
+	    // 날짜 수정 팝업창
+	    function openPopupForEdit(date, holidayId) {
+		    const url = "${pageContext.request.contextPath}/admin/holidays/editHolidayForm?date=" + date + "&holidayId=" + holidayId;
+		    window.open(
+		    	url, 'editHoliday', 'width=500,height=300,left=100,top=100'
+		    );
+		}
     </script>
     
     <style>
@@ -57,7 +66,7 @@
         
         <!-- 휴강 등록 팝업 버튼 -->
 	    <div style="text-align: right; margin-bottom: 5px;">
-			<button onclick="openPopup()" class="register-button" style="margin-top: 0px;">
+			<button onclick="openPopupForInsert()" class="register-button" style="margin-top: 0px;">
 				+ 휴강 등록
 			</button>
 		</div>
@@ -86,12 +95,14 @@
                                    
                                        <%-- 휴강 --%>
                                        <c:when test="${memoDto.type eq '휴강'}">
-                                           <div class="memo holiday clickable"
-                                               onclick="location.href='${pageContext.request.contextPath}/admin/holidays/updateHolidayDate?date=${day.dateStr}'">
-                                               ${memoDto.memo}
-                                           </div>
-                                       </c:when>
-                                       
+                                           <c:if test="${memoDto.holidayId != null}">
+										       <div class="memo holiday clickable"
+										           onclick="openPopupForEdit('${day.dateStr}', ${memoDto.holidayId})">
+										           ${memoDto.memo}
+										       </div>
+										    </c:if>
+									   </c:when>
+										                                      
                                        <%-- 공휴일 --%>
                                        <c:when test="${memoDto.type eq '공휴일'}">
                                            <div class="memo holiday disabled">
