@@ -143,4 +143,20 @@
 			</when>
 		</choose>
 	</select>
+	
+	
+	<select id="selectCourseListNotEnded" resultType="com.example.lms.dto.CourseDTO">
+	    SELECT
+	        c.course_id AS courseId,
+	        c.course_name AS courseName,
+	        c.description,
+	        c.class_no AS classNo,
+	        c.start_date AS startDate,
+	        c.end_date AS endDate,
+	        c.teacher_no AS teacherNo,
+	        cl.classroom AS classroom   -- ★ 이거 추가!
+	    FROM course c
+	    INNER JOIN class cl ON c.class_no = cl.class_no
+	    WHERE c.end_date >= #{today}
+	</select>
 </mapper>

@@ -2,7 +2,11 @@ package com.example.lms.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,48 +16,61 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.impl.AttendanceServiceImpl;
+import com.example.lms.service.impl.CourseServiceImpl;
 
 @Controller
 public class AttendanceController {
     @Autowired AttendanceServiceImpl attendanceService;
+    @Autowired CourseServiceImpl courseService;
     
     // 출석 통계(전체) 페이지
     @GetMapping("/admin/attendanceStatistics")
     public String getAttendanceStatistics(Model model) {
         LocalDate now = LocalDate.now();
-        String startDate = now.withDayOfMonth(1).toString();     // 이번 달 1일
-        String endDate = LocalDate.now().plusDays(1).toString(); // 오늘 + 1일
+        // 진행 중인 강의만 조회
+        List<CourseDTO> courseList = courseService.selectCourseListNotEnded(now.toString());
 
-        // 강의(반) ID, 이름
-        List<Integer> courseIds = Arrays.asList(1, 2, 3, 4, 5);
-        List<String> classNames = Arrays.asList("A반", "B반", "C반", "D반", "E반");
-
-        // 통계 데이터 저장할 리스트
+        List<String> classNames = new ArrayList<>();
         List<Integer> studentCounts = new ArrayList<>();
         List<Integer> attendanceTotalCounts = new ArrayList<>();
         List<Integer> actuals = new ArrayList<>();
-
-        // 각 반(courseId)별 데이터 집계
-        for (Integer courseId : courseIds) {
-            int studentCount = attendanceService.getStudentCount(courseId);  // 학생 수
-            int attendanceTotalCount = attendanceService.getAttendanceTotalCount(startDate, endDate, studentCount, courseId); // 전체 출석 가능 횟수
-            int actual = attendanceService.getActualAttendance(startDate, endDate, courseId); // 실제 출석(지각포함) 횟수
-
+        List<Integer> courseIds = new ArrayList<>();
+        courseList.sort(Comparator.comparing(CourseDTO::getClassroom));
+        for (CourseDTO course : courseList) {
+            int courseId = course.getCourseId();
+            classNames.add(course.getClassroom()); // 반 이름 필드명에 맞게 변경
+            courseIds.add(courseId);
+            int studentCount = attendanceService.getStudentCount(courseId);
+            int attendanceTotalCount = attendanceService.getAttendanceTotalCount(
+                    now.withDayOfMonth(1).toString(),
+                    now.plusDays(1).toString(),
+                    studentCount,
+                    courseId
+            );
+            int actual = attendanceService.getActualAttendance(
+                    now.withDayOfMonth(1).toString(),
+                    now.plusDays(1).toString(),
+                    courseId
+            );
             studentCounts.add(studentCount);
             attendanceTotalCounts.add(attendanceTotalCount);
             actuals.add(actual);
         }
 
-        // JSP에서 쓸 데이터 모델에 저장
+        System.out.println("현재 진행 중인 강의 개수: " + courseList.size());
+        for (CourseDTO course : courseList) {
+            System.out.println(course);
+        }
+        
         model.addAttribute("classNames", classNames);
         model.addAttribute("studentCounts", studentCounts);
         model.addAttribute("attendanceTotalCounts", attendanceTotalCounts);
         model.addAttribute("actuals", actuals);
         model.addAttribute("courseIds", courseIds);
 
-        // 통계 페이지로 이동
         return "/admin/attendanceStatistics";
     }
     

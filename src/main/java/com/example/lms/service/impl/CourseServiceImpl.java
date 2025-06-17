@@ -65,4 +65,10 @@ public class CourseServiceImpl implements CourseService{
 		return courseMapper.getCountCourseListByTeacherNo(teacherNo, filter);
 	}
 	
+	@Override
+	public List<CourseDTO> selectCourseListNotEnded(String now) {
+
+		return courseMapper.selectCourseListNotEnded(now);
+	}
+	
 }

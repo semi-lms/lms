@@ -27,4 +27,6 @@ public interface CourseMapper {
 	List<CourseDTO> selectCourseListByTeacherNo(Map<String, Object> params);
 	// 페이징
 	int getCountCourseListByTeacherNo(int teacherNo, String filter);
+
+	List<CourseDTO> selectCourseListNotEnded(String now);
 }

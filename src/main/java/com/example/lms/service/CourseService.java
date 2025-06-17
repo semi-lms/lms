@@ -25,4 +25,6 @@ public interface CourseService {
 	public List<CourseDTO> getCourseListByTeacherNo(Map<String, Object> params);
 	//페이징
 	public int getCountCourseListByTeacherNo(int teacherNo, String filter);
+
+	List<CourseDTO> selectCourseListNotEnded(String now);
 }
