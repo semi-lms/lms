@@ -243,4 +243,33 @@ canvas {
     z-index: 9999;
     transition: transform 0.1s ease;
   }
+  
+    /* main 하단 리스트 이모지 */
+  .notice-list li::before {
+  content: "🔶";
+  font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
+  margin-right: 5px;
+}
+.qna-list li::before {
+  content: "🔷 ";
+   font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
+  margin-right: 5px;
+}
+.file-list li::before {
+  content: "📎 ";
+}
+
+/* main 하단 리스트 날짜 정렬 */
+.list-item {
+  position: relative;
+  padding-right: 100px; /* 날짜 공간 확보 */
+}
+
+.list-item .date {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 0.85em;
+  color: gray;
+}
 

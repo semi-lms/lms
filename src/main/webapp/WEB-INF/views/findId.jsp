@@ -24,6 +24,7 @@
 				</th>
 			</tr>
 		</table>
+		<button type="button" onclick="location.href='/login'">되돌아가기</button>
 		<button type="submit">확인</button>
 	</form>
 <script>
@@ -45,6 +46,7 @@
             success: function(result){
                 if(result && result!="NOT_FOUND"){
                     alert("회원님의 아이디는 " + result + "이거에용");
+                    window.location.href = "/login"; // 로그인 페이지로 이동
                 } else {
                     alert("일치하는 정보가 없네용? 간첩이세요?");
                 }

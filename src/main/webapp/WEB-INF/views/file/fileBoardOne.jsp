@@ -37,10 +37,12 @@
     <tr>
       <th>작성자</th>
 		<!-- 작성자 admin이면 '관리자'로 출력 -->
+		    <!--
 		    <form method="get" action="${pageContext.request.contextPath}/file/downloadAll">
               <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
-              <button type="submit">전체 다운로드(추후구현?)</button>
+             <-- <button type="submit">전체 다운로드(추후구현?)</button>
             </form>
+             -->
 		<td>
 			<c:choose>
 				<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>

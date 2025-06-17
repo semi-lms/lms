@@ -99,13 +99,8 @@ public class LoginController {
         session.invalidate();
         return "redirect:/main";
     }
-   // 게시글 목록
-    @GetMapping("/board")
-    public String boardList() {
- 
-        return "main";
-    }
 
+    // 아이디 찾기
     @GetMapping("/findId")
     public String findId() {
     	
@@ -125,6 +120,7 @@ public class LoginController {
         }
     }
     
+    // 비밀번호 찾기
     @GetMapping("/findPw")
     public String findPw() {
     	

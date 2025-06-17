@@ -30,6 +30,7 @@
 				</td>			
 			</tr>
 		</table>
+		<button type="button" onclick="location.href='/login'">되돌아가기</button>
 		<button type="submit">확인</button>
 	</form>
 <script>

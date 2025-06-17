@@ -1,5 +1,6 @@
 package com.example.lms.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import lombok.Data;
@@ -10,6 +11,6 @@ public class NoticeDTO {
 		private String adminId;
 		private String title;
 		private String content;
-		private String createDate;	// create_date 
-		private String updateDate;	// update_date
+		private Timestamp createDate;	// create_date 
+		private Timestamp updateDate;	// update_date
 }
