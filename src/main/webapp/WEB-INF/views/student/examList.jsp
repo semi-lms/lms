@@ -106,14 +106,17 @@
 </style>
 </head>
 <body>
-
+<div class="sidebar">
+  <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+</div>
 <div class="container">
-  <h1>시험 리스트</h1>
+  <h1>${loginUser.name}님의 시험 목록</h1>
 
   <div class="card-list">
     <c:forEach var="exam" items="${exams}">
       <c:choose>
-        <c:when test="${exam.status == '불가'}">
+     
+        <c:when test="${exam.status == '불가' and exam.submitStatus != '응시완료'}">
           <div class="card disabled">
             <h3>${exam.title}</h3>
             <p>시작일: ${exam.examStartDate}</p>
@@ -123,9 +126,10 @@
             <p>점수: ${exam.score}</p>
           </div>
         </c:when>
-        <c:otherwise>
-        <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&submissionId=${exam.submissionId}&page=1'">
 
+       
+        <c:otherwise>
+          <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
             <h3>${exam.title}</h3>
             <p>시작일: ${exam.examStartDate}</p>
             <p>종료일: ${exam.examEndDate}</p>

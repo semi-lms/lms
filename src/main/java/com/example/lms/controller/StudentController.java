@@ -130,8 +130,7 @@ public class StudentController {
 		return "student/myAttendance";
 	}
 	@GetMapping("/student/examList")
-	public String examList(@RequestParam(required = false) Integer studentNo,
-	                       @RequestParam(required = false) Integer examId,
+	public String examList( @RequestParam(required = false) Integer examId,
 	                       @RequestParam(defaultValue = "1") int currentPage,
 	                       @RequestParam(defaultValue = "10") int rowPerPage,
 	                       Model model,
@@ -143,7 +142,7 @@ public class StudentController {
 	        return "redirect:/login"; // 로그인 안 되어있거나 courseId 없으면 로그인 페이지로 리다이렉트
 	    }
 	    int courseId = loginUser.getCourseId();
-
+	    int studentNo =  loginUser.getStudentNo();
 	    // 페이징 처리
 	    int totalCnt = examService.getExamCnt(courseId);
 	    int lastPage = (int) Math.ceil((double) totalCnt / rowPerPage);
@@ -157,7 +156,7 @@ public class StudentController {
 	    examMap.put("rowPerPage", rowPerPage);
 
 	    // 시험 목록 조회
-	    List<ExamDTO> exams = examService.getExamListByStudent(endPage, startRow, rowPerPage);
+	    List<ExamDTO> exams = examService.getExamListByStudent(studentNo,  startRow, rowPerPage);
 
 	    // 모델에 값 추가
 	    model.addAttribute("exams", exams);
@@ -165,7 +164,6 @@ public class StudentController {
 	    model.addAttribute("studentNo", studentNo);
 	    model.addAttribute("currentPage", currentPage);
 	    model.addAttribute("startPage", startPage);
-	    model.addAttribute("endPage", endPage);
 	    model.addAttribute("lastPage", lastPage);
 
 	    return "student/examList";
@@ -182,7 +180,7 @@ public class StudentController {
 
 	    // 제출 여부 확인 (exam_submission 테이블에서 해당 학생, 시험의 제출 존재 여부)
 	    ExamSubmissionDTO submission = examService.getSubmissionByExamAndStudent(examId, loginUser.getStudentNo());
-
+	 
 	    if (submission != null) {
 	        // 제출한 상태면 결과페이지로 리다이렉트
 	        return "redirect:/student/examResult?submissionId=" + submission.getSubmissionId();
@@ -193,7 +191,7 @@ public class StudentController {
 	        @SuppressWarnings("unchecked")
 	        Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers");
 	        if (temp == null) temp = new HashMap<>();
-
+	
 	        model.addAttribute("questions", questions);
 	        model.addAttribute("examId", examId);
 	        model.addAttribute("tempAnswers", temp);
@@ -206,8 +204,9 @@ public class StudentController {
 
 	// 최종 제출 처리
 	@PostMapping("/student/submitExam")
-	public String submitExam(@ModelAttribute ExamSubmissionDTO submission, HttpSession session, Model model) {
+	public String submitExam(@ModelAttribute ExamSubmissionDTO submission, HttpSession session, Model model ) {
 		SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+		
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
@@ -221,7 +220,7 @@ public class StudentController {
 		List<ExamAnswerDTO> answers = submission.getAnswers();
 		int score = examService.submitExam(submission, answers);
 		model.addAttribute("score", score); 
-		return "redirect:/student/examResult"; //추후 결과페이지로 수정할거
+		 return "redirect:/student/examResult?submissionId=" + submission.getSubmissionId();
 	}
 	//시험 결과 보기
 	@GetMapping("/student/examResult")

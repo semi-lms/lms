@@ -20,7 +20,7 @@
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
 		  <a href="/manage/course" class="submenu-link">• 수강과목</a>
-		  <a href="/examList?courseId=${loginUser.courseId }" class="submenu-link">• 시험문제</a>
+		  <a href="/student/examList?studentNo=${loginUser.studentNo }" class="submenu-link">• 시험문제</a>
 		  <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}" class="submenu-link">• 강의일정</a>
 		</div>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>

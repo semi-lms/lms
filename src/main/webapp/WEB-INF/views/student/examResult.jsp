@@ -5,66 +5,90 @@
 <head>
     <title>시험 결과</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 900px;
-            margin: 40px auto;
+        .content-wrapper {
+            margin-left: 250px;
+            padding: 40px;
             background-color: #f7f9fc;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #333;
         }
-        h2 {
+
+        .content-wrapper h2 {
             text-align: center;
             color: #2c3e50;
             margin-bottom: 30px;
             letter-spacing: 1px;
         }
-        .score {
-            font-size: 28px;
-            font-weight: 700;
+
+        .content-wrapper .score {
+            font-size: 26px;
+            font-weight: 600;
             margin-bottom: 25px;
             text-align: center;
             color: #2980b9;
         }
+
+        .table-container {
+            max-width: 700px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
         .answer-list {
             border-collapse: collapse;
             width: 100%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-radius: 8px;
             overflow: hidden;
+            font-size: 14px;
         }
+
         .answer-list th, .answer-list td {
-            padding: 12px 18px;
+            padding: 8px 12px;
             text-align: center;
             border-bottom: 1px solid #e1e8ed;
         }
+
         .answer-list thead th {
             background-color: #2980b9;
             color: white;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.03em;
         }
-        .answer-list tbody tr:hover {
-            background-color: #f1f6fb;
+
+        .answer-list td:first-child,
+        .answer-list th:first-child {
+            width: 60px;
         }
+
+        .answer-list td:last-child,
+        .answer-list th:last-child {
+            width: 60px;
+        }
+
         .correct {
             color: #155724;
-            font-weight: bold;
             background-color: #d4edda;
             border-radius: 4px;
-            padding: 4px 10px;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 13px;
             display: inline-block;
         }
+
         .wrong {
             color: #721c24;
-            font-weight: bold;
             background-color: #f8d7da;
             border-radius: 4px;
-            padding: 4px 10px;
+            padding: 2px 8px;
+            font-weight: bold;
+            font-size: 13px;
             display: inline-block;
         }
-        a {
+
+        .content-wrapper a {
             display: inline-block;
             margin-top: 30px;
             padding: 10px 25px;
@@ -75,57 +99,67 @@
             transition: background-color 0.3s ease;
             font-weight: 600;
         }
-        a:hover {
+
+        .content-wrapper a:hover {
             background-color: #1c5980;
         }
-        /* 반응형 */
+
         @media (max-width: 600px) {
             .answer-list th, .answer-list td {
-                padding: 10px 8px;
+                padding: 6px 8px;
+                font-size: 12px;
             }
-            .score {
-                font-size: 22px;
+
+            .content-wrapper .score {
+                font-size: 20px;
             }
         }
     </style>
 </head>
 <body>
 
-<h2>시험 결과</h2>
-<p class="score">총 점수: ${score} 점</p>
+    <div class="sidebar">
+        <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+    </div>
 
-<table class="answer-list">
-    <thead>
-        <tr>
-            <th>문제 번호</th>
-            <th>선택한 답</th>
-            <th>정답</th>
-            <th>O/X</th>
-        </tr>
-    </thead>
-    <tbody>
-       <c:forEach var="answer" items="${answers}" varStatus="status">
-        <tr>
-            <td>${status.index + 1}</td>
-            <td><c:out value="${answer.answerNo}" /></td>
-            <td>${answer.correctNo }</td>
-            <td>
-                <c:choose>
-                    <c:when test="${answer.answerNo == answer.correctNo}">
-                        <span class="correct">O</span>
-                    </c:when>
-                    <c:otherwise>
-                        <span class="wrong">X</span>
-                    </c:otherwise>
-                </c:choose>
-            </td>
-        </tr>
-    </c:forEach>
-    </tbody>
-</table>
+    <div class="content-wrapper">
+        <h2>시험 결과</h2>
+        <p class="score">총 점수: ${score} 점</p>
 
-<br>
-<a href="/student/examList">시험 목록으로 돌아가기</a>
+        <div class="table-container">
+            <table class="answer-list">
+                <thead>
+                    <tr>
+                        <th>문제</th>
+                        <th>선택</th>
+                        <th>정답</th>
+                        <th>O/X</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="answer" items="${answers}" varStatus="status">
+                        <tr>
+                            <td>${status.index + 1}</td>
+                            <td><c:out value="${answer.answerNo}" /></td>
+                            <td>${answer.correctNo}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${answer.answerNo == answer.correctNo}">
+                                        <span class="correct">O</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="wrong">X</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/student/examList">시험 목록으로 돌아가기</a>
+    </div>
 
 </body>
 </html>

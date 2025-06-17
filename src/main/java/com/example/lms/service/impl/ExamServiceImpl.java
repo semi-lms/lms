@@ -13,8 +13,11 @@ import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamOptionDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
+import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.mapper.ExamMapper;
 import com.example.lms.service.ExamService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ExamServiceImpl implements ExamService {
@@ -97,8 +100,9 @@ public class ExamServiceImpl implements ExamService {
 
     // 학생별 시험 목록 조회
     @Override
-    public List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage) {
+    public List<ExamDTO> getExamListByStudent(int studentNo ,int startRow, int rowPerPage) {
     	Map<String, Object> param = new HashMap<>();
+
     	param.put("studentNo", studentNo);
     	param.put("startRow", startRow);
     	param.put("rowPerPage", rowPerPage);
