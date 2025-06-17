@@ -78,12 +78,12 @@
 	 VALUES (#{submissionId}, #{examId}, #{studentNo}, now(), 0)
 	</insert>
 	<!-- 시험문제 가져오기  -->
-	<select id="getQuestionsByExamId" resultType="com.example.lms.dto.ExamQuestionDTO">
-    SELECT question_id AS questionId , exam_id AS examId , question_no questionNo , 
-    question_title AS questionTitle, question_text AS questionText, correct_no AS correctNo
-   	FROM exam_question
-    WHERE exam_id = #{examId}
-    ORDER BY question_no ASC
+	<select id="getQuestionsByExamId" parameterType="int" resultType="com.example.lms.dto.ExamQuestionDTO">
+		SELECT question_id AS questionId , exam_id AS examId , question_no questionNo , 
+		question_title AS questionTitle, question_text AS questionText, correct_no AS correctNo
+		FROM exam_question
+		WHERE exam_id = #{examId}
+		ORDER BY question_no ASC
 	</select>
 	
 
@@ -168,5 +168,41 @@
 	        WHERE student_no = #{studentNo}
 	    )
 	</select>
-
+	
+	<!-- 시험 이름 가져오기 -->
+	<select id="getExamTitle" parameterType="int" resultType="String">
+		SELECT title FROM exam WHERE exam_id = #{examId}
+	</select>
+	
+	<!-- 문제가 등록되었는지 count -->
+	<select id="getQuestionCnt" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM exam WHERE exam_id = #{examId}
+	</select>
+	
+	<!-- questionId로 question 가져오기 -->
+	<select id="getQuestionByQuestionId" parameterType="int" resultType="com.example.lms.dto.ExamQuestionDTO">
+		SELECT question_id questionId, exam_id examId, question_no questionNo, question_title questionTitle, question_text questionText, correct_no correctNo
+		FROM exam_question WHERE question_id = #{questionId}
+	</select>
+	
+	<!-- 문제 업데이트 -->
+	<update id="updateQuestion" parameterType="map">
+		UPDATE exam_question SET
+		question_title = #{questionTitle}, question_text = #{questionText}, correct_no = #{correctNo}
+		WHERE question_id = #{questionId}
+	</update>
+	
+	<!-- 보기 업데이트 -->
+	<update id="updateOption" parameterType="map">
+		UPDATE exam_option SET
+		option_text = #{optionText}
+		WHERE question_id = #{questionId} AND option_no = #{optionNo}
+	</update>
+	
+	
+	
+	
+	
+	
+	
 </mapper>

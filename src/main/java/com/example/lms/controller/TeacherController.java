@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.ExamDTO;
+import com.example.lms.dto.ExamOptionDTO;
+import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AttendanceService;
@@ -26,6 +28,7 @@ import com.example.lms.service.CourseService;
 import com.example.lms.service.ExamService;
 import com.example.lms.service.StudentService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -333,8 +336,63 @@ public class TeacherController {
 		} else {
 			attendanceService.updateAttendance(attendanceDto);
 		};
-		
-		return "redirect:/attendanceList";
+		int courseId = attendanceDto.getCourseId();
+		return "redirect:/attendanceList?courseId="+courseId;
 	}
 	
+	// 공결
+	
+	
+	// 문제 리스트
+	@GetMapping("/questionList")
+	public String questionList(@RequestParam(name = "examId", required = false, defaultValue = "1") int examId
+								, Model model) {
+		int qCnt = examService.getQuestionCnt(examId);
+		if(qCnt != 0) {
+			List<ExamQuestionDTO> questions = examService.getQuestionList(examId);
+			model.addAttribute("questions", questions);
+		}
+		
+		String title = examService.getExamTitle(examId);
+		
+		
+		model.addAttribute("examId", examId);
+		model.addAttribute("title", title);
+		model.addAttribute("qCnt", qCnt);
+		
+		return "/teacher/questionList";
+	}
+	
+	// 문제 상세 페이지
+	@GetMapping("/questionOne")
+	public String questionOne(@RequestParam int questionId, Model model) {
+		ExamQuestionDTO question = examService.getQuestionByQuestionId(questionId); // 문제 1개
+	    List<ExamOptionDTO> options = examService.getOptionsByQuestionId(questionId); // 보기들
+
+	    model.addAttribute("question", question);
+	    model.addAttribute("options", options);
+		
+		return "/teacher/questionOne";
+	}
+	
+	// 문제, 보기 수정 페이지
+	@PostMapping("/updateQuestion")
+	public String updateQuestion(
+	        @RequestParam("questionId") int questionId,
+	        @RequestParam("questionTitle") String questionTitle,
+	        @RequestParam("questionText") String questionText,
+	        @RequestParam("correctNo") int correctNo,
+	        HttpServletRequest request
+	) {
+	    // 문제 내용 업데이트
+	    examService.updateQuestion(questionId, questionTitle, questionText, correctNo);
+
+	    // 보기 업데이트
+	    for (int i = 1; i <= 4; i++) {
+	        String optionText = request.getParameter("option" + i);
+	        examService.updateOption(questionId, i, optionText);
+	    }
+
+	    return "redirect:/questionOne?questionId=" + questionId;
+	}
 }

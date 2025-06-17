@@ -47,4 +47,18 @@ public interface ExamMapper {
 	//학생 시험 리스트
 	List<ExamDTO> selectExamListByStudentNo(Map<String, Object> param);
 	int countExamListByStudentNo(int studentNo);
+	
+	// 시험 이름 가져오기
+	String getExamTitle(int examId);
+	
+	// 시험 문제 수 가져오기
+	int getQuestionCnt(int examId);
+	
+	// questionId 로 문제 가져오기
+	ExamQuestionDTO getQuestionByQuestionId(int questionId);
+	
+	//문제 수정
+	int updateQuestion(int questionId, String questionTitle, String questionText, int correctNo);
+	//보기 수정
+	int updateOption(int questionId, int optionNo, String optionText);
 }
