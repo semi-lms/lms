@@ -171,3 +171,65 @@ canvas {
   z-index: 9999;
   border-radius : 100px;
 }
+/* 공통메인 */
+.common-main-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.common-card {
+  flex: 1;
+  min-width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 25px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.common-card:hover {
+  transform: translateY(-5px);
+}
+
+.common-card h3 {
+ text-align: center;
+  font-size: 1.3em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.common-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.common-card li {
+  margin-bottom: 8px;
+  font-size: 0.95em;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.view-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9em;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.view-btn:hover {
+  background-color: #0056b3;
+}
+
