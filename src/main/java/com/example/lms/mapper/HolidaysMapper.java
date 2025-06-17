@@ -7,14 +7,14 @@ import com.example.lms.dto.HolidaysDTO;
 @Mapper
 public interface HolidaysMapper {
 	// 휴강 삭제
-	int deleteHoliday(HolidaysDTO holidaysDTO);
+	int deleteHoliday(HolidaysDTO holidaysDto);
 	
 	// 휴강 등록
-	int insertHoliday(HolidaysDTO holidaysDTO);
+	int insertHoliday(HolidaysDTO holidaysDto);
 	
 	// 휴강 등록 시 날짜 유효성 검사
 	String getHolidayNameByDate(String date);
 	
 	// 휴강 날짜 수정 시 날짜 유효성 검사
-	boolean isDuplicateDateForUpdate(HolidaysDTO holidaysDTO);
+	boolean isDuplicateDateForUpdate(HolidaysDTO holidaysDto);
 }

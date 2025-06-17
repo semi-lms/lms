@@ -28,10 +28,12 @@ import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
+import com.example.lms.dto.TeacherDTO;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.ExamService;
 import com.example.lms.service.StudentService;
+import com.example.lms.service.TeacherService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -40,14 +42,20 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Controller
 public class TeacherController {
-	@Autowired
-	private StudentService studentService;
-	@Autowired
-	private ExamService examService;
-	@Autowired
-	private CourseService courseService;
-	@Autowired
-	private AttendanceService	attendanceService;
+	@Autowired private StudentService studentService;
+	@Autowired private ExamService examService;
+	@Autowired private CourseService courseService;
+	@Autowired private AttendanceService attendanceService;
+	@Autowired private TeacherService teacherService;
+	
+	
+	// 강사 리스트
+	@GetMapping("/admin/teacherList")
+	public String getTeacherList(@ModelAttribute TeacherDTO teacherDto, Model model) {
+		List<TeacherDTO> teacherList = teacherService.getTeacherList(teacherDto);
+		model.addAttribute("teacherList", teacherList);
+		return "admin/teacherList";
+	}
 	
 	// 강의 리스트
 	@GetMapping("/courseListFromTeacher")

@@ -48,5 +48,26 @@
 		WHERE teacher_no = #{teacherNo}
 	</update>
 	
-
+	<!-- 강사 리스트 -->
+	<select id="getTeacherList" resultType="com.example.lms.dto.TeacherDTO">
+		SELECT 
+			t.name AS name, 
+			CONCAT(
+				SUBSTRING(t.phone, 1, 3), '-', 
+				SUBSTRING(t.phone, 4, 4), '-', 
+				SUBSTRING(t.phone, 8, 4)
+			) AS phone,
+			CONCAT(
+				SUBSTRING(t.sn, 1, 6), '-', 
+				SUBSTRING(t.sn, 7, 7)
+			) AS sn,
+			t.address AS address,
+			t.email AS email,
+			t.teacher_id AS teacherId,
+			c.course_name AS courseName
+		FROM teacher t
+		INNER join course c
+		ON t.course_id = c.course_id
+		ORDER BY t.NAME ASC;
+	</select>
 </mapper>

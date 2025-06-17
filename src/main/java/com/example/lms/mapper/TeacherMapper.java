@@ -1,5 +1,7 @@
 package com.example.lms.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.lms.dto.TeacherDTO;
@@ -16,4 +18,6 @@ public interface TeacherMapper {
 	String selectPasswordById(String teacherId);
 	int updateTeacherInfo(TeacherDTO teacherDto);
 	
+	// 강사 리스트
+	List<TeacherDTO> getTeacherList(TeacherDTO teacherDto);
 }

@@ -29,8 +29,8 @@ public class HolidaysController {
 	}
 	
 	@PostMapping("/holidays/insertHoliday")
-	public String insertHoliday(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
-		holidaysService.insertHoliday(holidaysDTO);
+	public String insertHoliday(@ModelAttribute HolidaysDTO holidaysDto, Model model) {
+		holidaysService.insertHoliday(holidaysDto);
 		model.addAttribute("success", true);
 		return "admin/insertHolidayForm";  // 리다이렉트로 할 경우 팝업창 닫는 JS 실행 불가능
 	}
@@ -55,8 +55,8 @@ public class HolidaysController {
 	}
 	
 	@PostMapping("/holidays/updateHolidayDate")
-	public String updateHolidayDate(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
-		holidaysService.updateHolidayDate(holidaysDTO);
+	public String updateHolidayDate(@ModelAttribute HolidaysDTO holidaysDto, Model model) {
+		holidaysService.updateHolidayDate(holidaysDto);
 		model.addAttribute("success", true);
 		return "admin/editHolidayForm";
 	}
@@ -76,8 +76,8 @@ public class HolidaysController {
 	
 	// 휴강 삭제 (팝업)
 	@PostMapping("/holidays/deleteHoliday")
-	public String deleteHoliday(@ModelAttribute HolidaysDTO holidaysDTO, Model model) {
-		holidaysService.deleteHoliday(holidaysDTO);
+	public String deleteHoliday(@ModelAttribute HolidaysDTO holidaysDto, Model model) {
+		holidaysService.deleteHoliday(holidaysDto);
 		model.addAttribute("deleted", true);
 		return "admin/editHolidayForm";
 	}

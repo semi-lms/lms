@@ -15,20 +15,20 @@ public class HolidaysServiceImpl implements HolidaysService {
 	private HolidaysMapper holidaysMapper;
 	
 	@Override
-	public int deleteHoliday(HolidaysDTO holidaysDTO) {
-		return holidaysMapper.deleteHoliday(holidaysDTO);
+	public int deleteHoliday(HolidaysDTO holidaysDto) {
+		return holidaysMapper.deleteHoliday(holidaysDto);
 	}
 	
 	@Override
-	public int insertHoliday(HolidaysDTO holidaysDTO) {
-		return holidaysMapper.insertHoliday(holidaysDTO);
+	public int insertHoliday(HolidaysDTO holidaysDto) {
+		return holidaysMapper.insertHoliday(holidaysDto);
 	}
 	
 	@Override
 	@Transactional
-	public void updateHolidayDate(HolidaysDTO holidaysDTO) {
-		holidaysMapper.deleteHoliday(holidaysDTO);  // 기존 날짜 삭제
-		holidaysMapper.insertHoliday(holidaysDTO);  // 새 날짜로 재등록
+	public void updateHolidayDate(HolidaysDTO holidaysDto) {
+		holidaysMapper.deleteHoliday(holidaysDto);  // 기존 날짜 삭제
+		holidaysMapper.insertHoliday(holidaysDto);  // 새 날짜로 재등록
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class HolidaysServiceImpl implements HolidaysService {
 	}
 
 	@Override
-	public boolean isDuplicateDateForUpdate(HolidaysDTO holidaysDTO) {
-		return holidaysMapper.isDuplicateDateForUpdate(holidaysDTO);
+	public boolean isDuplicateDateForUpdate(HolidaysDTO holidaysDto) {
+		return holidaysMapper.isDuplicateDateForUpdate(holidaysDto);
 	}
 }
