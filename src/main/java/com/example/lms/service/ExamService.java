@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
+import com.example.lms.dto.ExamOptionDTO;
+import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 
 public interface ExamService {
@@ -29,4 +31,19 @@ public interface ExamService {
 	
 	int getExamListCountByStudent(int studentNo);
 	
+	// 한페이지에 문제 출력
+	List<ExamQuestionDTO> getQuestionList(int examId);
+	// 시험 이름 가져오기
+	String getExamTitle(int examId);
+	// 문제 수 가져오기
+	int getQuestionCnt(int examId);
+	// questionId로 문제 가져오기
+	ExamQuestionDTO getQuestionByQuestionId(int questionId);
+	// 옵션 가져요기
+	List<ExamOptionDTO> getOptionsByQuestionId(int questionId);
+	
+	// 문제 수정
+	int updateQuestion(int questionId, String questionTitle, String questionText, int correctNo);
+	// 보기 수정
+	int updateOption(int questionId, int optionNo, String optionText);
 }

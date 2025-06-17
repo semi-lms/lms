@@ -116,7 +116,47 @@ public class ExamServiceImpl implements ExamService{
 	public int getExamListCountByStudent(int studentNo) {
 		return examMapper.countExamListByStudentNo(studentNo);
 	}
-
+	
+	// 한페이지에 문제출력
+	@Override
+	public List<ExamQuestionDTO> getQuestionList(int examId) {
+		return examMapper.getQuestionsByExamId(examId);
+	}
+	
+	// 시험 이름 가져오기
+	@Override
+	public String getExamTitle(int examId) {
+		return examMapper.getExamTitle(examId);
+	}
+	
+	// 문제 수 가져오기
+	@Override
+	public int getQuestionCnt(int examId) {
+		return examMapper.getQuestionCnt(examId);
+	}
+	
+	// questionId로 문제 가져오기
+	@Override
+	public ExamQuestionDTO getQuestionByQuestionId(int questionId) {
+		return examMapper.getQuestionByQuestionId(questionId);
+	}
+	
+	// option 가져오기(따로)
+	@Override
+	public List<ExamOptionDTO> getOptionsByQuestionId(int questionId) {
+		return examMapper.getOptionsByQuestionId(questionId);
+	}
+	
+	// 문제 수정
+	@Override
+	public int updateQuestion(int questionId, String questionTitle, String questionText, int correctNo) {
+		return examMapper.updateQuestion(questionId, questionTitle, questionText, correctNo);
+	}
+	// 보기 수정
+	@Override
+	public int updateOption(int questionId, int optionNo, String optionText) {
+		return examMapper.updateOption(questionId, optionNo, optionText);
+	}
 }
 
 
