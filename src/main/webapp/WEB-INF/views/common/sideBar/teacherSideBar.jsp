@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 
 
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
@@ -27,7 +28,14 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-
+document.addEventListener('DOMContentLoaded', () => {
+	  const cursorImg = document.getElementById('custom-cursor');
+	  document.addEventListener('mousemove', function (e) {
+	    cursorImg.style.left = (e.clientX + 30) + 'px';  // 마우스 x좌표 + 30px
+	    cursorImg.style.top = (e.clientY + 30) + 'px';   // 마우스 y좌표 + 30px
+	  });
+	});
+	
 function toggleSubmenu() {
   $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
 }

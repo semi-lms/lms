@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+    <img src="/img/cursor.png" id="custom-cursor" alt="커서" />
+
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
@@ -27,4 +29,13 @@
 function toggleSubmenu() {
   $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+	  const cursorImg = document.getElementById('custom-cursor');
+	  document.addEventListener('mousemove', function (e) {
+	    cursorImg.style.left = (e.clientX + 30) + 'px';  
+	    cursorImg.style.top = (e.clientY + 30) + 'px';   
+	  });
+	});
 </script>
+

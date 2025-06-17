@@ -14,6 +14,7 @@
 </head>
 <body>
 
+<img src="${pageContext.request.contextPath}/img/cursor.png" id="custom-cursor" />
 	<!-- 헤더 include -->
 	<c:choose>
 		<c:when test="${sessionScope.loginUser.role eq 'admin'}">
@@ -148,6 +149,14 @@
 
 	<!-- footer -->
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
-	
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		  const cursorImg = document.getElementById('custom-cursor');
+		  document.addEventListener('mousemove', function (e) {
+		    cursorImg.style.left = (e.clientX + 30) + 'px';  // 마우스 x좌표 + 30px
+		    cursorImg.style.top = (e.clientY + 30) + 'px';   // 마우스 y좌표 + 30px
+		  });
+		});
+</script>
 </body>
 </html>
