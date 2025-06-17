@@ -46,7 +46,7 @@ header {
 .card.mypage-box {
     flex: 1;
     max-width: 320px;
-    background-color: #D9F0F1;
+ background-color: #E4F6D8; /* 연한 연두 크림톤 */
 box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1); /* 연두빛 살짝 넣은 그림자 */
     border-radius: 12px;
     padding: 30px 20px;
@@ -55,8 +55,8 @@ box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1); /* 연두빛 살짝 넣은 그림
 }
 
 .mypage-box h2 {
+    font-size: 1.3em;  
     margin-top: 0;
-    font-size: 1.5em;
     color: #333;
 }
 
@@ -66,28 +66,30 @@ box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1); /* 연두빛 살짝 넣은 그림
 }
 
 a.btn {
+	
     display: inline-block;
     margin: 10px 5px;
-    padding: 10px 20px;
+   padding: 6px 14px;       /* 기존 10px 20px -> 좀 작게 */
+    font-size: 0.9em;        /* 폰트 크기 줄임 */
     border-radius: 6px;
     text-decoration: none;
     color: white;
-    background-color: blue;
+      background-color: #4CAF50; 
     font-weight: bold;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 a.btn:hover {
-    background-color: #0056b3;
+     background-color: #388E3C; 
     transform: scale(1.05);
 }
 
 a.btn.logout {
-    background-color: #dc3545;
+    background-color: #D9534F; /* 톤 다운 레드 */
 }
 
 a.btn.logout:hover {
-    background-color: #b52d3b;
+    background-color: #B52A34; /* 진한 레드 */
     transform: scale(1.05);
 }
 
@@ -186,7 +188,7 @@ canvas {
 .common-card {
   flex: 1;
   min-width: 280px;
-  background: #fff;
+  background: #D3EAF2;
   border-radius: 12px;
   padding: 20px 25px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
