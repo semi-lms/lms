@@ -1,6 +1,5 @@
 package com.example.lms.service.impl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,41 +85,24 @@ public class ExamServiceImpl implements ExamService{
 
 		return score; 
 
-	}
-	public List<ExamQuestionDTO> getQuestionsByPage(int examId, int page) {
+	}//페이지별로 문제가져오기(안씀)
+	
+	//문제가져오기
+	public List<ExamQuestionDTO> getAllQuestions(int examId) {
 		List<ExamQuestionDTO> allQuestions = examMapper.getQuestionsByExamId(examId);
 
-		int pageSize = 1; // 페이지당 문제 수
-		int fromIndex = (page - 1) * pageSize;
-		int toIndex = Math.min(fromIndex + pageSize, allQuestions.size());
-
-		if (fromIndex >= allQuestions.size()) {
-			return new ArrayList<>();
-		}
-
-		List<ExamQuestionDTO> pagedQuestions = allQuestions.subList(fromIndex, toIndex);
-
-
-		for (ExamQuestionDTO question : pagedQuestions) {
+		for (ExamQuestionDTO question : allQuestions) {
 			List<ExamOptionDTO> options = examMapper.getOptionsByQuestionId(question.getQuestionId());
 			question.setOptions(options);
 		}
 
-
-		return pagedQuestions;
+		return allQuestions;
 	}
+	
 
-	@Override
-	public boolean saveAnswerTemporary(ExamAnswerDTO answer) {
-		//  세션이나 DB 임시 테이블에 저장 처리
-		return examMapper.insertAnswer(answer) > 0;
-	}
 	//한 한생의 시험들 응시상태 확인
-	@Override
-	public Map<Integer, String> getSubmitStatusMap(int studentNo, List<Integer> examIdList) {
-		return examMapper.getSubmitStatusMap(studentNo, examIdList);
-	}
-	//학생별 시험별 점수 확인
+
+	//학생별 문제 가져오기
 	@Override
 	public List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage) {
 		Map<String, Object> param = new HashMap<>();

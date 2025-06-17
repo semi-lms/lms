@@ -12,7 +12,7 @@
     margin: 0;
     padding: 20px;
     display: flex;
-    justify-content: center; /* 가로 가운데 정렬 */
+    justify-content: center;
   }
 
   .container {
@@ -30,48 +30,78 @@
     color: #333;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
+  /* 카드 컨테이너 */
+  .card-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
   }
 
-  th, td {
-    padding: 14px 18px;
-    border-bottom: 1px solid #e1e4e8;
-  }
-
-  th {
-    background-color: #007BFF;
-    color: white;
-    font-weight: 600;
-  }
-
-  tr:hover {
-    background-color: #f1f5f9;
+  /* 카드 하나 */
+  .card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 250px;
     cursor: pointer;
+    transition: box-shadow 0.3s ease;
   }
 
-  a {
-    text-decoration: none;
+  .card:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+
+  /* 응시불가능 카드 스타일 */
+  .card.disabled {
+    background: #f0f0f0;
+    color: #999;
+    cursor: default;
+    box-shadow: none;
+  }
+
+  .card.disabled:hover {
+    box-shadow: none;
+  }
+
+  .card h3 {
+    margin: 0 0 12px;
     color: #007BFF;
-    font-weight: 600;
   }
 
-  a:hover {
-    text-decoration: underline;
+  .card.disabled h3 {
+    color: #999;
   }
 
-  span {
+  .card p {
+    margin: 6px 0;
     font-weight: 600;
     color: #555;
-    margin: 0 6px;
+  }
+
+  .card.disabled p {
+    color: #999;
   }
 
   /* pagination */
   .pagination {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 30px;
+  }
+  .pagination span {
+    font-weight: 600;
+    color: #555;
+    margin: 0 6px;
+  }
+  .pagination a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: 600;
+  }
+  .pagination a:hover {
+    text-decoration: underline;
   }
 </style>
 </head>
@@ -79,25 +109,33 @@
 
 <div class="container">
   <h1>시험 리스트</h1>
-  <table>
-    <tr>
-      <th>제목</th>
-      <th>시작일</th>
-      <th>종료일</th>
-      <th>응시여부</th>     
-      <th>응시가능여부</th>
-      <th>점수</th>
-    </tr>
+
+  <div class="card-list">
     <c:forEach var="exam" items="${exams}">
-      <tr onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
-        <td>${exam.title}</td>
-        <td>${exam.examStartDate}</td>
-        <td>${exam.examEndDate}</td>
-        <td>${exam.submitStatus}</td> 
-        <td>${exam.score}</td>
-      </tr>
+      <c:choose>
+        <c:when test="${exam.status == '불가'}">
+          <div class="card disabled">
+            <h3>${exam.title}</h3>
+            <p>시작일: ${exam.examStartDate}</p>
+            <p>종료일: ${exam.examEndDate}</p>
+            <p>응시여부: ${exam.submitStatus}</p>
+            <p>응시가능여부: ${exam.status}</p>
+            <p>점수: ${exam.score}</p>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
+            <h3>${exam.title}</h3>
+            <p>시작일: ${exam.examStartDate}</p>
+            <p>종료일: ${exam.examEndDate}</p>
+            <p>응시여부: ${exam.submitStatus}</p>
+            <p>응시가능여부: ${exam.status}</p>
+            <p>점수: ${exam.score}</p>
+          </div>
+        </c:otherwise>
+      </c:choose>
     </c:forEach>
-  </table>
+  </div>
 
   <div class="pagination">
     <c:forEach var="i" begin="1" end="${endPage}">

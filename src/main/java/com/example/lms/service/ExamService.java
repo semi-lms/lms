@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
-import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
 
 public interface ExamService {
@@ -24,14 +23,8 @@ public interface ExamService {
 	// 시험 리스트 삭제
 	int removeExam(int examId);
 	// 시험 제출
-	int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers);
-	// 시험 임시 저장
-	boolean saveAnswerTemporary(ExamAnswerDTO answer);
-	// 페이지별 문제 출력
-	Map<Integer, String> getSubmitStatusMap(int studentNo, List<Integer> examIdList);
-	
-	List<ExamQuestionDTO> getQuestionsByPage(int examId, int page);
-	
+	int submitExam(ExamSubmissionDTO submission, List<ExamAnswerDTO> answers);;
+	// 페이지별 문제 출력	
 	List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage);
 	
 	int getExamListCountByStudent(int studentNo);
