@@ -31,7 +31,7 @@ body { margin: 0; padding: 0; }
                 <th>반</th>
                 <th>강의명</th>
                 <th>출석 가능 일수</th>
-                <th>실제 출석</th>
+                <th>출석 일수</th>
                 <th>출석률(%)</th>
             </tr>
             <!-- 각 반 별로 반복 -->
@@ -94,7 +94,7 @@ body { margin: 0; padding: 0; }
             labels: labels,
             datasets: [
                 {
-                    label: '전체 출석 가능',
+                    label: '출석 가능 일수',
                     data: totals,
                     backgroundColor: '#1e90ffcc',
                     borderColor: '#1e90ff',
@@ -102,7 +102,7 @@ body { margin: 0; padding: 0; }
                     yAxisID: 'y',
                 },
                 {
-                    label: '실제 출석',
+                    label: '출석 일수',
                     data: actuals,
                     backgroundColor: '#ffd600cc',
                     borderColor: '#ffd600',        
