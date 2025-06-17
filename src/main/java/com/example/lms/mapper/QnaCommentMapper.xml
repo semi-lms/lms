@@ -10,6 +10,7 @@
 			writer_id AS writerId,
 			writer_role AS writerRole,
 			content,
+			parent_comment_id AS parentCommentId,
 			create_date AS createDate,
 			update_date AS updateDate
 		FROM qna_comment
@@ -19,14 +20,15 @@
 	
 	<!-- 댓글 작성 -->
 	<insert id="insertQnaComment" parameterType="com.example.lms.dto.QnaCommentDTO">
-		INSERT INTO qna_comment (qna_id, writer_id, writer_role, content, create_date)
-			VALUES(#{qnaId}, #{writerId}, #{writerRole}, #{content}, NOW() + INTERVAL 9 HOUR)
+		INSERT INTO qna_comment (qna_id, writer_id, writer_role, content, parent_comment_id, create_date)
+			VALUES(#{qnaId}, #{writerId}, #{writerRole}, #{content}, #{parentCommentId}, NOW() + INTERVAL 9 HOUR)
 	</insert>
 	
 	<!-- 댓글 수정 -->
 	<update id="updateQnaComment" parameterType="com.example.lms.dto.QnaCommentDTO">
 		UPDATE qna_comment
 		SET content= #{content},
+			
 			update_date = #{updateDate}
 		WHERE comment_id = #{commentId}
 	</update>
@@ -39,6 +41,12 @@
 		WHERE comment_id = #{commentId}
 	</delete>
 	
+	<!-- 대댓글도  삭제-->
+	<delete id="deleteRepliesByParentId" parameterType="int">
+	  DELETE FROM qna_comment
+	  WHERE parent_comment_id = #{commentId}
+	</delete>
+	
 	<!-- 댓글 1개 조회 -->
 	<select id="selectQnaCommentById" parameterType="int" resultType="com.example.lms.dto.QnaCommentDTO">
 	SELECT 
@@ -47,11 +55,13 @@
 		writer_id AS writerId,
 		writer_role AS writerRole,
 		content,
+		parent_comment_id AS parentCommentId,
 		create_date AS createDate,
 		update_date AS updateDate
 	FROM qna_comment
 	WHERE comment_id = #{commentId}
-</select>
-	
+	</select>
 
+	
+	
 </mapper>

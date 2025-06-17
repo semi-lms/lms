@@ -23,6 +23,11 @@ public interface QnaCommentMapper {
 	// 댓글 삭제
 	int deleteQnaComment(int qnaCommentDto);
 	
+	// 대댓글 삭제
+	int deleteRepliesByParentId(int commentId);
+	
 	// 댓글 1개조회
 	QnaCommentDTO selectQnaCommentById(int commentId);
+	
+	
 }

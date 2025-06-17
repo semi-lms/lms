@@ -61,6 +61,7 @@ public class QnaCommentController {
 	@PostMapping("/insertQnaComment")
 	public String insertQnaComment(@RequestParam("qnaId") int qnaId,			// 댓글이 달릴 qna 글 번호를 파라미터로 받음
 									@RequestParam("content") String content,	// 사용자가 입력한 댓글 내용
+									@RequestParam(value = "parentCommentId", required = false) Integer parentCommentId,
 									HttpSession session) {						// 로그인 정보를 가져오기 위해 세션 객체도 함께 받음
 			
 		// 세션에서 로그인 된 사용자 정보를 꺼냄
@@ -75,6 +76,9 @@ public class QnaCommentController {
 		
 		// 댓글 본문 내용 저장
 		comment.setContent(content);
+		
+		// 일반 댓글이면 null, 대댓글이면 부모 ID
+		comment.setParentCommentId(parentCommentId);
 		
 	    // 댓글 작성자 ID를 설정
 	    //   - admin이면 adminId,
@@ -139,7 +143,7 @@ public class QnaCommentController {
 						            @RequestParam("qnaId") int qnaId, // 다시 돌아가기 위한 정보
 						            HttpSession session,
 						            RedirectAttributes ra) {
-    	System.out.println("🟢 deleteQnaComment 들어옴"); // 로그 확인용
+    	// System.out.println("🟢 deleteQnaComment 들어옴"); // 로그 확인용
 	// 로그인 유저 정보 가져오기
 	SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
 	
@@ -169,6 +173,8 @@ public class QnaCommentController {
 	}
 	
 	// 삭제 수행
+	// 삭제 순서 대댓글 -> 댓글
+	qnaCommentService.deleteRepliesByParentId(commentId);
 	qnaCommentService.deleteQnaComment(commentId);
 	
 	// 댓글 삭제 후 원래 QnA 상세 페이지로 리다이렉트

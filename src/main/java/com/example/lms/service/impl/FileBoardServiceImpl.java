@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lms.dto.FileBoardDTO;
 import com.example.lms.dto.FileDTO;
@@ -52,6 +53,7 @@ public class FileBoardServiceImpl implements FileBoardService {
 	}
 
 	@Override
+	@Transactional
 	public int deleteFileBoard(int fileBoardNo) {
 	    // 1. 파일 목록 불러오기
 	    List<FileDTO> fileList = fileMapper.selectFileListByBoardNo(fileBoardNo);
@@ -60,7 +62,7 @@ public class FileBoardServiceImpl implements FileBoardService {
 	    for (FileDTO file : fileList) {
 	        File f = new File("C:/" + file.getFilePath()); // ex) upload/abcd1234.jpg
 	        if (f.exists()) {
-	            f.delete();
+	            f.delete();		// 실제 디스크에서 삭제
 	        }
 	    }
 

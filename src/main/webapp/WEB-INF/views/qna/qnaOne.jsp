@@ -29,117 +29,162 @@
 <div class="qna-content">
   <h2>qna 상세보기</h2>
 
-  <table border="1" cellpadding="10">
-    <tr>
-      <th>작성자</th>
-      <td>${qna.studentName}</td>
-    </tr>
-    <tr>
-      <th>제목</th>
-      <td>${qna.title}</td>
-    </tr>
-    <tr>
-      <th>내용</th>
-      <td style="white-space: pre-wrap;">${qna.content}</td>
-    </tr>
-    <tr>
-      <th>작성일</th>
-      <td><fmt:formatDate value="${qna.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-    </tr>
+  <table class="qna-table">
+    <tr><th>작성자</th><td>${qna.studentName}</td></tr>
+    <tr><th>제목</th><td>${qna.title}</td></tr>
+    <tr><th>내용</th><td style="white-space: pre-wrap;">${qna.content}</td></tr>
+    <tr><th>작성일</th><td><fmt:formatDate value="${qna.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td></tr>
   </table>
 
   <br>
 
-<!-- 학생인 경우: 수정 + 삭제 버튼 나란히 -->
-<c:if test="${loginUser.role eq 'student' && loginUser.studentNo eq qna.studentNo}">
-  <div style="display: flex; gap: 10px;">
-    <!-- 수정 버튼 -->
-    <form method="get" action="${pageContext.request.contextPath}/qna/updateQna">
-      <input type="hidden" name="qnaId" value="${qna.qnaId}">
-      <button type="submit">수정</button>
-    </form>
-
-    <!-- 삭제 버튼 -->
-    <form id="studentDeleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna">
-      <input type="hidden" name="qnaId" value="${qna.qnaId}">
-      <!-- 삭제할경우 비밀번호 입력 -->
-      <input type="hidden" name="pw" id="pw"> <!-- JS에서 값 넣을 자리 -->
-      <button type="button" onclick="handleDelete()">삭제</button>
-    </form>
-  </div>
-</c:if>
-
-<!-- 관리자일 경우: 삭제만 가능 -->
-<c:if test="${loginUser.role eq 'admin'}">
-  <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna">
-    <input type="hidden" name="qnaId" value="${qna.qnaId}">
-      <!-- 삭제할경우 비밀번호 입력 -->
-      <input type="hidden" name="pw" id="pw"> <!-- JS에서 값 넣을 자리 -->
-      <button type="button" onclick="handleDelete()">삭제</button>
-  </form>
-</c:if>
-
-<!-- ✨ QnA 답변 댓글 영역 -->
-<hr>
-<h4>💬 답변</h4>
- <!-- 댓글 목록 -->
-<c:forEach var="comment" items="${commentList}">
-  <div id="comment-${comment.commentId}">
-    <p><strong>${comment.writerId} (${comment.writerRole})</strong> | <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
-
-    <!-- 댓글 내용 표시 -->
-    <c:if test="${editCommentId == null or editCommentId != comment.commentId}">
-      <div class="comment-box">${comment.content}</div>
-    </c:if>
-
-    <!-- 수정 중인 댓글일 경우 -->
-    <c:if test="${editCommentId eq comment.commentId}">
-      <form method="post" action="${pageContext.request.contextPath}/qna/updateQnaComment">
-        <input type="hidden" name="commentId" value="${comment.commentId}">
+  <!-- 수정/삭제 버튼 영역 -->
+  <c:if test="${loginUser.role eq 'student' && loginUser.studentNo eq qna.studentNo}">
+    <div class="comment-action-right">
+      <form method="get" action="${pageContext.request.contextPath}/qna/updateQna" onsubmit="saveScrollAndSubmit(this)">
         <input type="hidden" name="qnaId" value="${qna.qnaId}">
-        <textarea name="content" rows="3" cols="60">${comment.content}</textarea><br>
-        <button type="submit">저장</button>
-        <a href="${pageContext.request.contextPath}/qna/qnaOne?qnaId=${qna.qnaId}">취소</a>
+        <button type="submit">수정</button>
       </form>
-    </c:if>
+      <form id="studentDeleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna" onsubmit="saveScrollAndSubmit(this)">
+        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+        <input type="hidden" name="pw" id="pw">
+        <button type="button" onclick="handleDelete()">삭제</button>
+      </form>
+    </div>
+  </c:if>
 
-    <!-- 수정/삭제 버튼 -->
-    <c:choose>
-      <c:when test="${loginUser.role eq 'admin' || loginUser.role eq 'teacher'}">
-        <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" style="display:inline;">
-          <input type="hidden" name="commentId" value="${comment.commentId}">
-          <input type="hidden" name="qnaId" value="${qna.qnaId}">
-          <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-        </form>
-      </c:when>
+  <c:if test="${loginUser.role eq 'admin'}">
+    <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/qna/deleteQna" onsubmit="saveScrollAndSubmit(this)" class="comment-action-right">
+      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+      <input type="hidden" name="pw" id="pw">
+      <button type="button" onclick="handleDelete()">삭제</button>
+    </form>
+  </c:if>
 
-      <c:when test="${loginUser.role eq comment.writerRole && loginUser.studentId eq comment.writerId}">
-        <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne">
-          <input type="hidden" name="qnaId" value="${qna.qnaId}">
-          <input type="hidden" name="editCommentId" value="${comment.commentId}">
-          <button type="submit">수정</button>
-        </form>
+  <!-- 댓글 및 대댓글 영역 -->
+  <hr>
+  <h4>💬 답변</h4>
+  <c:forEach var="comment" items="${commentList}">
+    <c:if test="${comment.parentCommentId == null}">
+      <div class="qna-comment-wrapper">
+      <div class="comment-row">
+        <!--  작성자 -->
+        <p><strong>${comment.writerId}</strong> (${comment.writerRole}) <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
         
-        <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" style="display:inline;">
-          <input type="hidden" name="commentId" value="${comment.commentId}">
-          <input type="hidden" name="qnaId" value="${qna.qnaId}">
-          <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-        </form>
-      </c:when>
-    </c:choose>
-  </div>
-</c:forEach>
+         <!-- 수정/삭제 -->
+         <!-- 관리자는 모든 댓글 삭제 가능 -->
+          <div class="comment-action-right">
+            <c:if test="${loginUser.role eq 'admin'}">
+              <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+                <input type="hidden" name="commentId" value="${comment.commentId}">
+                <input type="hidden" name="qnaId" value="${qna.qnaId}">
+                <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+              </form>
+            </c:if>
+            <!-- 본인이 작성한 댓글은 수정 삭제 가능 -->
+            <c:if test="${comment.writerId eq loginUserId}">
+              <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne#comment-${comment.commentId}" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+                <input type="hidden" name="qnaId" value="${qna.qnaId}">
+                <input type="hidden" name="editCommentId" value="${comment.commentId}">
+                <button type="submit">수정</button>
+              </form>
+              <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+                <input type="hidden" name="commentId" value="${comment.commentId}">
+                <input type="hidden" name="qnaId" value="${qna.qnaId}">
+                <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+              </form>
+            </c:if>
+          </div>
+         </div> 
 
-<!-- 댓글 작성 폼 (작성자 본인, 강사, 관리자만) -->
-<c:if test="${loginUser.role eq 'admin' 
-           || loginUser.role eq 'teacher' 
-           || loginUser.studentNo eq qna.studentNo}">
-  <form action="${pageContext.request.contextPath}/qna/insertQnaComment" method="post">
-    <input type="hidden" name="qnaId" value="${qna.qnaId}">
-    <textarea name="content" rows="4" cols="60" placeholder="답변을 입력하세요" required></textarea><br>
-    <button type="submit">답변 등록</button>
-  </form>
-</c:if>
+        <!-- 댓글 내용만 박스 -->
+        <div id="comment-${comment.commentId}" class="comment-content-box comment-row">
+          <c:if test="${editCommentId == null or editCommentId != comment.commentId}">
+          <div class="comment-text">${comment.content}</div>
+          </c:if>
+          <c:if test="${editCommentId eq comment.commentId}">
+            <form method="post" action="${pageContext.request.contextPath}/qna/updateQnaComment" onsubmit="saveScrollAndSubmit(this)">
+              <input type="hidden" name="commentId" value="${comment.commentId}">
+              <input type="hidden" name="qnaId" value="${qna.qnaId}">
+              <textarea name="content" rows="3" cols="60" onfocus="clearOnFirstFocus(this)">${comment.content}</textarea><br>
+              <button type="submit">저장</button>
+              <a href="${pageContext.request.contextPath}/qna/qnaOne?qnaId=${qna.qnaId}">취소</a>
+            </form>
+          </c:if>
+        </div>
+
+        <!-- 대댓글 출력 -->
+        <c:forEach var="reply" items="${commentList}">
+          <c:if test="${reply.parentCommentId == comment.commentId}">
+            <div class="reply-box">
+              <!-- 작성자/날짜 + 수정/삭제 버튼을 flex로 나눔 -->
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>↳ <strong>${reply.writerId}</strong> (${reply.writerRole}) <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></div>
+                <!-- 관리자일 경우: 모든 대댓글 삭제 가능 -->
+				<c:if test="${loginUser.role eq 'admin'}">
+				  <div>
+				    <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				      <input type="hidden" name="commentId" value="${reply.commentId}">
+				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				      <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+				    </form>
+				  </div>
+				</c:if>
+                
+                <!-- 2. 본인이 작성한 경우: 수정/삭제 모두 가능 (관리자 포함) -->
+				<c:if test="${reply.writerId eq loginUserId}">
+				  <div>
+				    <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne#comment-${comment.commentId}" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				      <input type="hidden" name="editCommentId" value="${reply.commentId}">
+				      <button type="submit">수정</button>
+				    </form>
+				    <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				      <input type="hidden" name="commentId" value="${reply.commentId}">
+				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				      <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+				    </form>
+				  </div>
+				</c:if>
+              </div>
+              <!-- 내용 or 수정폼 -->
+              <div style="margin-top: 5px;">
+                <c:if test="${editCommentId != reply.commentId}">${reply.content}</c:if>
+                <c:if test="${editCommentId == reply.commentId}">
+                  <form method="post" action="${pageContext.request.contextPath}/qna/updateQnaComment" onsubmit="saveScrollAndSubmit(this)">
+                    <input type="hidden" name="commentId" value="${reply.commentId}">
+                    <input type="hidden" name="qnaId" value="${qna.qnaId}">
+                    <textarea name="content" rows="3" cols="50" onfocus="clearOnFirstFocus(this)">${reply.content}</textarea><br>
+                    <button type="submit">저장</button>
+                    <a href="${pageContext.request.contextPath}/qna/qnaOne?qnaId=${qna.qnaId}">취소</a>
+                  </form>
+                </c:if>
+              </div>
+            </div>
+          </c:if>
+        </c:forEach>
+
+        <!-- 대댓글 입력 폼 -->
+        <div class="reply-form">
+          <form method="post" action="${pageContext.request.contextPath}/qna/insertQnaComment" onsubmit="saveScrollAndSubmit(this)">
+            <input type="hidden" name="qnaId" value="${qna.qnaId}">
+            <input type="hidden" name="parentCommentId" value="${comment.commentId}">
+            <input type="text" name="content" placeholder="답글 작성" style="width: 300px;">
+            <button type="submit">등록</button>
+          </form>
+        </div>
+      </div>
+    </c:if>
+  </c:forEach>
+
+  <!-- 일반 댓글 입력 폼 -->
+  <c:if test="${not empty loginUser}">
+    <form method="post" action="${pageContext.request.contextPath}/qna/insertQnaComment" onsubmit="saveScrollAndSubmit(this)">
+      <input type="hidden" name="qnaId" value="${qna.qnaId}">
+      <textarea name="content" rows="4" cols="60" placeholder="댓글을 입력하세요" required></textarea><br>
+      <button type="submit">댓글 등록</button>
+    </form>
+  </c:if>
 
   <br>
   <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>
@@ -159,7 +204,37 @@
 		    document.getElementById("deleteForm").submit(); // 폼 제출
 		  }
 		}
+		// 내용칸 클릭하면 기존 글 삭제
+		 function clearOnFirstFocus(el) {
+			    // 한 번만 비우도록 체크
+			    if (!el.dataset.cleared) {
+			      el.dataset.cleared = "true";
+			      el.value = "";
+			    }
+			  }
 		
+		// 현재 스크롤 위치 저장한 후 폼 제출 (페이지 새로고침 시 해당 위치 유지)
+		  function saveScrollAndSubmit(form) {
+			    // 스크롤 위치 저장
+			    sessionStorage.setItem("scrollY", window.scrollY);
+
+			    // 약간의 지연을 주고 수동으로 submit
+			    setTimeout(() => {
+			      form.submit();
+			    }, 0);
+
+			    // 기본 submit 방지
+			    return false;
+			  }
+		  
+		  // 페이지 로드 시 이전에 저장된 스크롤 위치로 이동
+		  window.addEventListener("load", () => {				
+			    const y = sessionStorage.getItem("scrollY");	// 저장된 위치 꺼냄
+			    if (y !== null) {
+			      window.scrollTo(0, parseInt(y));				// 스크롤 이동
+			      sessionStorage.removeItem("scrollY");			// 사용 후 제거
+			    }
+			  });
 	</script>
 </body>
 </html>

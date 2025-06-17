@@ -1,43 +1,126 @@
 @charset "UTF-8";
 
-/* qna 리스트 */
+/* qna 콘텐츠 영역 */
 .qna-content {
-  padding-left: 300px; /* 사이드바가 약 250px이면 이 정도 */
+  padding-left: 300px;
   padding-top: 30px;
-  
-  /* qna 수정 폼 */
- .form-group {
-    display: flex;
-    align-items: center; /* 수직 정렬 맞춤 */
-    margin-bottom: 15px;
-  }
-
-  .form-group label {
-    width: 70px;
-    font-weight: bold;
-  }
-
-  .form-control {
-    width: 400px;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-    .form-control[readonly] {
-    background-color: #eee;
-    color: #333;
-  }
-
-  textarea.form-control {
-    height: 200px;
-    resize: vertical;
-  }
 }
-	/* 댓글 내용*/
-.comment-box {
+
+/* qna 수정 폼 */
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* 테이블 공통 스타일 (옵션) */
+.qna-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.qna-table th,
+.qna-table td {
   border: 1px solid #ccc;
   padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  text-align: left;
 }
+
+.form-group label {
+  width: 70px;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 400px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.form-control[readonly] {
+  background-color: #eee;
+  color: #333;
+}
+
+textarea.form-control {
+  height: 200px;
+  resize: vertical;
+}
+
+/* 댓글 전체 영역 */
+.qna-comment-wrapper {
+  margin-bottom: 15px;
+}
+
+/* 댓글 내용 박스 */
+.comment-content-box {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  margin-bottom: 5px;
+}
+
+/* 버튼 오른쪽 정렬 */
+.comment-action-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+/* 대댓글 작성 영역 */
+.reply-form {
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+
+/* 대댓글 내용 박스 */
+.reply-box {
+  margin-left: 30px;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f4f4f4;
+  border-left: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+
+/* 댓글 헤더 (작성자+날짜+버튼 정렬용) */
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 댓글 작성자 정보 */
+.comment-writer {
+  font-weight: bold;
+}
+
+/* 답변 제목 */
+.answer-title {
+  margin-top: 30px;
+  font-size: 1.1em;
+}
+
+/* 댓글 한 줄 정렬용 flex 컨테이너 */
+.comment-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 댓글 내용 영역 */
+.comment-text {
+  flex-grow: 1;
+  padding-right: 10px;
+  white-space: pre-wrap;
+}
+
+/* 버튼 영역 (수정/삭제) */
+.comment-buttons {
+  display: flex;
+  gap: 5px;
+}
+

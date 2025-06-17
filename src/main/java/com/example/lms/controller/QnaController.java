@@ -125,6 +125,17 @@ public class QnaController {
 			// 로그인 한 유저정보 세션에서 꺼냄
 		    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
 
+		    String loginUserId = "";
+		    if (loginUser != null) {
+		        if ("admin".equals(loginUser.getRole())) {
+		            loginUserId = loginUser.getAdminId();
+		        } else if ("teacher".equals(loginUser.getRole())) {
+		            loginUserId = loginUser.getTeacherId();
+		        } else if ("student".equals(loginUser.getRole())) {
+		            loginUserId = loginUser.getStudentId();
+		        }
+		    }
+		    
 		    // 글 번호에 해당하는 qna 글을 DB에서 가져옴
 		    QnaDTO qnaDto = qnaService.selectQnaOne(qnaId);
 		    
@@ -148,6 +159,7 @@ public class QnaController {
 		        }
 		    }
 		    
+		    model.addAttribute("loginUserId", loginUserId); // ★ JSP에서 사용 가능하도록 추가
 		    // 위 조건을 모두 통과하면 글 내용을 모델에 담아서 jsp로 전달
 		    model.addAttribute("qna", qnaDto);
 		    model.addAttribute("editCommentId", editCommentId);

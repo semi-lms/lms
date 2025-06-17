@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lms.dto.QnaCommentDTO;
 import com.example.lms.mapper.QnaCommentMapper;
@@ -31,8 +32,14 @@ public class QnaCommentServiceImpl implements QnaCommentService {
 	}
 
 	@Override
+	@Transactional
 	public int deleteQnaComment(int commentId) {
-		return qnaCommentMapper.deleteQnaComment(commentId);
+	    
+		// 1. 대댓글 먼저 삭제
+	    qnaCommentMapper.deleteRepliesByParentId(commentId);
+
+	    // 2. 부모 댓글 삭제
+	    return  qnaCommentMapper.deleteQnaComment(commentId);
 	}
 	
 	// 댓글 1개조회
@@ -40,5 +47,11 @@ public class QnaCommentServiceImpl implements QnaCommentService {
 	public QnaCommentDTO selectQnaCommentById(int commentId) {
 		return qnaCommentMapper.selectQnaCommentById(commentId);
 	}
+
+	@Override
+	public int deleteRepliesByParentId(int commentId) {
+		return qnaCommentMapper.deleteRepliesByParentId(commentId);
+	}
+
 
 }
