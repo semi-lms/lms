@@ -9,12 +9,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.CourseDTO;
@@ -22,6 +26,7 @@ import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamOptionDTO;
 import com.example.lms.dto.ExamQuestionDTO;
 import com.example.lms.dto.ExamSubmissionDTO;
+import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
@@ -29,6 +34,7 @@ import com.example.lms.service.ExamService;
 import com.example.lms.service.StudentService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,11 +51,18 @@ public class TeacherController {
 	
 	// 강의 리스트
 	@GetMapping("/courseListFromTeacher")
-	public String courseListFromTeacher(@RequestParam(name = "teacherNo", required = false, defaultValue = "7") int teacherNo
-										, @RequestParam(defaultValue = "1") int currentPage
+	public String courseListFromTeacher(@RequestParam(defaultValue = "1") int currentPage
 										, @RequestParam(defaultValue = "10") int rowPerPage
 										, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter
-										, Model model) {
+										, Model model
+										, HttpSession session) {
+		// 로그인한 사용자 정보에서 courseId 가져오기
+		SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+		if (loginUser == null || loginUser.getCourseId() == 0) {
+			return "redirect:/login"; // 로그인 안 되어있거나 courseId 없으면 로그인 페이지로 리다이렉트
+		}
+		int teacherNo = loginUser.getTeacherNo();
+		
 		// 페이징
 		int totalCnt = courseService.getCountCourseListByTeacherNo(teacherNo, filter);
 		int lastPage = totalCnt / rowPerPage;
@@ -354,7 +367,7 @@ public class TeacherController {
 		}
 		
 		String title = examService.getExamTitle(examId);
-		
+		log.info("qCnt:"+qCnt);
 		
 		model.addAttribute("examId", examId);
 		model.addAttribute("title", title);
@@ -377,22 +390,48 @@ public class TeacherController {
 	
 	// 문제, 보기 수정 페이지
 	@PostMapping("/updateQuestion")
-	public String updateQuestion(
-	        @RequestParam("questionId") int questionId,
-	        @RequestParam("questionTitle") String questionTitle,
-	        @RequestParam("questionText") String questionText,
-	        @RequestParam("correctNo") int correctNo,
-	        HttpServletRequest request
-	) {
-	    // 문제 내용 업데이트
-	    examService.updateQuestion(questionId, questionTitle, questionText, correctNo);
-
-	    // 보기 업데이트
-	    for (int i = 1; i <= 4; i++) {
-	        String optionText = request.getParameter("option" + i);
-	        examService.updateOption(questionId, i, optionText);
-	    }
-
-	    return "redirect:/questionOne?questionId=" + questionId;
+	public String updateQuestion(@RequestParam("questionId") int questionId
+								, @RequestParam("questionTitle") String questionTitle
+								, @RequestParam("questionText") String questionText
+								, @RequestParam("correctNo") int correctNo
+								, HttpServletRequest request) {
+		// 문제 내용 업데이트
+		examService.updateQuestion(questionId, questionTitle, questionText, correctNo);
+		
+		// 보기 업데이트
+		for (int i = 1; i <= 4; i++) {
+			String optionText = request.getParameter("option" + i);
+			examService.updateOption(questionId, i, optionText);
+		}
+		
+		return "redirect:/questionOne?questionId=" + questionId;
 	}
+		
+	// 문제 등록 페이지
+	@GetMapping("/addQuestion")
+	public String addQuestion(@RequestParam("examId") int examId
+							, Model model) {
+		model.addAttribute("examId", examId);
+		return "/teacher/addQuestion";
+	}
+	
+	@PostMapping("/submitQuestions")
+	@ResponseBody
+	public ResponseEntity<String> submitQuestions(
+	        @RequestParam("examId") int examId,
+	        @RequestBody List<ExamQuestionDTO> questions) {
+	    try {
+	        for (ExamQuestionDTO question : questions) {
+	            question.setExamId(examId); // examId 설정
+	            
+	            // 서비스에서 문제와 보기 모두 저장
+	            examService.insertQuestionAndOptions(question);
+	        }
+	        return ResponseEntity.ok("등록 성공");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("등록 실패");
+	    }
+	}
+
 }

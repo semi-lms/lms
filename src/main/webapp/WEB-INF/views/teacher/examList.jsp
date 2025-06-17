@@ -82,7 +82,7 @@
 			<c:forEach var="exam" items="${exams}">
 				<!-- 보기 모드 행 -->
 				<tr id="viewRow-${exam.examId}">
-					<td>${exam.title}</td>
+					<td><a href="/questionList?examId=${exam.examId}">${exam.title}</a></td>
 					<td>${exam.status}</td>
 					<td>${exam.examStartDate}</td>
 					<td>${exam.examEndDate}</td>
@@ -97,6 +97,7 @@
 						</c:if>
 					</td>
 				</tr>
+				
 		
 				<!-- 수정 모드 행 -->
 				<tr id="editRow-${exam.examId}" style="display:none;">
@@ -121,7 +122,7 @@
 					<span>[${i}]</span>
 				</c:when>
 				<c:otherwise>
-					<a href="/examList?currentPage=${i}">[${i}]</a>
+					<a href="/examList?courseId=${courseId}&currentPage=${i}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>

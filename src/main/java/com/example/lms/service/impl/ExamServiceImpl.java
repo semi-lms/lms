@@ -189,4 +189,25 @@ public class ExamServiceImpl implements ExamService {
 	public List<ExamAnswerDTO> getExamAnswersWithCorrect(int submissionId) {
 		  return examMapper.selectExamAnswersWithCorrect(submissionId);
 	}
+	
+	// 문제, 보기 등록
+	@Override
+	public int insertQuestion(ExamQuestionDTO examQuestionDto) {
+		return examMapper.insertQuestion(examQuestionDto);
+	}
+	@Override
+	public int insertOption(ExamOptionDTO examOptionDto) {
+		return examMapper.insertOption(examOptionDto);
+	}
+	
+	@Override
+	@Transactional
+	public void insertQuestionAndOptions(ExamQuestionDTO question) {
+	    examMapper.insertQuestion(question);  // 여기서 question.questionId 자동 셋팅됨
+	    
+	    for (ExamOptionDTO option : question.getOptions()) {
+	        option.setQuestionId(question.getQuestionId()); // 자동 생성된 PK 세팅
+	        examMapper.insertOption(option);
+	    }
+	}
 }

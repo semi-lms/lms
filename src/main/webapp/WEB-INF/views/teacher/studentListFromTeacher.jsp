@@ -82,7 +82,7 @@
 					<span>[${i}]</span>
 				</c:when>
 				<c:otherwise>
-					<a href="/studentListFromTeacher?currentPage=${i}">[${i}]</a>
+					<a href="/studentListFromTeacher?courseId=${courseId}&currentPage=${i}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>

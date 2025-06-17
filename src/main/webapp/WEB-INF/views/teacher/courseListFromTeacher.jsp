@@ -76,7 +76,7 @@
 			</tr>
 			<c:forEach var="course" items="${courses}">
 				<tr>
-					<td>${course.courseName}</td>
+					<td><a href="/attendanceList?courseId=${course.courseId}">${course.courseName}</a></td>
 					<td>${course.startDate}</td>
 					<td>${course.endDate}</td>
 					<td>${course.courseActive}</td>
@@ -89,7 +89,7 @@
 					<span>[${i}]</span>
 				</c:when>
 				<c:otherwise>
-					<a href="/courseListFromTeacher?currentPage=${i}&filter=${filter}">[${i}]</a>
+					<a href="/courseListFromTeacher?teacherNo=${teacherNo}&currentPage=${i}&filter=${filter}">[${i}]</a>
 				</c:otherwise>
 			</c:choose>
 		</c:forEach>

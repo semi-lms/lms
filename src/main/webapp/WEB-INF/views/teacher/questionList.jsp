@@ -42,7 +42,7 @@
 		</c:forEach>
 	</c:if>
 	<c:if test="${qCnt == 0}">
-		<button type="button" onclick="location.href='addQuestion.jsp?examId=${examId}'">문제 등록</button>
+		<button type="button" onclick="location.href='/addQuestion?examId=${examId}'">문제 등록</button>
 	</c:if>
 </div>
 <script>

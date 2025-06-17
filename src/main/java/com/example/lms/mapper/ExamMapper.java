@@ -81,4 +81,9 @@ public interface ExamMapper {
 
     // 보기 수정
     int updateOption(int questionId, int optionNo, String optionText);
+    
+    // 문제 등록
+    int insertQuestion(ExamQuestionDTO examQuestionDto);
+    // 보기 등록
+    int insertOption(ExamOptionDTO examOptionDto);
 }

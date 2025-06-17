@@ -66,4 +66,12 @@ public interface ExamService {
     List<ExamAnswerDTO> getAnswersBySubmissionId(int submissionId);
 
 	List<ExamQuestionDTO> getAllQuestions(int examId);
+	
+	// 문제 등록
+	int insertQuestion(ExamQuestionDTO examQuestionDto);
+	// 보기 등록
+	int insertOption(ExamOptionDTO examOptionDto);
+	
+	// 문제, 보기 등록
+	void insertQuestionAndOptions(ExamQuestionDTO question);
 }

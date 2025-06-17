@@ -210,4 +210,15 @@
 		WHERE question_id = #{questionId} AND option_no = #{optionNo}
 	</update>
 
+	
+	<!-- 문제 등록 -->
+	<insert id="insertQuestion" parameterType="com.example.lms.dto.ExamQuestionDTO" useGeneratedKeys="true" keyProperty="questionId">
+		INSERT INTO exam_question (exam_id, question_no, question_title, question_text, correct_no)
+		VALUES (#{examId}, #{questionNo}, #{questionTitle}, #{questionText}, #{correctNo})
+	</insert>
+	<!-- 보기 등록 -->
+	<insert id="insertOption" parameterType="com.example.lms.dto.ExamOptionDTO">
+		INSERT INTO exam_option (question_id, option_no, option_text)
+		VALUES (#{questionId}, #{optionNo}, #{optionText})
+	</insert>
 </mapper>
