@@ -8,11 +8,23 @@ import com.example.lms.dto.TeacherDTO;
 
 @Mapper
 public interface LoginMapper {
-		AdminDTO loginAdmin(AdminDTO adminDto); 		// 관리자 로그인
-		TeacherDTO loginTeacher(TeacherDTO teacherDto);	// 강사 로그인
-		StudentDTO loginStudent(StudentDTO studentDto); // 학생 로그인
+		
+		// 관리자 로그인	
+		AdminDTO loginAdmin(AdminDTO adminDto); 		
+		
+		// 강사 로그인
+		TeacherDTO loginTeacher(TeacherDTO teacherDto);	
+		
+		// 학생 로그인
+		StudentDTO loginStudent(StudentDTO studentDto); 
+		
+		// 
 		String findIdByNameEmail(String findIdByName, String findIdByEmail);
+		
 		String findPwByNameIdEmail(String findPwByName, String findPwById, String findPwByEmail);
+		
 		void updatePassword(String findPwById, String tempPw);
+		
 		int updatePwByTempPw(String encodedPw, String tempPw);
+		
 	}

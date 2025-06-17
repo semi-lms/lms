@@ -74,26 +74,32 @@
          <!-- 수정/삭제 -->
          <!-- 관리자는 모든 댓글 삭제 가능 -->
           <div class="comment-action-right">
-            <c:if test="${loginUser.role eq 'admin'}">
-              <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-                <input type="hidden" name="commentId" value="${comment.commentId}">
-                <input type="hidden" name="qnaId" value="${qna.qnaId}">
-                <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-              </form>
-            </c:if>
-            <!-- 본인이 작성한 댓글은 수정 삭제 가능 -->
-            <c:if test="${comment.writerId eq loginUserId}">
-              <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne#comment-${comment.commentId}" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-                <input type="hidden" name="qnaId" value="${qna.qnaId}">
-                <input type="hidden" name="editCommentId" value="${comment.commentId}">
-                <button type="submit">수정</button>
-              </form>
-              <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-                <input type="hidden" name="commentId" value="${comment.commentId}">
-                <input type="hidden" name="qnaId" value="${qna.qnaId}">
-                <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-              </form>
-            </c:if>
+			 <c:choose>
+			    <%-- 1. 본인 글이면: 수정 + 삭제 --%>
+			    <c:when test="${comment.writerId eq loginUserId}">
+			      <!-- 수정 버튼 -->
+			      <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne#comment-${comment.commentId}" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+			        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+			        <input type="hidden" name="editCommentId" value="${comment.commentId}">
+			        <button type="submit">수정</button>
+			      </form>
+			      <!-- 삭제 버튼 -->
+			      <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+			        <input type="hidden" name="commentId" value="${comment.commentId}">
+			        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+			        <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+			      </form>
+			    </c:when>
+			
+			    <%-- 2. 관리자면서 본인이 작성한 글이 아닌 경우: 삭제만 --%>
+			    <c:when test="${loginUser.role eq 'admin'}">
+			      <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+			        <input type="hidden" name="commentId" value="${comment.commentId}">
+			        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+			        <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+			      </form>
+			    </c:when>
+			  </c:choose>
           </div>
          </div> 
 
@@ -112,7 +118,7 @@
             </form>
           </c:if>
         </div>
-
+        
         <!-- 대댓글 출력 -->
         <c:forEach var="reply" items="${commentList}">
           <c:if test="${reply.parentCommentId == comment.commentId}">
@@ -120,33 +126,42 @@
               <!-- 작성자/날짜 + 수정/삭제 버튼을 flex로 나눔 -->
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>↳ <strong>${reply.writerId}</strong> (${reply.writerRole}) <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></div>
-                <!-- 관리자일 경우: 모든 대댓글 삭제 가능 -->
-				<c:if test="${loginUser.role eq 'admin'}">
-				  <div>
-				    <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-				      <input type="hidden" name="commentId" value="${reply.commentId}">
-				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
-				      <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-				    </form>
-				  </div>
-				</c:if>
                 
-                <!-- 2. 본인이 작성한 경우: 수정/삭제 모두 가능 (관리자 포함) -->
-				<c:if test="${reply.writerId eq loginUserId}">
-				  <div>
-				    <form method="get" action="${pageContext.request.contextPath}/qna/qnaOne#comment-${comment.commentId}" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
-				      <input type="hidden" name="editCommentId" value="${reply.commentId}">
-				      <button type="submit">수정</button>
-				    </form>
-				    <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment" onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
-				      <input type="hidden" name="commentId" value="${reply.commentId}">
-				      <input type="hidden" name="qnaId" value="${qna.qnaId}">
-				      <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
-				    </form>
-				  </div>
-				</c:if>
+				<c:choose>
+				 <%-- 본인이 작성한 대댓글인 경우: 수정/삭제 가능 --%>
+				  <c:when test="${reply.writerId eq loginUserId}">
+				    <div>
+				      <form method="get"
+				            action="${pageContext.request.contextPath}/qna/qnaOne#comment-${reply.commentId}"
+				            onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				        <input type="hidden" name="editCommentId" value="${reply.commentId}">
+				        <button type="submit">수정</button>
+				      </form>
+				
+				      <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment"
+				            onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				        <input type="hidden" name="commentId" value="${reply.commentId}">
+				        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				        <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+				      </form>
+				    </div>
+				  </c:when>
+				
+				  <%-- 관리자일 경우: 모든 대댓글 삭제 가능 --%>
+				  <c:when test="${loginUser.role eq 'admin'}">
+				    <div>
+				      <form method="post" action="${pageContext.request.contextPath}/qna/deleteQnaComment"
+				            onsubmit="saveScrollAndSubmit(this)" style="display:inline;">
+				        <input type="hidden" name="commentId" value="${reply.commentId}">
+				        <input type="hidden" name="qnaId" value="${qna.qnaId}">
+				        <button type="submit" onclick="return confirm('정말 삭제할까요?')">삭제</button>
+				      </form>
+				    </div>
+				  </c:when>
+				</c:choose>
               </div>
+              
               <!-- 내용 or 수정폼 -->
               <div style="margin-top: 5px;">
                 <c:if test="${editCommentId != reply.commentId}">${reply.content}</c:if>

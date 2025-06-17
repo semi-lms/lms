@@ -51,6 +51,7 @@
 		WHERE student_id = #{studentId}
 	</select>
 	
+	
 	<select id="findIdByNameEmail" resultType="String">
 		SELECT student_id
 		FROM student

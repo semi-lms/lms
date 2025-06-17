@@ -190,7 +190,7 @@ public class QnaController {
 		    String dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
 		    
 		    // 사용자가 입력한 비밀번호를 DB 비밀번호와 다르면 -> 접근 차단 후 오류 메시지 전달
-		    if (!pw.equals(dbPw)) {
+		    if (!passwordEncoder.matches(pw, dbPw)) {
 		        ra.addFlashAttribute("errorMsg", "비밀번호가 일치하지 않습니다.");
 		        return "redirect:/qna/qnaList";
 		    }
