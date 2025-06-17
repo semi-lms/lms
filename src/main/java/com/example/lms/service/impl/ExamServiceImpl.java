@@ -121,19 +121,19 @@ public class ExamServiceImpl implements ExamService{
 		return examMapper.getSubmitStatusMap(studentNo, examIdList);
 	}
 	//학생별 시험별 점수 확인
-	 @Override
-	    public List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage) {
-	        Map<String, Object> param = new HashMap<>();
-	        param.put("studentNo", studentNo);
-	        param.put("startRow", startRow);
-	        param.put("rowPerPage", rowPerPage);
-	        return examMapper.selectExamListByStudentNo(param);
-	    }
+	@Override
+	public List<ExamDTO> getExamListByStudent(int studentNo, int startRow, int rowPerPage) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("studentNo", studentNo);
+		param.put("startRow", startRow);
+		param.put("rowPerPage", rowPerPage);
+		return examMapper.selectExamListByStudentNo(param);
+	}
 
-	    @Override
-	    public int getExamListCountByStudent(int studentNo) {
-	        return examMapper.countExamListByStudentNo(studentNo);
-	    }
+	@Override
+	public int getExamListCountByStudent(int studentNo) {
+		return examMapper.countExamListByStudentNo(studentNo);
+	}
 
 }
 

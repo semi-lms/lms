@@ -179,24 +179,6 @@ public class StudentController {
 	    // 시험 목록 조회
 	    List<ExamDTO> exams = examService.getExamListByStudent(endPage, startRow, rowPerPage);
 
-		/*
-		 * // 시험 ID 리스트 List<Integer> examIdList = exams.stream()
-		 * .map(ExamDTO::getExamId) .collect(Collectors.toList());
-		 * 
-		 * // 응시 여부와 점수 Map<Integer, String> submitStatusMap =
-		 * examService.getSubmitStatusMap(studentNo, examIdList);
-		 * 
-		 * submitStatusMap = (submitStatusMap != null) ? submitStatusMap : new
-		 * HashMap<>();
-		 * 
-		 * LocalDate today = LocalDate.now(); for (ExamDTO exam : exams) { if
-		 * (today.isBefore(exam.getExamStartDate())) { exam.setStatus("응시불가"); } else if
-		 * (today.isAfter(exam.getExamEndDate())) { exam.setStatus("기간만료"); } else {
-		 * exam.setStatus("응시가능"); } String submitStatus =
-		 * submitStatusMap.getOrDefault(exam.getExamId(), "미응시");
-		 * exam.setSubmitStatus(submitStatus); }
-		 */
-
 	    // 모델에 값 추가
 	    model.addAttribute("exams", exams);
 	    model.addAttribute("courseId", courseId);
