@@ -227,17 +227,18 @@ public class MypageController {
 		
 		// 비밀번호 비교 (새 비밀번호가 입력된 경우)
 		if (studentDto.getPassword() != null && !studentDto.getPassword().isBlank()) {
-			// 기존 비밀번호와 새 비밀번호가 같으면 변경 거부
-			if (studentDto.getPassword().equals(current.getPassword())) {
-				result.put("success", false);
-				result.put("message", "기존 비밀번호와 동일합니다.");
-				return result;
-			}
-			
-			// 새 비밀번호 사용 (그대로)
+		    // 이미 암호화된 DB 비밀번호와 사용자가 입력한 새 비밀번호를 비교
+		    if (passwordEncoder.matches(studentDto.getPassword(), current.getPassword())) {
+		        result.put("success", false);
+		        result.put("message", "기존 비밀번호와 동일합니다.");
+		        return result;
+		    }
+
+		    // 암호화된 새 비밀번호로 변경
+		    studentDto.setPassword(passwordEncoder.encode(studentDto.getPassword()));
 		} else {
-			// 새 비밀번호가 입력되지 않았다면 기존 비밀번호 유지
-			studentDto.setPassword(current.getPassword());
+		    // 입력 안 하면 기존 비밀번호 유지
+		    studentDto.setPassword(current.getPassword());
 		}
 		
 		// 최종적으로 DB에 업데이트 실행
