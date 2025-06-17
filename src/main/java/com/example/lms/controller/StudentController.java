@@ -1,7 +1,6 @@
 package com.example.lms.controller;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.apache.ibatis.binding.MapperMethod.ParamMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -132,23 +129,6 @@ public class StudentController {
 
 		return "student/myAttendance";
 	}
-	// 문제 페이지 보여주기
-	@GetMapping("/student/takeExam")
-	public String takeExam(@RequestParam int examId, @RequestParam int page, Model model, HttpSession session) {
-		//문제 페이지 갯수 
-		List<ExamQuestionDTO> questions = examService.getQuestionsByPage(examId, page); 
-		@SuppressWarnings("unchecked")
-		//정답 임시 저장 
-		Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers"); 
-		if (temp == null) temp = new HashMap<>();
-
-		model.addAttribute("questions", questions);
-		model.addAttribute("examId", examId);
-		model.addAttribute("page", page);
-		model.addAttribute("isLastPage", page == 10); //10페이지가 마지막 (고정)
-		model.addAttribute("tempAnswers", temp); //정답 임시 저장 (페이지 넘어갔다가 다시 돌아와도 남아있음)
-		return "student/takeExam"; 
-	}
 	@GetMapping("/student/examList")
 	public String examList(@RequestParam(required = false) Integer studentNo,
 	                       @RequestParam(required = false) Integer examId,
@@ -191,6 +171,23 @@ public class StudentController {
 	    return "student/examList";
 	}
 
+	
+	// 문제 페이지 보여주기
+	@GetMapping("/student/takeExam")
+	public String takeExam(@RequestParam int examId, Model model, HttpSession session) {
+	    List<ExamQuestionDTO> questions = examService.getAllQuestions(examId); // 전부 불러옴
+
+	    @SuppressWarnings("unchecked")
+	    Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers");
+	    if (temp == null) temp = new HashMap<>();
+
+	    model.addAttribute("questions", questions);
+	    model.addAttribute("examId", examId);
+	    model.addAttribute("tempAnswers", temp);
+	    return "student/takeExam";
+	}
+
+	
 
 
 	// 최종 제출 처리
@@ -200,7 +197,12 @@ public class StudentController {
 		if (loginUser == null) {
 			return "redirect:/login";
 		}
-
+		log.info("answers list size = {}", submission.getAnswers() == null ? "null" : submission.getAnswers().size());
+		if (submission.getAnswers() != null) {
+		  for (ExamAnswerDTO a : submission.getAnswers()) {
+		    log.info("answer: q={}, a={}", a.getQuestionId(), a.getAnswerNo());
+		  }
+		}
 		submission.setStudentNo(loginUser.getStudentNo());
 		List<ExamAnswerDTO> answers = submission.getAnswers();
 		int score = examService.submitExam(submission, answers);
