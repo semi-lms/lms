@@ -216,7 +216,14 @@
 		    }
 		
 		    document.getElementById("pw").value = pw; // hidden input에 비번 저장
-		    document.getElementById("deleteForm").submit(); // 폼 제출
+		    // 로그인한 사용자의 role에 따라 올바른 form 선택
+		    const loginUserRole = "${loginUser.role}"; // JSP에서 전달
+
+		    if (loginUserRole === "admin") {
+		      document.getElementById("deleteForm").submit();
+		    } else {
+		      document.getElementById("studentDeleteForm").submit();
+		    }
 		  }
 		}
 		// 내용칸 클릭하면 기존 글 삭제

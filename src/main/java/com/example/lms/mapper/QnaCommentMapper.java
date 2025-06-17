@@ -20,7 +20,10 @@ public interface QnaCommentMapper {
 	// 댓글 수정
 	int updateQnaComment(QnaCommentDTO qnaCommentDto);
 	
-	// 댓글 삭제
+	// 댓글 삭제 (QnA 글 하나에 달린 모든 댓글)
+    int deleteCommentsByQnaId(int qnaId);
+	
+	// 특정댓글 삭제
 	int deleteQnaComment(int qnaCommentDto);
 	
 	// 대댓글 삭제
@@ -28,6 +31,12 @@ public interface QnaCommentMapper {
 	
 	// 댓글 1개조회
 	QnaCommentDTO selectQnaCommentById(int commentId);
+	
+	// qna 글에 달린 모든 대댓글 삭제
+	int deleteChildCommentsByQnaId(int qnaId);
+	
+	//qna 글에 달린 모든 부모 댓글 삭제
+	int deleteParentCommentsByQnaId(int qnaId);
 	
 	
 }

@@ -33,6 +33,13 @@
 		WHERE comment_id = #{commentId}
 	</update>
 	
+	<!-- 해당 QnA에 달린 모든 댓글 삭제 (부모+대댓글 포함) -->
+	<delete id="deleteCommentsByQnaId" parameterType="int">
+		DELETE
+		FROM qna_comment
+		WHERE qna_id = #{qnaId}
+	</delete>
+	
 	<!-- 댓글 삭제 -->
 	<!-- 확장성을 위해 parameterType을 int로 안받고 dto로 받음 -->
 	<delete id="deleteQnaComment" parameterType="int">
@@ -61,6 +68,20 @@
 	FROM qna_comment
 	WHERE comment_id = #{commentId}
 	</select>
+	
+	<!-- QnA 글에 달린 모든 대댓글 삭제 -->
+<delete id="deleteChildCommentsByQnaId" parameterType="int">
+	DELETE FROM qna_comment
+	WHERE qna_id = #{qnaId}
+	AND parent_comment_id IS NOT NULL
+</delete>
+
+<!-- QnA 글에 달린 모든 부모 댓글 삭제 -->
+<delete id="deleteParentCommentsByQnaId" parameterType="int">
+	DELETE FROM qna_comment
+	WHERE qna_id = #{qnaId}
+	AND parent_comment_id IS NULL
+</delete>
 
 	
 	

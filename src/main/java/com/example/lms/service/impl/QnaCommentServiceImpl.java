@@ -53,5 +53,25 @@ public class QnaCommentServiceImpl implements QnaCommentService {
 		return qnaCommentMapper.deleteRepliesByParentId(commentId);
 	}
 
+	// 해당 QnA에 달린 모든 댓글 삭제 (부모+대댓글 포함)
+	@Override
+	@Transactional
+	public int deleteCommentsByQnaId(int qnaId) {
+		qnaCommentMapper.deleteChildCommentsByQnaId(qnaId);  // 먼저 대댓글 삭제
+		return qnaCommentMapper.deleteParentCommentsByQnaId(qnaId);
+	}
+
+	// QnA 글에 달린 모든 대댓글 삭제
+	@Override
+	public int deleteChildCommentsByQnaId(int qnaId) {
+		return qnaCommentMapper.deleteChildCommentsByQnaId(qnaId);
+	}
+
+	// QnA 글에 달린 모든 부모 댓글 삭제
+	@Override
+	public int deleteParentCommentsByQnaId(int qnaId) {
+		return qnaCommentMapper.deleteParentCommentsByQnaId(qnaId);
+	}
+
 
 }

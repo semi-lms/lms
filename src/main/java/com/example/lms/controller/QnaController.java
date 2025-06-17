@@ -235,6 +235,7 @@ public class QnaController {
 		@PostMapping("/deleteQna")
 		public String deleteQna(@ModelAttribute QnaDTO qnaDto,
 		                        @RequestParam String pw,
+		                        @RequestParam int qnaId,
 		                        HttpSession session,
 		                        RedirectAttributes ra) {
 
@@ -247,15 +248,7 @@ public class QnaController {
 		        return "redirect:/login";
 		    }
 		    
-		    // DB에서 로그인한 학생의 비밀번호 가져오기 (암호화 안 된 평문)
-		    String dbPw = "";
-
-		    if (loginUser.getAdminId() != null) {
-		        dbPw = adminService.getAdminById(loginUser.getAdminId()).getPassword();
-		    } else {
-		        dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
-		    }
-		   /* // 1. DB에서 로그인한 학생의 암호화된 비밀번호 가져오기
+		   // 1. DB에서 로그인한 학생의 암호화된 비밀번호 가져오기
 		    String dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
 
 		    // 입력한 비밀번호와 비교
@@ -263,9 +256,20 @@ public class QnaController {
 		        ra.addFlashAttribute("errorMsg", "비밀번호가 일치하지 않습니다.");
 		        return "redirect:/qna/qnaOne?qnaId=" + qnaId;
 		    }
-		    */
-		    // 3. 삭제 수행
-		    qnaService.deleteQna(qnaDto);
+		    System.out.println("삭제 시도 qnaId = " + qnaDto.getQnaId());
+		    
+		    // 5. 삭제할 QnA 정보 준비
+		    qnaDto.setQnaId(qnaId);
+
+		    // 6. QnA 삭제 (→ 내부에서 댓글 먼저 삭제함)
+		    int result = qnaService.deleteQna(qnaDto);
+
+		    // 7. 결과에 따라 메시지 전달
+		    if (result > 0) {
+		        ra.addFlashAttribute("msg", "삭제되었습니다.");
+		    } else {
+		        ra.addFlashAttribute("errorMsg", "삭제에 실패했습니다.");
+		    }
 
 		    return "redirect:/qna/qnaList";
 		}

@@ -33,6 +33,7 @@
 					<th>번호</th>
 					<th>제목</th>
 					<th>작성자</th>
+					<th>답변</th>
 					<th>작성일</th>
 				</tr>
 				<c:forEach var="qna" items="${qnaList}">
@@ -51,6 +52,7 @@
 						  </c:choose>
 						</td>
 						<td>${qna.studentName}</td>
+						<td>${qna.answerStatus}</td>
 						<td><fmt:formatDate value="${qna.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					</tr>
 				</c:forEach>

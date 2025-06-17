@@ -11,6 +11,7 @@ public class QnaDTO {
 	private int studentNo;				// student_no
 	private String title;				// title
 	private String content;				// content
+	private String answerStatus;			// answer_status 댓글달리면 답변완료
 	private Timestamp createDate;			// create_date
 	private Timestamp updateDate;			// update_date
 	private String studentName;				// student_name

@@ -96,10 +96,15 @@ public class QnaCommentController {
 	    
 	    // 한국 시간 기준으로 createDate 지정
 	    LocalDateTime nowKorea = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-	    comment.setCreateDate(Timestamp.valueOf(nowKorea));
+	    
+	    //	쿼리에 NOW() + 9 HOUR 되어있어서 필요 x
+	    // comment.setCreateDate(Timestamp.valueOf(nowKorea));
 	    
 	    // service를 통해 댓글 DB에 저장 요청
 	    qnaCommentService.insertQnaComment(comment);
+	    
+	    // qna 상태 '답변완료로 변경
+	    qnaService.updateAnswerStatus(qnaId, "답변완료");
 	    
 	    // 저장이 끝난 후 다시 qna 상세 페이지로 리다이렉트
 	    // 새로 작성된 댓글이 포함된 상세페이지를 다시 보여주기 위해
