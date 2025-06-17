@@ -68,12 +68,12 @@ public class LoginController {
                 sessionUser.setEmail(teacher.getEmail());
                 sessionUser.setRegDate(teacher.getRegDate());
             }
-        } else if ("student".equals(role)) {				// 학생 동일
+        } else if ("student".equals(role)) {
             StudentDTO studentDto = new StudentDTO();
             studentDto.setStudentId(id);
             studentDto.setPassword(pw);
             StudentDTO student = loginService.loginStudent(studentDto);
-            if (student != null) {
+            if (student != null && passwordEncoder.matches(pw, student.getPassword())) {
                 sessionUser = new SessionUserDTO();
                 sessionUser.setRole("student");
                 sessionUser.setStudentId(student.getStudentId());

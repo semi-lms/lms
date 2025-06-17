@@ -39,6 +39,7 @@
 		SELECT student_no AS studentNo,
 				course_id AS courseId,
 				student_id AS studentId,
+				password,
 				name,
 				sn,
 				address,
@@ -47,7 +48,7 @@
 				reg_date AS regDate,
 				temp_code AS tempCode
 		FROM student
-		WHERE student_id = #{studentId} AND password = #{password}
+		WHERE student_id = #{studentId}
 	</select>
 	
 	<select id="findIdByNameEmail" resultType="String">
