@@ -32,7 +32,7 @@ public class AttendanceController {
         LocalDate now = LocalDate.now();
         // 진행 중인 강의만 조회
         List<CourseDTO> courseList = courseService.selectCourseListNotEnded(now.toString());
-
+        List<String> courseName = new ArrayList<>(); 
         List<String> classNames = new ArrayList<>();
         List<Integer> studentCounts = new ArrayList<>();
         List<Integer> attendanceTotalCounts = new ArrayList<>();
@@ -43,6 +43,7 @@ public class AttendanceController {
             int courseId = course.getCourseId();
             classNames.add(course.getClassroom()); // 반 이름 필드명에 맞게 변경
             courseIds.add(courseId);
+            courseName.add(course.getCourseName());
             int studentCount = attendanceService.getStudentCount(courseId);
             int attendanceTotalCount = attendanceService.getAttendanceTotalCount(
                     now.withDayOfMonth(1).toString(),
@@ -70,17 +71,16 @@ public class AttendanceController {
         model.addAttribute("attendanceTotalCounts", attendanceTotalCounts);
         model.addAttribute("actuals", actuals);
         model.addAttribute("courseIds", courseIds);
-
+        model.addAttribute("courseNames", courseName);
         return "/admin/attendanceStatistics";
     }
     
     // 특정 반/월별 출석 상세 페이지
     @GetMapping("/admin/attendanceByClass")
-    public String attendanceByClass(
-            @RequestParam int courseId, // 강의(반) ID
-            @RequestParam(required = false) Integer year,
-            @RequestParam(required = false) Integer month,
-            Model model) {
+    public String attendanceByClass(@RequestParam int courseId
+    								,@RequestParam(required = false) Integer year
+						            ,@RequestParam(required = false) Integer month
+						            ,Model model) {
 
         // 1. 기준 연/월 세팅 (파라미터 없으면 이번 달)
         LocalDate today = LocalDate.now();

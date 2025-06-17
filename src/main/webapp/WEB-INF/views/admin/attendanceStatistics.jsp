@@ -29,14 +29,16 @@ body { margin: 0; padding: 0; }
         <table border="1">
             <tr>
                 <th>반</th>
-                <th>전체 출석 가능 횟수</th>
-                <th>실제 출석(지각 포함)</th>
+                <th>강의명</th>
+                <th>출석 가능 일수</th>
+                <th>실제 출석</th>
                 <th>출석률(%)</th>
             </tr>
             <!-- 각 반 별로 반복 -->
             <c:forEach var="i" begin="0" end="${fn:length(classNames) - 1}">
                 <tr>
                     <td>${classNames[i]}</td>
+                    <td>${courseNames[i]}</td>
                     <td>${attendanceTotalCounts[i]}</td>
                     <td>${actuals[i]}</td>
                     <td>
