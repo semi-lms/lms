@@ -74,4 +74,7 @@ public interface ExamService {
 	
 	// 문제, 보기 등록
 	void insertQuestionAndOptions(ExamQuestionDTO question);
+	
+	// 문제 삭제
+	void deleteExamQuestionOption(int examId);
 }

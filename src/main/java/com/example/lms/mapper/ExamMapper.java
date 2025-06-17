@@ -86,4 +86,9 @@ public interface ExamMapper {
     int insertQuestion(ExamQuestionDTO examQuestionDto);
     // 보기 등록
     int insertOption(ExamOptionDTO examOptionDto);
+    
+    // 문제 삭제
+    void deleteExamOptionByExamId(int examId);
+    void deleteExamQuestionByExamId(int examId);
+    void deleteExamByExamId(int examId);
 }

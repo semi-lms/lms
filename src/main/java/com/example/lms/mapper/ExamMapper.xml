@@ -221,4 +221,23 @@
 		INSERT INTO exam_option (question_id, option_no, option_text)
 		VALUES (#{questionId}, #{optionNo}, #{optionText})
 	</insert>
+	
+	<!-- 시험 삭제 관련 쿼리들 -->
+	<!-- 1. exam_option 삭제 -->
+	<delete id="deleteExamOptionByExamId" parameterType="int">
+		DELETE FROM exam_option
+		WHERE question_id IN (
+			SELECT question_id FROM exam_question WHERE exam_id = #{examId}
+		)
+	</delete>
+	<!-- 2. exam_question 삭제 -->
+	<delete id="deleteExamQuestionByExamId" parameterType="int">
+		DELETE FROM exam_question
+		WHERE exam_id = #{examId}
+	</delete>
+	<!-- 3. exam 삭제 -->
+	<delete id="deleteExamByExamId" parameterType="int">
+		DELETE FROM exam
+		WHERE exam_id = #{examId}
+	</delete>
 </mapper>

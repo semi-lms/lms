@@ -210,4 +210,12 @@ public class ExamServiceImpl implements ExamService {
 	        examMapper.insertOption(option);
 	    }
 	}
+	
+	@Override
+	@Transactional
+	public void deleteExamQuestionOption(int examId) {
+		examMapper.deleteExamOptionByExamId(examId);
+		examMapper.deleteExamQuestionByExamId(examId);
+		examMapper.deleteExamByExamId(examId);
+	}
 }
