@@ -145,7 +145,9 @@
 	</div>
 	<!-- 공통 하단 컨텐츠 include -->
 	<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />
+
 	<!-- footer -->
 	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	
 </body>
 </html>
