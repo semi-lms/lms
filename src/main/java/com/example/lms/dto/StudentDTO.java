@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class StudentDTO {	
-	private int studentNo;		// student_no
-	private int courseId;		// course_id
+	private Integer studentNo;		// student_no
+	private Integer courseId;		// course_id
 	private String studentId;		// student_id
 	private String password;	// password
 	private String name;		// name

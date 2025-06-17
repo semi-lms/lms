@@ -115,22 +115,22 @@ body {
 	
 	$(function () {
 	    // 행 추가 버튼 클릭하면 1행씩 추가
-	    $("#insertRowBtn").click(function () {
-	        let html = `
-	            <tr>
-	                <td><button type="button" class="remove-row-btn" title="행 삭제">&times;</button></td>
-	                <td><input type="text" name="studentList[${rowIdx}].name"></td>
-	                <td><input type="text" name="studentList[${rowIdx}].phone" class="phone-input"></td>
-	                <td><input type="text" name="studentList[${rowIdx}].sn"></td>
-	                <td><input type="text" name="studentList[${rowIdx}].address"></td>
-	                <td><input type="email" name="studentList[${rowIdx}].email"></td>
-	                <td><input type="text" name="studentList[${rowIdx}].studentId" readonly></td>
-	                <td><input type="text" name="studentList[${rowIdx}].password" readonly></td>
-	            </tr>
-	        `;
-	        $("#studentTableBody").append(html);
-	        rowIdx++;
-	    });
+		$("#insertRowBtn").click(function () {
+		    let html = `
+		        <tr>
+		            <td><button type="button" class="remove-row-btn" title="행 삭제">&times;</button></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].name"></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].phone" class="phone-input"></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].sn"></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].address"></td>
+		            <td><input type="email" name="studentList[\${rowIdx}].email"></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].studentId" readonly></td>
+		            <td><input type="text" name="studentList[\${rowIdx}].password" readonly></td>
+		        </tr>
+		    `;
+		    $("#studentTableBody").append(html);
+		    rowIdx++;
+		});
 	
 	    // 행 삭제
 	    $("#studentTableBody").on("click", ".remove-row-btn", function () {
@@ -153,20 +153,17 @@ body {
 	    });
 	});
 	
-	//학생 등록 전 유효성 검사
 	function validateForm() {
-	    let isAnyRowInvalid = false;    // 일부 칸만 입력된 행이 있는지 확인하기 위해
-	    let hasAtLeastOneRow = false;   // 모든 칸이 입력된 행이 하나라도 있는지 확인하기 위해
-	
+	    let isAnyRowInvalid = false;
+	    let hasAtLeastOneRow = false;
+
 	    $("#studentTableBody tr").each(function (index) {
 	        const $inputs = $(this).find("input[type='text']:not([readonly]), input[type='email']");
-	        let rowHasValue = false;    // 이 행에서 한 칸이라도 값이 있는지
-	        let rowIsValid = true;      // 이 행의 모든 칸이 채워졌는지
-	
-	        // 각 셀(이름, 전화번호 등)을 돌면서 체크
+	        let rowHasValue = false;
+	        let rowIsValid = true;
+
 	        $inputs.each(function () {
 	            const val = $(this).val().trim();
-	            // 빈 칸이면 에러 표시
 	            if (!val) {
 	                rowIsValid = false;
 	                $(this).css("border", "2px solid red");
@@ -175,30 +172,48 @@ body {
 	                $(this).css("border", "");
 	            }
 	        });
-	
-	        // 이 행이 모든 칸이 채워진 경우 → 등록할 대상
+
 	        if (rowHasValue && rowIsValid) {
 	            hasAtLeastOneRow = true;
 	        }
-	        // 이 행이 일부 칸만 입력된 경우 → 에러
 	        if (rowHasValue && !rowIsValid) {
 	            isAnyRowInvalid = true;
 	        }
 	    });
-	
-	    // 일부 칸만 채워진 행이 있다면 전체 등록 막기
+
 	    if (isAnyRowInvalid) {
 	        alert("모든 칸을 빠짐없이 입력하세요.");
 	        return false;
 	    }
-	
-	    // 한 행도 전부 채워진 게 없다면 등록 막기
+
 	    if (!hasAtLeastOneRow) {
 	        alert("최소 1명의 학생 정보를 모두 입력하세요.");
 	        return false;
 	    }
-	
-	    // 정상적으로 통과 시 등록
+
+	    // 이 부분이 **폼이 실제 제출될 때 반드시 실행되어야 함**
+	    // 모든 칸이 비어있는 row는 name 속성 제거 (Spring에서 무시됨)
+	    $("#studentTableBody tr").each(function () {
+	        let allEmpty = true;
+	        $(this).find("input[type='text']:not([readonly]), input[type='email']").each(function () {
+	            if ($(this).val().trim()) {
+	                allEmpty = false;
+	            }
+	        });
+	        if (allEmpty) {
+	            $(this).find("input").removeAttr("name");
+	        }
+	    });
+	    
+	    $("#studentTableBody tr").each(function () {
+	        $(this).find("input").each(function () {
+	            // name 속성이 있고, [와 ]가 붙어 있는데 그 안이 비었으면 삭제
+	            var name = $(this).attr("name");
+	            if (name && name.match(/studentList\[\]/)) {
+	                $(this).removeAttr("name");
+	            }
+	        });
+	    });
 	    return true;
 	}
 </script>
