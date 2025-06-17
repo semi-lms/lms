@@ -175,16 +175,30 @@ public class StudentController {
 	// 문제 페이지 보여주기
 	@GetMapping("/student/takeExam")
 	public String takeExam(@RequestParam int examId, Model model, HttpSession session) {
-	    List<ExamQuestionDTO> questions = examService.getAllQuestions(examId); // 전부 불러옴
+	    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+	    if (loginUser == null) {
+	        return "redirect:/login";
+	    }
 
-	    @SuppressWarnings("unchecked")
-	    Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers");
-	    if (temp == null) temp = new HashMap<>();
+	    // 제출 여부 확인 (exam_submission 테이블에서 해당 학생, 시험의 제출 존재 여부)
+	    ExamSubmissionDTO submission = examService.getSubmissionByExamAndStudent(examId, loginUser.getStudentNo());
 
-	    model.addAttribute("questions", questions);
-	    model.addAttribute("examId", examId);
-	    model.addAttribute("tempAnswers", temp);
-	    return "student/takeExam";
+	    if (submission != null) {
+	        // 제출한 상태면 결과페이지로 리다이렉트
+	        return "redirect:/student/examResult?submissionId=" + submission.getSubmissionId();
+	    } else {
+	        // 응시 전 상태면 시험 문제 보여주기
+	        List<ExamQuestionDTO> questions = examService.getAllQuestions(examId);
+
+	        @SuppressWarnings("unchecked")
+	        Map<Integer, Integer> temp = (Map<Integer, Integer>) session.getAttribute("tempAnswers");
+	        if (temp == null) temp = new HashMap<>();
+
+	        model.addAttribute("questions", questions);
+	        model.addAttribute("examId", examId);
+	        model.addAttribute("tempAnswers", temp);
+	        return "student/takeExam";
+	    }
 	}
 
 	
@@ -207,9 +221,30 @@ public class StudentController {
 		List<ExamAnswerDTO> answers = submission.getAnswers();
 		int score = examService.submitExam(submission, answers);
 		model.addAttribute("score", score); 
-		return "redirect:/student/examList"; //추후 결과페이지로 수정할거
+		return "redirect:/student/examResult"; //추후 결과페이지로 수정할거
 	}
+	//시험 결과 보기
+	@GetMapping("/student/examResult")
+	public String examResult(@RequestParam int submissionId, Model model) {
+	    ExamSubmissionDTO submission = examService.getSubmissionById(submissionId);
+	    if (submission == null) {
+	        return "redirect:/student/examList";
+	    }
+	    List<ExamAnswerDTO> answers = examService.getExamAnswersWithCorrect(submissionId);
+//	    List<ExamAnswerDTO> answers = examService.getAnswersBySubmissionId(submissionId);
+	    List<ExamQuestionDTO> questions = examService.getAllQuestions(submission.getExamId());
 
+	    Map<Integer, Integer> correctMap = new HashMap<>();
+	    for (ExamQuestionDTO q : questions) {
+	        correctMap.put(q.getQuestionId(), q.getCorrectNo());
+	    }
+
+	    model.addAttribute("score", submission.getScore());
+	    model.addAttribute("answers", answers);
+	    model.addAttribute("correctMap", correctMap);
+
+	    return "student/examResult";
+	}
 
 	// 학생 리스트 페이지
 	@GetMapping("/admin/studentList")

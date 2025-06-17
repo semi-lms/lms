@@ -124,7 +124,8 @@
           </div>
         </c:when>
         <c:otherwise>
-          <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
+        <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&submissionId=${exam.submissionId}&page=1'">
+
             <h3>${exam.title}</h3>
             <p>시작일: ${exam.examStartDate}</p>
             <p>종료일: ${exam.examEndDate}</p>
