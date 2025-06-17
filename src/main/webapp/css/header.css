@@ -1,5 +1,5 @@
 .header {
-    background-color: white;
+    background-color: #E9FCE9;
     display: flex;
     align-items: center;
     justify-content: space-between; /* 가운데 정렬에서 좌우 배치로 변경 */
@@ -48,15 +48,15 @@
 }
 
 .header .nav a {
-    color: #333; 
+    color: #2F6B49; /* 진한 연두 초록 */
     text-decoration: none;
     padding: 6px 10px;
     border-radius: 3px;
+    transition: color 0.3s ease;
 }
 
 .header .nav a:hover,
 .header .nav a:focus {
-    color: skyblue;
+    color: #63C285; /* 밝은 연두 */
     outline: none;
 }
-

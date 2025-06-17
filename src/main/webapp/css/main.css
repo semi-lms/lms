@@ -2,7 +2,7 @@
 
 body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background: white;
+	background: #F7FAF0;
 	margin: 0;
 	padding: 0;
 	
@@ -46,10 +46,10 @@ header {
 .card.mypage-box {
     flex: 1;
     max-width: 320px;
-    background-color: white;
+    background-color: #D9F0F1;
+box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1); /* 연두빛 살짝 넣은 그림자 */
     border-radius: 12px;
     padding: 30px 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     animation: fadeInUp 1s ease forwards;
 }
