@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="/css/lecture.css" />
 </head>
 <body>
+<c:choose>
+  <c:when test="${loginUser.role == 'teacher'}">
+    <jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
+  </c:when>
+  <c:when test="${loginUser.role == 'student'}">
+    <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+  </c:when>
+</c:choose>
     <div class="schedule-container">
         <h2>강의 일정 등록/수정</h2>
 

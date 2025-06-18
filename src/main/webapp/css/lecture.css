@@ -63,7 +63,7 @@ textarea {
     resize: vertical;
 }
 
-button {
+.schedule-container button {
     width: 100%;
     padding: 10px;
     background-color: #66bb6a;
@@ -76,7 +76,7 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.schedule-container button:hover {
     background-color: #388e3c;
 }
 
