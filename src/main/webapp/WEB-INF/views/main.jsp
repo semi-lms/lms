@@ -10,11 +10,13 @@
 <title>LMS 메인</title>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">  
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body>
 
-<img src="${pageContext.request.contextPath}/img/cursor.png" id="custom-cursor" />
+	<img src="${pageContext.request.contextPath}/img/cursor.png"
+		id="custom-cursor" />
 	<!-- 헤더 include -->
 	<c:choose>
 		<c:when test="${sessionScope.loginUser.role eq 'admin'}">
@@ -40,34 +42,48 @@
 		</div>
 
 		<c:choose>
-		  <c:when test="${not empty loginUser}">
-		    <c:choose>
-		      <c:when test="${loginUser.role eq 'admin'}">
-		        <div class="card mypage-box">
-		          <h2>김예진/노민혁 님</h2>
-		          <p>역할: ${loginUser.role}</p>
-		          <a href="/mypage" class="btn">마이페이지</a>
-		          <a href="/logout" class="btn logout">로그아웃</a>
-		        </div>
-		      </c:when>
-		      <c:otherwise>
-		        <div class="card mypage-box">
-		          <h2>${loginUser.name}님</h2>
-		          <p>역할: ${loginUser.role}</p>
-		          <a href="/mypage" class="btn">마이페이지</a>
-		          <a href="/logout" class="btn logout">로그아웃</a>
-		        </div>
-		      </c:otherwise>
-		    </c:choose>
-		  </c:when>
-		
-		  <c:otherwise>
-		    <div class="card mypage-box">
-		      <h2>환영합니다!</h2>
-		      <p>로그인이 필요합니다.</p>
-		      <a href="/login" class="btn">로그인</a>
-		    </div>
-		  </c:otherwise>
+			<c:when test="${not empty loginUser}">
+				<c:choose>
+					<c:when test="${loginUser.role eq 'admin'}">
+						<div class="card mypage-box">
+							<h2>김예진/노민혁 님</h2>
+							<p>	
+								<c:choose>
+									<c:when test="${loginUser.role eq 'student'}">학생</c:when>
+									<c:when test="${loginUser.role eq 'teacher'}">강사</c:when>
+									<c:when test="${loginUser.role eq 'admin'}">관리자</c:when>
+									<c:otherwise>${loginUser.role}</c:otherwise>
+								</c:choose>
+							</p>
+							<a href="/mypage" class="btn">마이페이지</a> <a href="/logout"
+								class="btn logout">로그아웃</a>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="card mypage-box">
+							<h2>${loginUser.name}님</h2>
+							<p>	
+								<c:choose>
+									<c:when test="${loginUser.role eq 'student'}">학생</c:when>
+									<c:when test="${loginUser.role eq 'teacher'}">강사</c:when>
+									<c:when test="${loginUser.role eq 'admin'}">관리자</c:when>
+									<c:otherwise>${loginUser.role}</c:otherwise>
+								</c:choose>
+							</p>
+							<a href="/mypage" class="btn">마이페이지</a> <a href="/logout"
+								class="btn logout">로그아웃</a>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</c:when>
+
+			<c:otherwise>
+				<div class="card mypage-box">
+					<h2>환영합니다!</h2>
+					<p>로그인이 필요합니다.</p>
+					<a href="/login" class="btn">로그인</a>
+				</div>
+			</c:otherwise>
 		</c:choose>
 	</div>
 
@@ -140,9 +156,10 @@
 	</c:if>
 	<!-- 삼담문의 배너 -->
 	<div class="floBanPc3">
-	  <a href="tel:028187950">
-	    <img src="https://cdn.imweb.me/upload/S202407158b5a524da5594/40ffd7b4f910b.png" width="150px" height="150px">
-	  </a>
+		<a href="tel:028187950"> <img
+			src="https://cdn.imweb.me/upload/S202407158b5a524da5594/40ffd7b4f910b.png"
+			width="150px" height="150px">
+		</a>
 	</div>
 	<!-- 공통 하단 컨텐츠 include -->
 	<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />

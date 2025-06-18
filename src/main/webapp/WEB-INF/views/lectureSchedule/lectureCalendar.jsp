@@ -47,7 +47,14 @@
 
 </head>
 <body>
-<jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+<c:choose>
+  <c:when test="${loginUser.role == 'teacher'}">
+    <jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
+  </c:when>
+  <c:when test="${loginUser.role == 'student'}">
+    <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+  </c:when>
+</c:choose>
     <div class="calendar-container">
         <div class="month-nav">
             <button class="btn-month" onclick="prevMonth()">&lt;</button>
