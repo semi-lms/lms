@@ -45,15 +45,14 @@
           <textarea id="content" name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요.">${notice.content}</textarea>
         </div>
 
-        <div class="form-group">
+       <div class="button-group">
           <button type="submit" class="btn-submit">수정 완료</button>
-        </div>
-
-        <div class="form-group">
           <a href="${pageContext.request.contextPath}/notice/noticeOne?noticeId=${notice.noticeId}">
             <button type="button" class="btn-submit">돌아가기</button>
           </a>
         </div>
+
+       
 
       </form>
     </div>

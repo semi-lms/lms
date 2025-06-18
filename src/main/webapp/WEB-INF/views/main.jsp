@@ -61,8 +61,10 @@
 								<c:otherwise>${loginUser.role}</c:otherwise>
 							</c:choose>
 						</p>
-						<a href="/mypage" class="btn">마이페이지</a> <a href="/logout"
-							class="btn logout">로그아웃</a>
+							<c:if test="${loginUser.role ne 'admin'}">
+						<a href="/mypage" class="btn">마이페이지</a> 
+						</c:if>
+						<a href="/logout"class="btn logout">로그아웃</a>
 					</div>
 				</c:when>
 				<c:otherwise>
