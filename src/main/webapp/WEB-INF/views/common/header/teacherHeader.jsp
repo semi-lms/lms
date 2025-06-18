@@ -8,9 +8,11 @@
     <img src="/img/우수훈련기관.png" width="63" height="56" />
   </div>
   <div class="nav">
-    	<a href="/">강의목록</a>
-    	<a href="/">관리목록</a>
-    	<a href="/lectureSchedule?=${loginuser.courseId }&year=2025&month=6">강의일정</a>
+    	<a href="/courseListFromTeacher?courseId=${loginUser.courseId}">강의목록</a>
+    	<a href="/attendanceList?courseId=${loginUser.courseId}">출결관리</a>
+    	<a href="/studentListFromTeacher?courseId=${loginUser.courseId}">학생관리</a>
+    	<a href="/examList?courseId=${loginUser.courseId}">시험관리</a>
+    	<a href="/lectureSchedule?courseId=${loginUser.courseId}&year=2025&month=6">강의일정</a>
     	<a href="/notice/noticeList">공지사항</a>
 		<a href="/qna/qnaList">QNA</a>
 		<a href="file/fileBoard">자료실</a>

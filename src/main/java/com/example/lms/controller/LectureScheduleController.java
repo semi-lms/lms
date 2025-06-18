@@ -44,16 +44,14 @@ public class LectureScheduleController {
         int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
 
    
-     // 1일 셋팅
-        cal.set(displayYear, displayMonth - 1, 1);
-        int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	    // 1일로 세팅
+	    cal.set(displayYear, displayMonth - 1, 1);
+	    // 1일이 무슨 요일인지 (일:1, 월:2, ..., 토:7)
+	    int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	    // (0:일요일, 1:월요일 ... 6:토요일)로 변경
+	    int startOffset = firstDayOfWeek - 1; // Calendar.SUNDAY == 1
+	    cal.add(Calendar.DATE, -startOffset); // ← 요기서 -startOffset
 
-        // 일요일이면 offset 0, 아니면 (요일 - 2)로 계산 (월=0, ... 일=6)
-        int startOffset = (firstDayOfWeek == Calendar.SUNDAY) ? 0 : firstDayOfWeek - 2;
-        if (startOffset < 0) startOffset = 6;  // 일요일일 때 음수 방지
-
-        // 달력 시작 날짜 = 1일 - startOffset 일
-        cal.add(Calendar.DATE, -startOffset);
 
         List<Map<String, Object>> weeks = new ArrayList<>();
         

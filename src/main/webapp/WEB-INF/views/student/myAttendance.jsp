@@ -9,24 +9,6 @@
 
 <title>강의 일정</title>
 
-<script>
-    const studentId = '${studentId}'; 
-    console.log('학생아이디' , ${studnentId})
-	
-        function prevMonth() {
-            let y = ${year}, m = ${month} - 1;
-            if (m < 1) { y--; m = 12; }
-            location.href = '/student/myAttendance?studentId=' + studentId + '&year=' + y + '&month=' + m;
-       
-        }
-
-        function nextMonth() {
-            let y = ${year}, m = ${month} + 1;
-            if (m > 12) { y++; m = 1; }
-            location.href = '/student/myAttendance?studentId=' + studentId+ '&year=' + y + '&month=' + m;
-        }
-
-    </script>
 </head>
 <body>
 
@@ -68,5 +50,23 @@
 			</tbody>
 		</table>
 	</div>
+	<script>
+    const studentNo = '${studentNo}'; 
+    console.log('studentNo:', studentNo);
+	
+        function prevMonth() {
+            let y = ${year}, m = ${month} - 1;
+            if (m < 1) { y--; m = 12; }
+            location.href = '/student/myAttendance?studentNo=' + studentNo + '&year=' + y + '&month=' + m;
+       
+        }
+
+        function nextMonth() {
+            let y = ${year}, m = ${month} + 1;
+            if (m > 12) { y++; m = 1; }
+            location.href = '/student/myAttendance?studentNo=' + studentNo+ '&year=' + y + '&month=' + m;
+        }
+
+    </script>
 </body>
 </html>

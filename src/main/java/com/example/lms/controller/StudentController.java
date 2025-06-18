@@ -61,74 +61,81 @@ public class StudentController {
 
 	@GetMapping("/student/myAttendance")
 	public String getMyAttendance(@RequestParam int studentNo,
-			@RequestParam(required = false) Integer year,
-			@RequestParam(required = false) Integer month,
-			HttpSession session,
-			Model model) {
+	        @RequestParam(required = false) Integer year,
+	        @RequestParam(required = false) Integer month,
+	        HttpSession session,
+	        Model model) {
 
-		Calendar cal = Calendar.getInstance();
-		int displayYear = (year != null) ? year : cal.get(Calendar.YEAR);
-		int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
+	    Calendar cal = Calendar.getInstance();
+	    int displayYear = (year != null) ? year : cal.get(Calendar.YEAR);
+	    int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
+	    
+	    // 1일로 세팅
+	    cal.set(displayYear, displayMonth - 1, 1);
+	    // 1일이 무슨 요일인지 (일:1, 월:2, ..., 토:7)
+	    int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+	    // (0:일요일, 1:월요일 ... 6:토요일)로 변경
+	    int startOffset = firstDayOfWeek - 1; // Calendar.SUNDAY == 1
+	    cal.add(Calendar.DATE, -startOffset); // ← 요기서 -startOffset
+	    
+	    List<Map<String, Object>> weeks = new ArrayList<>();
 
-		cal.set(displayYear, displayMonth - 1, 1);
-		int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-		int startOffset = (firstDayOfWeek == Calendar.SUNDAY) ? 0 : firstDayOfWeek - 2;
-		if (startOffset < 0) startOffset = 6;
-		cal.add(Calendar.DATE, -startOffset);
+	    for (int w = 0; w < 6; w++) {
+	        List<Map<String, Object>> days = new ArrayList<>();
+	        boolean hasCurrentMonthDate = false;
 
-		List<Map<String, Object>> weeks = new ArrayList<>();
+	        for (int d = 0; d < 7; d++) {
+	            Date date = cal.getTime();
+	            Calendar tmpCal = Calendar.getInstance();
+	            tmpCal.setTime(date);
 
-		for (int w = 0; w < 6; w++) {
-			List<Map<String, Object>> days = new ArrayList<>();
-			boolean hasCurrentMonthDate = false;
+	            int y = tmpCal.get(Calendar.YEAR);
+	            int m = tmpCal.get(Calendar.MONTH) + 1;
+	            int day = tmpCal.get(Calendar.DAY_OF_MONTH);
 
-			for (int d = 0; d < 7; d++) {
-				Date date = cal.getTime();
-				Calendar tmpCal = Calendar.getInstance();
-				tmpCal.setTime(date);
+	            boolean isCurrentMonth = (m == displayMonth);
+	            if (isCurrentMonth) hasCurrentMonthDate = true;
 
-				int y = tmpCal.get(Calendar.YEAR);
-				int m = tmpCal.get(Calendar.MONTH) + 1;
-				int day = tmpCal.get(Calendar.DAY_OF_MONTH);
+	            String dateStr = String.format("%04d-%02d-%02d", y, m, day);
 
-				boolean isCurrentMonth = (m == displayMonth);
-				if (isCurrentMonth) hasCurrentMonthDate = true;
+	            int dayOfWeek = tmpCal.get(Calendar.DAY_OF_WEEK); // 일:1, 월:2, ... 토:7
 
-				String dateStr = String.format("%04d-%02d-%02d", y, m, day);
+	            Map<String, Object> dayMap = new HashMap<>();
+	            dayMap.put("dateStr", dateStr);
+	            dayMap.put("day", day);
+	            dayMap.put("isCurrentMonth", isCurrentMonth);
+	            dayMap.put("dayOfWeek", dayOfWeek);
+	            days.add(dayMap);
 
-				Map<String, Object> dayMap = new HashMap<>();
-				dayMap.put("dateStr", dateStr);
-				dayMap.put("day", day);
-				dayMap.put("isCurrentMonth", isCurrentMonth);
-				dayMap.put("dayOfWeek", d + 1);
-				days.add(dayMap);
+	            cal.add(Calendar.DATE, 1);
+	        }
 
-				cal.add(Calendar.DATE, 1);
-			}
+	        if (hasCurrentMonthDate) {
+	            weeks.add(Map.of("days", days));
+	        }
+	    }
 
-			if (hasCurrentMonthDate) {
-				weeks.add(Map.of("days", days));
-			}
-		}
+	    
+	    // 출석 정보 조회 후 날짜별로 매핑
+	    List<AttendanceDTO> attendanceList = attendanceService.getAttendanceListByStudentNo(studentNo);
+	    Map<String, String> attendanceMap = new HashMap<>();
 
-		// 출석 정보 조회 후 날짜별로 매핑
-		List<AttendanceDTO> attendanceList = attendanceService.getAttendanceListByStudentNo(studentNo);
-		Map<String, String> attendanceMap = new HashMap<>();
+	    for (AttendanceDTO dto : attendanceList) {
+	        if (dto.getDate() != null && dto.getStatus() != null) {
+	            String dateStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(dto.getDate());
+	            attendanceMap.put(dateStr, dto.getStatus());
+	        }
+	    }
 
-		for (AttendanceDTO dto : attendanceList) {
-			if (dto.getDate() != null && dto.getStatus() != null) {
-				String dateStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(dto.getDate());
-				attendanceMap.put(dateStr, dto.getStatus());
-			}
-		}
+	    model.addAttribute("year", displayYear);
+	    model.addAttribute("month", displayMonth);
+	    model.addAttribute("weeks", weeks);
+	    model.addAttribute("attendanceMap", attendanceMap);
+	    model.addAttribute("studentNo", studentNo);
 
-		model.addAttribute("year", displayYear);
-		model.addAttribute("month", displayMonth);
-		model.addAttribute("weeks", weeks);
-		model.addAttribute("attendanceMap", attendanceMap);
-
-		return "student/myAttendance";
+	    return "student/myAttendance";
 	}
+
 	@GetMapping("/student/examList")
 	public String examList( @RequestParam(required = false) Integer examId,
 	                       @RequestParam(defaultValue = "1") int currentPage,
