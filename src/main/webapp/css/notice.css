@@ -1,35 +1,232 @@
-@charset "UTF-8";
+/* notice.css - 공지사항 본문 전용 스타일 */
 
-/* 공지사항 리스트 */
-.notice-content {
-  padding-left: 300px; /* 사이드바가 약 250px이면 이 정도 */
-  padding-top: 30px;
-  
-  /* 공지사항 수정 폼 */
- .form-group {
-    display: flex;
-    align-items: center; /* 수직 정렬 맞춤 */
-    margin-bottom: 15px;
-  }
-
-  .form-group label {
-    width: 70px;
-    font-weight: bold;
-  }
-
-  .form-control {
-    width: 400px;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-    .form-control[readonly] {
-    background-color: #eee;
-    color: #333;
-  }
-
-  textarea.form-control {
-    height: 200px;
-    resize: vertical;
-  }
+/* 본문 영역 여백 및 최대 너비 */
+.main-content {
+  width: calc(90% - 270px);
+  margin-left: 270px !important;
+  padding-left: 20px;
+  margin: 30px 20px;
+  background-color: #fff;
+  box-sizing: border-box;
+  min-height: 100vh;
 }
+
+/* 제목 스타일 */
+h1, h2 {
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* 테이블 스타일 */
+table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-left : 80px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 15px;
+}
+
+table th {
+  background-color: #2c3e50; /* 진한 네이비 */
+  color: #ffffff; /* 흰색 */
+  font-weight: 600;
+}
+
+table tr:hover {
+  background-color: #f0f8ff; /* 연한 하늘색으로 변경 */
+}
+
+/* form 그룹 스타일 */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #2c3e50; /* 네이비 계열 */
+  outline: none;
+}
+
+/* 텍스트 에어리어 */
+textarea.form-control {
+  resize: vertical;
+  min-height: 150px;
+  font-family: inherit;
+}
+
+/* 검색 영역 */
+#searchOption, #searchNotice {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+/* 페이지 네비게이션 */
+a {
+  color: #2c3e50; /* 네이비 */
+  text-decoration: none;
+  margin: 0 5px;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #1abc9c; /* 민트빛 포인트 */
+}
+
+span {
+  font-weight: 700;
+  color: #444;
+  margin: 0 5px;
+}
+
+/* confirm 삭제 버튼 */
+form[action*="deleteNotice"] button {
+  background-color: #c0392b;
+}
+
+form[action*="deleteNotice"] button:hover {
+  background-color: #a83227;
+}
+
+/* 공지사항 상세보기 내용 줄바꿈 유지 */
+.main-content table td[style] {
+  white-space: pre-wrap;
+}
+/* 검색 영역 */
+.notice-search {
+  display: flex;
+ justify-content: flex-end; 
+ margin-right: 60px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.notice-search select,
+.notice-search input[type="text"] {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.notice-search button {
+  padding: 8px 16px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notice-search button:hover {
+  background-color: #1a252f;
+}
+
+/* 버튼 스타일 - 깔끔한 블랙 테두리 + 흰 배경 스타일 */
+button, .btn-submit, a.btn-submit {
+  background-color: white;
+  color: #333;
+  border: 1.5px solid #333;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  display: inline-block;
+}
+
+button:hover, .btn-submit:hover, a.btn-submit:hover {
+  background-color: #333;
+  color: white;
+}
+
+/* 삭제 버튼 강조 */
+form[action*="deleteNotice"] button {
+  border: 1.5px solid #c0392b;
+  color: #c0392b;
+  background-color: white;
+}
+
+form[action*="deleteNotice"] button:hover {
+  background-color: #c0392b;
+  color: white;
+}
+/* 상세보기 테이블 - 전부 흰 배경 */
+.notice-content table {
+  background-color: white;
+  border-collapse: collapse;
+  width: 100%;
+  box-shadow: 0 0 8px rgba(0,0,0,0.05);
+  font-size: 15px;
+}
+
+.notice-content th {
+  background-color: #f5f5f5; /* 연한 회색 */
+  color: #333;
+  text-align: left;
+  padding: 12px 15px;
+  font-weight: 600;
+}
+
+.notice-content td {
+  background-color: white;
+  padding: 12px 15px;
+  color: #444;
+  border-top: 1px solid #eee;
+}
+/* 버튼들을 오른쪽 아래로 정렬 */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 30px;
+  margin-right: 60px;
+  flex-wrap: wrap;
+}
+
+.button-group form,
+.button-group a {
+  display: inline-block;
+}
+
+.button-group button,
+.button-group .btn-submit {
+  margin: 0;
+}
+

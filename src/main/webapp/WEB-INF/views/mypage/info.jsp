@@ -58,12 +58,6 @@
       <input type="text" name="phone" id="phone" value="${fullUser.phone}" />
     </div>
 
-    <!-- 수강과목 -->
-    <div class="form-group">
-      <label>수강과목:</label>
-      <input type="text" value="${fullUser.courseName}" readonly />
-    </div>
-
     <!-- 가입일 -->
     <div class="form-group">
       <label>가입일:</label>

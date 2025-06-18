@@ -1,5 +1,5 @@
 .header {
-    background-color: #F7FAF0;
+    background-color: #f0f8f5;
     display: flex;
     align-items: center;
     justify-content: space-between; 
@@ -48,7 +48,7 @@
 }
 
 .header .nav a {
-    color:#2F4F4F ; /* 진한 연두 초록 */
+    color:#1C3A3E  ; 
     text-decoration: none;
     padding: 6px 10px;
     border-radius: 3px;

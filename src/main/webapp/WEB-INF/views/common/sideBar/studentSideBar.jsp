@@ -4,6 +4,7 @@
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate value="${now}" pattern="yyyy" var="currentYear" />
 <fmt:formatDate value="${now}" pattern="M" var="currentMonth" />
+    <img src="/img/cursor.png" id="custom-cursor" alt="커서" />
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
@@ -18,7 +19,6 @@
 
     <!-- 하위 메뉴: 기본은 숨김 -->
 		<div id="submenu">
-		  <a href="/manage/course" class="submenu-link">• 수강과목</a>
 		  <a href="/student/examList?studentNo=${loginUser.studentNo }" class="submenu-link">• 시험문제</a>
 		  <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}" class="submenu-link">• 강의일정</a>
 		</div>
@@ -31,8 +31,8 @@
 document.addEventListener('DOMContentLoaded', () => {
 	  const cursorImg = document.getElementById('custom-cursor');
 	  document.addEventListener('mousemove', function (e) {
-	    cursorImg.style.left = (e.clientX + 30) + 'px';  // 마우스 x좌표 + 30px
-	    cursorImg.style.top = (e.clientY + 30) + 'px';   // 마우스 y좌표 + 30px
+	    cursorImg.style.left = (e.clientX + 30) + 'px';  
+	    cursorImg.style.top = (e.clientY + 30) + 'px';   
 	  });
 	});
 function toggleSubmenu() {

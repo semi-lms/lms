@@ -9,68 +9,67 @@
 </head>
 <body>
 
-<!-- 사이드바 -->
-<div class="sidebar">
-  <c:choose>
-    <c:when test="${loginUser.role eq 'admin'}">
-      <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
-    </c:when>
-  </c:choose>
-</div>
+  <!-- 왼쪽 메뉴 -->
+  <div class="sidebar">
+    <c:choose>
+      <c:when test="${loginUser.role eq 'admin'}">
+        <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
+      </c:when>
+    </c:choose>
+  </div>
 
-<!-- 본문 -->
-<div class="notice-content">
-  <h2>공지사항 수정</h2>
+  <!-- 본문 -->
+  <div class="main-content">
+    <div class="notice-content">
+      <h2>공지사항 수정</h2>
 
-  <form method="post"
-        action="${pageContext.request.contextPath}/notice/updateNotice"
-        onsubmit="return validateForm()">
-    
-    <!-- 숨겨진 공지 ID -->
-    <input type="hidden" name="noticeId" value="${notice.noticeId}">
-	<div class="form-group">
-      <label>작성자</label>
-      <input type="text" value="김예진/노민혁" class="form-control" readonly>
+      <form method="post"
+            action="${pageContext.request.contextPath}/notice/updateNotice"
+            onsubmit="return validateForm()">
+
+        <!-- 숨겨진 공지 ID -->
+        <input type="hidden" name="noticeId" value="${notice.noticeId}">
+
+        <div class="form-group">
+          <label>작성자</label>
+          <input type="text" value="관리자" class="form-control" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="title">제목</label>
+          <input type="text" id="title" name="title" value="${notice.title}" class="form-control" placeholder="제목을 입력해주세요.">
+        </div>
+
+        <div class="form-group">
+          <label for="content">내용</label>
+          <textarea id="content" name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요.">${notice.content}</textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-submit">수정 완료</button>
+        </div>
+
+        <div class="form-group">
+          <a href="${pageContext.request.contextPath}/notice/noticeOne?noticeId=${notice.noticeId}">
+            <button type="button" class="btn-submit">돌아가기</button>
+          </a>
+        </div>
+
+      </form>
     </div>
-    <!-- 제목 -->
-    <div class="form-group">
-      <label for="title">제목</label>
-      <input type="text" id="title" name="title" value="${notice.title}" class="form-control">
-    </div>
+  </div>
 
-    <!-- 내용 -->
-	<div class="form-group">
-	  <label for="content">내용</label>
-	  <textarea id="content" name="content" rows="10" cols="50">${notice.content}</textarea>
-	</div>
-
-    <!-- 수정 버튼 -->
-    <div class="form-group">
-      <button type="submit" class="btn-submit">수정 완료</button>
-    </div>
-
-    <!-- 뒤로가기 -->
-    <div class="form-group">
-      <a href="${pageContext.request.contextPath}/notice/noticeOne?noticeId=${notice.noticeId}">
-        <button type="button" class="btn-submit">돌아가기</button>
-      </a>
-    </div>
-
-  </form>
-</div>
- <!-- 제목 내용을 입력하지 않을경우 -->
   <script>
-	function validateForm() {
-	  const title = document.getElementById("title").value.trim();
-	  const content = document.getElementById("content").value.trim();
-	
-	  if (title === "" || content === "") {
-	    alert("제목과 내용을 입력해주세요");
-	    return false; // 제출 막음
-	  }
-	
-	  return true; // 정상 제출
-	}
-	</script>
+    function validateForm() {
+      const title = document.getElementById("title").value.trim();
+      const content = document.getElementById("content").value.trim();
+
+      if (title === "" || content === "") {
+        alert("제목과 내용을 입력해주세요");
+        return false;
+      }
+      return true;
+    }
+  </script>
 </body>
 </html>

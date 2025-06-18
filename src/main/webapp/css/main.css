@@ -2,19 +2,12 @@
 
 body {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background: #F7FAF0;
+	background: #f0f8f5;
 	margin: 0;
 	padding: 0;
 }
 
-header {
-	background-color: #343a40;
-	color: white;
-	padding: 15px 30px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+
 
 .main-section {
     max-width: 1200px;
@@ -102,7 +95,7 @@ a.btn {
 	border-radius: 6px;
 	text-decoration: none;
 	color: white;
-	background-color: #4CAF50;
+	background-color: #66BB6A   ;
 	font-weight: bold;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 }
@@ -111,7 +104,7 @@ a.btn:hover {
 	transform: scale(1.05);
 }
 a.btn.logout {
-	background-color: #D9534F;
+	background-color: #E57373   ;
 }
 a.btn.logout:hover {
 	background-color: #B52A34;
