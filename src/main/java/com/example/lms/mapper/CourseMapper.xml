@@ -49,7 +49,7 @@
 			</if>
 		</where>
 		GROUP BY c.course_id
-		ORDER BY c.course_id DESC
+		ORDER BY c.end_date DESC
     	LIMIT #{startRow}, #{rowPerPage}
 	</select>
 
