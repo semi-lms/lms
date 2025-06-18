@@ -57,7 +57,6 @@
             },
             success: function(result){
                 if(result && result!="NOT_FOUND"){
-                    alert("회원님의 아이디는 " + result + "이거에용");
                     window.location.href = "/login";
                 } else {
                     alert("일치하는 정보가 없네용? 간첩이세요?");

@@ -63,8 +63,7 @@
             },
             success: function(result){
                 if(result && result!="NOT_FOUND"){
-                    alert("회원님의 임시 비밀번호는 " + result + "입니다.");
-                    window.location.href = "/login";
+                    window.location.href = "/changePw";
                 } else {
                     alert("정보가 일치하지 않습니다.");
                 }
