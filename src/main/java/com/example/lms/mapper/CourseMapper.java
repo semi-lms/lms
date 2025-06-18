@@ -1,5 +1,6 @@
 package com.example.lms.mapper;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public interface CourseMapper {
 
 	int deleteCourses(List<Integer> courseIds);
 
-	int getOverlapCount(int classNo, String startDate, String endDate);
+	int getOverlapCount(int classNo, LocalDate localDate, LocalDate localDate2);
 	
 	// 강사 등록 시 선택할 강의명 조회
 	List<CourseDTO> getCourseNameNotEnded();

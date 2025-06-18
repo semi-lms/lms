@@ -1,5 +1,6 @@
 package com.example.lms.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +91,8 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	public int getOverlapCount(int classNo, String startDate, String endDate) {
-	    return courseMapper.getOverlapCount(classNo, startDate, endDate);
+	public int getOverlapCount(int classNo, LocalDate localDate, LocalDate localDate2) {
+	    return courseMapper.getOverlapCount(classNo, localDate, localDate2);
 	}
 
 	@Override
