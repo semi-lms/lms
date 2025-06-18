@@ -49,6 +49,7 @@
 			(s.name LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'studentNo')
 			
 		)
+		AND student_no = #{studentNo}
 		ORDER BY q.create_date DESC
 		LIMIT #{startRow}, #{rowPerPage} 
 	</select>

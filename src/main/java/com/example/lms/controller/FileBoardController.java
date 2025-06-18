@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ import com.example.lms.service.FileService;
 
 import jakarta.servlet.http.HttpSession;
 
+
 @Controller
 @RequestMapping("/file")
 public class FileBoardController {
@@ -57,7 +60,8 @@ public class FileBoardController {
 	@Autowired
 	private FileMapper fileMapper;
 	
-	// 공지사항 리스트
+	
+	// 자료실 리스트
 		@GetMapping("/fileBoardList")
 		   public String fileBoardList (Model model,
 		            @RequestParam(defaultValue = "1") int currentPage,
@@ -143,7 +147,7 @@ public class FileBoardController {
 					fileDto.setFileBoardNo(fileBoardDto.getFileBoardNo());
 					fileDto.setAdminId(loginUser.getAdminId());
 					fileDto.setFileName(originalFilename);	// 사용자에게 보여줄 이름
-					fileDto.setFilePath("upload/" + uuidName);	// 웹에서 접근할 경로
+					fileDto.setFilePath("C:/upload/" + uuidName);	// 웹에서 접근할 경로
 					fileDto.setSaveName(uuidName);
 					
 					fileMapper.insertFile(fileDto);
@@ -230,7 +234,7 @@ public class FileBoardController {
 		                    fileDto.setAdminId(loginUser.getAdminId());
 		                    fileDto.setFileName(originalFilename);
 		                    fileDto.setSaveName(uuidName);
-		                    fileDto.setFilePath("upload/" + uuidName);
+		                    fileDto.setFilePath("C:/upload/" + uuidName);
 
 		                    // 3-6. DB에 저장
 		                    fileMapper.insertFile(fileDto);
@@ -287,14 +291,22 @@ public class FileBoardController {
 			    // fileName = 실제 저장된 이름(UUID)
 			    FileDTO file = fileService.selectFileBySaveName(saveName);
 			    if (file == null) {
+			    	  System.out.println("DB에 해당 파일 없음: " + saveName);
+			    	  
 			        throw new FileNotFoundException("DB에서 해당 파일 정보를 찾을 수 없습니다: " + saveName);
 			    }
 
 			    String originalName = file.getFileName(); // 브라우저에 표시할 원래 이름
-			    Path filePath = Paths.get(uploadPath).resolve(saveName).normalize();
+			    Path filePath = Paths.get(file.getFilePath()).normalize(); // DB에 저장된 전체 경로 그대로 사용
+			    System.out.println("파일 경로: " + filePath);
+			    
 			    Resource resource = new UrlResource(filePath.toUri());
+			    
+			    System.out.println("실제 파일 경로: " + filePath);
 
 			    if (!resource.exists()) {
+			    	System.out.println("실제 파일이 존재하지 않음: " + filePath);
+			    	
 			        throw new FileNotFoundException("파일이 존재하지 않습니다.");
 			    }
 
@@ -309,6 +321,31 @@ public class FileBoardController {
 			                "attachment; filename=\"" + encodedFileName + "\"")
 			        .body(resource);
 			}
+		
+		
+		@PostMapping("/upload")
+		public String uploadFile(@RequestParam MultipartFile file) throws IOException {
+		    String uploadPath = "C:/upload/";
+		    File dir = new File(uploadPath);
+		    if (!dir.exists()) {
+		        dir.mkdirs(); // 폴더가 없으면 생성
+		    }
+		    System.out.println("운영체제: " + System.getProperty("os.name"));
+		    String originalName = file.getOriginalFilename(); 
+		    String saveName = UUID.randomUUID().toString() + "_" + originalName; // 확장자 포함 저장
+		    File saveFile = new File("C:/upload/" + saveName);
+		    file.transferTo(saveFile);
+		    System.out.println("파일 실제 저장됨: " + saveFile.getAbsolutePath());
+		    // DTO에 정보 설정
+		    FileDTO dto = new FileDTO();
+		    dto.setFileName(originalName);        // 사용자에게 보이는 원래 이름
+		    dto.setSaveName(saveName);            // 저장된 이름
+		    dto.setFilePath("C:/upload/" + saveName); // 절대경로로 저장
+		    dto.setUploadDate(Timestamp.valueOf(LocalDateTime.now())); // 업로드 시간
+		    System.out.println(">> 저장될 filePath: " + dto.getFilePath());
+		    fileService.insertFile(dto);
+		    return "redirect:/success";
+		}
 		
 		
 }

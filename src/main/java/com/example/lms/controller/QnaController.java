@@ -52,17 +52,27 @@ public class QnaController {
 				@RequestParam(defaultValue = "1") int currentPage,
 				@RequestParam(value="searchOption", required=false, defaultValue="all") String searchOption,
 				@RequestParam(value="keyword", required=false, defaultValue="") String keyword,
-				@RequestParam(defaultValue = "10") int rowPerPage) {
+				@RequestParam(defaultValue = "10") int rowPerPage,
+				@RequestParam(value="mine", required=false, defaultValue="false") boolean mine,
+				HttpSession session) {
 			
 			int totalCount = qnaService.totalCount(searchOption, keyword);
 			Page page = new Page(rowPerPage, currentPage, totalCount, searchOption, keyword);
 			int startRow = (currentPage - 1) * rowPerPage;
+			
+			// 본인이 쓴 글 확인하려면 로그인한 유저 정보 꺼내와야함
+			SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
 			
 			Map<String, Object> param = new HashMap<>();
 			param.put("searchOption", searchOption);
 			param.put("keyword", keyword);
 			param.put("startRow", (currentPage - 1) * rowPerPage);
 			param.put("rowPerPage", rowPerPage);
+			
+			// 본인이 쓴 qna 확인 하는 용도
+			if(mine && "student".equals(loginUser.getRole())) {
+				param.put("studentNo", loginUser.getStudentNo());
+			}
 			
 			List<QnaDTO> qnaList = qnaService.selectQnaList(param);
 			
@@ -80,6 +90,7 @@ public class QnaController {
 	        model.addAttribute("startPage", startPage);
 	        model.addAttribute("endPage", endPage);
 	        model.addAttribute("lastPage", lastPage);
+	        model.addAttribute("mine", mine);
 	        
 
 	        return"qna/qnaList";
