@@ -67,10 +67,10 @@ public class HolidaysController {
 	@ResponseBody
 	public boolean isDuplicateDateForUpdate(@RequestParam("date") String date,
 											@RequestParam("holidayId") int holidayId) {
-		HolidaysDTO holidaysDTO = new HolidaysDTO();
-		holidaysDTO.setDate(date);
-		holidaysDTO.setHolidayId(holidayId);
-		return holidaysService.isDuplicateDateForUpdate(holidaysDTO);
+		HolidaysDTO holidaysDto = new HolidaysDTO();
+		holidaysDto.setDate(date);
+		holidaysDto.setHolidayId(holidayId);
+		return holidaysService.isDuplicateDateForUpdate(holidaysDto);
 	}
 	
 	

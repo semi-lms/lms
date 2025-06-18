@@ -28,6 +28,7 @@
 				<th>이메일</th>
 				<th>아이디</th>
 				<th>담당강의</th>
+				<th>선택</th>
 			</tr>
 			<c:forEach var="teacher" items="${teacherList}">
 				<tr>
@@ -37,7 +38,17 @@
 					<td>${teacher.address}</td>
 					<td>${teacher.email}</td>
 					<td>${teacher.teacherId}</td>
-					<td>${teacher.courseName}</td>
+					<td>
+						<c:choose>
+						    <c:when test="${empty teacher.courseName}">
+						    	미정
+						    </c:when>
+						    <c:otherwise>
+						    	${teacher.courseName}
+						    </c:otherwise>
+					  </c:choose>
+					</td>
+					<td><input type="checkbox" class="selectTeacher" value="${teacher.teacherId}"></td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -46,9 +57,13 @@
 			<button type="button" id="insertTeacher">
 				➕ 강사 등록
 			</button>
-			<button type="button" id="updateTeacher">
-				💾 강사 수정
+			<button type="button" id="modifyBtn">
+				💾 수정
 			</button>
+			<button type="button" id="removeBtn">
+				❌ 삭제
+			</button>
+			
 		</div>
 	</div>
 	

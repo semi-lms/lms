@@ -57,6 +57,7 @@ public class TeacherController {
 		return "admin/teacherList";
 	}
 	
+	
 	// 강사 등록
 	@GetMapping("/admin/insertTeacher")
 	public String insertTeacher(Model model) {
@@ -69,10 +70,34 @@ public class TeacherController {
 	@PostMapping("/admin/insertTeacher")
 	public String insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
 		teacherService.insertTeacher(teacherDto);
-		return "redirect:/admin/insertTeacher";
+		return "redirect:/admin/teacherList";
 	}
 	
+	
+	// 강사 정보 수정
+	@GetMapping("/admin/updateTeacher")
+	public String updateTeacher(@RequestParam("teacherNo") int teacherNo, Model model) {
+		TeacherDTO teacherDto = teacherService.getTeacherByNo(teacherNo);
+		model.addAttribute("teacherDto", teacherDto);
+		model.addAttribute("courseList", courseService.getCourseNameNotEnded());
+		return "admin/updateTeacher";
+	}
+	
+	@PostMapping("/admin/updateTeacher")
+	public String updateTeacher(@ModelAttribute TeacherDTO teacherDto) {
+		teacherService.updateTeacher(teacherDto);
+		return "redirect:/admin/teacherList";
+	}
+	
+	
+	// 강사 삭제 (여러 명 삭제 가능)
+	@PostMapping("/admin/deleteTeachers")
+	public String deleteTeachers(@RequestParam("teacherNos") List<Integer> teacherNos) {
+		teacherService.deleteTeachers(teacherNos);
+		return "redirect:/admin/teacherList";
+	}
 		
+	
 	// 강의 리스트
 	@GetMapping("/courseListFromTeacher")
 	public String courseListFromTeacher(@RequestParam(defaultValue = "1") int currentPage

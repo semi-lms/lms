@@ -51,7 +51,7 @@
 	<!-- 강사 리스트 -->
 	<select id="getTeacherList" resultType="com.example.lms.dto.TeacherDTO">
 		SELECT 
-			t.name AS name, 
+			t.name, 
 			CONCAT(
 				SUBSTRING(t.phone, 1, 3), '-', 
 				SUBSTRING(t.phone, 4, 4), '-', 
@@ -61,14 +61,14 @@
 				SUBSTRING(t.sn, 1, 6), '-', 
 				SUBSTRING(t.sn, 7, 7)
 			) AS sn,
-			t.address AS address,
-			t.email AS email,
+			t.address,
+			t.email,
 			t.teacher_id AS teacherId,
 			c.course_name AS courseName
 		FROM teacher t
-		INNER join course c
+		LEFT join course c
 		ON t.course_id = c.course_id
-		ORDER BY t.NAME ASC;
+		ORDER BY t.name ASC;
 	</select>
 	
 	<!-- 강사 등록 -->
@@ -78,12 +78,62 @@
 	    	sn,	address,
 	    	email, course_id,
 		    teacher_id, password, reg_date
-		  )
+		)
 		VALUES (
 		  	#{name}, REPLACE(#{phone}, '-', ''),
 		  	REPLACE(#{sn}, '-', ''), #{address},
-		  	#{email}, #{courseId},
+		  	#{email}, 
+			<if test="courseId != null and courseId != ''">
+  				#{courseId},
+			</if>
+			<if test="courseId == null or courseId == ''">
+  				NULL,
+			</if>
 		    #{teacherId}, #{password}, NOW()
-		  )
+		)
 	</insert>
+	
+	<!-- 강사 한 명 조회 -->
+	<select id="getTeacherByNo" parameterType="com.example.lms.dto.TeacherDTO">
+		SELECT
+	        t.name,
+	        t.phone,
+	        t.sn,
+	        t.address,
+	        t.email,
+	        c.course_name AS courseName
+	    FROM teacher t
+	    LEFT join course c
+		ON t.course_id = c.course_id
+	    WHERE t.teacher_no = #{teacherNo}
+	</select>
+	
+	<!-- 강사 수정 -->
+	<update id="updateTeacher" parameterType="com.example.lms.dto.TeacherDTO">
+		UPDATE teacher
+		SET
+			name = #{name},
+			phone = #{phone},
+			sn = #{sn},
+			address = #{address},
+			email = #{email},
+			<if test="courseId != null and courseId != ''">
+  				#{courseId},
+			</if>
+			<if test="courseId == null or courseId == ''">
+  				NULL,
+			</if>
+		WHERE t.teacher_no = #{teacherNo}
+	</update>
+	
+	<!-- 강사 삭제 (여러 명 삭제 가능) -->
+	<delete id="deleteTeachers" parameterType="list">
+		DELETE FROM teacher
+		WHERE teacher_no IN  
+		<!-- teacher_no 컬럼이 주어진 리스트 값들 중 하나와 일치하는 경우 -->
+		<foreach collection="list" item="teacherNo" open="(" separator="," close=")">
+			#{teacherNo}
+		</foreach>
+		<!-- ex) WHERE teacher_no IN (1, 2, 3) -->
+	</delete>
 </mapper>

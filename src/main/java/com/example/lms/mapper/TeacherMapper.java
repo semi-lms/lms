@@ -23,4 +23,13 @@ public interface TeacherMapper {
 	
 	// 강사 등록
 	int insertTeacher(TeacherDTO teacherDto);
+	
+	// 강사 한 명 조회
+	TeacherDTO getTeacherByNo(int teacherNo);
+	
+	// 강사 정보 수정
+	int updateTeacher(TeacherDTO teacherDto);
+	
+	// 강사 삭제
+	int deleteTeachers(List<Integer> teacherNos);
 }
