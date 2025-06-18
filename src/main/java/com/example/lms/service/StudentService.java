@@ -24,4 +24,10 @@ public interface StudentService {
 	
 	void insertStudentAndCourseApply(List<StudentDTO> validList);
 	
+	StudentDTO getStudentById(int studentNo);
+	
+	int updateStudent(StudentDTO dto);
+	
+	int deleteStudents(List<Integer> studentNo);
+	
 }

@@ -94,7 +94,7 @@ public class CourseController {
 	    return "success";
 	}
 	
-	// 강의 수정
+	// 강의 수정 관련 정보 가져오기
 	@GetMapping("/admin/getCourseDetail")
 	@ResponseBody
 	public CourseDTO getCourseDetail(@RequestParam int courseId) {
