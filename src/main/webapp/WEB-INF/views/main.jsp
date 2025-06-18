@@ -5,7 +5,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>LMS 메인</title>
+<title>구디아카데미 LMS</title>
+<link rel="icon" href="${pageContext.request.contextPath}/img/cursor.png" type="image/png">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <link rel="stylesheet"
@@ -170,7 +171,7 @@
                 const iconUrl = `https://openweathermap.org/img/wn/04d@2x.png`;
 
                 document.getElementById('weather-location').textContent = '📍' + data.name;
-                document.getElementById('weather-temp').textContent = '🌡' + data.main.temp + ' °C';
+                document.getElementById('weather-temp').textContent = '🌡' + data.main.temp.toFixed(1) + ' °C';
                 document.getElementById('weather-desc').textContent = '🌤' + data.weather[0].description;
 
                 const iconImg = document.getElementById('weather-icon');
