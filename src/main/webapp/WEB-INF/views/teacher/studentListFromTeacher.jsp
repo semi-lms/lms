@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,6 +58,43 @@
 		<jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
 	</div>
 	<div class="main-content">
+		<!-- 공통 페이지 상단 메뉴 -->
+		<div style="margin-bottom: 20px;">
+			<c:set var="currentPath" value="${pageContext.request.requestURI}" />
+
+			<a href="/attendanceList?courseId=${courseId}" 
+				style="padding: 8px 16px; 
+					margin-right: 10px; 
+					border-radius: 6px; 
+					text-decoration: none; 
+					font-weight: bold;
+				<c:if test='${fn:contains(currentPath, "/attendanceList")}'>background-color: #cce5ff; color: #004085;</c:if>
+				<c:if test='${!fn:contains(currentPath, "/attendanceList")}'>background-color: #e9ecef; color: #333;</c:if>">
+				출결 관리
+			</a>
+
+			<a href="/studentListFromTeacher?courseId=${courseId}" 
+				style="padding: 8px 16px; 
+				   margin-right: 10px; 
+				   border-radius: 6px; 
+				   text-decoration: none; 
+				   font-weight: bold;
+				<c:if test='${fn:contains(currentPath, "/studentListFromTeacher")}'>background-color: #cce5ff; color: #004085;</c:if>
+				<c:if test='${!fn:contains(currentPath, "/studentListFromTeacher")}'>background-color: #e9ecef; color: #333;</c:if>">
+				학생 관리
+			</a>
+
+			<a href="/examList?courseId=${courseId}" 
+				style="padding: 8px 16px; 
+					border-radius: 6px; 
+					text-decoration: none; 
+					font-weight: bold;
+				<c:if test='${fn:contains(currentPath, "/examList")}'>background-color: #cce5ff; color: #004085;</c:if>
+				<c:if test='${!fn:contains(currentPath, "/examList")}'>background-color: #e9ecef; color: #333;</c:if>">
+				시험 관리
+			</a>
+		</div>
+		
 		<h1>반 학생 리스트</h1>
 		<table border="1">
 			<tr>
