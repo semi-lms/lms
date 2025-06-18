@@ -50,7 +50,8 @@
   </table>
 
   <!-- 작성 버튼 -->
-  <div class="notice-actions">
+		<div class="button-group">
+
     <c:if test="${loginUser.role eq 'admin'}">
       <a href="/notice/insertNotice"><button type="button">작성</button></a>
     </c:if>
