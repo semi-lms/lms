@@ -39,7 +39,7 @@
   <br>
 
   <!-- 수정/삭제 버튼 영역 -->
-  <c:if test="${loginUser.role eq 'student' && loginUser.studentNo eq qna.studentNo}">
+  <c:if test="${loginUser.role eq 'student' && loginUser.studentNo eq qna.studentNo && commentCount eq 0}">
     <div class="comment-action-right">
       <form method="get" action="${pageContext.request.contextPath}/qna/updateQna" onsubmit="saveScrollAndSubmit(this)">
         <input type="hidden" name="qnaId" value="${qna.qnaId}">
@@ -178,14 +178,17 @@
             </div>
           </c:if>
         </c:forEach>
-
+<!-- 대댓글 입력 토글 버튼 -->
+<p id="replyToggle-${comment.commentId}" style="cursor: pointer; color: blue; display: inline;"
+   onclick="showReplyForm(${comment.commentId})">댓글쓰기</p>
         <!-- 대댓글 입력 폼 -->
-        <div class="reply-form">
+        <div  id="replyForm-${comment.commentId}" class="reply-form" style="display: none;">
           <form method="post" action="${pageContext.request.contextPath}/qna/insertQnaComment" onsubmit="saveScrollAndSubmit(this)">
             <input type="hidden" name="qnaId" value="${qna.qnaId}">
             <input type="hidden" name="parentCommentId" value="${comment.commentId}">
             <input type="text" name="content" placeholder="답글 작성" style="width: 300px;">
             <button type="submit">등록</button>
+             <button type="button" onclick="cancelReplyForm(${comment.commentId})">취소</button>
           </form>
         </div>
       </div>
@@ -193,7 +196,7 @@
   </c:forEach>
 
   <!-- 일반 댓글 입력 폼 -->
-  <c:if test="${not empty loginUser}">
+  <c:if test="${not empty loginUser && loginUser.role ne 'student'}">
     <form method="post" action="${pageContext.request.contextPath}/qna/insertQnaComment" onsubmit="saveScrollAndSubmit(this)">
       <input type="hidden" name="qnaId" value="${qna.qnaId}">
       <textarea name="content" rows="4" cols="60" placeholder="댓글을 입력하세요" required></textarea><br>
@@ -205,6 +208,17 @@
   <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>
 </div>
 	<script>
+	 function showReplyForm(commentId) {
+		    // 댓글쓰기 텍스트 숨기고, 폼 보여주기
+		    document.getElementById("replyToggle-" + commentId).style.display = "none";
+		    document.getElementById("replyForm-" + commentId).style.display = "block";
+		  }
+	 		// 취소버튼 누르면 돌아가기
+	  function cancelReplyForm(commentId) {
+		    document.getElementById("replyForm-" + commentId).style.display = "none";
+		    document.getElementById("replyToggle-" + commentId).style.display = "inline";
+		  }
+	
 		function handleDelete() {
 			// alert("삭제 버튼 클릭됨");  // 디버깅용
 		  if (confirm("정말로 삭제하시겠습니까?")) {

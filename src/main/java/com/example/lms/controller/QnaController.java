@@ -195,6 +195,10 @@ public class QnaController {
 		        return "redirect:/qna/qnaList";
 		    }
 
+		    // 댓글이 없으면 수정삭제 보이기
+		    int commentCount = qnaCommentService.countComments(qnaId); // 부모 댓글만!
+		    model.addAttribute("commentCount", commentCount);
+		    
 		    // 비밀번호가 일치하면 해당 qna 글을 가져옴
 		    QnaDTO qnaDto = qnaService.selectQnaOne(qnaId);
 		    model.addAttribute("qna", qnaDto);
@@ -210,9 +214,20 @@ public class QnaController {
 		@GetMapping("/updateQna")
 		public String updateQna(@RequestParam("qnaId") int qnaId,
 									HttpSession session,
+									RedirectAttributes ra,
 									Model model) {
 			
 			SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+			
+			// 댓글수 확인 해서 댓글이 달리면 학생은 수정 못하기
+		    if("student".equals(loginUser.getRole())) {
+		    	int commentCount = qnaCommentService.countComments(qnaId);
+		    	if (commentCount > 0) {
+		    		ra.addFlashAttribute("errorMsg", "답변이 달린 글은 삭제 할 수 없습니다.");
+		    		return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+		    	}
+		    }
+			
 			//기존 qna 정보 가져오기
 			QnaDTO qna = qnaService.selectQnaOne(qnaId);
 			
@@ -220,6 +235,7 @@ public class QnaController {
 		    if (loginUser.getStudentNo() != qna.getStudentNo()) {
 		        return "redirect:/qna/qnaList";
 		    }
+		    
 			model.addAttribute("qna", qna);
 			return "qna/updateQna";
 		}
@@ -248,6 +264,16 @@ public class QnaController {
 		        return "redirect:/login";
 		    }
 		    
+		    // 댓글수 확인 해서 댓글이 달리면 학생은 삭제 못하기
+		    if("student".equals(loginUser.getRole())) {
+		    	int commentCount = qnaCommentService.countComments(qnaId);
+		    	if (commentCount > 0) {
+		    		ra.addFlashAttribute("errorMsg", "답변이 달린 글은 삭제 할 수 없습니다.");
+		    		return "redirect:/qna/qnaOne?qnaId=" + qnaId;
+		    	}
+		    }
+		    
+		    
 		   // 1. DB에서 로그인한 학생의 암호화된 비밀번호 가져오기
 		    String dbPw = mypageService.getStudentPasswordById(loginUser.getStudentId());
 
@@ -273,6 +299,8 @@ public class QnaController {
 
 		    return "redirect:/qna/qnaList";
 		}
+		
+		
 	
 }
 

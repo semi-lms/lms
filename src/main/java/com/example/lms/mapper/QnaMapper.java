@@ -35,4 +35,6 @@ public interface QnaMapper {
 	
 	// 답변완료,미답변 표시
 	int updateAnswerStatus(Map<String, Object> param);
+	
+
 }
