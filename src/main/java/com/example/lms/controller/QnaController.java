@@ -60,10 +60,12 @@ public class QnaController {
 			Page page = new Page(rowPerPage, currentPage, totalCount, searchOption, keyword);
 			int startRow = (currentPage - 1) * rowPerPage;
 			
+			
 			// 본인이 쓴 글 확인하려면 로그인한 유저 정보 꺼내와야함
 			SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
 			
 			Map<String, Object> param = new HashMap<>();
+			
 			param.put("searchOption", searchOption);
 			param.put("keyword", keyword);
 			param.put("startRow", (currentPage - 1) * rowPerPage);

@@ -142,7 +142,8 @@ public class MypageController {
 	        result.put("message", "현재 비밀번호가 일치하지 않습니다.");
 	        return result;
 	    }
-	 // 평문 비교
+	    
+	  // 평문 비교
 	    if (teacherDto.getPassword() != null && !teacherDto.getPassword().isBlank()) {
 	        if (teacherDto.getPassword().equals(current.getPassword())) {
 	            result.put("success", false);
@@ -156,8 +157,9 @@ public class MypageController {
 	    } else {
 	        teacherDto.setPassword(current.getPassword()); // 변경 없으면 기존 유지
 	    }
+	  
+	   /*
 	    // 비밀번호 변경 여부 확인 및 암호화
-	   /* 지금 db에 암호화된 비밀번호가 아니라서 추후에 회원가입할때 암호화 하게되면 이 코드로 변경
 	   if (teacherDto.getPassword() != null && !teacherDto.getPassword().isBlank()) {
 	        if (passwordEncoder.matches(teacherDto.getPassword(), current.getPassword())) {
 	            result.put("success", false);
@@ -233,12 +235,11 @@ public class MypageController {
 		        result.put("message", "기존 비밀번호와 동일합니다.");
 		        return result;
 		    }
-
-		    // 암호화된 새 비밀번호로 변경
-		    studentDto.setPassword(passwordEncoder.encode(studentDto.getPassword()));
-		} else {
-		    // 입력 안 하면 기존 비밀번호 유지
-		    studentDto.setPassword(current.getPassword());
+			    // 암호화된 새 비밀번호로 변경
+			    studentDto.setPassword(passwordEncoder.encode(studentDto.getPassword()));
+			} else {
+			    // 입력 안 하면 기존 비밀번호 유지
+			    studentDto.setPassword(current.getPassword());
 		}
 		
 		// 최종적으로 DB에 업데이트 실행

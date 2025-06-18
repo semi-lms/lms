@@ -54,21 +54,11 @@ public class FileBoardServiceImpl implements FileBoardService {
 
 	@Override
 	@Transactional
-	public int deleteFileBoard(int fileBoardNo) {
-	    // 1. 파일 목록 불러오기
-	    List<FileDTO> fileList = fileMapper.selectFileListByBoardNo(fileBoardNo);
+    public int deleteFileBoard(int fileBoardNo) {
 
-	    // 2. 실제 저장된 파일 삭제
-	    for (FileDTO file : fileList) {
-	        File f = new File("C:/" + file.getFilePath()); // ex) upload/abcd1234.jpg
-	        if (f.exists()) {
-	            f.delete();		// 실제 디스크에서 삭제
-	        }
-	    }
-
-	    // 3. DB에서 파일 정보 삭제
+		// 게시글에 첨부된 파일(Base64 데이터) DB에서 삭제
 	    fileMapper.deleteFilesByBoardNo(fileBoardNo);	// 자식 먼저 삭제
-
+		  // 2. 게시글 본문 삭제
 	    return fileBoardMapper.deleteFileBoard(fileBoardNo);	//부모 삭제
 	}
 

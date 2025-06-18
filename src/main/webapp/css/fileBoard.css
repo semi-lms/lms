@@ -104,37 +104,79 @@
   color: #555;
 }
 
-/* 삭제 버튼 및 입력박스 */
+/* 삭제 버튼 스타일 */
 #deleteForm button {
   background-color: #c0392b;
 }
-
 #deleteForm button:hover {
   background-color: #922b21;
 }
 
-
-.fileBoard-content .form-group {
-  display: block; /* 기본 세로 정렬 유지 */
-  margin-bottom: 20px;
-}
-
+/* 버튼 그룹 정렬 */
 .btn-group {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
 }
-
 .btn-group .btn-submit {
   min-width: 80px;
   text-align: center;
 }
-
-
 .fileBoard-content button,
 .fileBoard-content .btn-submit {
-  flex: none; /* 크기 고정 */
+  flex: none;
   min-width: 100px;
   text-align: center;
+}
+
+/* 📎 파일명 + 마우스 오버 이미지 미리보기 */
+.file-preview-wrapper {
+  position: relative;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.file-preview-wrapper .file-name {
+  cursor: pointer;
+  font-weight: 500;
+  color: #2c3e50;
+  text-decoration: underline;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.file-preview-wrapper .img-preview {
+  display: none;
+  position: absolute;
+  bottom: 110%; /* 링크 위에 뜨게 조절 */
+  left: 0%;
+  z-index: 999;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  pointer-events: none; /* 이미지가 클릭 막지 않게 처리 */
+}
+
+.file-preview-wrapper .img-preview img {
+  max-width: 200px;
+  max-height: 180px;
+  border-radius: 5px;
+}
+
+.file-preview-wrapper:hover .img-preview {
+  display: block;
+}
+
+.download-link {
+  display: inline-block;
+  margin-top: 5px;
+  color: #2980b9;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.download-link:hover {
+  text-decoration: underline;
 }

@@ -46,22 +46,25 @@
 	</div>
 	
 	<!-- 기존 첨부파일 -->
-		<c:forEach var="file" items="${fileList}">
-		  <div>
-		    <a href="/file/download?saveName=${file.saveName}">${file.fileName}</a>
-		    <label>
-		      <input type="checkbox" name="deleteFileNames" value="${file.saveName}">
-		      삭제
-		    </label>
-		  </div>
-		</c:forEach>
+<c:forEach var="file" items="${fileList}">
+  <div>
+    <a href="data:${file.fileType};base64,${file.base64Data}" download="${file.fileName}">
+      ${file.fileName}
+    </a>
+    <label>
+      <input type="checkbox" name="deleteFileIds" value="${file.fileId}">
+      삭제
+    </label>
+  </div>
+</c:forEach>
 	
 	  <!-- 새로운 파일 추가 -->
 	  <div>
 	    새로운 첨부파일 추가
 	    <input type="file" name="uploadFile" multiple>
+	    <small>※ Ctrl(또는 Shift)를 누른 채 여러 개의 파일을 한 번에 선택하세요.</small>
 	  </div>
-
+	<br>
 
     <!-- 수정 버튼 -->
     <div class="btn-group">

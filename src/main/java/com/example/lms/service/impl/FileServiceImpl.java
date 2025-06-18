@@ -15,41 +15,34 @@ public class FileServiceImpl implements FileService {
 	@Autowired
 	private FileMapper fileMapper;
 	
-	// 파일 첨부
-	@Override
-	public int insertFile(FileDTO fileDto) {
-		return fileMapper.insertFile(fileDto);
-	}
+    // 파일 저장
+    @Override
+    public int saveFile(FileDTO fileDto) {
+       return fileMapper.insertFile(fileDto);
+    }
 
-	// 게시글번호로 파일목록
-	@Override
-	public List<FileDTO> selectFileListByBoardNo(int fileBoardNo) {
-		return fileMapper.selectFileListByBoardNo(fileBoardNo);
-	}
+    // 게시글 번호로 파일 목록 조회
+    @Override
+    public List<FileDTO> getFilesByBoardNo(int fileBoardNo) {
+        return fileMapper.selectFilesByBoardNo(fileBoardNo);
+    }
 
-	// 파일 상세보기(다운로드)
-	@Override
-	public int selectFileListById(int fileDto) {
-		return fileMapper.selectFileListById(fileDto);
-	}
+    // 파일 ID로 단건 조회
+    @Override
+    public FileDTO getFileById(int fileId) {
+        return fileMapper.selectFileById(fileId);
+    }
 
-	// 게시글 삭제시 파일도 같이 삭제
-	@Override
-	public int deleteFilesByBoardNo(int fileBoardNo) {
-		return fileMapper.deleteFilesByBoardNo(fileBoardNo);
-	}
+    // 게시글 번호로 전체 파일 삭제
+    @Override
+    public int deleteFilesByBoardNo(int fileBoardNo) {
+       return fileMapper.deleteFilesByBoardNo(fileBoardNo);
+    }
 
-
-	// 파일 이름으로 조회
-	@Override
-	public FileDTO selectFileBySaveName(String saveName) {
-		return fileMapper.selectFileBySaveName(saveName);
-	}
-
-	// 특정 파일(save_name)으로 1개 삭제
-	@Override
-	public int deleteFileBySaveName(String savaName) {
-		return fileMapper.deleteFileBySaveName(savaName);
-	}
+    // 파일 ID로 단일 삭제
+    @Override
+    public int deleteFileById(int fileId) {
+      return  fileMapper.deleteFileById(fileId);
+    }
 
 }

@@ -58,6 +58,7 @@
 				</c:forEach>
 			</table>
 			<br>
+			
 				<c:if test="${loginUser.role eq 'student'}">
 				   <a href="/qna/insertQna"><button type="button">작성</button></a><br>
 				</c:if>

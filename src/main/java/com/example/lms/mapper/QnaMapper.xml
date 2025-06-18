@@ -47,8 +47,8 @@
 			(q.title LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'title')
 			OR
 			(s.name LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'studentNo')
-			
 		)
+		AND (#{studentNo} IS NULL OR q.student_no = #{studentNo})
 		ORDER BY q.create_date DESC
 		LIMIT #{startRow}, #{rowPerPage} 
 	</select>
