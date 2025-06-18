@@ -91,8 +91,8 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	public int getOverlapCount(int classNo, LocalDate localDate, LocalDate localDate2) {
-	    return courseMapper.getOverlapCount(classNo, localDate, localDate2);
+	public int getOverlapCount(int classNo, String string, String string2) {
+	    return courseMapper.getOverlapCount(classNo, string, string2);
 	}
 
 	@Override

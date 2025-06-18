@@ -35,7 +35,7 @@ public interface CourseService {
 
 	int deleteCourses(List<Integer> courseIds);
 
-	int getOverlapCount(int classNo, LocalDate startDate, LocalDate endDate);
+	int getOverlapCount(int classNo, String startDate, String endDate);
 	
 	List<CourseDTO> getCourseNameNotEnded();
 }
