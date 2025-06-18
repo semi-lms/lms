@@ -94,4 +94,8 @@ public class CourseServiceImpl implements CourseService{
 	    return courseMapper.getOverlapCount(classNo, startDate, endDate);
 	}
 
+	@Override
+	public List<CourseDTO> getCourseNameNotEnded() {
+		return courseMapper.getCourseNameNotEnded();
+	}
 }

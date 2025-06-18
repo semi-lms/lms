@@ -215,4 +215,15 @@
 	        #{id}
 	    </foreach>
 	</delete>
+	
+	
+	<!-- 강사 등록 시 선택할 강의명 조회 -->
+	<select id="getCourseNameNotEnded" resultType="com.example.lms.dto.CourseDTO">
+		SELECT 
+			course_id AS courseId, 
+			course_name AS courseName
+		FROM course
+		WHERE end_date >= CURDATE()  <!-- 종료되지 않은 강의만 조회 -->
+		ORDER BY course_name ASC;
+	</select>
 </mapper>

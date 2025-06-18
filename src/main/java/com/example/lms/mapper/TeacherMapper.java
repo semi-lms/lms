@@ -20,4 +20,7 @@ public interface TeacherMapper {
 	
 	// 강사 리스트
 	List<TeacherDTO> getTeacherList(TeacherDTO teacherDto);
+	
+	// 강사 등록
+	int insertTeacher(TeacherDTO teacherDto);
 }

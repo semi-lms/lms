@@ -57,6 +57,22 @@ public class TeacherController {
 		return "admin/teacherList";
 	}
 	
+	// 강사 등록
+	@GetMapping("/admin/insertTeacher")
+	public String insertTeacher(Model model) {
+		// 진행 중인 강의 목록 넘기기
+		List<CourseDTO> courseList = courseService.getCourseNameNotEnded();
+		model.addAttribute("courseList", courseList);
+		return "admin/insertTeacher";
+	}
+	
+	@PostMapping("/admin/insertTeacher")
+	public String insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
+		teacherService.insertTeacher(teacherDto);
+		return "redirect:/admin/insertTeacher";
+	}
+	
+		
 	// 강의 리스트
 	@GetMapping("/courseListFromTeacher")
 	public String courseListFromTeacher(@RequestParam(defaultValue = "1") int currentPage

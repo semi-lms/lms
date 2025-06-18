@@ -6,4 +6,6 @@ import com.example.lms.dto.TeacherDTO;
 
 public interface TeacherService {
 	List<TeacherDTO> getTeacherList(TeacherDTO teacherDto);
+	
+	int insertTeacher(TeacherDTO teacherDto);
 }

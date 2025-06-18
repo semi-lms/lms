@@ -18,4 +18,9 @@ public class TeacherServiceImpl implements TeacherService {
 	public List<TeacherDTO> getTeacherList(TeacherDTO teacherDto) {
 		return teacherMapper.getTeacherList(teacherDto);
 	}
+	
+	@Override
+	public int insertTeacher(TeacherDTO teacherDto) {
+		return teacherMapper.insertTeacher(teacherDto);
+	}
 }

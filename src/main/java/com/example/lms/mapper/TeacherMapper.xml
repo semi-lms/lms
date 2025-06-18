@@ -70,4 +70,20 @@
 		ON t.course_id = c.course_id
 		ORDER BY t.NAME ASC;
 	</select>
+	
+	<!-- 강사 등록 -->
+	<insert id="insertTeacher" parameterType="com.example.lms.dto.TeacherDTO">
+	    INSERT INTO teacher (
+	    	name, phone,
+	    	sn,	address,
+	    	email, course_id,
+		    teacher_id, password, reg_date
+		  )
+		VALUES (
+		  	#{name}, REPLACE(#{phone}, '-', ''),
+		  	REPLACE(#{sn}, '-', ''), #{address},
+		  	#{email}, #{courseId},
+		    #{teacherId}, #{password}, NOW()
+		  )
+	</insert>
 </mapper>
