@@ -242,7 +242,7 @@ public class TeacherController {
 	
 	@PostMapping("/removeExam")
 	public String removeExam(@RequestParam("examId") int examId) {
-		examService.removeExam(examId);
+		examService.deleteExamQuestionOption(examId);
 		return "redirect:/examList";
 	}
 	
