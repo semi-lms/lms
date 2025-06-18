@@ -80,5 +80,20 @@ public class StudentServiceImpl implements StudentService {
 		
 	}
 	
+	@Override
+	public StudentDTO getStudentById(int studentNo) {
+	    return studentMapper.getStudentById(studentNo);
+	}
+	
+	@Override
+	public int updateStudent(StudentDTO dto) {
+	    return studentMapper.updateStudent(dto);
+	}
+	
+	@Override
+	public int deleteStudents(List<Integer> studentNo) {
+		
+		return studentMapper.deleteStudents(studentNo);
+	}
 	
 }

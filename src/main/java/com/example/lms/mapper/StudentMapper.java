@@ -41,4 +41,9 @@ public interface StudentMapper {
 	
 	void insertCourseApply(String studentId, int courseId);
 
+	StudentDTO getStudentById(int studentNo);
+
+	int updateStudent(StudentDTO dto);
+	
+	int deleteStudents(List<Integer> studentNo);
 }

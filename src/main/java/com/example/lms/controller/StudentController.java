@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.CourseDTO;
@@ -288,7 +290,7 @@ public class StudentController {
 		model.addAttribute("keyword", keyword);           // 검색 키워드 값
 		model.addAttribute("startPage", startPage);       // 페이지 네비 시작 번호
 		model.addAttribute("endPage", endPage);           // 페이지 네비 끝 번호
-
+		model.addAttribute("courseList", studentService.selectCourse());
 		
 		return "/admin/studentList";
 	}
@@ -338,4 +340,28 @@ public class StudentController {
         }
         
     }
+    
+    @GetMapping("/admin/getStudentDetail")
+    @ResponseBody
+    public StudentDTO getStudentDetail(@RequestParam("studentNo") int studentNo) {
+        // studentService에서 학생 한 명 조회해서 리턴
+        return studentService.getStudentById(studentNo);
+    }
+    
+    @PostMapping("/admin/updateStudent")
+    @ResponseBody
+    public String updateStudent(@ModelAttribute StudentDTO dto) {
+        System.out.println("수정 요청 studentNo=" + dto.getStudentNo()); // 로그 추가
+        int row = studentService.updateStudent(dto);
+        System.out.println("수정 결과 row=" + row); // 로그 추가
+        return (row > 0) ? "ok" : "fail";
+    }
+    
+    @PostMapping("/admin/deleteStudents")
+    @ResponseBody
+    public int deleteStudents(@RequestParam("studentIds") List<Integer> studentNo) {
+    	
+    	return studentService.deleteStudents(studentNo);
+    }
+    
 }

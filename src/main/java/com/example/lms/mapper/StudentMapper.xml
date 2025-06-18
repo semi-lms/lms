@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.StudentMapper">
+	
+	<resultMap id="studentMap" type="com.example.lms.dto.StudentDTO">
+    <result property="studentNo" column="student_no"/>
+    <result property="courseId" column="course_id"/>
+    <result property="studentId" column="student_id"/>
+    <result property="password" column="password"/>
+    <result property="name" column="name"/>
+    <result property="sn" column="sn"/>
+    <result property="address" column="address"/>
+    <result property="email" column="email"/>
+    <result property="phone" column="phone"/>
+    <result property="regDate" column="reg_date"/>
+    <!-- 필요한 컬럼 다 추가 -->
+</resultMap>
 	<!-- 강의별 학생 조회 -->
 	<select id="selectStudentListByCourseId" parameterType="map" resultType="com.example.lms.dto.StudentDTO">
 		SELECT name, SUBSTRING(CAST(sn AS CHAR), 1, 6) AS birth
@@ -44,7 +58,7 @@
 	</select>
 	
 	<!-- 개인정보 수정 -->
-	<update id="updateStudentInfo" parameterType="com.example.lms.dto.TeacherDTO">
+	<update id="updateStudentInfo" parameterType="com.example.lms.dto.StudentDTO">
 		UPDATE student
 		SET
 			student_id = #{studentId},
@@ -56,6 +70,7 @@
 	
 	<select id="getStudentList" parameterType="map" resultType="com.example.lms.dto.StudentDTO">
 		SELECT s.name, s.phone, s.sn, s.address
+			, s.student_no AS studentNo
 			, s.email, s.student_id AS studentId
 			, c.course_name AS courseName
 		FROM student s INNER JOIN course c
@@ -121,7 +136,28 @@
         (SELECT student_no FROM student WHERE student_id = #{studentId}),
         #{courseId},
         NOW()
-    )
-</insert>
+	    )
+	</insert>
 	
+<select id="getStudentById" parameterType="int" resultMap="studentMap">
+    SELECT * FROM student WHERE student_no = #{studentNo}
+</select>
+	
+	<update id="updateStudent" parameterType="com.example.lms.dto.StudentDTO">
+	    UPDATE student
+	    SET
+	        name = #{name},
+	        phone = #{phone},
+	        sn = REPLACE(#{sn}, '-', ''),
+	        address = #{address},
+	        email = #{email}
+	    WHERE student_no = #{studentNo}
+	</update>
+	
+	<delete id="deleteStudents" parameterType="list">
+	    DELETE FROM student WHERE student_no IN
+	    <foreach collection="list" item="studentNo" open="(" separator="," close=")">
+	        #{studentNo}
+	    </foreach>
+	</delete>
 </mapper>
