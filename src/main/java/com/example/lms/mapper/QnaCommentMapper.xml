@@ -69,20 +69,28 @@
 	WHERE comment_id = #{commentId}
 	</select>
 	
-	<!-- QnA 글에 달린 모든 대댓글 삭제 -->
-<delete id="deleteChildCommentsByQnaId" parameterType="int">
-	DELETE FROM qna_comment
-	WHERE qna_id = #{qnaId}
-	AND parent_comment_id IS NOT NULL
-</delete>
-
-<!-- QnA 글에 달린 모든 부모 댓글 삭제 -->
-<delete id="deleteParentCommentsByQnaId" parameterType="int">
-	DELETE FROM qna_comment
-	WHERE qna_id = #{qnaId}
-	AND parent_comment_id IS NULL
-</delete>
-
+		<!-- QnA 글에 달린 모든 대댓글 삭제 -->
+	<delete id="deleteChildCommentsByQnaId" parameterType="int">
+		DELETE FROM qna_comment
+		WHERE qna_id = #{qnaId}
+		AND parent_comment_id IS NOT NULL
+	</delete>
 	
+	<!-- QnA 글에 달린 모든 부모 댓글 삭제 -->
+	<delete id="deleteParentCommentsByQnaId" parameterType="int">
+		DELETE FROM qna_comment
+		WHERE qna_id = #{qnaId}
+		AND parent_comment_id IS NULL
+	</delete>
+
+	<!-- 댓글(부모)있으면 삭제못하게 하는 쿼리  -->
+	<select id="countComments" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM qna_comment
+		WHERE qna_id = #{qnaId}
+		AND  parent_comment_id IS NULL		
+	</select>
+	<!-- 논리적으로 댓글만 있으면 삭제 못하게 막을 수 있는데 
+		예외상황이 있을수 있으므로 IN NULL을 해야한다 -->
 	
 </mapper>

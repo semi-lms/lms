@@ -38,5 +38,7 @@ public interface QnaCommentMapper {
 	//qna 글에 달린 모든 부모 댓글 삭제
 	int deleteParentCommentsByQnaId(int qnaId);
 	
+	// 댓글이 달리면 수정 삭제 못하기
+	int countComments(int qnaId);
 	
 }

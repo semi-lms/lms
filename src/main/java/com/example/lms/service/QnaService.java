@@ -31,4 +31,5 @@ public interface QnaService {
 	// 답변완료,미답변 표시
 	int updateAnswerStatus(int qnaId, String status);
 	
+	
 }

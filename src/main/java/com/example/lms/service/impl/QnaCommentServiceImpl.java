@@ -72,6 +72,12 @@ public class QnaCommentServiceImpl implements QnaCommentService {
 	public int deleteParentCommentsByQnaId(int qnaId) {
 		return qnaCommentMapper.deleteParentCommentsByQnaId(qnaId);
 	}
+	
+	// 댓글이 달리면 수정 삭제 못하기
+	@Override
+	public int countComments(int qnaId) {
+		return qnaCommentMapper.countComments(qnaId);
+	}
 
 
 }
