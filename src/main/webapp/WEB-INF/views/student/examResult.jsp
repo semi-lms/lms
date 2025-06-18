@@ -133,7 +133,7 @@
 
 	<div class="content-wrapper">
 		<h2>시험 결과</h2>
-		<p class="score">총 점수: ${score} 점</p>
+		<p class="score">총 점수: ${score}0점</p>
 
 		<div class="table-container">
 			<table class="answer-list">
