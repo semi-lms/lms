@@ -45,7 +45,7 @@
              -->
 		<td>
 			<c:choose>
-				<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
+				<c:when test="${fileBoard.adminId eq 'admin'}">관리자</c:when>
 				<c:otherwise>${fileBoard.adminId}</c:otherwise>
 			</c:choose>
 		</td>
@@ -86,23 +86,24 @@
   <br>
 
   <c:if test="${loginUser.role eq 'admin'}">
-    <!-- 관리자만 수정/삭제 가능 -->
+  <div class="btn-group">
     <form method="get" action="${pageContext.request.contextPath}/file/updateFileBoard">
       <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
-      <button type="submit">수정</button>
+      <button type="submit" class="btn-submit">수정</button>
     </form>
 
     <form id="deleteForm" method="post" action="${pageContext.request.contextPath}/file/deletefileBoard">
       <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
-      <!-- 삭제할경우 비밀번호 입력 -->
-      <input type="hidden" name="pw" id="pw"> <!-- JS에서 값 넣을 자리 -->
-      <button type="button" onclick="handleDelete()">삭제</button>
-      
+      <input type="hidden" name="pw" id="pw">
+      <button type="button" onclick="handleDelete()" class="btn-submit">삭제</button>
     </form>
-  </c:if>
+
+</c:if>
+
 
   <br>
   <a href="${pageContext.request.contextPath}/file/fileBoardList"><button>목록으로</button></a>
+    </div>
 </div>
 	<script>
 		function handleDelete() {
