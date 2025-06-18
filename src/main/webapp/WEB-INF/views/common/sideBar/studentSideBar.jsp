@@ -16,12 +16,8 @@
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
     <button type="button" class="sidebar-btn" onclick="goToInfo()">개인정보</button><br><br>
     <a href="/student/myAttendance?studentNo=${loginUser.studentNo}&year=${currentYear}&month=${currentMonth}"><button class="sidebar-btn">출석현황</button></a><br><br>
-
-    <!-- 하위 메뉴: 기본은 숨김 -->
-		<div id="submenu">
-		  <a href="/student/examList?studentNo=${loginUser.studentNo }" class="submenu-link">• 시험문제</a>
-		  <a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}" class="submenu-link">• 강의일정</a>
-		</div>
+	<a href="/student/examList?studentNo=${loginUser.studentNo}"><button class="sidebar-btn">시험문제</button></a><br><br>
+	<a href="/lectureSchedule?courseId=${loginUser.courseId}&year=${currentYear}&month=${currentMonth}"><button class="sidebar-btn">강의일정</button></a><br><br>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/file/fileBoardList"><button class="sidebar-btn">자료실</button></a><br><br>
