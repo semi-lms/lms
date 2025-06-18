@@ -31,7 +31,7 @@
     <input type="hidden" name="fileBoardNo" value="${fileBoard.fileBoardNo}">
 	<div class="form-group">
       <label>작성자</label>
-      <input type="text" value="김예진/노민혁" class="form-control" readonly>
+      <input type="text" value="관리자" class="form-control" readonly>
     </div>
     <!-- 제목 -->
     <div class="form-group">
@@ -64,6 +64,7 @@
 
 
     <!-- 수정 버튼 -->
+    <div class="btn-group">
     <div class="form-group">
       <button type="submit" class="btn-submit">수정 완료</button>
     </div>
@@ -74,7 +75,7 @@
         <button type="button" class="btn-submit">돌아가기</button>
       </a>
     </div>
-
+</div>
   </form>
 </div>
  <!-- 제목 내용을 입력하지 않을경우 -->

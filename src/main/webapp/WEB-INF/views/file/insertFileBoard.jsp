@@ -33,7 +33,7 @@
     <!-- 관리자 아이디 표시 (readonly) -->
     <div class="form-group">
       <label>작성자</label>
-      <input type="text" class="form-control" value="김예진/노민혁" readonly>
+      <input type="text" class="form-control" value="관리자" readonly>
       <input type="hidden" name="adminId" value="${loginUser.adminId}">
     </div>
 
@@ -56,7 +56,7 @@
       <ul id="fileList"></ul>
       <small>※ Ctrl(또는 Shift)를 누른 채 여러 개의 파일을 한 번에 선택하세요.</small>
     </div>
-
+	<div class="btn-group">
     <!-- 등록 버튼 -->
     <div class="form-group">
       <button type="submit" class="btn-submit">등록</button>
@@ -66,7 +66,7 @@
     <div class="form-group">
       <a href="${pageContext.request.contextPath}/file/fileBoardList" class="btn-submit">돌아가기</a>
     </div>
-
+</div>
   </form>
  </div>
   <!-- 제목 내용을 입력하지 않을경우 -->
