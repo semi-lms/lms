@@ -3,70 +3,58 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-   <title>로그인</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f5f5f5;
-        }
-        .login-container {
-            max-width: 500px;
-            margin: 100px auto;
-        }
-        .card {
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .btn-group-custom {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/login.css">
+   
 </head>
 <body>
+ <img src="/img/cursor.png" id="custom-cursor" alt="커서" />
+ <jsp:include page="/WEB-INF/views/common/header/mainHeader.jsp" />
+<div class="login-wrapper">
+    <div class="login-box">
+        <h2>로그인</h2>
+        <form action="login" method="post">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" id="id" name="id" class="short-input" required>
+            </div>
+            <div class="form-group">
+                <label for="pw">비밀번호</label>
+                <input type="password" id="pw" name="pw" class="short-input" required>
+            </div>
 
-<div class="container login-container">
-    <div class="card">
-            <h4 class="mb-4 text-center">로그인</h4>
-            <form action="login" method="post">
-                <div class="mb-3">
-                    <label for="id" class="form-label">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" required>
-                </div>
-                <div class="mb-3">
-                    <label for="pw" class="form-label">비밀번호</label>
-                    <input type="password" class="form-control" id="pw" name="pw" required>
-                </div>
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger">${error}</div>
-                </c:if>
-                <div class="d-grid gap-2 mt-3">
-                    <button type="submit" class="btn btn-primary">로그인</button>
-                </div>
-                
-                <!-- 사용자 타입 선택 -->
-				<div class="mb-3 text-center">
-				    <div class="btn-group" role="group">
-				        <input type="radio" class="btn-check" name="role" id="admin" value="admin" autocomplete="off" required>
-				        <label class="btn btn-outline-danger" for="admin">관리자</label>
-				
-				        <input type="radio" class="btn-check" name="role" id="teacher" value="teacher" autocomplete="off">
-				        <label class="btn btn-outline-warning" for="teacher">강사</label>
-				
-				        <input type="radio" class="btn-check" name="role" id="student" value="student" autocomplete="off">
-				        <label class="btn btn-outline-success" for="student">학생</label>
-				    </div>
-			   </div>
+            <c:if test="${not empty error}">
+                <div class="error-message">${error}</div>
+            </c:if>
+
+            <div class="role-buttons">
+                <input type="radio" class="btn-check" name="role" id="admin" value="admin" required>
+                <label class="btn-outline-role" for="admin">관리자</label>
+
+                <input type="radio" class="btn-check" name="role" id="teacher" value="teacher">
+                <label class="btn-outline-role" for="teacher">강사</label>
+
+                <input type="radio" class="btn-check" name="role" id="student" value="student">
+                <label class="btn-outline-role" for="student">학생</label>
+            </div>
+
+            <button type="submit" class="submit-btn">로그인</button>
         </form>
-				<a href="/findId"><button type="submit">아이디 찾기</button></a>
-				<a href="/findPw"><button type="submit">비밀번호 찾기</button></a>
+        <div class="link-buttons">
+            <a href="/findId">아이디 찾기</a>
+            <a href="/findPw">비밀번호 찾기</a>
+        </div>
     </div>
 </div>
-
-</head>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		  const cursorImg = document.getElementById('custom-cursor');
+		  document.addEventListener('mousemove', function (e) {
+		    cursorImg.style.left = (e.clientX + 30) + 'px';  // 마우스 x좌표 + 30px
+		    cursorImg.style.top = (e.clientY + 30) + 'px';   // 마우스 y좌표 + 30px
+		  });
+		});
+</script>
 </body>
 </html>
