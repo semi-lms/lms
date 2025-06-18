@@ -27,41 +27,44 @@
   </div>
 	  <div class="fileBoard-content" >
 		<h1>자료실</h1>
-		<form method="get" > 
-			<table border="1">
-				<tr>
-					<th>번호</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>작성일</th>
-				</tr>
-				<c:forEach var="fileBoard" items="${fileBoardList}">
-					<tr>
-						<td>${fileBoard.fileBoardNo}</td>
-						<td><a href="/file/fileBoardOne?fileBoardNo=${fileBoard.fileBoardNo}">${fileBoard.title} </a></td>
-					<!-- 작성자 admin이면 '관리자'로 출력 -->
-					<td>
-						<c:choose>
-							<c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
-							<c:otherwise>${fileBoard.adminId}</c:otherwise>
-						</c:choose>
-					</td>
-						<td><fmt:formatDate value="${fileBoard.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-					</tr>
-				</c:forEach>
-			</table>
-			<br>
-				<c:if test="${loginUser.role eq 'admin'}">
-				   <a href="/file/insertFileBoard"><button type="button">작성</button></a><br>
-				</c:if>
-			 	<select name="searchOption" id="searchOption">
-				<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
-				<option value="title"
-					${searchOption == 'title' ? 'selected' : ''}>제목</option>
-				</select> <input type="text" name="keyword" id="searchOption"
-					value="${searchFileBoard}" placeholder="검색">
-				<button type="submit" id="searchBtn">검색</button>
-		 </form>
+		<form method="get">
+  <div class="fileBoard-top-bar">
+    <c:if test="${loginUser.role eq 'admin'}">
+      <a href="/file/insertFileBoard"><button type="button">작성</button></a>
+    </c:if>
+
+    <div class="search-group">
+      <select name="searchOption" id="searchOption">
+        <option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
+        <option value="title" ${searchOption == 'title' ? 'selected' : ''}>제목</option>
+      </select>
+      <input type="text" name="keyword" id="searchOption" value="${searchFileBoard}" placeholder="검색">
+      <button type="submit" id="searchBtn">검색</button>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일</th>
+    </tr>
+    <c:forEach var="fileBoard" items="${fileBoardList}">
+      <tr>
+        <td>${fileBoard.fileBoardNo}</td>
+        <td><a href="/file/fileBoardOne?fileBoardNo=${fileBoard.fileBoardNo}">${fileBoard.title}</a></td>
+        <td>
+          <c:choose>
+            <c:when test="${fileBoard.adminId eq 'admin'}">김예진/노민혁</c:when>
+            <c:otherwise>${fileBoard.adminId}</c:otherwise>
+          </c:choose>
+        </td>
+        <td><fmt:formatDate value="${fileBoard.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+      </tr>
+    </c:forEach>
+  </table>
+</form>
 		 	<c:if test="${page.lastPage > 1 }">
 				<c:if test="${startPage > 1 }">
 					<a

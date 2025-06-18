@@ -303,3 +303,72 @@ canvas {
     overflow-y: auto;  
     padding: 22px;
 }
+/* 반응형 - 태블릿 이하 (화면 너비 1024px 이하) */
+@media (max-width: 1024px) {
+    .main-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 0 20px;
+    }
+
+    .card.video-card,
+    .card.mypage-box,
+    .card.stats-box {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .commonMain {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .common-main-section {
+        flex-direction: column;
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .common-card {
+        width: 100%;
+    }
+
+    .side-section {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+/* 반응형 - 모바일 (화면 너비 768px 이하) */
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    .card.mypage-box,
+    .card.stats-box,
+    .card.video-card {
+        padding: 20px 15px;
+    }
+
+    .mypage-box h2,
+    .card.stats-box h2,
+    .common-card h3 {
+        font-size: 1.1em;
+    }
+
+    a.btn {
+        font-size: 0.85em;
+        padding: 5px 12px;
+    }
+
+    #weather {
+        width: 100%;
+    }
+
+    .floBanPc3 {
+        display: none;  /* 모바일에서는 상담 배너 숨김 */
+    }
+}

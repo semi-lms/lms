@@ -12,6 +12,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -42,7 +43,9 @@ public class LectureScheduleController {
         Calendar cal = Calendar.getInstance();
         int displayYear = (year != null) ? year : cal.get(Calendar.YEAR);
         int displayMonth = (month != null) ? month : cal.get(Calendar.MONTH) + 1;
-
+        
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
    
 	    // 1일로 세팅
 	    cal.set(displayYear, displayMonth - 1, 1);
@@ -138,10 +141,12 @@ public class LectureScheduleController {
         return "lectureSchedule/lectureCalendar";
     }
 
-
+    //강의일(달력) 등록 수정 
     @GetMapping("/lectureScheduleForm")
     public String showScheduleForm(@RequestParam int courseId,
                                    @RequestParam(required = false) Integer dateNo,
+                                   @RequestParam(required = false) Integer year,
+                                   @RequestParam(required = false) Integer month,
                                    Model model) {
 
         LectureScheduleDTO schedule;
@@ -149,7 +154,6 @@ public class LectureScheduleController {
         if (dateNo != null) {
             schedule = lectureScheduleService.getScheduleByDateNo(dateNo);
             if (schedule == null) {
-                // 잘못된 dateNo인 경우 예외처리 또는 기본값 세팅
                 schedule = new LectureScheduleDTO();
                 schedule.setCourseId(courseId);
             }
@@ -159,20 +163,30 @@ public class LectureScheduleController {
         }
 
         model.addAttribute("schedule", schedule);
+        model.addAttribute("courseId", courseId);
+        model.addAttribute("month", month);
+
         return "lectureSchedule/lectureScheduleForm";
     }
 
+
    
     @PostMapping("/save")
-    public String saveSchedule(@ModelAttribute LectureScheduleDTO scheduleDto) {
+    public String saveSchedule(@ModelAttribute LectureScheduleDTO scheduleDto,
+                               @RequestParam(required = false) Integer year,
+                               @RequestParam(required = false) Integer month) {
+
         if (scheduleDto.getDateNo() != null) {
-        	
-            lectureScheduleService.modifyLectureSchedule(scheduleDto);  // 수정
+            lectureScheduleService.modifyLectureSchedule(scheduleDto);
         } else {
-            lectureScheduleService.addLectureSchedule(scheduleDto);     // 신규 등록
+            lectureScheduleService.addLectureSchedule(scheduleDto);
         }
-        return "redirect:/lectureSchedule?courseId=" + scheduleDto.getCourseId();
+
+        return "redirect:/lectureSchedule?courseId=" + scheduleDto.getCourseId()
+                + (year != null ? "&year=" + year : "")
+                + (month != null ? "&month=" + month : "");
     }
+
 
    
     @PostMapping("/delete")
