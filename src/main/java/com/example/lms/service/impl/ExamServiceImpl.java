@@ -40,6 +40,11 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    public int getCourseIdByExamId(int examId) {
+    	return examMapper.getCourseIdByExamId(examId);
+    }
+    
+    @Override
     public int getExamCnt(int courseId) {
         return examMapper.getExamCnt(courseId);
     }

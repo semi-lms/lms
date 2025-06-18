@@ -24,6 +24,9 @@ public interface ExamMapper {
     List<ExamDTO> selectExamList(Map<String, Object> params);
     int getExamCnt(int courseId);
 
+    // courseId 추출
+    int getCourseIdByExamId(int examId);
+    
     // 시험 리스트 등록/수정/삭제
     int insertExam(ExamDTO examDto);
     int updateExam(ExamDTO examDto);

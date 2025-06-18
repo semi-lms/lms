@@ -5,8 +5,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>성적 리스트</title>
+<title>성적 상세보기</title>
 <style>
+	.card-container {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr); /* 2열 */
+		gap: 2px;
+		max-width: 960px;
+		margin: 0 auto;
+		padding: 20px;
+	}
+	
+	.card {
+		background-color: #fff;
+		border: 1px solid #ddd;
+		border-radius: 12px;
+		padding: 16px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+		font-family: "Segoe UI", sans-serif;
+	}
 	.container {
 		display: flex;
 		min-height: 100vh;
@@ -51,6 +68,7 @@
 		background-color: #eee;
 	}
 </style>
+
 </head>
 <body>
 <div class="container">
@@ -85,51 +103,20 @@
 			</a>
 		</div>
 			
-		<h1>성적 리스트</h1>
-		<form method="get" action="/scoreList?examId=${examId}">
-			<input type="hidden" name="examId" value="${examId}" />
-			<input type="hidden" name="courseId" value="${courseId}" />
-			<input type="hidden" name="currentPage" value="1" />
-			<button type="submit" name="filter" value="전체" ${filter == '전체' ? 'disabled' : ''}>전체</button>
-			<button type="submit" name="filter" value="미제출" ${filter == '미제출' ? 'disabled' : ''}>미제출</button>
-			<button type="submit" name="filter" value="제출" ${filter == '제출' ? 'disabled' : ''}>제출</button>
-		</form>
-		<table border="1">
-			<tr>
-				<th>이름</th>
-				<th>성적</th>
-				<th>제출일</th>
-			</tr>
-			<c:forEach var="sc" items="${scores}">
-				<tr>
-					<td>${sc.name}</td>
-					<td>
-						<c:choose>
-							<c:when test="${sc.score != null}">
-								<a href="/scoreOne?submissionId=${sc.submissionId}" 
-								   style="text-decoration: none; color: #007bff; cursor: pointer;">
-									${sc.score}
-								</a>
-							</c:when>
-							<c:otherwise>
-								미제출
-							</c:otherwise>
-						</c:choose>
-					</td>
-					<td>${sc.submitDate == null ? '미제출' : sc.submitDate}</td>
-				</tr>
+		<h1 style="text-align: center">${title}</h1>
+		<c:if test="${qCnt != 0}">
+			<div class="card-container">
+			<c:forEach var="question" items="${questions}" varStatus="status">
+				<a href="/questionOne?questionId=${question.questionId}" style="text-decoration: none; color: inherit;">
+					<div class="card">
+						<h3>문제 ${question.questionNo}</h3>
+						<h4>${question.questionTitle}</h4>
+						<p>제출 답안 : ${question.answerNo}</p>
+						<p>정답 ${question.correctNo}번</p>
+					</div>
+				</a>
 			</c:forEach>
-		</table>
-		<c:forEach var="i" begin="1" end="${lastPage}">
-			<c:choose>
-				<c:when test="${i == currentPage }">
-					<span>[${i}]</span>
-				</c:when>
-				<c:otherwise>
-					<a href="/scoreList?examId=${examId}&currentPage=${i}&filter=${filter}">[${i}]</a>
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
+		</c:if>
 	</div>
 </div>
 </body>

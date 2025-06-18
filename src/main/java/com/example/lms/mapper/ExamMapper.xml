@@ -4,7 +4,7 @@
 
 	<!-- 성적 리스트 -->
 	<select id="selectScoreList" parameterType="map" resultType="com.example.lms.dto.ExamSubmissionDTO">
-		SELECT st.name, s.score, s.submit_date submitDate
+		SELECT st.name, s.score, s.submit_date submitDate, st.student_no studentNo, s.submission_id submissionId
 		FROM student st
 		LEFT JOIN exam_submission s ON st.student_no = s.student_no
 		WHERE st.course_id = #{courseId}
@@ -39,7 +39,12 @@
 			<!-- 전체일 경우 조건 없음 -->
 		</choose>
 	</select>
-
+	
+	<!-- 성적 리스트 조회 위한 exam_id로 course_id 추출 -->
+	<select id="getCourseIdByExamId" parameterType="int" resultType="int">
+		SELECT course_id FROM exam WHERE exam_id = #{examId}
+	</select>
+	
 	<!-- 시험 리스트 조회 -->
 	<select id="selectExamList" parameterType="map" resultType="com.example.lms.dto.ExamDTO">
 		SELECT title, exam_start_date examStartDate, exam_end_date examEndDate, exam_id examId
@@ -172,7 +177,7 @@
 	<select id="selectExamAnswersWithCorrect" resultType="com.example.lms.dto.ExamAnswerDTO"> 
 	    SELECT ea.question_id AS questionId,
 	           ea.answer_no AS answerNo,
-	           q.correct_no AS correctNo
+	           q.correct_no AS correctNo, q.question_no AS questionNo, q.question_title AS questionTitle, q.exam_id AS examId
 	    FROM exam_answer ea
 	    JOIN exam_question q ON ea.question_id = q.question_id
 	    WHERE ea.submission_id = #{submissionId}

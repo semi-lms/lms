@@ -146,6 +146,7 @@
 						<td><input type="date" name="examEndDate" value="${exam.examEndDate}" /></td>
 						<td>
 							<input type="hidden" name="examId" value="${exam.examId}" />
+							<input type="hidden" name="courseId" value="${courseId}" />
 							<button type="submit">저장</button>
 							<button type="button" onclick="cancelEdit(${exam.examId})">취소</button>
 						</td>
