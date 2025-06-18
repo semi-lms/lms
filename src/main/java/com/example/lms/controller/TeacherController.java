@@ -276,6 +276,12 @@ public class TeacherController {
 		@RequestParam(required = false) Integer month,
 		Model model) {
 		
+		// 0. 강의 정보 가져오기
+		CourseDTO course = courseService.getCourseOne(courseId);
+		LocalDate courseStart = course.getStartDate(); // 예: 2025-03-01
+		LocalDate courseEnd = course.getEndDate();     // 예: 2025-06-30
+
+		
 		// 1. 기준 날짜 셋팅: 년/월 파라미터 없으면 오늘 기준으로
 		LocalDate today = LocalDate.now();
 		int y = (year != null) ? year : today.getYear(); // 연도 선택값 또는 현재 연도
@@ -287,7 +293,10 @@ public class TeacherController {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 날짜 포맷 패턴 선언
 		List<String> dayList = new ArrayList<>();
 		for (LocalDate d = firstDay; !d.isAfter(lastDay); d = d.plusDays(1)) {
-			dayList.add(d.format(dtf)); // yyyy-MM-dd 형태의 문자열로 dayList에 저장
+			if (!d.isBefore(courseStart) && !d.isAfter(courseEnd)) {
+				dayList.add(d.format(dtf));  // yyyy-MM-dd 형태의 문자열로 dayList에 저장
+			}
+
 		}
 		
 		// 3. DB에서 출석 데이터(AttendanceDTO), 학생명단(StudentDTO) 조회
@@ -359,6 +368,9 @@ public class TeacherController {
 		model.addAttribute("prevMonth", prevMonth);
 		model.addAttribute("nextYear", nextYear);
 		model.addAttribute("nextMonth", nextMonth);
+		model.addAttribute("courseStart", courseStart);
+		model.addAttribute("courseEnd", courseEnd);
+		
 		
 		// 8. JSP로 이동 (WEB-INF/views/teacher/attendanceList.jsp)
 		return "/teacher/attendanceList";
@@ -374,6 +386,15 @@ public class TeacherController {
 			attendanceService.updateAttendance(attendanceDto);
 		};
 		int courseId = attendanceDto.getCourseId();
+		return "redirect:/attendanceList?courseId="+courseId;
+	}
+	
+	// 출결 한번에 업데이트
+	@PostMapping("/insertAttendanceAll")
+	public String insertAttendanceAll(@RequestParam String status
+									, @RequestParam int courseId
+									, Model model) {
+		attendanceService.insertAttendanceAll(status, courseId);
 		return "redirect:/attendanceList?courseId="+courseId;
 	}
 	

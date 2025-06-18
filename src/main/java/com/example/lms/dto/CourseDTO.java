@@ -1,5 +1,7 @@
 package com.example.lms.dto;
 
+import java.time.LocalDate;
+
 import lombok.Data;
 
 @Data
@@ -8,8 +10,8 @@ public class CourseDTO {
 	private String courseName;
 	private String description;
 	private int classNo;
-	private String startDate;
-	private String endDate;
+	private LocalDate startDate;
+	private LocalDate endDate;
 	private int teacherNo;
 	private String teacherName;
 	private String applyPerson;

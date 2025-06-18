@@ -35,6 +35,7 @@
 	}
 	table {
 		background: #fff;
+		table-layout: fixed
 	}
 </style>
 <body>
@@ -82,7 +83,7 @@
 		
 			<h1>${year}년 ${month}월</h1>
 			<div>
-				<form method="post" action="insertAll" onsubmit="return confirmInsert();">
+				<form method="post" action="insertAttendanceAll" onsubmit="return confirmInsert();">
 					금일 전체 학생 
 					<select name="status" id="bulkStatus">
 						<option value="출석">출석</option>
@@ -93,9 +94,19 @@
 				</form>
 			</div>
 			<div>
-				<a href="?courseId=${courseId}&year=${prevYear}&month=${prevMonth}">이전달</a>
+				<!-- 이전달, 다음달 조건을 넣기위한 변수 지정 -->
+				<c:set var="courseStartKey" value="${fn:substring(fn:replace(courseStart, '-', ''), 0, 6)}" />
+				<c:set var="courseEndKey" value="${fn:substring(fn:replace(courseEnd, '-', ''), 0, 6)}" />
+				<c:set var="prevDateKey" value="${prevYear}${prevMonth lt 10 ? '0' : ''}${prevMonth}" />
+				<c:set var="nextDateKey" value="${nextYear}${nextMonth lt 10 ? '0' : ''}${nextMonth}" />
+				
+				<c:if test="${prevDateKey >= courseStartKey}">
+					<a href="?courseId=${courseId}&year=${prevYear}&month=${prevMonth}">이전달</a>
+				</c:if>
 				<span style="font-weight:bold;">${year}년 ${month}월</span>
-				<a href="?courseId=${courseId}&year=${nextYear}&month=${nextMonth}">다음달</a>
+				<c:if test="${nextDateKey <= courseEndKey}">
+					<a href="?courseId=${courseId}&year=${nextYear}&month=${nextMonth}">다음달</a>
+				</c:if>
 			</div>
 			<table border="1">
 				<thead>
@@ -156,7 +167,7 @@
 				<select name="status">
 					<option value="출석">출석</option>
 					<option value="지각">지각</option>
-					<option value="지각">조퇴</option>
+					<option value="조퇴">조퇴</option>
 					<option value="결석">결석</option>
 					<option value="공결">공결</option>
 				</select>
@@ -207,6 +218,16 @@
 		}
 		
 		$('#attendanceModal').show();
+	});
+	
+	// 공결에서 다른걸 선택하거나 다른 상태에서 공결을 선택할 시 바로 첨부파일 첨부창
+	$('#attendanceForm select[name="status"]').on('change', function() {
+		const status = $(this).val();
+		if (status === '공결') {
+			$('#fileUploadSection').show();
+		} else {
+			$('#fileUploadSection').hide();
+		}
 	});
 	
 	// 한번에 입력 버튼
