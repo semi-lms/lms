@@ -1,94 +1,103 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>LMS 메인</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+<meta charset="UTF-8">
+<title>LMS 메인</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body>
 
-<img src="${pageContext.request.contextPath}/img/cursor.png" id="custom-cursor" />
+	<img src="${pageContext.request.contextPath}/img/cursor.png"
+		id="custom-cursor" />
 
-<!-- 헤더 include -->
-<c:choose>
-    <c:when test="${sessionScope.loginUser.role eq 'admin'}">
-        <jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
-    </c:when>
-    <c:when test="${sessionScope.loginUser.role eq 'teacher'}">
-        <jsp:include page="/WEB-INF/views/common/header/teacherHeader.jsp" />
-    </c:when>
-    <c:when test="${sessionScope.loginUser.role eq 'student'}">
-        <jsp:include page="/WEB-INF/views/common/header/studentHeader.jsp" />
-    </c:when>
-    <c:otherwise>
-        <jsp:include page="/WEB-INF/views/common/header/mainHeader.jsp" />
-    </c:otherwise>
-</c:choose>
+	<!-- 헤더 include -->
+	<c:choose>
+		<c:when test="${sessionScope.loginUser.role eq 'admin'}">
+			<jsp:include page="/WEB-INF/views/common/header/adminHeader.jsp" />
+		</c:when>
+		<c:when test="${sessionScope.loginUser.role eq 'teacher'}">
+			<jsp:include page="/WEB-INF/views/common/header/teacherHeader.jsp" />
+		</c:when>
+		<c:when test="${sessionScope.loginUser.role eq 'student'}">
+			<jsp:include page="/WEB-INF/views/common/header/studentHeader.jsp" />
+		</c:when>
+		<c:otherwise>
+			<jsp:include page="/WEB-INF/views/common/header/mainHeader.jsp" />
+		</c:otherwise>
+	</c:choose>
 
-<!-- 메인 콘텐츠 -->
-<div class="main-section">
-    <!-- 왼쪽 비디오 카드 -->
-    <div class="card video-card">
-        <video autoplay muted loop>
-            <source src="<c:url value='/video/goodee.mp4'/>" type="video/mp4">
-        </video>
-    </div>
+	<!-- 메인 콘텐츠 -->
+	<div class="main-section">
+		<!-- 왼쪽 비디오 카드 -->
+		<div class="card video-card">
+			<video autoplay muted loop>
+				<source src="<c:url value='/video/goodee.mp4'/>" type="video/mp4">
+			</video>
+		</div>
 
-    <!-- 오른쪽 박스들 -->
-    <div class="side-section">
-        <!-- 마이페이지 박스 -->
-        <c:choose>
-            <c:when test="${not empty loginUser}">
-                <div class="card mypage-box">
-                    <h2>${loginUser.name}님</h2>
-                    <p>
-                        <c:choose>
-                            <c:when test="${loginUser.role eq 'student'}">학생</c:when>
-                            <c:when test="${loginUser.role eq 'teacher'}">강사</c:when>
-                            <c:when test="${loginUser.role eq 'admin'}">관리자</c:when>
-                            <c:otherwise>${loginUser.role}</c:otherwise>
-                        </c:choose>
-                    </p>
-                    <a href="/mypage" class="btn">마이페이지</a>
-                    <a href="/logout" class="btn logout">로그아웃</a>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="card mypage-box">
-                    <h2>환영합니다!</h2>
-                    <p>로그인이 필요합니다.</p>
-                    <a href="/login" class="btn">로그인</a>
-                </div>
-            </c:otherwise>
-        </c:choose>
+		<!-- 오른쪽 박스들 -->
+		<div class="side-section">
+			<!-- 마이페이지 박스 -->
+			<c:choose>
+				<c:when test="${not empty loginUser}">
 
-        <!-- 관리자: 통계 / 그 외: 날씨 -->
-        <c:choose>
-            <c:when test="${loginUser.role eq 'admin'}">
-                <div class="card info-box">
-                    <h3>오늘의 출석 통계</h3>
-                    <canvas id="attendanceChart"></canvas>
-                </div>
-            </c:when>
-            <c:otherwise>
-                <div class="card info-box" id="weather">
-                    <p id="weather-location"></p>
-                      <img id="weather-icon" src="" alt="날씨 아이콘" style="width: 80px; height: 80px; display: none;">
-                    <p id="weather-temp"></p>
-                    <p id="weather-desc"></p>
-                </div>
-            </c:otherwise>
-        </c:choose>
-    </div>
-</div>
+					<div class="card mypage-box">
 
-<!-- 통계 JS -->
-<c:if test="${loginUser.role eq 'admin'}">
-<script>
+						<h2>
+							${loginUser.name}
+							<c:if test="${loginUser.role ne 'admin'}">님</c:if>
+						</h2>
+						<p>
+							<c:choose>
+								<c:when test="${loginUser.role eq 'student'}">학생</c:when>
+								<c:when test="${loginUser.role eq 'teacher'}">강사</c:when>
+								<c:when test="${loginUser.role eq 'admin'}">관리자</c:when>
+								<c:otherwise>${loginUser.role}</c:otherwise>
+							</c:choose>
+						</p>
+						<a href="/mypage" class="btn">마이페이지</a> <a href="/logout"
+							class="btn logout">로그아웃</a>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="card mypage-box">
+						<h2>환영합니다!</h2>
+						<p>로그인이 필요합니다.</p>
+						<a href="/login" class="btn">로그인</a>
+					</div>
+				</c:otherwise>
+			</c:choose>
+
+			<!-- 관리자: 통계 / 그 외: 날씨 -->
+			<c:choose>
+				<c:when test="${loginUser.role eq 'admin'}">
+					<div class="card info-box">
+						<h3>오늘의 출석 통계</h3>
+						<canvas id="attendanceChart"></canvas>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="card info-box" id="weather">
+						<p id="weather-location"></p>
+						<img id="weather-icon" src="" alt="날씨 아이콘"
+							style="width: 80px; height: 80px; display: none;">
+						<p id="weather-temp"></p>
+						<p id="weather-desc"></p>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</div>
+	</div>
+
+	<!-- 통계 JS -->
+	<c:if test="${loginUser.role eq 'admin'}">
+		<script>
     const classroom = [
         <c:forEach var="item" items="${list}" varStatus="status">
             "${item.classroom}"<c:if test="${!status.last}">,</c:if>
@@ -143,14 +152,14 @@
         location.href = "/admin/attendanceStatistics";
     };
 </script>
-</c:if>
+	</c:if>
 
-<!-- 날씨 JS -->
-<c:if test="${loginUser.role ne 'admin'}">
+	<!-- 날씨 JS -->
+	<c:if test="${loginUser.role ne 'admin'}">
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
+		<script>
     fetch("https://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=7ffda95e88ecbf36cebafb2a3089b0ca&units=metric&lang=kr")
         .then(response => response.json())
         .then(data => {
@@ -175,13 +184,13 @@
         });
 </script>
 
-</c:if>
+	</c:if>
 
-<!-- 기타 하단 -->
-<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+	<!-- 기타 하단 -->
+	<jsp:include page="/WEB-INF/views/common/commonMain.jsp" />
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
-<script>
+	<script>
 document.addEventListener('DOMContentLoaded', () => {
     const cursorImg = document.getElementById('custom-cursor');
     document.addEventListener('mousemove', function (e) {
