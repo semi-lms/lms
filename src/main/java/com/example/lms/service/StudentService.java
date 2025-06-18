@@ -30,4 +30,6 @@ public interface StudentService {
 	
 	int deleteStudents(List<Integer> studentNo);
 	
+	int deleteByStudentNo(List<Integer> studentNo);
+	
 }

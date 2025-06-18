@@ -160,4 +160,12 @@
 	        #{studentNo}
 	    </foreach>
 	</delete>
+	
+	<delete id="deleteByStudentNo" parameterType="list">
+	    DELETE FROM course_apply
+	    WHERE student_no IN
+	    <foreach collection="list" item="studentNo" open="(" separator="," close=")">
+	        #{studentNo}
+	    </foreach>
+	</delete>
 </mapper>

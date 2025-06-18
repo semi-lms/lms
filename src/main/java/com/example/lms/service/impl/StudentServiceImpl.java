@@ -91,9 +91,16 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
+	@Transactional
 	public int deleteStudents(List<Integer> studentNo) {
+		studentMapper.deleteByStudentNo(studentNo);
 		
 		return studentMapper.deleteStudents(studentNo);
+	}
+	
+	@Override
+	public int deleteByStudentNo(List<Integer> studentNo) {
+	    return studentMapper.deleteByStudentNo(studentNo);
 	}
 	
 }

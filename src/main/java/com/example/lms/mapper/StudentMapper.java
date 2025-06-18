@@ -46,4 +46,7 @@ public interface StudentMapper {
 	int updateStudent(StudentDTO dto);
 	
 	int deleteStudents(List<Integer> studentNo);
+	
+	int deleteByStudentNo(List<Integer> studentNo);
+	
 }
