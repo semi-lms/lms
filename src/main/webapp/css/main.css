@@ -5,7 +5,6 @@ body {
 	background: #F7FAF0;
 	margin: 0;
 	padding: 0;
-	
 }
 
 header {
@@ -18,104 +17,119 @@ header {
 }
 
 .main-section {
-    max-width: 1200px;
-    margin: 40px auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 40px;
+	max-width: 1200px;
+	margin: 40px auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 40px;
 }
 
 .card.video-card {
-    flex: 2;
-    max-width: 900px;
-    height: 440px;
-    padding: 0;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    animation: fadeInScale 1s ease forwards;
+	flex: 2;
+	max-width: 900px;
+	height: 440px;
+	padding: 0;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	animation: fadeInScale 1s ease forwards;
 }
 
 .card.video-card video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 .card.mypage-box {
-    flex: 1;
-    max-width: 320px;
- background-color: #E4F6D8; /* 연한 연두 크림톤 */
-box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1); /* 연두빛 살짝 넣은 그림자 */
-    border-radius: 12px;
-    padding: 30px 20px;
-    text-align: center;
-    animation: fadeInUp 1s ease forwards;
+	flex: 1;
+	max-width: 320px;
+	background-color: #FAFCF5;
+	box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1);
+	border-radius: 12px;
+	padding: 30px 20px;
+	text-align: center;
+	animation: fadeInUp 1s ease forwards;
 }
 
 .mypage-box h2 {
-    font-size: 1.3em;  
-    margin-top: 0;
-    color: #333;
+	font-size: 1.3em;
+	margin-top: 0;
+	color: #333;
 }
 
 .mypage-box p {
-    color: #666;
-    margin-bottom: 20px;
+	color: #666;
+	margin-bottom: 20px;
 }
 
 a.btn {
-	
-    display: inline-block;
-    margin: 10px 5px;
-   padding: 6px 14px;       /* 기존 10px 20px -> 좀 작게 */
-    font-size: 0.9em;        /* 폰트 크기 줄임 */
-    border-radius: 6px;
-    text-decoration: none;
-    color: white;
-      background-color: #4CAF50; 
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+	display: inline-block;
+	margin: 10px 5px;
+	padding: 6px 14px; /* 기존 10px 20px -> 좀 작게 */
+	font-size: 0.9em; /* 폰트 크기 줄임 */
+	border-radius: 6px;
+	text-decoration: none;
+	color: white;
+	background-color: #4CAF50;
+	font-weight: bold;
+	transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 a.btn:hover {
-     background-color: #388E3C; 
-    transform: scale(1.05);
+	background-color: #388E3C;
+	transform: scale(1.05);
 }
 
 a.btn.logout {
-    background-color: #D9534F; /* 톤 다운 레드 */
+	background-color: #D9534F; /* 톤 다운 레드 */
 }
 
 a.btn.logout:hover {
-    background-color: #B52A34; /* 진한 레드 */
-    transform: scale(1.05);
+	background-color: #B52A34; /* 진한 레드 */
+	transform: scale(1.05);
 }
 
 /* 애니메이션 정의 */
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@
+keyframes fadeInUp { 0% {
+	opacity: 0;
+	transform: translateY(20px);
 }
 
-@keyframes fadeInScale {
-    0% {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
+100
+%
+{
+opacity
+:
+1;
+transform
+:
+translateY(
+0
+);
+}
+}
+@
+keyframes fadeInScale { 0% {
+	opacity: 0;
+	transform: scale(0.95);
 }
 
+100
+%
+{
+opacity
+:
+1;
+transform
+:
+scale(
+1
+);
+}
+}
 canvas {
 	max-width: 100%;
 	height: auto;
@@ -164,112 +178,112 @@ canvas {
 	cursor: pointer;
 }
 
-
-
 /* 상담문의 배너 스타일 */
 .floBanPc3 {
-  position: fixed;
-  top: 400px; /* 윗쪽 끝에서부터의 거리 */
-  right: 4PX;
-  z-index: 9999;
-  border-radius : 100px;
+	position: fixed;
+	top: 400px; /* 윗쪽 끝에서부터의 거리 */
+	right: 4PX;
+	z-index: 9999;
+	border-radius: 100px;
 }
 /* 공통메인 */
 .common-main-section {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 80px auto;
-  padding: 20px;
-  flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+	gap: 30px;
+	max-width: 1200px;
+	margin: 80px auto;
+	padding: 20px;
+	flex-wrap: wrap;
 }
 
 .common-card {
-  flex: 1;
-  min-width: 280px;
-  background: #FAFCF5;
-  border-radius: 12px;
-  padding: 20px 25px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
+	flex: 1;
+	min-width: 280px;
+	background: #FAFCF5;
+	border-radius: 12px;
+	padding: 20px 25px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+	transition: transform 0.3s ease;
 }
 
 .common-card:hover {
-  transform: translateY(-5px);
+	transform: translateY(-5px);
 }
 
 .common-card h3 {
- text-align: center;
-  font-size: 1.3em;
-  color: #333;
-  margin-bottom: 15px;
+	text-align: center;
+	font-size: 1.3em;
+	color: #333;
+	margin-bottom: 15px;
 }
 
 .common-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 15px 0;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 15px 0;
 }
 
 .common-card li {
-  margin-bottom: 8px;
-  font-size: 0.95em;
-  color: #555;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	margin-bottom: 8px;
+	font-size: 0.95em;
+	color: #555;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .view-btn {
-  display: inline-block;
-  padding: 8px 14px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  font-size: 0.9em;
-  border-radius: 6px;
-  transition: background-color 0.3s;
+	display: inline-block;
+	padding: 8px 14px;
+	background-color: #007bff;
+	color: #fff;
+	text-decoration: none;
+	font-size: 0.9em;
+	border-radius: 6px;
+	transition: background-color 0.3s;
 }
 
 .view-btn:hover {
-  background-color: #0056b3;
+	background-color: #0056b3;
 }
-  #custom-cursor {
-    position: fixed;
-    width: 50px;
-    height: 50px;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s ease;
-  }
-  
-    /* main 하단 리스트 이모지 */
-  .notice-list li::before {
-  content: "🔶";
-  font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
-  margin-right: 5px;
+
+#custom-cursor {
+	position: fixed;
+	width: 50px;
+	height: 50px;
+	pointer-events: none;
+	z-index: 9999;
+	transition: transform 0.1s ease;
 }
+
+/* main 하단 리스트 이모지 */
+.notice-list li::before {
+	content: "🔶";
+	font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
+	margin-right: 5px;
+}
+
 .qna-list li::before {
-  content: "🔷 ";
-   font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
-  margin-right: 5px;
+	content: "🔷 ";
+	font-size: 0.75em; /* 또는 px 단위로 지정해도 됨 */
+	margin-right: 5px;
 }
+
 .file-list li::before {
-  content: "📎 ";
+	content: "📎 ";
 }
 
 /* main 하단 리스트 날짜 정렬 */
 .list-item {
-  position: relative;
-  padding-right: 100px; /* 날짜 공간 확보 */
+	position: relative;
+	padding-right: 100px; /* 날짜 공간 확보 */
 }
 
 .list-item .date {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 0.85em;
-  color: gray;
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 0.85em;
+	color: gray;
 }
-
