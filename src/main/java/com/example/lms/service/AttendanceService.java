@@ -21,4 +21,7 @@ public interface AttendanceService {
     int isAttendance(AttendanceDTO attendanceDto);
     int updateAttendance(AttendanceDTO attendanceDto);
     int insertAttendance(AttendanceDTO attendanceDto);
+    
+    // 오늘날짜 한번에 업데이트(있으면 제외)
+    void insertAttendanceAll(String status, int courseId);
 }

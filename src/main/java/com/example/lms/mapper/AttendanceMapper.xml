@@ -143,4 +143,13 @@
 		SET status = #{status}
 		WHERE student_no = #{studentNo} AND course_id = #{courseId} AND date = #{date}
 	</update>
+	
+	<!-- 출석/결석 일괄 입력(이미 데이터가 있으면 제외) -->
+	<insert id="insertAttendanceAll" parameterType="map">
+		INSERT INTO attendance (student_no, course_id, date, status)
+		SELECT s.student_no, s.course_id, CURDATE(), #{status} FROM student s WHERE s.course_id = #{courseId}
+		AND NOT EXISTS (
+			SELECT * FROM attendance a WHERE a.student_no = s.student_no AND a.course_id = s.course_id AND a.date = CURDATE()
+		)
+	</insert>
 </mapper>

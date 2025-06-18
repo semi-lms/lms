@@ -43,7 +43,55 @@
 			<jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
 		</div>
 		<div class="main-content">
+			<!-- 공통 페이지 상단 메뉴 -->
+			<div style="margin-bottom: 20px;">
+				<c:set var="currentPath" value="${pageContext.request.requestURI}" />
+
+				<a href="/attendanceList?courseId=${courseId}" 
+					style="padding: 8px 16px; 
+						margin-right: 10px; 
+						border-radius: 6px; 
+						text-decoration: none; 
+						font-weight: bold;
+					<c:if test='${fn:contains(currentPath, "/attendanceList")}'>background-color: #cce5ff; color: #004085;</c:if>
+					<c:if test='${!fn:contains(currentPath, "/attendanceList")}'>background-color: #e9ecef; color: #333;</c:if>">
+					출결 관리
+				</a>
+
+				<a href="/studentListFromTeacher?courseId=${courseId}" 
+					style="padding: 8px 16px; 
+					   margin-right: 10px; 
+					   border-radius: 6px; 
+					   text-decoration: none; 
+					   font-weight: bold;
+					<c:if test='${fn:contains(currentPath, "/studentListFromTeacher")}'>background-color: #cce5ff; color: #004085;</c:if>
+					<c:if test='${!fn:contains(currentPath, "/studentListFromTeacher")}'>background-color: #e9ecef; color: #333;</c:if>">
+					학생 관리
+				</a>
+
+				<a href="/examList?courseId=${courseId}" 
+					style="padding: 8px 16px; 
+						border-radius: 6px; 
+						text-decoration: none; 
+						font-weight: bold;
+					<c:if test='${fn:contains(currentPath, "/examList")}'>background-color: #cce5ff; color: #004085;</c:if>
+					<c:if test='${!fn:contains(currentPath, "/examList")}'>background-color: #e9ecef; color: #333;</c:if>">
+					시험 관리
+				</a>
+			</div>
+		
 			<h1>${year}년 ${month}월</h1>
+			<div>
+				<form method="post" action="insertAll" onsubmit="return confirmInsert();">
+					금일 전체 학생 
+					<select name="status" id="bulkStatus">
+						<option value="출석">출석</option>
+						<option value="결석">결석</option>
+					</select>
+					<input type="hidden" name="courseId" value="${courseId}">
+					<button type="submit">입력</button>
+				</form>
+			</div>
 			<div>
 				<a href="?courseId=${courseId}&year=${prevYear}&month=${prevMonth}">이전달</a>
 				<span style="font-weight:bold;">${year}년 ${month}월</span>
@@ -160,6 +208,12 @@
 		
 		$('#attendanceModal').show();
 	});
+	
+	// 한번에 입력 버튼
+	function confirmInsert() {
+		const status = document.getElementById("bulkStatus").value;
+		return confirm("이미 입력된 학생들을 제외한 학생들이 '" + status + "'으로 입력됩니다. 진행하시겠습니까?");
+	}
 	</script>
 	
 </body>

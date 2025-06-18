@@ -77,4 +77,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public int updateAttendance(AttendanceDTO attendanceDto) {
 		return attendanceMapper.updateAttendance(attendanceDto);
 	}
+	// 오늘날짜 한번에 업데이트(이미 오늘날짜 데이터 존재하면 예외)
+	public void insertAttendanceAll(String status, int courseId) {
+		attendanceMapper.insertAttendanceAll(status, courseId);
+	}
 }

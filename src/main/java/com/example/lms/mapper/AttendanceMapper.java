@@ -37,4 +37,7 @@ public interface AttendanceMapper {
 	int updateAttendance(AttendanceDTO attendanceDto);
 	// 없으면 입력
 	int insertAttendance(AttendanceDTO attendanceDto);
+	
+	// 한번에 입력(이미 데이터 있으면 제외)
+	void insertAttendanceAll(String status, int courseId);
 }
