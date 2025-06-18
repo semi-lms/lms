@@ -95,8 +95,8 @@
 			</div>
 			<div>
 				<!-- 이전달, 다음달 조건을 넣기위한 변수 지정 -->
-				<c:set var="courseStartKey" value="${fn:substring(fn:replace(courseStart, '-', ''), 0, 6)}" />
-				<c:set var="courseEndKey" value="${fn:substring(fn:replace(courseEnd, '-', ''), 0, 6)}" />
+				<c:set var="courseStartKey" value="${fn:substring(fn:replace(courseStartDate, '-', ''), 0, 6)}" />
+				<c:set var="courseEndKey" value="${fn:substring(fn:replace(courseEndDate, '-', ''), 0, 6)}" />
 				<c:set var="prevDateKey" value="${prevYear}${prevMonth lt 10 ? '0' : ''}${prevMonth}" />
 				<c:set var="nextDateKey" value="${nextYear}${nextMonth lt 10 ? '0' : ''}${nextMonth}" />
 				
