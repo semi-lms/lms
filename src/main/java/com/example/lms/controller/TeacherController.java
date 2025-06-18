@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.lms.dto.AttendanceDTO;
 import com.example.lms.dto.CourseDTO;
+import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
 import com.example.lms.dto.ExamOptionDTO;
 import com.example.lms.dto.ExamQuestionDTO;
@@ -184,12 +185,13 @@ public class TeacherController {
 	
 	// 성적 리스트
 	@GetMapping("/scoreList")
-	public String scoreList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
-							, @RequestParam(name = "examId", required = false, defaultValue = "1") int examId
+	public String scoreList(@RequestParam(name = "examId", required = false, defaultValue = "1") int examId
 							, @RequestParam(defaultValue = "1") int currentPage
 							, @RequestParam(defaultValue = "10") int rowPerPage
 							, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter
 							, Model model) {
+		
+		int courseId = examService.getCourseIdByExamId(examId);
 		// 페이징
 		int totalCnt = examService.getScoreCnt(courseId, examId, filter);
 		int lastPage = totalCnt / rowPerPage;
@@ -223,6 +225,20 @@ public class TeacherController {
 		
 		return "teacher/scoreList";
 	}
+	
+	// 성적 상세 페이지
+		@GetMapping("/scoreOne")
+		public String scoreOne(@RequestParam(name = "submissionId", required = false, defaultValue = "1") int submissionId
+									, Model model) {
+			
+			List<ExamAnswerDTO> questions = examService.getExamAnswersWithCorrect(submissionId);
+			model.addAttribute("questions", questions);
+			
+			
+			
+			return "/teacher/scoreOne";
+		}
+	
 	
 	// 시험 리스트
 	@GetMapping("/examList")
@@ -278,19 +294,19 @@ public class TeacherController {
 	@PostMapping("/updateExam")
 	public String updateExam(@ModelAttribute ExamDTO examDto) {
 		examService.modifyExam(examDto);
-		return "redirect:/examList";
+		return "redirect:/examList?courseId="+examDto.getCourseId();
 	}
 	
 	@PostMapping("/removeExam")
 	public String removeExam(@RequestParam("examId") int examId) {
 		examService.deleteExamQuestionOption(examId);
-		return "redirect:/examList";
+		return "redirect:/examList?courseId="+examId;
 	}
 	
 	@PostMapping("/insertExam")
 	public String insertExam(@ModelAttribute ExamDTO examDto) {
 		examService.addExam(examDto);
-		return "redirect:/examList";
+		return "redirect:/examList?courseId="+examDto.getCourseId();
 	}
 	
 	// 출결 관리
