@@ -7,13 +7,26 @@
     <result property="maxPerson" column="max_person"/>
 </resultMap>
 
+<resultMap id="courseDetailMap" type="com.example.lms.dto.CourseDTO">
+    <id property="courseId" column="course_id"/>
+    <result property="courseName" column="course_name"/>
+    <result property="description" column="description"/>
+    <result property="teacherNo" column="teacher_no"/>
+    <result property="teacherName" column="name"/>
+    <result property="classNo" column="class_no"/>
+    <result property="classroom" column="classroom"/>
+    <result property="startDate" column="start_date"/>
+    <result property="endDate" column="end_date"/>
+    <result property="maxPerson" column="max_person"/>
+</resultMap>
+
 	<select id="selectCourseList"
 		resultType="com.example.lms.dto.CourseDTO" parameterType="map">
 		SELECT
 		t.`name` AS teacherName,
 		c.course_name AS courseName,
 		cl.classroom as classroom,
-		c.course_id AS courseID,
+		c.course_id AS courseId,
 		CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
 		CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
 		FROM course c
@@ -64,9 +77,16 @@
 		    GROUP BY class_no
 		) c ON cl.class_no = c.class_no
 		WHERE
-		    c.class_no IS NULL -- 아예 강의 배정된 적 없는 강의실 (빈 강의실)
+		    c.class_no IS NULL
 		    OR
 		    c.last_end_date &lt;= DATE_ADD(CURDATE(), INTERVAL 2 MONTH)
+	</select>
+
+	<select id="getOverlapCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM course
+	    WHERE class_no = #{classNo}
+	      AND (start_date &lt;= #{endDate} AND end_date &gt;= #{startDate})
 	</select>
 
 	<select id="selectClassByNo" parameterType="int" resultMap="classMap">
@@ -154,9 +174,45 @@
 	        c.start_date AS startDate,
 	        c.end_date AS endDate,
 	        c.teacher_no AS teacherNo,
-	        cl.classroom AS classroom   -- ★ 이거 추가!
+	        cl.classroom AS classroom
 	    FROM course c
 	    INNER JOIN class cl ON c.class_no = cl.class_no
 	    WHERE c.end_date >= #{today}
 	</select>
+	
+	<select id="getCourseOne" resultMap="courseDetailMap">
+	    SELECT 
+	        c.course_id AS course_id,
+	        c.course_name AS course_name,
+	        c.description AS description,
+	        c.class_no AS class_no,
+	        c.start_date AS start_date,
+	        c.end_date AS end_date,
+	        c.teacher_no AS teacher_no,
+	        t.name AS name,
+	        cl.classroom AS classroom,
+	        cl.max_person AS max_person
+	    FROM course c 
+	    INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+	    INNER JOIN class cl ON c.class_no = cl.class_no
+	    WHERE c.course_id = #{courseId}
+	</select>
+	
+	<update id="updateCourse" parameterType="com.example.lms.dto.CourseDTO">
+	    UPDATE course
+	    SET course_name = #{courseName},
+	        description = #{description},
+	        class_no = #{classNo},
+	        start_date = #{startDate},
+	        end_date = #{endDate},
+	        teacher_no = #{teacherNo}
+	    WHERE course_id = #{courseId}
+	</update>
+	
+	<delete id="deleteCourses" parameterType="java.util.List">
+	    DELETE FROM course WHERE course_id IN
+	    <foreach collection="list" item="id" open="(" separator="," close=")">
+	        #{id}
+	    </foreach>
+	</delete>
 </mapper>

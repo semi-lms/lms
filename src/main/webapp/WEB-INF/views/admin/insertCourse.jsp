@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>강의 등록</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 .container {
@@ -12,15 +12,13 @@
 	flex-direction: row;
 	align-items: flex-start;
 }
-
 .sidebar {
-	min-width: 200px; /* 메뉴 폭은 취향껏 */
+	min-width: 200px;
 	margin-right: 30px;
 }
-
 .main-content {
 	flex: 1;
-	padding: 32px 24px 24px 300px; /* 좌우여백 */
+	padding: 32px 24px 24px 300px;
 	overflow-x: auto;
 	background: #fafbfc;
 }
@@ -33,16 +31,18 @@
 		</div>
 		<div class="main-content">
 			<h1>강의 등록</h1>
-			<form action="insertCourse" method="post" onsubmit="return validateForm()">
+			<form id="courseInsertForm" method="post">
 				<table border="1">
 					<tr>
 						<th>담당 강사</th>
-						<td><select name="teacherNo" required>
+						<td>
+							<select name="teacherNo" required>
 								<option value="">강사 선택</option>
 								<c:forEach var="teacherList" items="${teacherList}">
 									<option value="${teacherList.teacherNo}">${teacherList.name}</option>
 								</c:forEach>
-						</select></td>
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<th>강의명</th>
@@ -71,7 +71,7 @@
 					<tr>
 						<th>강의실</th>
 						<td>
-							<select name="classNo" required>
+							<select name="classNo" id="classNo" required>
 								<option value="">강의실 선택</option>
 								<c:forEach var="classroom" items="${classList}">
 									<option value="${classroom.classNo}">${classroom.classroom}</option>
@@ -82,17 +82,17 @@
 					<tr>
 						<th>수강정원</th>
 						<td>
-							<input type="text" name="maxPerson" id="maxPerson">
+							<input type="text" name="maxPerson" id="maxPerson" readonly>
 						</td>
 					</tr>
 				</table>
-				<button type="submit">강의 등록</button>
+				<button type="button" id="insertBtn">강의 등록</button>
 			</form>
 		</div>
 	</div>
 <script>
-	// 강의실 선택 시 강의실 별 수강 정원을 DB에서 가져와서 자동으로 입력
-	$('select[name="classNo"]').change(function(){
+	// 강의실 선택 시 수강정원 자동입력
+	$('#classNo').change(function(){
 		var classNo = $(this).val();
 		if(classNo) {
 			$.ajax({
@@ -100,27 +100,43 @@
 				type: 'get',
 				data: {classNo: classNo},
 				success: function(data){
-					console.log(data);
 					$("#maxPerson").val(data);
 				}
-			})
+			});
 		} else {
 			$("#maxPerson").val("");
 		}
-	})
-	
-	// 강의 등록 시 공백 확인
-	function validateForm() {
-		const courseName = document.getElementById("courseName").value.trim();
-		const description = document.getElementById("description").value.trim();
-		const startDate = document.getElementById("startDate").value.trim();
-		const endDate = document.getElementById("endDate").value.trim();
-		
+	});
+
+	// 강의 등록 버튼 클릭 시
+	$("#insertBtn").click(function() {
+		const courseName = $("#courseName").val().trim();
+		const description = $("#description").val().trim();
+		const startDate = $("#startDate").val().trim();
+		const endDate = $("#endDate").val().trim();
+
 		if(!courseName || !description || !startDate || !endDate) {
-			alert("공백 없이 작성 부탁드립니다.")
-			return false;
+			alert("공백 없이 작성 부탁드립니다.");
+			return;
 		}
-	}
+
+		$.ajax({
+			url: "insertCourse",
+			type: "POST",
+			data: $("#courseInsertForm").serialize(),
+			success: function(result){
+				if(result === "overlap"){
+					alert("이미 해당 강의실에서 진행 중인 강의와 일정이 겹칩니다.");
+				}else{
+					alert("등록 완료");
+					location.href = "/admin/courseList";
+				}
+			},
+			error: function(){
+				alert("등록 중 오류가 발생했습니다.");
+			}
+		});
+	});
 </script>
 </body>
 </html>

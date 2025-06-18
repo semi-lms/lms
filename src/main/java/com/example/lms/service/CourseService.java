@@ -27,4 +27,12 @@ public interface CourseService {
 	public int getCountCourseListByTeacherNo(int teacherNo, String filter);
 
 	List<CourseDTO> selectCourseListNotEnded(String now);
+
+	CourseDTO getCourseOne(int courseId);
+
+	int updateCourse(CourseDTO dto);
+
+	int deleteCourses(List<Integer> courseIds);
+
+	int getOverlapCount(int classNo, String startDate, String endDate);
 }

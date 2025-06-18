@@ -70,5 +70,28 @@ public class CourseServiceImpl implements CourseService{
 
 		return courseMapper.selectCourseListNotEnded(now);
 	}
-	
+
+	@Override
+	public CourseDTO getCourseOne(int courseId) {
+
+		return courseMapper.getCourseOne(courseId);
+	}
+
+	@Override
+	public int updateCourse(CourseDTO dto) {
+
+		return courseMapper.updateCourse(dto);
+	}
+
+	@Override
+	public int deleteCourses(List<Integer> courseIds) {
+		// TODO Auto-generated method stub
+		return courseMapper.deleteCourses(courseIds);
+	}
+
+	@Override
+	public int getOverlapCount(int classNo, String startDate, String endDate) {
+	    return courseMapper.getOverlapCount(classNo, startDate, endDate);
+	}
+
 }

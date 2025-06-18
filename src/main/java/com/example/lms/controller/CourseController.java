@@ -50,6 +50,10 @@ public class CourseController {
 	    param.put("rowPerPage", rowPerPage);  // ★추가
 	    
 		List<CourseDTO> list = course.selectCourseList(param);
+		List<TeacherDTO> teacherList = course.selectTeacherList();
+		List<ClassDTO> classList = course.selectClassList();
+		model.addAttribute("teacherList", teacherList);
+		model.addAttribute("classList", classList);
 	    model.addAttribute("courseList", list);
 	    model.addAttribute("page", page);
 	    model.addAttribute("searchCourse", keyword);
@@ -64,13 +68,9 @@ public class CourseController {
 	@GetMapping("/admin/insertCourse")
 	public String insertCourse(Model model) {
 		List<TeacherDTO> teacherList = course.selectTeacherList();
-		for (TeacherDTO t : teacherList) {
-		    System.out.println("teacherNo: " + t.getTeacherNo() + ", name: " + t.getName());
-		}
 		List<ClassDTO> classList = course.selectClassList();
 		model.addAttribute("teacherList", teacherList);
 		model.addAttribute("classList", classList);
-		System.out.println("class테스트"+classList);
 		return "/admin/insertCourse";
 	}
 	
@@ -84,9 +84,35 @@ public class CourseController {
 	
 	
 	@PostMapping("/admin/insertCourse")
+	@ResponseBody
 	public String insertCourse(CourseDTO courseDto) {
-		course.insertCourse(courseDto);
-	    System.out.println("넘어온 teacherNo = " + courseDto.getTeacherNo());
-		return "redirect:/admin/courseList";
+	    int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate());
+	    if (overlapCount > 0) {
+	        return "overlap";
+	    }
+	    course.insertCourse(courseDto);
+	    return "success";
+	}
+	
+	// 강의 수정
+	@GetMapping("/admin/getCourseDetail")
+	@ResponseBody
+	public CourseDTO getCourseDetail(@RequestParam int courseId) {
+	    return course.getCourseOne(courseId);
+	}
+
+	// 강의 수정
+	@PostMapping("/admin/updateCourse")
+	@ResponseBody
+	public String updateCourse(CourseDTO dto) {
+		course.updateCourse(dto);
+	    return "success";
+	}
+	
+	// 강의 삭제
+	@PostMapping("/admin/deleteCourses")
+	@ResponseBody
+	public int deleteCourses(@RequestParam("courseIds") List<Integer> courseIds) {
+	    return course.deleteCourses(courseIds);
 	}
 }
