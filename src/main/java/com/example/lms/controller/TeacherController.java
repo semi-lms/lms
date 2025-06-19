@@ -82,11 +82,33 @@ public class TeacherController {
 	}
 	
 	@PostMapping("/admin/insertTeacher")
-	public String insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
+	@ResponseBody
+	public Map<String, Object> insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
+		Map<String, Object> result = new HashMap<>();
+		
+		// 아이디/비밀번호 null 또는 빈 문자열 확인
+	    if (teacherDto.getTeacherId() == null || teacherDto.getTeacherId().trim().isEmpty() ||
+	    		teacherDto.getPassword() == null || teacherDto.getPassword().trim().isEmpty()) {
+	        result.put("success", false);
+	        result.put("message", "아이디 또는 비밀번호가 누락되었습니다.");
+	        return result;
+	    }
+		
+		// 강의 중복 배정 검사
+	    Integer courseId = teacherDto.getCourseId();
+	    if (courseId != null && courseId > 0 && teacherService.isCourseAssigned(courseId)) {
+	        result.put("success", false);
+	        result.put("message", "해당 강의에는 이미 강사가 배정되어 있습니다.");
+	        return result;
+	    }
+		
+		// 비밀번호 암호화
 		String encodedPassword = passwordEncoder.encode(teacherDto.getPassword());
 		teacherDto.setPassword(encodedPassword);
+		
 		teacherService.insertTeacher(teacherDto);
-		return "redirect:/admin/teacherList";
+		result.put("success", true);
+		return result;
 	}
 	
 	
@@ -100,9 +122,22 @@ public class TeacherController {
 	}
 	
 	@PostMapping("/admin/updateTeacher")
-	public String updateTeacher(@ModelAttribute TeacherDTO teacherDto) {
+	@ResponseBody
+	public Map<String, Object> updateTeacher(@ModelAttribute TeacherDTO teacherDto) {
+		Map<String, Object> result = new HashMap<>();
+		
+		// 수정 시 본인을 제외한 중복 배정 검사
+		Integer courseId = teacherDto.getCourseId();
+		if (courseId != null && teacherDto.getCourseId() > 0 
+				&& teacherService.isCourseAssignedForUpdate(teacherDto.getCourseId(), teacherDto.getTeacherNo())) {
+			result.put("success", false);
+			result.put("message", "해당 강의에는 이미 다른 강사가 배정되어 있습니다.");
+			return result;
+		}
+		
 		teacherService.updateTeacher(teacherDto);
-		return "redirect:/admin/teacherList";
+		result.put("success", true);
+		return result;
 	}
 	
 	

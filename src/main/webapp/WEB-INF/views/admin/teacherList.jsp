@@ -7,18 +7,18 @@
 	<title>강사 리스트</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
-	  .container {
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
-	    margin-top: 30px;
-	  }
+		.container {
+	 		display: flex;
+	    	flex-direction: column;
+	    	align-items: center;
+	    	margin-top: 30px;
+	  	}
 	  
 		#teacherModal input,
 		#teacherModal select {
-		  width: 300px;
-		  padding: 5px;
-		  box-sizing: border-box;
+			width: 300px;
+		  	padding: 5px;
+		  	box-sizing: border-box;
 		}
 	</style>
 </head>
@@ -170,12 +170,16 @@
 				url: "/admin/updateTeacher",
 				type: "POST",
 				data: $("#teacherForm").serialize(),  // 폼 전체 데이터를 문자열로 변환해서 서버로 전송
-				success: function () {
-					alert("수정 완료");
-					location.reload();  // 목록 새로고침
+				success: function (response) {
+					if (response.success) {
+						alert("수정 완료");
+						location.reload();  // 목록 새로고침
+					} else {
+						alert(response.message);
+					}
 				},
 				error: function () {
-					alert("수정 실패");
+					alert("서버 오류 발생");
 				}
 			});
 		});

@@ -15,7 +15,7 @@
 		}
 		 
 	 	input, select {
-			width: 300px;  /* 필요시 적절히 조절 */
+			width: 300px;
 			padding: 5px;
 			box-sizing: border-box;
 		}
@@ -73,6 +73,29 @@
 	</form>
 	
 	<script>
+		$("form").on("submit", function (e) {
+			e.preventDefault();  // 기본 전송 막기
+			
+			const formData = $(this).serialize();
+			
+			$.ajax({
+				url: "${pageContext.request.contextPath}/admin/insertTeacher",
+				type: "POST",
+				data: formData,
+				success: function (response) {
+					if (response.success) {
+						alert("등록 완료");
+						window.location.href = "${pageContext.request.contextPath}/admin/teacherList";
+					} else {
+						alert(response.message);
+					}
+				},
+				error: function () {
+					alert("서버 오류 발생");
+				}
+			});
+		});
+	
 		// 아이디 6자리로 랜덤하게 부여
 		function randomId(length = 6) {
 			const chars = "abcdefghijklmnopqrstuvwxyz0123456789";

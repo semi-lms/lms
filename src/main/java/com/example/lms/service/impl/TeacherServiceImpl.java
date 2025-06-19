@@ -38,4 +38,15 @@ public class TeacherServiceImpl implements TeacherService {
 	public int deleteTeachers(List<Integer> teacherNos) {
 		return teacherMapper.deleteTeachers(teacherNos);
 	}
+
+	@Override
+	public boolean isCourseAssigned(int courseId) {
+		int count = teacherMapper.isCourseAssigned(courseId);
+	    return count > 0;
+	}
+
+	@Override
+	public boolean isCourseAssignedForUpdate(int courseId, int teacherNo) {
+		return teacherMapper.isCourseAssignedForUpdate(courseId, teacherNo);
+	}
 }

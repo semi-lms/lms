@@ -14,4 +14,8 @@ public interface TeacherService {
 	int updateTeacher(TeacherDTO teacherDto);
 	
 	int deleteTeachers(List<Integer> teacherNos);
+	
+	boolean isCourseAssigned(int courseId);
+	
+	boolean isCourseAssignedForUpdate(int courseId, int teacherNo);
 }

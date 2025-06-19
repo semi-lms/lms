@@ -111,7 +111,7 @@
 	    WHERE t.teacher_no = #{teacherNo}
 	</select>
 	
-	<!-- 강사 수정 -->
+	<!-- 강사 정보 수정 -->
 	<update id="updateTeacher" parameterType="com.example.lms.dto.TeacherDTO">
 		UPDATE teacher
 		SET
@@ -142,4 +142,19 @@
 		</foreach>
 		<!-- ex) WHERE teacher_no IN (1, 2, 3) -->
 	</delete>
+	
+	<!-- 강사 등록 시 해당 강의에 이미 배정된 강사가 있는지 확인 -->
+	<select id="isCourseAssigned" parameterType="int" resultType="int">
+		SELECT COUNT(*)
+		FROM teacher
+		WHERE course_id = #{courseId}
+	</select>
+	
+	<!-- 강사 수정 시 본인을 제외하고 해당 강의에 배정된 강사가 있는지 확인 -->
+	<select id="isCourseAssignedForUpdate" parameterType="map" resultSets="int">
+		SELECT COUNT(*)
+		FROM teacher
+		WHERE course_id = #{courseId}
+			AND teacher_no != #{teacherNo} 
+	</select>
 </mapper>
