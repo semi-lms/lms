@@ -89,9 +89,10 @@
                         <td>
                         	<!-- 출석 status 상태에 따라 이모티콘 표시 -->
                             <c:choose>
-                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}">●</c:when>
-                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">△</c:when>
-                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}">✗</c:when>
+                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}"><span>🔵</span></c:when>
+                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}"><span>🟡</span></c:when>
+                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}"><span>❌</span></c:when>
+                                <c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}"><span>📝</span></c:when>
                                 <c:otherwise>-</c:otherwise>
                             </c:choose>
                         </td>

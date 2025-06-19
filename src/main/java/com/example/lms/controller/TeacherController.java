@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,7 +49,7 @@ public class TeacherController {
 	@Autowired private CourseService courseService;
 	@Autowired private AttendanceService attendanceService;
 	@Autowired private TeacherService teacherService;
-	
+	@Autowired private PasswordEncoder passwordEncoder;
 	
 	// 강사 리스트
 	@GetMapping("/admin/teacherList")
@@ -70,7 +71,11 @@ public class TeacherController {
 	
 	@PostMapping("/admin/insertTeacher")
 	public String insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
+		String encodedPassword = passwordEncoder.encode(teacherDto.getPassword());
+		teacherDto.setPassword(encodedPassword);
+		
 		teacherService.insertTeacher(teacherDto);
+		
 		return "redirect:/admin/teacherList";
 	}
 	
