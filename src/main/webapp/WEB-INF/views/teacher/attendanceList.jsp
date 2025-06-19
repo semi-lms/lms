@@ -37,6 +37,16 @@
 		background: #fff;
 		table-layout: fixed
 	}
+	#previewImage {
+    position: absolute;
+    max-width: 300px;
+    max-height: 300px;
+    border: 1px solid #ccc;
+    background: #fff;
+    z-index: 1000;
+    display: none;
+    padding: 5px;
+	}
 </style>
 <body>
 	<div class="container">
@@ -183,7 +193,7 @@
 				<!-- 첨부파일명 표시 영역 -->
 				<a href="#" id="attachedFileLink" target="_blank" style="margin-left: 10px; display:none; cursor:pointer; text-decoration:underline; color:blue;"></a>
 				<!-- 미리보기 이미지 (툴팁용) -->
-				<img id="previewImage" src="" alt="미리보기" style="display:none; position:absolute; max-width:200px; border:1px solid #ccc; background:#fff; padding:5px; z-index:1000;" />
+				<img id="previewImage" src="" alt="미리보기" style="display:none; max-width:800px; border:1px solid #ccc; background:#fff; padding:5px; z-index:1000;" />
 			</div>
 			<br>
 			<button type="submit">저장</button>
@@ -225,39 +235,20 @@
 				$('#attachedFileLink')
 					.text(fileName)
 					.attr('href', '/attendanceFile/download?fileId=' + fileId)
-					.show();
-				
-				// 마우스 올리면 미리보기 (이미지 또는 PDF)
-				$('#attachedFileLink').off('mouseenter mouseleave').on({
-					mouseenter: function(e) {
-						// 미리보기 이미지 URL (별도 미리보기용 URL 만들면 좋음)
-						// 여기선 다운로드 URL 그대로 써서 브라우저가 직접 보여주게 함
+					.show()
+					.off('mouseenter mouseleave')
+					.on({
+						mouseenter: function () {
 						const previewUrl = '/attendanceFile/preview?fileId=' + fileId;
-						// 이미지 src 세팅
+			
 						$('#previewImage')
 							.attr('src', previewUrl)
-							.css({ display: 'block' })
-					},
-					mousemove: function(e) {
-						const offsetX = 15;
-						const offsetY = 10;
-						const imgWidth = 220;
-						const screenWidth = $(window).width();
-						
-						// 오른쪽 화면 끝에 닿을 경우 왼쪽으로 위치
-						let left = (e.pageX + imgWidth + offsetX > screenWidth)
-							? e.pageX - imgWidth - offsetX
-							: e.pageX + offsetX;
-						
-						$('#previewImage').css({
-							top: e.pageY + offsetY + 'px',
-							left: left + 'px'
-						});
-					},
-					mouseleave: function() {
+							.css({ display: 'block' });
+						},
+						mouseleave: function () {
 						$('#previewImage').hide().attr('src', '');
-					}
-				});
+						}
+					});
 				
 			} else {
 				$('#currentDocIcon').html('&#10060;');   // 첨부 없음
