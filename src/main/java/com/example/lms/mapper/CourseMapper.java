@@ -1,10 +1,10 @@
 package com.example.lms.mapper;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
@@ -37,7 +37,10 @@ public interface CourseMapper {
 
 	int deleteCourses(List<Integer> courseIds);
 
-	int getOverlapCount(int classNo, String string, String string2);
+    int getOverlapCount(@Param("classNo") int classNo
+            		    , @Param("startDate") String startDate
+            			, @Param("endDate") String endDate
+        );
 	
 	// 강사 등록 시 선택할 강의명 조회
 	List<CourseDTO> getCourseNameNotEnded();

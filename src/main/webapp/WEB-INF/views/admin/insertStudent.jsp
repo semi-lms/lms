@@ -139,6 +139,21 @@ body {
 	
 	    // 전화번호 입력 시 자동 ID/비밀번호 세팅
 	    $("#studentTableBody").on("input", ".phone-input", function () {
+	        // 1. 자동 하이픈
+	        let value = $(this).val().replace(/[^0-9]/g, "");
+	        let result = "";
+
+	        if (value.length < 4) {
+	            result = value;
+	        } else if (value.length < 8) {
+	            result = value.substr(0, 3) + "-" + value.substr(3);
+	        } else if (value.length <= 11) {
+	            result = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7);
+	        } else {
+	            result = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7, 4);
+	        }
+	        $(this).val(result);
+	    	
 	        const $row = $(this).closest("tr");
 	        const phone = this.value.replace(/[^0-9]/g, "");
 	        if (phone.length >= 4) {
@@ -152,6 +167,20 @@ body {
 	        }
 	    });
 	});
+	$("#studentTableBody").on("input", "input[name$='.sn']", function() {
+	    let value = $(this).val().replace(/[^0-9]/g, "");
+	    let result = "";
+
+	    if (value.length <= 6) {
+	        result = value;
+	    } else if (value.length <= 13) {
+	        result = value.substr(0, 6) + "-" + value.substr(6);
+	    } else {
+	        result = value.substr(0, 6) + "-" + value.substr(6, 7);
+	    }
+	    $(this).val(result);
+	});
+	
 	
 	function validateForm() {
 	    let isAnyRowInvalid = false;
@@ -173,6 +202,42 @@ body {
 	            }
 	        });
 
+	        // 이메일 형식 검사 추가
+	        const $emailInput = $(this).find("input[type='email']");
+	        if ($emailInput.length && $emailInput.val().trim()) {
+	            var email = $emailInput.val().trim();
+	            var emailReg = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+	            if (!emailReg.test(email)) {
+	                rowIsValid = false;
+	                $emailInput.css("border", "2px solid red");
+	                alert("이메일 형식이 올바르지 않습니다.");
+	            }
+	        }
+
+	        // 전화번호 형식 검사 추가 (예: 01012345678 또는 010-1234-5678)
+	        const $phoneInput = $(this).find("input[name$='.phone']");
+	        if ($phoneInput.length && $phoneInput.val().trim()) {
+	            var phone = $phoneInput.val().replace(/-/g, "");
+	            var phoneReg = /^01[016789][0-9]{7,8}$/;
+	            if (!phoneReg.test(phone)) {
+	                rowIsValid = false;
+	                $phoneInput.css("border", "2px solid red");
+	                alert("전화번호 형식이 올바르지 않습니다.");
+	            }
+	        }
+
+	        // 주민번호 형식 검사 추가 (예: 6자리-7자리)
+	        const $snInput = $(this).find("input[name$='.sn']");
+	        if ($snInput.length && $snInput.val().trim()) {
+	            var sn = $snInput.val().trim();
+	            var snReg = /^[0-9]{6}-?[0-9]{7}$/;
+	            if (!snReg.test(sn)) {
+	                rowIsValid = false;
+	                $snInput.css("border", "2px solid red");
+	                alert("주민번호 형식이 올바르지 않습니다.");
+	            }
+	        }
+
 	        if (rowHasValue && rowIsValid) {
 	            hasAtLeastOneRow = true;
 	        }
@@ -182,7 +247,7 @@ body {
 	    });
 
 	    if (isAnyRowInvalid) {
-	        alert("모든 칸을 빠짐없이 입력하세요.");
+	        // 이미 alert로 안내했으므로 추가 alert 생략
 	        return false;
 	    }
 
@@ -191,7 +256,7 @@ body {
 	        return false;
 	    }
 
-	    // 이 부분이 **폼이 실제 제출될 때 반드시 실행되어야 함**
+	    // ... (이하 기존 코드 동일)
 	    // 모든 칸이 비어있는 row는 name 속성 제거 (Spring에서 무시됨)
 	    $("#studentTableBody tr").each(function () {
 	        let allEmpty = true;
@@ -207,7 +272,6 @@ body {
 	    
 	    $("#studentTableBody tr").each(function () {
 	        $(this).find("input").each(function () {
-	            // name 속성이 있고, [와 ]가 붙어 있는데 그 안이 비었으면 삭제
 	            var name = $(this).attr("name");
 	            if (name && name.match(/studentList\[\]/)) {
 	                $(this).removeAttr("name");

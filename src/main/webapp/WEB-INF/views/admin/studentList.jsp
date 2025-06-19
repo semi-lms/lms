@@ -57,7 +57,7 @@ body {
 						<td>
 							<c:choose>
 								<c:when test="${fn:length(sList.sn) == 13}">
-									${fn:substring(sList.sn, 0, 6)}-${fn:substring(sList.sn, 6, 13)}
+								  <c:out value="${fn:substring(sList.sn, 0, 6)}"/>-*******
 								</c:when>
 								<c:otherwise>
 									${sList.sn}
@@ -72,9 +72,11 @@ body {
 					</tr>
 				</c:forEach>
 			</table>
-			<button type="button" id="insertStudent">학생등록</button>
-			<button type="button" id="modifyBtn">수정</button>
-			<button type="button" id="removeBtn">삭제</button>
+			<c:if test="${loginUser.adminId eq 'admin'}">
+			  <button type="button" id="insertStudent">학생등록</button>
+			  <button type="button" id="modifyBtn">수정</button>
+			  <button type="button" id="removeBtn">삭제</button>
+			</c:if>
 			<br>
 			<select name="searchOption">
 				<option value="all" ${searchOption == 'all' ? 'selected' : ''}>전체</option>
@@ -179,7 +181,13 @@ $(function(){
     });
 
     $("#saveStudentBtn").off('click').on('click', function(){
-    	  console.log($("#modalStudentNo").val(), $("#modalStudentId").val());
+    	var email = $("#modalEmail").val().trim();
+    	var emailReg = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (!emailReg.test(email)) {
+            alert("이메일 형식이 올바르지 않습니다.");
+            return;
+        }
+        
         $.ajax({
             url: "/admin/updateStudent",
             type: "POST",
