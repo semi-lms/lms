@@ -1,3 +1,11 @@
+/* 📦 전체 레이아웃 */
+body {
+  background-color: #f0f8f5;
+  font-family: 'Noto Sans KR', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .container {
   display: flex;
 }
@@ -16,9 +24,84 @@
 }
 
 .content {
-  margin-left: 300px; /* ← 핵심 부분 */
+  margin-left: 300px;
   padding: 20px;
   flex-grow: 1;
   min-height: 100vh;
   box-sizing: border-box;
+}
+
+/* 🎨 로그인/정보 수정 공통 스타일 */
+.mypage-section {
+  max-width: 700px;
+  background-color: #fff;
+  margin: 40px auto;
+  padding: 40px 35px 35px 35px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+}
+
+.mypage-section h3 {
+  text-align: center;
+  color: #4caf50;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.short-input,
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* 버튼 스타일 */
+.submit-btn,
+#checkBtn {
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 8px;
+  background-color: #4caf50;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-btn:hover,
+#checkBtn:hover {
+  background-color: #43a047;
+}
+
+/* 오류 메시지 */
+.error {
+  color: #c62828;
+  font-size: 13px;
+  margin-top: 5px;
+  display: block;
+}
+/* 변경 못하는 칸 */
+.short-input[readonly] {
+  background-color: #f0f0f0;
+  color: #555;
+  cursor: not-allowed;
 }
