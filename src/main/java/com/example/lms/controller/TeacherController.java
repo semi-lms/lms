@@ -65,7 +65,9 @@ public class TeacherController {
 	@GetMapping("/admin/teacherList")
 	public String getTeacherList(@ModelAttribute TeacherDTO teacherDto, Model model) {
 		List<TeacherDTO> teacherList = teacherService.getTeacherList(teacherDto);
+		List<CourseDTO> courseList = courseService.getCourseNameNotEnded();
 		model.addAttribute("teacherList", teacherList);
+		model.addAttribute("courseList", courseList);
 		return "admin/teacherList";
 	}
 	
@@ -132,7 +134,6 @@ public class TeacherController {
 		}
 		return sn;
 	}
-
 	
 	
 	// 강사 삭제 (여러 명 삭제 가능)

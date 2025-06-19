@@ -160,9 +160,9 @@
 		$("#saveTeacherBtn").off('click').on('click', function () {
 
 			// 전화번호/주민번호 하이픈 제거 (DB 저장용)
-			const rawPhone = $("modalPhone").val().replace(/-/g, '');
-			const rawSn = $("modalSn").val().replace(/-/g, '');
-			$("#ModalPhone").val(rawPhone);
+			const rawPhone = $("#modalPhone").val().replace(/-/g, '');
+			const rawSn = $("#modalSn").val().replace(/-/g, '');
+			$("#modalPhone").val(rawPhone);
 			$("#modalSn").val(rawSn);
 			
 			
