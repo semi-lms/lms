@@ -13,16 +13,23 @@
 		
 	<select id="getAttendanceFileByCourse" parameterType="int" resultType="com.example.lms.dto.AttendanceFileDTO">
 		SELECT 
-			f.file_id,
-			f.teacher_no,
-			f.attendance_no,
-			f.file_name,
-			f.base64_data,
-			f.upload_date,
-			a.student_no,
+			f.file_id fileId,
+			f.teacher_no teacherNo,
+			f.attendance_no attendanceNo,
+			f.file_name fileName,
+			f.base64_data base64Data,
+			f.upload_date uploadDate,
+			a.student_no studentNo,
 			a.date
 		FROM attendance_file f
 		JOIN attendance a ON f.attendance_no = a.attendance_no
 		WHERE a.course_id = #{courseId}
+	</select>
+	
+	<!-- 미리보기/다운로드용 파일 아이디로 정보조회 -->
+	<select id="getFileById" parameterType="int" resultType="com.example.lms.dto.AttendanceFileDTO">
+		SELECT file_id fileId, teacher_no teacherNo, attendance_no attendanceNo, file_name fileName, base64_data base64Data, upload_date uploadDate
+		FROM attendance_file
+		WHERE file_id = #{fileId}
 	</select>
 </mapper>

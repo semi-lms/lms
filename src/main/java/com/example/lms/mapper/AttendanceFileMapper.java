@@ -11,4 +11,5 @@ public interface AttendanceFileMapper {
 	void insertAttendanceFile(AttendanceFileDTO attendanceFileDto);
 	void deleteAttendanceFile(AttendanceFileDTO attendanceFileDto);
 	List<AttendanceFileDTO> getAttendanceFileByCourse(int courseId);
+	AttendanceFileDTO getFileById(int fileId);
 }

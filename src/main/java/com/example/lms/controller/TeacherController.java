@@ -1,6 +1,8 @@
 package com.example.lms.controller;
 
 import java.io.IOException;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -44,6 +46,7 @@ import com.example.lms.service.StudentService;
 import com.example.lms.service.TeacherService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -406,6 +409,10 @@ public class TeacherController {
 		
 		// 공결 조회
 		List<AttendanceFileDTO> fileList = attendanceFileService.getAttendanceFileByCourse(courseId);
+		System.out.println("파일 리스트 개수: " + fileList.size());
+		for(AttendanceFileDTO file : fileList) {
+		    log.info(file.getFileName());
+		}
 		Map<Integer, Map<String, AttendanceFileDTO>> attendanceDocMap = new HashMap<>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -489,7 +496,48 @@ public class TeacherController {
 		return "redirect:/attendanceList?courseId="+courseId;
 	}
 	
-	// 공결
+	// 공결 증빙자료 미리보기
+	@GetMapping("/attendanceFile/preview")
+	public void previewFile(@RequestParam("fileId") int fileId, HttpServletResponse response) throws IOException {
+	    AttendanceFileDTO fileDto = attendanceFileService.getFileById(fileId);
+	    
+	    if (fileDto == null || fileDto.getBase64Data() == null) {
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
+
+	    String fileName = fileDto.getFileName();
+	    String contentType = URLConnection.guessContentTypeFromName(fileName); // 예: image/jpeg, application/pdf
+
+	    byte[] fileBytes = Base64.getDecoder().decode(fileDto.getBase64Data());
+
+	    response.setContentType(contentType != null ? contentType : "application/octet-stream");
+	    response.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
+	    response.getOutputStream().write(fileBytes);
+	    response.getOutputStream().flush();
+	}
+	
+	// 공결 증빙자료 다운로드
+	@GetMapping("/attendanceFile/download")
+	public void downloadFile(@RequestParam("fileId") int fileId, HttpServletResponse response) throws IOException {
+	    AttendanceFileDTO fileDto = attendanceFileService.getFileById(fileId);
+	    
+	    if (fileDto == null || fileDto.getBase64Data() == null) {
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
+
+	    // 파일 이름 인코딩
+	    String fileName = URLEncoder.encode(fileDto.getFileName(), "UTF-8").replaceAll("\\+", "%20");
+
+	    // Base64 → byte[]
+	    byte[] fileBytes = Base64.getDecoder().decode(fileDto.getBase64Data());
+
+	    response.setContentType("application/octet-stream");
+	    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+	    response.getOutputStream().write(fileBytes);
+	    response.getOutputStream().flush();
+	}
 	
 	
 	// 문제 리스트

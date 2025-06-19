@@ -27,4 +27,9 @@ public class AttendanceFileServiceImpl implements AttendanceFileService{
 	public List<AttendanceFileDTO> getAttendanceFileByCourse(int courseId) {
 		return attendanceFileMapper.getAttendanceFileByCourse(courseId);
 	}
+	
+	@Override
+	public AttendanceFileDTO getFileById(int fileId) {
+		return attendanceFileMapper.getFileById(fileId);
+	}
 }

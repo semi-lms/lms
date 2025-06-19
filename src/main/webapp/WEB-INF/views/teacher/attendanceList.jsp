@@ -141,18 +141,15 @@
 									data-student-no="${student.studentNo}" 
 									data-date="${date}" 
 									data-status="${attendanceMap[student.studentNo][date]}" 
-									data-has-doc="${file != null}">
+									data-has-doc="${file != null}"
+									data-file-name="${file != null ? file.fileName : ''}"
+									data-file-id="${file != null ? file.fileId : ''}">
 									<c:choose>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}">●</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">지각</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '조퇴'}">조퇴</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}">✗</c:when>
-										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">
-											공결
-											<c:if test="${file != null}">
-												첨부파일 있음: ${file.fileName}
-											</c:if>
-										</c:when>
+										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">공결</c:when>
 										<c:otherwise>-</c:otherwise>
 									</c:choose>
 								</td>
@@ -183,6 +180,10 @@
 			<div id="fileUploadSection" style="display:none;">
 				<label>첨부자료: <input type="file" name="proofDoc" /></label>
 				<span id="currentDocIcon" style="margin-left: 10px;"></span>
+				<!-- 첨부파일명 표시 영역 -->
+				<a href="#" id="attachedFileLink" target="_blank" style="margin-left: 10px; display:none; cursor:pointer; text-decoration:underline; color:blue;"></a>
+				<!-- 미리보기 이미지 (툴팁용) -->
+				<img id="previewImage" src="" alt="미리보기" style="display:none; position:absolute; max-width:200px; border:1px solid #ccc; background:#fff; padding:5px; z-index:1000;" />
 			</div>
 			<br>
 			<button type="submit">저장</button>
@@ -206,6 +207,8 @@
 		const date = $(this).data('date');
 		const status = $(this).data('status');
 		const hasDoc = $(this).data('has-doc');
+		const fileName = $(this).data('file-name');
+		const fileId = $(this).data('file-id');
 		
 		// 모달 초기화
 		$('#attendanceForm input[name="studentNo"]').val(studentNo);
@@ -217,11 +220,54 @@
 			$('#fileUploadSection').show();
 			if (hasDoc) {
 				$('#currentDocIcon').html('&#128196;'); // 첨부 있음
+				
+				// 첨부파일 링크 보이기
+				$('#attachedFileLink')
+					.text(fileName)
+					.attr('href', '/attendanceFile/download?fileId=' + fileId)
+					.show();
+				
+				// 마우스 올리면 미리보기 (이미지 또는 PDF)
+				$('#attachedFileLink').off('mouseenter mouseleave').on({
+					mouseenter: function(e) {
+						// 미리보기 이미지 URL (별도 미리보기용 URL 만들면 좋음)
+						// 여기선 다운로드 URL 그대로 써서 브라우저가 직접 보여주게 함
+						const previewUrl = '/attendanceFile/preview?fileId=' + fileId;
+						// 이미지 src 세팅
+						$('#previewImage')
+							.attr('src', previewUrl)
+							.css({ display: 'block' })
+					},
+					mousemove: function(e) {
+						const offsetX = 15;
+						const offsetY = 10;
+						const imgWidth = 220;
+						const screenWidth = $(window).width();
+						
+						// 오른쪽 화면 끝에 닿을 경우 왼쪽으로 위치
+						let left = (e.pageX + imgWidth + offsetX > screenWidth)
+							? e.pageX - imgWidth - offsetX
+							: e.pageX + offsetX;
+						
+						$('#previewImage').css({
+							top: e.pageY + offsetY + 'px',
+							left: left + 'px'
+						});
+					},
+					mouseleave: function() {
+						$('#previewImage').hide().attr('src', '');
+					}
+				});
+				
 			} else {
 				$('#currentDocIcon').html('&#10060;');   // 첨부 없음
+				$('#attachedFileLink').hide();
+				$('#previewImage').hide().attr('src', '');
 			}
 		} else {
 			$('#fileUploadSection').hide();
+			$('#attachedFileLink').hide();
+			$('#previewImage').hide().attr('src', '');
 		}
 		
 		$('#attendanceModal').show();
