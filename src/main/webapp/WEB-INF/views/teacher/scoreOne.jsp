@@ -107,14 +107,12 @@
 		<c:if test="${qCnt != 0}">
 			<div class="card-container">
 			<c:forEach var="question" items="${questions}" varStatus="status">
-				<a href="/questionOne?questionId=${question.questionId}" style="text-decoration: none; color: inherit;">
-					<div class="card">
-						<h3>문제 ${question.questionNo}</h3>
-						<h4>${question.questionTitle}</h4>
-						<p>제출 답안 : ${question.answerNo}</p>
-						<p>정답 ${question.correctNo}번</p>
-					</div>
-				</a>
+				<div class="card">
+					<h3>문제 ${question.questionNo}</h3>
+					<h4>${question.questionTitle}</h4>
+					<p>제출 답안 : ${question.answerNo}</p>
+					<p>정답 ${question.correctNo}번</p>
+				</div>
 			</c:forEach>
 		</c:if>
 	</div>

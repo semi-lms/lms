@@ -1,8 +1,11 @@
 package com.example.lms.controller;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +23,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.lms.dto.AttendanceDTO;
+import com.example.lms.dto.AttendanceFileDTO;
 import com.example.lms.dto.CourseDTO;
 import com.example.lms.dto.ExamAnswerDTO;
 import com.example.lms.dto.ExamDTO;
@@ -31,6 +36,7 @@ import com.example.lms.dto.ExamSubmissionDTO;
 import com.example.lms.dto.SessionUserDTO;
 import com.example.lms.dto.StudentDTO;
 import com.example.lms.dto.TeacherDTO;
+import com.example.lms.service.AttendanceFileService;
 import com.example.lms.service.AttendanceService;
 import com.example.lms.service.CourseService;
 import com.example.lms.service.ExamService;
@@ -50,7 +56,8 @@ public class TeacherController {
 	@Autowired private AttendanceService attendanceService;
 	@Autowired private TeacherService teacherService;
 	@Autowired private PasswordEncoder passwordEncoder;
-	
+	@Autowired private AttendanceFileService attendanceFileService;
+
 	// 강사 리스트
 	@GetMapping("/admin/teacherList")
 	public String getTeacherList(@ModelAttribute TeacherDTO teacherDto, Model model) {
@@ -396,7 +403,20 @@ public class TeacherController {
 		for (String day : dayList) {
 			System.out.println(day);
 		}
-		// ---
+		
+		// 공결 조회
+		List<AttendanceFileDTO> fileList = attendanceFileService.getAttendanceFileByCourse(courseId);
+		Map<Integer, Map<String, AttendanceFileDTO>> attendanceDocMap = new HashMap<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		for (AttendanceFileDTO file : fileList) {
+		    String dateKey = sdf.format(file.getDate());
+		    attendanceDocMap
+		        .computeIfAbsent(file.getStudentNo(), k -> new HashMap<>())
+		        .put(dateKey, file);
+		}
+
+		model.addAttribute("attendanceDocMap", attendanceDocMap);
 		
 		// 6. JSP로 전달할 데이터 Model에 저장
 		model.addAttribute("studentList", studentList);    // 학생명단
@@ -425,7 +445,15 @@ public class TeacherController {
 	}
 	
 	@PostMapping("/manageAttendance")
-	public String manageAttendance(@ModelAttribute AttendanceDTO attendanceDto) {
+	public String manageAttendance(@ModelAttribute AttendanceDTO attendanceDto
+									, @RequestParam(value = "proofDoc", required = false) MultipartFile proofDoc
+									, HttpSession session) throws IOException {
+		// 로그인한 사용자 정보에서 courseId 가져오기
+		SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+		if (loginUser == null || loginUser.getCourseId() == 0) {
+			return "redirect:/login"; // 로그인 안 되어있거나 courseId 없으면 로그인 페이지로 리다이렉트
+		}
+		
 		// 데이터 값이 있으면 수정 없으면 입력
 		int hasAttendance = attendanceService.isAttendance(attendanceDto);
 		if(hasAttendance == 0) {
@@ -433,6 +461,21 @@ public class TeacherController {
 		} else {
 			attendanceService.updateAttendance(attendanceDto);
 		};
+		
+		// 공결 + 파일 존재 시 파일 저장
+	    if ("공결".equals(attendanceDto.getStatus()) && proofDoc != null && !proofDoc.isEmpty()) {
+			AttendanceFileDTO fileDto = new AttendanceFileDTO();
+			fileDto.setAttendanceNo(attendanceService.getAttendanceNo(attendanceDto)); // DB insert 시 생성된 값 필요할 경우 서비스에서 리턴받기
+			fileDto.setTeacherNo(loginUser.getTeacherNo()); // 로그인 정보 기반
+			fileDto.setFileName(proofDoc.getOriginalFilename());
+			fileDto.setUploadDate(LocalDate.now().toString());
+			
+			// base64 인코딩 처리
+			String base64 = Base64.getEncoder().encodeToString(proofDoc.getBytes());
+			fileDto.setBase64Data(base64);
+			
+			attendanceFileService.saveProofFile(fileDto);
+	    }
 		int courseId = attendanceDto.getCourseId();
 		return "redirect:/attendanceList?courseId="+courseId;
 	}

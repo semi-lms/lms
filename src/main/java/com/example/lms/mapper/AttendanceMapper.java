@@ -40,4 +40,7 @@ public interface AttendanceMapper {
 	
 	// 한번에 입력(이미 데이터 있으면 제외)
 	void insertAttendanceAll(String status, int courseId);
+	
+	// 출석번호 조회
+	int getAttendanceNo(AttendanceDTO attendanceDto);
 }

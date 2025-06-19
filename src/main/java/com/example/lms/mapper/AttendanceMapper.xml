@@ -152,4 +152,9 @@
 			SELECT * FROM attendance a WHERE a.student_no = s.student_no AND a.course_id = s.course_id AND a.date = CURDATE()
 		)
 	</insert>
+	
+	<!-- 공결증빙자료 등록을 위한 attendance_no 조회 쿼리 -->
+	<select id="getAttendanceNo" parameterType="com.example.lms.dto.AttendanceDTO" resultType="int">
+		SELECT attendance_no FROM attendance WHERE student_no = #{studentNo} AND course_id = #{courseId} AND date = #{date}
+	</select>
 </mapper>

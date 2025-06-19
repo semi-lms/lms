@@ -81,4 +81,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public void insertAttendanceAll(String status, int courseId) {
 		attendanceMapper.insertAttendanceAll(status, courseId);
 	}
+	
+	// 출석번호 조회
+	public int getAttendanceNo(AttendanceDTO attendanceDto) {
+		return attendanceMapper.getAttendanceNo(attendanceDto);
+	}
 }

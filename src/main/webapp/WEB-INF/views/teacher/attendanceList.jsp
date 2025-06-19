@@ -80,7 +80,7 @@
 					시험 관리
 				</a>
 			</div>
-		
+			
 			<h1>${year}년 ${month}월</h1>
 			<div>
 				<form method="post" action="insertAttendanceAll" onsubmit="return confirmInsert();">
@@ -136,17 +136,23 @@
 						<tr>
 							<td>${student.name}</td>
 							<c:forEach var="date" items="${dayList}">
+							<c:set var="file" value="${attendanceDocMap[student.studentNo][date]}" />
 								<td class="attendance-cell"
 									data-student-no="${student.studentNo}" 
 									data-date="${date}" 
 									data-status="${attendanceMap[student.studentNo][date]}" 
-									data-has-doc="${attendanceDocMap[student.studentNo][date] != null}">
+									data-has-doc="${file != null}">
 									<c:choose>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '출석'}">●</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">지각</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '조퇴'}">조퇴</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}">✗</c:when>
-										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">공결</c:when>
+										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">
+											공결
+											<c:if test="${file != null}">
+												첨부파일 있음: ${file.fileName}
+											</c:if>
+										</c:when>
 										<c:otherwise>-</c:otherwise>
 									</c:choose>
 								</td>
@@ -205,6 +211,7 @@
 		$('#attendanceForm input[name="studentNo"]').val(studentNo);
 		$('#attendanceForm input[name="date"]').val(date);
 		$('#attendanceForm select[name="status"]').val(status);
+		
 		
 		if (status === '공결') {
 			$('#fileUploadSection').show();

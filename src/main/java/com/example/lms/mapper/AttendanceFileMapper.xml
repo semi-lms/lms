@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.lms.mapper.AttendanceFileMapper">
-	<!--  -->
+	<!-- 삭제 -->
+	<delete id="deleteAttendanceFile" parameterType="com.example.lms.dto.AttendanceFileDTO">
+		DELETE FROM attendance_file WHERE attendance_no = #{attendanceNo}
+	</delete>
+	<!-- 등록 -->
+	<insert id="insertAttendanceFile" parameterType="com.example.lms.dto.AttendanceFileDTO">
+		INSERT INTO attendance_file (teacher_no, attendance_no, file_name, base64_data)
+		VALUES (#{teacherNo}, #{attendanceNo}, #{fileName}, #{base64Data})
+	</insert>
+		
+	<select id="getAttendanceFileByCourse" parameterType="int" resultType="com.example.lms.dto.AttendanceFileDTO">
+		SELECT 
+			f.file_id,
+			f.teacher_no,
+			f.attendance_no,
+			f.file_name,
+			f.base64_data,
+			f.upload_date,
+			a.student_no,
+			a.date
+		FROM attendance_file f
+		JOIN attendance a ON f.attendance_no = a.attendance_no
+		WHERE a.course_id = #{courseId}
+	</select>
 </mapper>
