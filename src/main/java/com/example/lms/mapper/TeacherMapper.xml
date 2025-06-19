@@ -51,6 +51,7 @@
 	<!-- 강사 리스트 -->
 	<select id="getTeacherList" resultType="com.example.lms.dto.TeacherDTO">
 		SELECT 
+			t.teacher_no AS teacherNo,
 			t.name, 
 			CONCAT(
 				SUBSTRING(t.phone, 1, 3), '-', 
@@ -93,14 +94,16 @@
 		)
 	</insert>
 	
-	<!-- 강사 한 명 조회 -->
+	<!-- 강사 상세 조회 (수정 모달용) -->
 	<select id="getTeacherByNo" parameterType="com.example.lms.dto.TeacherDTO">
 		SELECT
+			t.teacher_no AS teacherNo,
 	        t.name,
 	        t.phone,
 	        t.sn,
 	        t.address,
 	        t.email,
+	        t.course_id AS courseId,
 	        c.course_name AS courseName
 	    FROM teacher t
 	    LEFT join course c
@@ -117,13 +120,16 @@
 			sn = #{sn},
 			address = #{address},
 			email = #{email},
-			<if test="courseId != null and courseId != ''">
-  				#{courseId},
-			</if>
-			<if test="courseId == null or courseId == ''">
-  				NULL,
-			</if>
-		WHERE t.teacher_no = #{teacherNo}
+			course_id =
+				<choose>
+					<when test="courseId != null and courseId != ''">
+						#{courseId}
+					</when>
+					<otherwise>
+		  				NULL			
+					</otherwise>
+				</choose>
+		WHERE teacher_no = #{teacherNo}
 	</update>
 	
 	<!-- 강사 삭제 (여러 명 삭제 가능) -->

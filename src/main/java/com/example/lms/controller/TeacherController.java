@@ -83,9 +83,7 @@ public class TeacherController {
 	public String insertTeacher(@ModelAttribute TeacherDTO teacherDto) {
 		String encodedPassword = passwordEncoder.encode(teacherDto.getPassword());
 		teacherDto.setPassword(encodedPassword);
-		
 		teacherService.insertTeacher(teacherDto);
-		
 		return "redirect:/admin/teacherList";
 	}
 	
@@ -104,6 +102,37 @@ public class TeacherController {
 		teacherService.updateTeacher(teacherDto);
 		return "redirect:/admin/teacherList";
 	}
+	
+	
+	// 강사 상세 조회 (수정 모달용)
+	@GetMapping("/admin/getTeacherDetail")
+	@ResponseBody
+	public TeacherDTO getTeacherDetail(@RequestParam("teacherNo") int teacherNo) {
+		TeacherDTO teacherDto = teacherService.getTeacherByNo(teacherNo);
+		
+		// 포맷 적용 후 모달로 전달
+		teacherDto.setPhone(formatPhone(teacherDto.getPhone()));
+		teacherDto.setSn(formatSn(teacherDto.getSn()));
+		
+		return teacherDto;
+	}
+	
+	// 포맷 메서드 (전화번호)
+	private String formatPhone(String phone) {
+		if (phone != null && phone.length() == 11) {
+			return phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7);
+		}
+		return phone;
+	}
+	
+	// 포맷 메서드 (주민번호)
+	private String formatSn(String sn) {
+		if (sn != null && sn.length() == 13) {
+			return sn.substring(0, 6) + "-" + sn.substring(6);
+		}
+		return sn;
+	}
+
 	
 	
 	// 강사 삭제 (여러 명 삭제 가능)
