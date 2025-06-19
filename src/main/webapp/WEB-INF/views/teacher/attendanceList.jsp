@@ -159,7 +159,9 @@
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '지각'}">지각</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '조퇴'}">조퇴</c:when>
 										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '결석'}">✗</c:when>
-										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">공결</c:when>
+										<c:when test="${attendanceMap[student.studentNo][date] != null && attendanceMap[student.studentNo][date] eq '공결'}">
+											<span style="color: ${file != null ? 'blue' : 'red'};">공결</span>
+										</c:when>
 										<c:otherwise>-</c:otherwise>
 									</c:choose>
 								</td>
