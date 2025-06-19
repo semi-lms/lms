@@ -57,13 +57,15 @@ public class LoginController {
             TeacherDTO teacherDto = new TeacherDTO();	
             teacherDto.setTeacherId(id);
             teacherDto.setPassword(pw);
-            TeacherDTO teacher = loginService.loginTeacher(teacherDto);		// 서비스에서 해당 아이디/비밀번호로 선생님 조회
-            if (teacher != null) {											// 비밀번호, 주소, 주민번호는 보안상 저장 x
+            TeacherDTO teacher = loginService.loginTeacher(teacherDto); // 서비스에서 해당 아이디/비밀번호로 선생님 조회
+            if (teacher != null && passwordEncoder.matches(pw, teacher.getPassword())) {	// 비밀번호, 주소, 주민번호는 보안상 저장 x	
                 sessionUser = new SessionUserDTO();
                 sessionUser.setRole("teacher");
                 sessionUser.setTeacherId(teacher.getTeacherId());
                 sessionUser.setTeacherNo(teacher.getTeacherNo());
-                sessionUser.setCourseId(teacher.getCourseId());
+                // null 방지 처리
+                Integer courseId = teacher.getCourseId();
+                sessionUser.setCourseId(courseId != null ? courseId : 0); // 기본값 0 또는 -1 설정
                 sessionUser.setName(teacher.getName());
                 sessionUser.setEmail(teacher.getEmail());
                 sessionUser.setRegDate(teacher.getRegDate());
@@ -109,14 +111,24 @@ public class LoginController {
     
     @PostMapping("/findId")
     @ResponseBody
-    public String findId(@RequestParam String findIdByName,
-                         @RequestParam String findIdByEmail) {
-        String userId = loginService.findIdByNameEmail(findIdByName, findIdByEmail);
+    public String findId(@RequestParam String name,
+                         @RequestParam String email,
+                         @RequestParam String role) {	// "student" or "teacher"
+        String userId = null;
+        
+        // 역할에 따라 다른 서비스 메서드 호출
+        if ("student".equals(role)) {
+        	userId = loginService.findStudentId(name, email);
+        } else if ("teacher".equals(role)) {
+        	userId = loginService.findTeacherId(name, email);
+        }
+        
         if (userId != null) {
-            mailService.sendIdMail(findIdByEmail, findIdByName, userId); // 이메일 전송
+        	// 아이디가 존재할 경우 해당 이메일로 전송
+        	mailService.sendIdMail(email, name, userId);
             return "SEND_SUCCESS";
         } else {
-            return "NOT_FOUND";
+            return "NOT_FOUND";	// 아이디가 존재하지 않을 경우
         }
     }
     
@@ -129,38 +141,89 @@ public class LoginController {
     
     @PostMapping("/findPw")
     @ResponseBody
-    public String findPw(@RequestParam String findPwByName,
-                         @RequestParam String findPwById,
-                         @RequestParam String findPwByEmail) {
-        // 일치 여부 확인 후
-        String pw = loginService.findPwByNameIdEmail(findPwByName, findPwById, findPwByEmail);
-        if (pw != null) { // 값이 있으면 유효한 사용자
-            String tempPw = mailService.createTempPassword(10); // 임시 비번 생성
-            loginService.updatePassword(findPwById, tempPw); // DB에 임시 비번으로 변경
-            mailService.sendTempPasswordMail(findPwByEmail, findPwByName, tempPw); // 메일 전송
-            return "SEND_SUCCESS";
+    public String findPw(@RequestParam String name,
+				    	 @RequestParam String userId,
+                         @RequestParam String email,
+                         @RequestParam String role) { // role 추가: "student" 또는 "teacher")
+        
+        String pw = null;
+
+        if ("student".equals(role)) {
+            pw = loginService.findStudentPw(name, userId, email);
+        } else if ("teacher".equals(role)) {
+            pw = loginService.findTeacherPw(name, userId, email);
+        }
+
+        if (pw != null) {
+            String tempCode = mailService.createTempPassword(10); // 임시코드 생성
+
+            if ("student".equals(role)) {
+                loginService.updateStudentTempCode(userId, tempCode);
+            } else if ("teacher".equals(role)) {
+                loginService.updateTeacherTempCode(userId, tempCode);
+            }
+
+            mailService.sendTempPasswordMail(email, name, tempCode); // 메일 전송
+            return tempCode;
         } else {
             return "NOT_FOUND";
         }
     }
 
-    
+    // 비밀번호 변경 화면 폼
     @GetMapping("/changePw")
-    public String changePw() {
+    public String changePw(@RequestParam String studentId,
+            @RequestParam String role,
+            @RequestParam String tempCode,
+            Model model) {
     	
-    	return "/changePw";
+				model.addAttribute("studentId", studentId);
+				model.addAttribute("role", role);
+				model.addAttribute("tempCode", tempCode);
+				return "/changePw";
     }
     
     @PostMapping("/changePw")
-    public String changePw(@RequestParam String pw
-    						,@RequestParam String tempPw) {
-    	String encodedPw = passwordEncoder.encode(pw);
-    	int row = loginService.updatePwByTempPw(encodedPw,tempPw);
-    	if(row > 0) {
-    		return "/main";
-    	} else {
-    		return "changePw";
-    	}
+    public String changePw(@RequestParam String pw,
+            @RequestParam String studentId,
+            @RequestParam String role,
+            @RequestParam String tempCode,
+            Model model) {
+
+		boolean success = false;
+		
+		if ("student".equals(role)) {
+			success = loginService.updateStudentPwByTempCode(studentId, tempCode, pw);
+		} else if ("teacher".equals(role)) {
+			success = loginService.updateTeacherPwByTempCode(studentId, tempCode, pw);
+		}
+		System.out.println("비번 변경 시도 → studentId: " + studentId + ", tempCode: " + tempCode + ", newPw: " + pw);
+		if (success) {
+			return "redirect:/login";
+		} else {
+			model.addAttribute("error", "비밀번호 변경 실패");
+			model.addAttribute("studentId", studentId);
+			model.addAttribute("role", role);
+			model.addAttribute("tempCode", tempCode);
+		return "changePw";
+		}
 	}
+    
+    // 임시코드 유효성 검사
+    @PostMapping("/checkTempCode")
+    @ResponseBody
+    public String checkTempCode(@RequestParam String userId,
+                                @RequestParam String role,
+                                @RequestParam String tempCode) {
+        boolean valid = false;
+
+        if ("student".equals(role)) {
+            valid = loginService.countStudentTempCode(userId, tempCode);
+        } else if ("teacher".equals(role)) {
+            valid = loginService.countTeacherTempCode(userId, tempCode);
+        }
+
+        return valid ? "VALID" : "INVALID";
+    }
 }
     

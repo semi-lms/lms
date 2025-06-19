@@ -31,127 +31,168 @@
 </div>
 
 <script>
-
 function loadContent(url) {
-	  $('#contentArea').load(url);
-	}
-	
-$(document).ready(function () {
-	  $('#contentArea').load('/mypage/info', function () {
-		 const role = '${loginUser.role}'; // JSP에서 세션 정보 출력
-		 const updateUrl = role === 'student' ? '/mypage/updateStudentInfo' : '/mypage/updateInfo';
-
-	    let idCleared = false;
-
-	    // 아이디 수정 가능하게 (최초 클릭 시에만)
-	    $('#userIdInput').on('click', function () {
-	      if (!idCleared) {
-	        $(this).removeAttr("readonly").val("").css({
-	          color: "black",
-	          backgroundColor: "#fff"
-	        }).focus();
-	        idCleared = true;
-	      }
-	    });
-
-	    // 아이디 중복 확인
-		$('#checkBtn').on('click', function () {
-		  const id = $('#userIdInput').val();
-		  if (!id) {
-		    alert("아이디를 입력하세요.");
-		    return;
-		  }
-		
-		  $.ajax({
-		    url: '/mypage/check-id',
-		    type: 'POST',
-		    contentType: 'application/json',
-		    data: JSON.stringify({ teacherId: id }),
-		    success: function (data) {
-		      alert(data.exists ? "이미 존재하는 아이디입니다." : "사용 가능한 아이디입니다.");
-		    }
-		  });
-		});
-
-		// 비밀번호 실시간 유효성 검사
-		$('#newPassword, #confirmPassword, #currentPassword').on('input', function () {
-		  const pw = $('#newPassword').val();
-		  const confirm = $('#confirmPassword').val();
-		  const currentPw = $('#currentPassword').val();
-
-		  $('#pwError').text('');
-		  $('#confirmError').text('');
-		  $('#currentPwError').text('');
-
-		  // 현재 비밀번호 입력 여부
-		  if (!currentPw) {
-		    $('#currentPwError').text('현재 비밀번호를 입력하세요.');
-		    return;
-		  }
-
-		  // 현재 비밀번호와 동일한지 비교
-		  if (pw && pw === currentPw) {
-		    $('#pwError').text('기존 비밀번호와 동일합니다.');
-		  }
-
-		  // 길이 검사
-		  if (pw.length > 0 && pw.length < 4) {
-		    $('#pwError').text('비밀번호는 최소 4자 이상이어야 합니다.');
-		  }
-
-		  // 확인 비밀번호 일치 검사
-		  if (confirm.length > 0 && pw !== confirm) {
-		    $('#confirmError').text('비밀번호가 일치하지 않습니다.');
-		  }
-		});
-
-	    // 수정 버튼 클릭 시 최종 유효성 검사
-	    $('#submitBtn').on('click', function () {
-	      const pw = $('#newPassword').val();
-	      const confirm = $('#confirmPassword').val();
-	      $('#pwError').text('');
-	      $('#confirmError').text('');
-	      let hasError = false;
-
-	      if (pw || confirm) {
-	        if (pw.length < 4) {
-	          $('#pwError').text('비밀번호는 최소 4자 이상이어야 합니다.');
-	          hasError = true;
-	        }
-	        if (pw !== confirm) {
-	          $('#confirmError').text('비밀번호가 일치하지 않습니다.');
-	          hasError = true;
-	        }
-	      }
-
-	      if (hasError) return;
-
-	      $.ajax({
-	    	  url: updateUrl,
-	    	  method: 'POST',
-	    	  data: $('#updateForm').serialize(),
-	    	  success: function (data) {
-	    	    if (data.success) {
-	    	      alert("수정 완료!");
-	    	      location.reload();
-	    	    } else {
-	    	      if (data.message === "기존 비밀번호와 동일합니다.") {
-	    	        $('#pwError').text(data.message);
-	    	      } else {
-	    	        alert(data.message);
-	    	      }
-	    	    }
-	    	  },
-	    	  error: function () {
-	    	    alert("수정 실패");
-	    	  }
-	    	});
-	      
-	    });
+	  $('#contentArea').load(url, function () {
+	    setTimeout(initMypageHandlers, 0); // DOM 완전히 로드 후 바인딩
 	  });
+	}
+
+	$(document).ready(function () {
+	  loadContent('/mypage/info');
 	});
 	
-	
+	$(document).on('input', '#currentPassword', function () {
+		  $('#currentPwError').text('');
+		});
+
+	function initMypageHandlers() {
+	  const role = '${loginUser.role}';
+	  const updateUrl = role === 'student' ? '/mypage/updateStudentInfo' : '/mypage/updateTeacherInfo';
+	  let idCleared = false;
+
+	  // 아이디 클릭 시 수정 가능
+	  $('#userIdInput').on('click', function () {
+	    if (!idCleared) {
+	      $(this).removeAttr("readonly").val("").css({
+	        color: "black",
+	        backgroundColor: "#fff"
+	      }).focus();
+	      idCleared = true;
+	    }
+	  });
+
+	  // 아이디 중복 검사
+	  $('#checkBtn').on('click', function () {
+	    const id = $('#userIdInput').val().trim();
+	    if (!id) return alert("아이디를 입력하세요.");
+
+	    $.ajax({
+	      url: '/mypage/check-id',
+	      type: 'POST',
+	      contentType: 'application/json',
+	      data: JSON.stringify({ teacherId: id }),
+	      success: (data) => {
+	        alert(data.exists ? "이미 존재하는 아이디입니다." : "사용 가능한 아이디입니다.");
+	      },
+	      error: () => alert("중복 확인 중 오류 발생")
+	    });
+	  });
+
+	  // 실시간 비밀번호 검사
+	  $('#newPassword, #confirmPassword').on('input', validatePasswords);
+
+	  // 수정 버튼
+	  $('#submitBtn').on('click', function () {
+	    if (!validateFinal()) return;
+
+	    const currentPw = $('#currentPassword').val().trim();
+
+	    if (isPwChanging()) {
+	      // 현재 비밀번호 서버 검증
+	      $.ajax({
+	        url: '/mypage/checkCurrentPw',
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: JSON.stringify({ currentPassword: currentPw }),
+	        success: function (data) {
+	          if (!data.valid) {
+	            setError('#currentPwError', '현재 비밀번호가 일치하지 않습니다.');
+	            return;
+	          }
+	          $('#currentPwError').text('');
+	          sendUpdate();
+	        },
+	        error: () => setError('#currentPwError', '비밀번호 확인 중 오류 발생')
+	      });
+	    } else {
+	      sendUpdate();
+	    }
+	  });
+
+	  function sendUpdate() {
+	    $.ajax({
+	      url: updateUrl,
+	      method: 'POST',
+	      data: $('#updateForm').serialize(),
+	      success: function (data) {
+	        if (data.success) {
+	          alert("수정 완료!");
+	          location.reload();
+	        } else {
+	          if (data.message === "기존 비밀번호와 동일합니다.") {
+	            setError('#pwError', data.message);
+	          } else {
+	            alert(data.message);
+	          }
+	        }
+	      },
+	      error: () => alert("수정 실패")
+	    });
+	  }
+	}
+
+	// 에러 메세지 출력 유틸
+	function setError(selector, message) {
+	  $(selector).text(message);
+	}
+
+	// 비밀번호 변경 여부 확인
+	function isPwChanging() {
+	  return $('#newPassword').val().trim() !== "" || $('#confirmPassword').val().trim() !== "";
+	}
+
+	// 실시간 비밀번호 검사
+	function validatePasswords() {
+	  const pw = $('#newPassword').val().trim();
+	  const confirm = $('#confirmPassword').val().trim();
+	  const currentPw = $('#currentPassword').val().trim();
+
+	  clearErrors();
+
+	  if (!isPwChanging()) return;
+
+	  if (pw.length < 4) setError('#pwError', '비밀번호는 최소 4자 이상이어야 합니다.');
+	  if (pw === currentPw && currentPw !== "") setError('#pwError', '기존 비밀번호와 동일합니다.');
+	  if (pw && confirm && pw !== confirm) setError('#confirmError', '비밀번호가 일치하지 않습니다.');
+	}
+
+	// 최종 유효성 검사
+	function validateFinal() {
+	  const pw = $('#newPassword').val().trim();
+	  const confirm = $('#confirmPassword').val().trim();
+	  const currentPw = $('#currentPassword').val().trim();
+
+	  clearErrors();
+	  let hasError = false;
+
+	  if (isPwChanging()) {
+	    if (!currentPw) {
+	      setError('#currentPwError', '현재 비밀번호를 입력하세요.');
+	      return false;
+	    }
+	    if (pw.length < 4) {
+	      setError('#pwError', '비밀번호는 최소 4자 이상이어야 합니다.');
+	      hasError = true;
+	    }
+	    if (pw !== confirm) {
+	      setError('#confirmError', '비밀번호가 일치하지 않습니다.');
+	      hasError = true;
+	    }
+	    if (pw === currentPw) {
+	      setError('#pwError', '기존 비밀번호와 동일합니다.');
+	      hasError = true;
+	    }
+	  }
+
+	  return !hasError;
+	}
+
+	// 에러 초기화
+	function clearErrors() {
+	  $('#pwError').text('');
+	  $('#confirmError').text('');
+	  $('#currentPwError').text('');
+	}
 </script>
 </body>
 </html>

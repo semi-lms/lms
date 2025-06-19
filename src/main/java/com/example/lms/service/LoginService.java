@@ -9,9 +9,20 @@ public interface LoginService {
 	AdminDTO loginAdmin(AdminDTO adminDto);
 	TeacherDTO loginTeacher(TeacherDTO teacherDto);
 	StudentDTO loginStudent(StudentDTO studentDto);
-	String findIdByNameEmail(String findIdByName, String findIdByEmail);
-	String findPwByNameIdEmail(String findPwByName, String findPwById, String findPwByEmail);
-	void updatePassword(String findPwById, String tempPw);
-	int updatePwByTempPw(String encodedPw, String tempPw);
 	
+    // 학생 ID/PW 찾기
+    String findStudentId(String name, String email);
+    String findStudentPw(String name, String userId, String email);
+    boolean updateStudentTempCode(String studentId, String tempCode); // 임시코드 저장
+    boolean updateStudentPwByTempCode(String studentId, String tempCode, String newPassword); // 임시코드로 비번 변경
+
+    // 강사 ID/PW 찾기
+    String findTeacherId(String name, String email);
+    String findTeacherPw(String name, String userId, String email);
+    boolean updateTeacherTempCode(String teacherId, String tempCode);
+    boolean updateTeacherPwByTempCode(String teacherId, String tempCode, String newPassword);
+    
+    // 임시코드 유효성 검사
+    boolean countStudentTempCode(String studentId, String tempCode);
+    boolean countTeacherTempCode(String teacherId, String tempCode);
 }

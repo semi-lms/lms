@@ -33,6 +33,7 @@
 			s.student_no AS studentNo,
    			s.student_id AS studentId,
 			s.name,
+			s.password,
 			s.email,
 			s.phone,
 			s.course_id AS courseId,

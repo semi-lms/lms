@@ -49,7 +49,7 @@
     <!-- 이메일 -->
     <div class="form-group">
       <label>이메일:</label>
-      <input type="text" name="email" value="${fullUser.email}" />
+      <input type="text" name="email" id="email" value="${fullUser.email}" />
     </div>
 
     <!-- 전화번호 -->

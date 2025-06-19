@@ -53,7 +53,7 @@ public class MypageController {
 		// 강사일 경우
 		if ("teacher".equals(loginUser.getRole())) {
 			model.addAttribute("fullUser", mypageService.getTeacherById(loginUser.getTeacherId()));
-		   // System.out.println("📞 phone: " + t.getPhone()); // 이게 null인지 체크
+		   // System.out.println("phone: " + t.getPhone()); // 이게 null인지 체크
 		    //System.out.println("courseName: " + t.getCourseName()); // 과목 이름 체크
 		    
 			// 학생일 경우
@@ -136,13 +136,7 @@ public class MypageController {
 	        teacherDto.setPhone(current.getPhone());
 	    }
 	    
-	    // 현재 비밀번호 확인
-	    if (!teacherDto.getCurrentPassword().equals(current.getPassword())) {
-	        result.put("success", false);
-	        result.put("message", "현재 비밀번호가 일치하지 않습니다.");
-	        return result;
-	    }
-	    
+	    /*
 	  // 평문 비교
 	    if (teacherDto.getPassword() != null && !teacherDto.getPassword().isBlank()) {
 	        if (teacherDto.getPassword().equals(current.getPassword())) {
@@ -157,10 +151,16 @@ public class MypageController {
 	    } else {
 	        teacherDto.setPassword(current.getPassword()); // 변경 없으면 기존 유지
 	    }
-	  
-	   /*
+	  */
+	   
 	    // 비밀번호 변경 여부 확인 및 암호화
 	   if (teacherDto.getPassword() != null && !teacherDto.getPassword().isBlank()) {
+		   if (!passwordEncoder.matches(teacherDto.getCurrentPassword(), current.getPassword())) {
+		        result.put("success", false);
+		        result.put("message", "현재 비밀번호가 일치하지 않습니다.");
+		        return result;
+		    }
+		   
 	        if (passwordEncoder.matches(teacherDto.getPassword(), current.getPassword())) {
 	            result.put("success", false);
 	            result.put("message", "기존 비밀번호와 동일합니다.");
@@ -170,7 +170,7 @@ public class MypageController {
 	    } else {
 	        teacherDto.setPassword(current.getPassword()); // 비밀번호 변경 안 하면 기존 값 유지
 	    }
-	    */
+	    
 
 	    // DB 업데이트
 	    mypageService.updateTeacherInfo(teacherDto);
@@ -229,6 +229,12 @@ public class MypageController {
 		
 		// 비밀번호 비교 (새 비밀번호가 입력된 경우)
 		if (studentDto.getPassword() != null && !studentDto.getPassword().isBlank()) {
+		    if (!passwordEncoder.matches(studentDto.getCurrentPassword(), current.getPassword())) {
+		        result.put("success", false);
+		        result.put("message", "현재 비밀번호가 일치하지 않습니다.");
+		        return result;
+		    }
+			
 		    // 이미 암호화된 DB 비밀번호와 사용자가 입력한 새 비밀번호를 비교
 		    if (passwordEncoder.matches(studentDto.getPassword(), current.getPassword())) {
 		        result.put("success", false);
@@ -254,6 +260,36 @@ public class MypageController {
 		result.put("message", "정보가 수정되었습니다. 다시 로그인해주세요.");
 		
 		return result;	// 클라이언트에게 결과 반환
+	}
+	
+	// 현재비밀번호 유효성 검사
+	@PostMapping("/checkCurrentPw")
+	@ResponseBody
+	public Map<String, Object> checkCurrentPw(@RequestBody Map<String, String> body, HttpSession session) {
+	    Map<String, Object> result = new HashMap<>();
+	    String inputPw = body.get("currentPassword");
+	    System.out.println("입력된 현재 비번: " + inputPw);
+	    SessionUserDTO loginUser = (SessionUserDTO) session.getAttribute("loginUser");
+
+	    if (loginUser == null || inputPw == null) {
+	        result.put("valid", false);
+	        return result;
+	    }
+
+	    // 강사인 경우
+	    if ("teacher".equals(loginUser.getRole())) {
+	        TeacherDTO current = mypageService.getTeacherById(loginUser.getTeacherId());
+	        result.put("valid", passwordEncoder.matches(inputPw, current.getPassword()));
+	    }
+	    // 학생인 경우
+	    else if ("student".equals(loginUser.getRole())) {
+	        StudentDTO current = mypageService.getStudentById(loginUser.getStudentId());
+	        result.put("valid", passwordEncoder.matches(inputPw, current.getPassword()));
+	    } else {
+	        result.put("valid", false);
+	    }
+
+	    return result;
 	}
 	
 	

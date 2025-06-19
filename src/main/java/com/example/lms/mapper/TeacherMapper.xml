@@ -18,7 +18,7 @@
 	        t.temp_code AS tempCode,
 	        c.course_name AS courseName
 		FROM teacher t
-		JOIN course c ON t.course_id = c.course_id
+		LEFT JOIN course c ON t.course_id = c.course_id
 		WHERE t.teacher_id = #{teacherId}
 	</select>
 	

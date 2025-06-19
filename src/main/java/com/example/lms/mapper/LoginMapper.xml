@@ -21,6 +21,7 @@
 		SELECT teacher_no AS teacherNo,
 				course_id AS courseId,
 				teacher_id AS teacherId,
+				password,
 				name,
 				sn,
 				address,
@@ -29,7 +30,7 @@
 				reg_date AS regDate,
 				temp_code AS tempCode
 		FROM teacher
-		WHERE teacher_id = #{teacherId} AND password = #{password}
+		WHERE teacher_id = #{teacherId}
 	</select>
 	
 	<!-- 학생 -->
@@ -51,32 +52,81 @@
 		WHERE student_id = #{studentId}
 	</select>
 	
-	
-	<select id="findIdByNameEmail" resultType="String">
-		SELECT student_id
-		FROM student
-		WHERE NAME=#{findIdByName}
-		AND email=#{findIdByEmail}
+    <!-- 학생 아이디 찾기 -->
+    <select id="findStudentId" resultType="String">
+        SELECT student_id
+        FROM student
+        WHERE name = #{name}
+          AND email = #{email}
+    </select>
+
+    <!-- 강사 아이디 찾기 -->
+    <select id="findTeacherId" resultType="String">
+        SELECT teacher_id
+        FROM teacher
+        WHERE name = #{name}
+          AND email = #{email}
+    </select>
+
+    <!-- 학생 비밀번호 확인용 조회 -->
+    <select id="findStudentPw" resultType="String">
+        SELECT password
+        FROM student
+        WHERE name = #{name}
+          AND student_id = #{userId}
+          AND email = #{email}
+    </select>
+
+    <!-- 강사 비밀번호 확인용 조회 -->
+    <select id="findTeacherPw" resultType="String">
+        SELECT password
+        FROM teacher
+        WHERE name = #{name}
+          AND teacher_id = #{userId}
+          AND email = #{email}
+    </select>
+
+    <!-- 학생 임시코드 저장 -->
+    <update id="updateStudentTempCode">
+        UPDATE student
+        SET temp_code = #{tempCode}
+        WHERE student_id = #{studentId}
+    </update>
+
+    <!-- 강사 임시코드 저장 -->
+    <update id="updateTeacherTempCode">
+        UPDATE teacher
+        SET temp_code = #{tempCode}
+        WHERE teacher_id = #{teacherId}
+    </update>
+
+    <!-- 학생 임시코드로 비밀번호 변경 -->
+    <update id="updateStudentPwByTempCode">
+        UPDATE student
+        SET password = #{newPassword}, temp_code = NULL
+        WHERE student_id = #{studentId}
+          AND temp_code = #{tempCode}
+    </update>
+
+    <!-- 강사 임시코드로 비밀번호 변경 -->
+    <update id="updateTeacherPwByTempCode">
+        UPDATE teacher
+        SET password = #{newPassword}, temp_code = NULL
+        WHERE teacher_id = #{teacherId}
+          AND temp_code = #{tempCode}
+    </update>
+    
+    <!-- student 임시코드 유효성 검사 -->
+	<select id="countStudentTempCode" resultType="int">
+	  SELECT COUNT(*) FROM student
+	  WHERE student_id = #{studentId} AND temp_code = #{tempCode}
 	</select>
 	
-	<select id="findPwByNameIdEmail" resultType="String">
-		SELECT password
-		FROM student
-		WHERE 
-		name = #{findPwByName}
-		AND student_id = #{findPwById}
-		AND email= #{findPwByEmail}
+	<!-- teacher 임시코드 유효성 검사 -->
+	<select id="countTeacherTempCode" resultType="int">
+	  SELECT COUNT(*) FROM teacher
+	  WHERE teacher_id = #{teacherId} AND temp_code = #{tempCode}
 	</select>
 	
-	<update id="updatePassword">
-	    UPDATE student
-	    SET password = #{tempPw}
-	    WHERE student_id = #{findPwById}
-	</update>
 	
-	<update id="updatePwByTempPw">
-		UPDATE student
-		SET password = #{encodedPw}
-		WHERE password = #{tempPw}
-	</update>
 </mapper>
