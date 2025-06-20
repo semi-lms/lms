@@ -6,6 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <title>자료실 상세보기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/fileBoard.css">	<!-- 외부 CSS 적용 -->
 </head>
 <body>

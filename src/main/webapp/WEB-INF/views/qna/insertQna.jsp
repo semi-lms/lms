@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>QnA 작성</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css"> <!-- 공지사항 css 통일 사용 -->
 </head>
 <body>

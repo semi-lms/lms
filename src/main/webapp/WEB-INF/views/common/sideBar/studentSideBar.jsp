@@ -32,8 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	  });
 	});
 function toggleSubmenu() {
-	  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
-	}
+	  // 관리목록 버튼과 하위메뉴를 제외한 영역 클릭 시 하위메뉴 숨김
+	  if (!$(e.target).closest('#submenu, .toggle-submenu').length) {
+$('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
+}
+});
+
 	
 function goToInfo() {
   // 현재 페이지가 mypage.jsp가 아니라면 먼저 이동

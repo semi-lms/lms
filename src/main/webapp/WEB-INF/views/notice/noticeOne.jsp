@@ -5,6 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <title>공지사항 상세보기</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
 </head>
 <body>

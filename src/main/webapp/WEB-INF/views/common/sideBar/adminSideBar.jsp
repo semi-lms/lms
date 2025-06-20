@@ -34,10 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	  });
 	});
 	
+	// 하위 메뉴 보이기/숨기기
 function toggleSubmenu() {
-  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
-}
-
+	  const submenu = document.getElementById('submenu');
+	  if (submenu.style.display === 'flex') {
+	    submenu.style.display = 'none';
+	  } else {
+	    submenu.style.display = 'flex';
+	  }
+	}
 
 </script>
 

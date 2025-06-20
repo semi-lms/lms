@@ -37,9 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	
 function toggleSubmenu() {
-  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
-}
-
+	  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
+	}
 function goToInfo() {
   // 현재 페이지가 mypage.jsp가 아니라면 먼저 이동
   if (!document.getElementById('contentArea')) {
