@@ -5,64 +5,69 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>qna 작성</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/qna.css">
+<title>QnA 작성</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css"> <!-- 공지사항 css 통일 사용 -->
 </head>
 <body>
 <fmt:setTimeZone value="Asia/Seoul" />
-  <!-- 왼쪽 메뉴 -->
-  <div class="sidebar">
-    <c:choose>
-      <c:when test="${loginUser.role eq 'admin'}">
-        <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
-      </c:when>
-      <c:when test="${loginUser.role eq 'teacher'}">
-        <jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
-      </c:when>
-      <c:when test="${loginUser.role eq 'student'}">
-        <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
-      </c:when>
-    </c:choose>
-  </div>
   
-  <h2>qna 작성</h2>
- <div class="qna-content" >
-  <form method="post" action="${pageContext.request.contextPath}/qna/insertQna">
+<div class="sidebar">
+  <c:choose>
+    <c:when test="${loginUser.role eq 'admin'}">
+      <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
+    </c:when>
+    <c:when test="${loginUser.role eq 'teacher'}">
+      <jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
+    </c:when>
+    <c:when test="${loginUser.role eq 'student'}">
+      <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
+    </c:when>
+  </c:choose>
+</div>
 
-    <!-- 관리자 아이디 표시 (readonly) -->
+<div class="main-content">
+  <h2>QnA 작성</h2>
+  
+  <form method="post" action="${pageContext.request.contextPath}/qna/insertQna" class="form-area" onsubmit="return validateForm()">
+
     <div class="form-group">
       <label>작성자</label>
       <input type="text" class="form-control" value="${loginUser.studentId}" readonly>
       <input type="hidden" name="studentId" value="${loginUser.studentId}">
     </div>
 
-    <!-- 제목 입력 -->
     <div class="form-group">
-    <label for="title">제목</label>
-      <input type="text" name="title" class="form-control" placeholder="제목을 입력해주세요.">
-        <!-- 비밀글 설정 -->
-    <label>
-    	<input type="checkbox" name="isSecret" value="Y"> 비밀글
-    </label>
+      <label for="title">제목</label>
+      <input type="text" name="title" id="title" class="form-control" placeholder="제목을 입력해주세요.">
+      <label style="margin-top: 8px; font-weight: normal;">
+        <input type="checkbox" name="isSecret" value="Y"> 비밀글
+      </label>
     </div>
 
-    <!-- 내용 입력 -->
     <div class="form-group">
-    <label for="content">내용</label>
-      <textarea name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요."></textarea>
+      <label for="content">내용</label>
+      <textarea name="content" id="content" rows="10" class="form-control" placeholder="내용을 입력해주세요."></textarea>
     </div>
 
-    <!-- 등록 버튼 -->
-    <div class="form-group">
+    <div class="form-group button-group">
       <button type="submit" class="btn-submit">등록</button>
-    </div>
-    
-    <!-- 돌아가기 버튼 -->
-    <div class="form-group">
       <a href="${pageContext.request.contextPath}/qna/qnaList" class="btn-submit">돌아가기</a>
     </div>
-
+    
   </form>
- </div>
+</div>
+
+<script>
+  function validateForm() {
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("content").value.trim();
+    if (title === "" || content === "") {
+      alert("제목과 내용을 입력해주세요");
+      return false;
+    }
+    return true;
+  }
+</script>
+
 </body>
 </html>

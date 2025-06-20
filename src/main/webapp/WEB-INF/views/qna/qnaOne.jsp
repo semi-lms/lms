@@ -26,7 +26,7 @@
 </div>
 
 <!-- 본문 -->
-<div class="qna-content">
+<div class="main-content">
   <h2>qna 상세보기</h2>
 
   <table class="qna-table">
