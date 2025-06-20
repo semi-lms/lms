@@ -205,7 +205,9 @@
   </c:if>
 
   <br>
-  <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>
+  <div class="button-group">
+   <a href="${pageContext.request.contextPath}/qna/qnaList"><button>목록으로</button></a>
+  </div>
 </div>
 	<script>
 	 function showReplyForm(commentId) {
