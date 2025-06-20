@@ -230,3 +230,33 @@ form[action*="deleteNotice"] button:hover {
   margin: 0;
 }
 
+/* 페이징 */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center; /* 가운데 정렬 핵심 */
+  gap: 8px; /* 버튼 사이 간격 */
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid #343e4a;
+  border-radius: 6px;
+  color: #343e4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pagination a:hover {
+  background-color: #d6dce2;   /* hover 시 연한 회색-남색 느낌 */
+}
+
+.pagination .current {
+  background-color: #343e4a;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
+

@@ -59,7 +59,16 @@
 
   <!-- 페이징 -->
   <div class="pagination">
-    <!-- (생략: 기존 코드 그대로 유지) -->
+   <c:forEach var="i" begin="${startPage}" end="${endPage}">
+    <c:choose>
+      <c:when test="${i == currentPage}">
+        <span class="current">${i}</span>
+      </c:when>
+      <c:otherwise>
+        <a href="?currentPage=${i}&searchOption=${searchOption}&keyword=${keyword}">${i}</a>
+      </c:otherwise>
+    </c:choose>
+  </c:forEach>
   </div>
 </div>
 </html>
