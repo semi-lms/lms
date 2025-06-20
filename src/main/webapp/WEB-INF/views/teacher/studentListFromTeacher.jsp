@@ -7,49 +7,96 @@
 <meta charset="UTF-8">
 <title>반 학생 리스트</title>
 <style>
-	.container {
-		display: flex;
-		min-height: 100vh;
-		font-family: 'Segoe UI', sans-serif;
-		background-color: #f0f0f0;
-	}
-	
-	.sidebar {
-		width: 220px;
-		background-color: #333;
-		color: white;
-		padding: 20px;
-		box-sizing: border-box;
-	}
-	
-	.main-content {
-		margin-left: 230px;
-		flex-grow: 1;
-		padding: 30px;
-		background-color: white;
-	}
-	
-	button {
-		margin-right: 10px;
-		padding: 6px 12px;
-	}
-	
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin-top: 20px;
-		background-color: #fff;
-	}
-	
-	th, td {
-		border: 1px solid #ccc;
-		padding: 10px;
-		text-align: center;
-	}
-	
-	th {
-		background-color: #eee;
-	}
+.container {
+	display: flex;
+	min-height: 100vh;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f0f0f0;
+	justify-content: center; /* 가로 중앙 정렬 */
+}
+
+
+.main-content {
+	max-width: 900px;  /* 최대 넓이 제한 */
+	width: 100%;
+	padding: 30px 40px 40px 40px; /* 콘텐츠 여백 */
+	background-color: white;
+	box-sizing: border-box;
+	min-height: 100vh;
+	margin-left: 20px; /* 사이드바와 간격 */
+}
+
+
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	background-color: #fff;
+	box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+th, td {
+	border: 1px solid #ccc;
+	padding: 12px 15px;
+	text-align: center;
+	font-size: 14px;
+	color: #333;
+}
+
+th {
+	background-color: #f8f9fa;
+	font-weight: 600;
+}
+
+tr:nth-child(even) {
+	background-color: #f9f9f9;
+}
+
+tr:hover {
+	background-color: #e9f0ff;
+}
+
+a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* 페이징 */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid #343e4a;
+  border-radius: 6px;
+  color: #343e4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pagination a:hover {
+  background-color: #d6dce2;
+}
+
+.pagination .current-page,
+.pagination .current {
+  background-color: #343e4a;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
+
 </style>
 </head>
 <body>
@@ -114,16 +161,19 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<c:forEach var="i" begin="1" end="${endPage}">
-			<c:choose>
-				<c:when test="${i == currentPage}">
-					<span>[${i}]</span>
-				</c:when>
-				<c:otherwise>
-					<a href="/studentListFromTeacher?courseId=${courseId}&currentPage=${i}">[${i}]</a>
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
+	<div class="pagination">
+  <c:forEach var="i" begin="1" end="${endPage}">
+    <c:choose>
+      <c:when test="${i == currentPage}">
+        <span>${i}</span>
+      </c:when>
+      <c:otherwise>
+        <a href="/studentListFromTeacher?courseId=${courseId}&currentPage=${i}">${i}</a>
+      </c:otherwise>
+    </c:choose>
+  </c:forEach>
+</div>
+
 	</div>
 </div>
 </body>

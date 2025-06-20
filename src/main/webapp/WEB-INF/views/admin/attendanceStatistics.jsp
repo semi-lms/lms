@@ -10,11 +10,98 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-body { margin: 0; padding: 0; }
-.container { display: flex; width: 100%; }
-.sidebar { min-width: 220px; background: #fafafa; height: 100vh; }
-.chart-container { margin-top: 32px; }
-.main-content { flex: 1; background: #fff; padding: 40px 40px 40px 300px; }
+@charset "UTF-8";
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: '맑은 고딕', sans-serif;
+  background-color: #f5f6fa;
+}
+
+/* 전체 컨테이너 (사이드바 + 본문) */
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 사이드바 */
+.sidebar {
+  min-width: 240px;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  padding: 20px 10px;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+/* 본문 영역 */
+.main-content {
+  flex: 1;
+  padding: 40px 60px 60px 300px;
+  background-color: #fff;
+}
+
+/* 페이지 제목 */
+.main-content h1 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+/* 통계 테이블 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 40px;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px 14px;
+  text-align: center;
+  font-size: 15px;
+}
+
+th {
+  background-color: #34495e;
+  color: white;
+  font-weight: 600;
+}
+
+tr:hover {
+  background-color: #f1f9ff;
+}
+
+/* 차트 영역 */
+.chart-container {
+  margin-top: 40px;
+  padding: 20px 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 반응형 대응 X (기존 설정 유지) */
+canvas {
+  display: block;
+  margin: 0 auto;
+}
+
+/* 커서 포인터 (차트 클릭 가능하도록) */
+#attendanceChart {
+  cursor: pointer;
+}
+
 </style>
 </head>
 <body>

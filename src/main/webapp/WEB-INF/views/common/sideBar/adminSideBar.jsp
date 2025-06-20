@@ -20,16 +20,13 @@
 		</div>
     <a href="/admin/attendanceStatistics"><button class="sidebar-btn">출석통계</button></a><br><br>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
+    <a href="/admin/courseList"><button class="sidebar-btn">강의목록</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/file/fileBoardList"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
 
 <script>
-function toggleSubmenu() {
-  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
-}
-
 document.addEventListener('DOMContentLoaded', () => {
 	  const cursorImg = document.getElementById('custom-cursor');
 	  document.addEventListener('mousemove', function (e) {
@@ -37,5 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	    cursorImg.style.top = (e.clientY + 30) + 'px';   
 	  });
 	});
+	
+function toggleSubmenu() {
+  $('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
+}
+
+
 </script>
 

@@ -6,49 +6,145 @@
 <meta charset="UTF-8">
 <title>강사-강의리스트</title>
 <style>
-	.container {
-		display: flex;
-		min-height: 100vh;
-		font-family: 'Segoe UI', sans-serif;
-		background-color: #f0f0f0;
-	}
-	
-	.sidebar {
-		width: 220px;
-		background-color: #333;
-		color: white;
-		padding: 20px;
-		box-sizing: border-box;
-	}
-	
-	.main-content {
-		margin-left: 230px;
-		flex-grow: 1;
-		padding: 30px;
-		background-color: white;
-	}
-	
-	button {
-		margin-right: 10px;
-		padding: 6px 12px;
-	}
-	
-	table {
-		width: 100%;
-		border-collapse: collapse;
-		margin-top: 20px;
-		background-color: #fff;
-	}
-	
-	th, td {
-		border: 1px solid #ccc;
-		padding: 10px;
-		text-align: center;
-	}
-	
-	th {
-		background-color: #eee;
-	}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: '맑은 고딕', sans-serif;
+  background-color: #f5f6fa;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 사이드바 */
+.sidebar {
+  min-width: 240px;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
+  padding: 20px 10px;
+  box-shadow: 2px 0 4px rgba(0,0,0,0.05);
+}
+
+/* 본문 */
+.main-content {
+  flex: 1;
+  padding: 40px 60px 60px 300px;
+  background-color: #fff;
+}
+
+/* 제목 */
+.main-content h1 {
+  font-size: 26px;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+/* 필터 버튼 */
+form {
+  margin-bottom: 30px;
+}
+
+form button {
+  padding: 8px 18px;
+  margin-right: 10px;
+  border: none;
+  background-color: #3498db;
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+form button:hover {
+  background-color: #2980b9;
+}
+
+form button:disabled {
+  background-color: #95a5a6;
+  cursor: default;
+}
+
+/* 테이블 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+
+th, td {
+  padding: 14px;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 15px;
+}
+
+th {
+  background-color: #34495e;
+  color: #fff;
+}
+
+tr:hover {
+  background-color: #f0f8ff;
+}
+
+a {
+  text-decoration: none;
+  color : black;
+  
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 페이징 */
+.main-content > span,
+.main-content > a {
+  margin-right: 6px;
+  font-size: 15px;
+  color: #333;
+}
+
+.main-content > span {
+  font-weight: bold;
+  color: #3498db;
+}
+	.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center; /* 가운데 정렬 핵심 */
+  gap: 8px; /* 버튼 사이 간격 */
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid #343e4a;
+  border-radius: 6px;
+  color: #343e4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pagination a:hover {
+  background-color: #d6dce2; 
+}
+
+.pagination .current {
+  background-color: #343e4a;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
@@ -83,16 +179,16 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<c:forEach var="i" begin="1" end="${lastPage}">
-			<c:choose>
-				<c:when test="${i == currentPage }">
-					<span>[${i}]</span>
-				</c:when>
-				<c:otherwise>
-					<a href="/courseListFromTeacher?teacherNo=${teacherNo}&currentPage=${i}&filter=${filter}">[${i}]</a>
-				</c:otherwise>
-			</c:choose>
-		</c:forEach>
+		<c:forEach var="i" begin="${startPage}" end="${endPage}">
+    <c:choose>
+      <c:when test="${i == currentPage}">
+        <span class="current">${i}</span>
+      </c:when>
+      <c:otherwise>
+        <a href="?currentPage=${i}&searchOption=${searchOption}&keyword=${keyword}">${i}</a>
+      </c:otherwise>
+    </c:choose>
+  </c:forEach>
 	</div>
 </div>
 </body>

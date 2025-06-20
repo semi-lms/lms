@@ -146,12 +146,14 @@ button:hover, .btn-submit:hover, a.btn-submit:hover {
   background-color: #d6dce2;
 }
 
+.pagination .current-page,
 .pagination .current {
   background-color: #343e4a;
   color: white;
   font-weight: bold;
   pointer-events: none;
 }
+
 
 
 /* 공통 입력 폼 */

@@ -1,0 +1,241 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+    font-family: '맑은 고딕', sans-serif;
+    background-color: #f8f9fa;
+}
+/* 제목 스타일 */
+h1, h2 {
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+/* 컨테이너: 사이드바 + 메인 콘텐츠 */
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* 메인 콘텐츠 영역 */
+.main-content {
+    flex: 1;
+    padding: 30px 40px;
+    margin-left: 240px;
+    background-color: #fff;
+}
+
+/* 페이지 제목 */
+.main-content h1 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #333;
+}
+
+/* 검색 폼 */
+.search-form {
+    margin-bottom: 20px;
+}
+
+#searchOption, #keyword {
+    padding: 7px 12px;
+    font-size: 15px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+#keyword {
+    width: 300px;
+    margin-left: 8px;
+}
+
+/* 검색 버튼 (공지사항 스타일로 통일) */
+#searchBtn {
+    background-color: white;
+    color: #333;
+    border: 1.5px solid #333;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    vertical-align: middle;
+}
+
+#searchBtn:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* 강의 테이블 */
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background-color: #fff;
+}
+
+.board-table th, .board-table td {
+    border: 1px solid #ddd;
+    padding: 12px 15px;
+    text-align: center;
+    font-size: 15px;
+    color: #444;
+}
+
+.board-table th {
+    background-color: #2c3e50;
+    font-weight: 600;
+    color: white;
+}
+
+.board-table tr:hover {
+    background-color: #f1f9ff;
+}
+
+/* 체크박스 셀은 좁게 */
+.board-table td input[type="checkbox"] {
+    transform: scale(1.2);
+}
+
+/* 버튼 그룹 (공지사항 스타일로 통일) */
+.button-group {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.button-group button {
+    background-color: white;
+    color: #333;
+    border: 1.5px solid #333;
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin: 0;
+}
+
+.button-group button:hover {
+    background-color: #333;
+    color: white;
+}
+
+/* 페이지네이션 */
+
+/* 페이징 */
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center; /* 가운데 정렬 핵심 */
+  gap: 8px; /* 버튼 사이 간격 */
+}
+
+.pagination a,
+.pagination span {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid #343e4a;
+  border-radius: 6px;
+  color: #343e4a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pagination a:hover {
+  background-color: #d6dce2; 
+}
+
+.pagination .current {
+  background-color: #343e4a;
+  color: white;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+
+
+/* 모달 박스 */
+#courseModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 460px;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    border-radius: 8px;
+    padding: 30px 30px 20px;
+    z-index: 1050;
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.modal-table th {
+    width: 110px;
+    text-align: right;
+    padding-right: 15px;
+    font-weight: 600;
+    color: #555;
+    vertical-align: middle;
+}
+
+.modal-table td {
+    text-align: left;
+}
+
+.modal-table input[type="text"],
+.modal-table input[type="date"],
+.modal-table select {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal-table input[type="text"]:focus,
+.modal-table input[type="date"]:focus,
+.modal-table select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* 모달 버튼 그룹 (공지사항 스타일로 통일) */
+#courseModal .button-group {
+    margin-top: 25px;
+    text-align: right;
+}
+
+#courseModal .button-group button {
+    background-color: white;
+    color: #333;
+    border: 1.5px solid #333;
+    padding: 9px 22px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 12px;
+    transition: all 0.25s ease;
+}
+
+#courseModal .button-group button:hover {
+    background-color: #333;
+    color: white;
+}

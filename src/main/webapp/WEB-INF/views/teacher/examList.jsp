@@ -13,7 +13,7 @@
 		font-family: 'Segoe UI', sans-serif;
 		background-color: #f0f0f0;
 	}
-	
+
 	.sidebar {
 		width: 220px;
 		background-color: #333;
@@ -21,36 +21,75 @@
 		padding: 20px;
 		box-sizing: border-box;
 	}
-	
+
 	.main-content {
 		margin-left: 230px;
 		flex-grow: 1;
 		padding: 30px;
 		background-color: white;
 	}
-	
-	button {
-		margin-right: 10px;
-		padding: 6px 12px;
+
+	h1 {
+		font-size: 24px;
+		margin-bottom: 15px;
 	}
-	
+
+	button {
+	margin-right: 8px;
+	padding: 5px 10px;
+	font-size: 14px;
+	cursor: pointer;
+	border: 1px solid #333;
+	border-radius: 4px;
+	background-color: white;
+	color: #333;
+	transition: background-color 0.2s ease;
+}
+
+button:hover {
+	background-color: #f0f0f0;
+}
+
 	table {
 		width: 100%;
+		max-width: 1000px;
 		border-collapse: collapse;
-		margin-top: 20px;
+		margin-top: 15px;
+		font-size: 14px;
 		background-color: #fff;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 	}
-	
+
 	th, td {
 		border: 1px solid #ccc;
-		padding: 10px;
+		padding: 8px 10px;
 		text-align: center;
+		word-break: keep-all;
 	}
-	
+
 	th {
-		background-color: #eee;
+		background-color: #f8f9fa;
+		font-weight: 600;
+	}
+
+	td input[type="text"],
+	td input[type="date"] {
+		width: 95%;
+		padding: 4px;
+		font-size: 13px;
+		box-sizing: border-box;
+	}
+
+	a {
+		color: #007bff;
+		text-decoration: none;
+	}
+
+	a:hover {
+		text-decoration: underline;
 	}
 </style>
+
 <script>
 	function enterEditMode(examId) {
 		document.getElementById("viewRow-" + examId).style.display = "none";

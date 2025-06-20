@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+    <img src="/img/cursor.png" id="custom-cursor" alt="커서" />
 
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
