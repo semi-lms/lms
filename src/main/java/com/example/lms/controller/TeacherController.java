@@ -232,6 +232,10 @@ public class TeacherController {
 										, @RequestParam(defaultValue = "1") int currentPage
 										, @RequestParam(defaultValue = "10") int rowPerPage
 										, Model model) {
+		// 강의명 조회
+		String courseName = courseService.getCourseOne(courseId).getCourseName();
+		model.addAttribute("courseName", courseName);
+		
 		// 페이징
 		int totalCnt = studentService.getStudentCntByCourseId(courseId);
 		int lastPage = totalCnt / rowPerPage;
@@ -272,6 +276,9 @@ public class TeacherController {
 							, Model model) {
 		
 		int courseId = examService.getCourseIdByExamId(examId);
+		// 강의명 조회
+		String courseName = courseService.getCourseOne(courseId).getCourseName();
+		model.addAttribute("courseName", courseName);
 		// 페이징
 		int totalCnt = examService.getScoreCnt(courseId, examId, filter);
 		int lastPage = totalCnt / rowPerPage;
@@ -326,6 +333,9 @@ public class TeacherController {
 							, @RequestParam(defaultValue = "1") int currentPage
 							, @RequestParam(defaultValue = "10") int rowPerPage
 							, Model model) {
+		// 강의명 조회
+		String courseName = courseService.getCourseOne(courseId).getCourseName();
+		model.addAttribute("courseName", courseName);
 		
 		// 페이징
 		int totalCnt = examService.getExamCnt(courseId);
@@ -403,7 +413,10 @@ public class TeacherController {
 		CourseDTO course = courseService.getCourseOne(courseId);
 		LocalDate courseStartDate = LocalDate.parse(course.getStartDate(), dtf);
 		LocalDate courseEndDate = LocalDate.parse(course.getEndDate(), dtf);
-
+		
+		// 강의명
+		String courseName = course.getCourseName();
+		model.addAttribute("courseName", courseName);
 		
 		// 1. 기준 날짜 셋팅: 년/월 파라미터 없으면 오늘 기준으로
 		LocalDate today = LocalDate.now();
