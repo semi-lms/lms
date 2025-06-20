@@ -97,7 +97,8 @@
 			</c:choose>
 		</div>
 	</div>
-
+<img src="https://cdn.imweb.me/upload/S202407158b5a524da5594/40ffd7b4f910b.png"
+     class="floating-img" width="150" height="150">
 	<!-- 통계 JS -->
 	<c:if test="${loginUser.role eq 'admin'}">
 		<script>

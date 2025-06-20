@@ -31,8 +31,10 @@
 
   /* 제목 */
   h1 {
-    font-size: 24px;
-    margin-bottom: 24px;
+   margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
   }
 
   /* 검색영역 */
@@ -63,7 +65,7 @@
   }
 
   .search-container button:hover {
-    background-color: #0056b3;
+     background-color: #1a252f;
   }
 
   /* 테이블 스타일 (공지/자료실과 동일) */

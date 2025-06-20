@@ -6,6 +6,16 @@ body {
 	margin: 0;
 	padding: 0;
 }
+.floating-img {
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+    width: 150px;
+    height: 150px;
+    z-index: 999; /* 다른 요소 위에 표시 */
+    pointer-events: none; /* 마우스 클릭 방지 */
+    opacity: 0.9; /* 살짝 투명하게 */
+}
 
 
 

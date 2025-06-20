@@ -20,8 +20,10 @@
 }
 
 h1 {
-	font-size: 28px;
-	margin-bottom: 20px;
+	  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
 }
 
 table {

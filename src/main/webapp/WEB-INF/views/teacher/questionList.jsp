@@ -8,22 +8,28 @@
 <title>문제 리스트</title>
 <style>
 	.card-container {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr); /* 2열 */
-		gap: 2px;
-		max-width: 960px;
-		margin: 0 auto;
-		padding: 20px;
-	}
-	
-	.card {
-		background-color: #fff;
-		border: 1px solid #ddd;
-		border-radius: 12px;
-		padding: 16px;
-		box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-		font-family: "Segoe UI", sans-serif;
-	}
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2열 */
+    gap: 2px;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    font-family: "Segoe UI", sans-serif;
+
+    width: 450px;           /* 가로 고정 */
+    height: 200px;          /* 세로 고정 */
+    overflow: hidden;       /* 넘치는 내용 감추기 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 때 ... 처리 */
+    white-space: nowrap;    /* 줄바꿈 방지 */
+}
 	.container {
 		display: flex;
 		min-height: 100vh;
