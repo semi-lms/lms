@@ -90,7 +90,7 @@ body {
 }
 /* 변경 못하는 칸 */
 .short-input[readonly] {
-  background-color: #f0f0f0;
+  background-color: white;;
   color: #555;
   cursor: not-allowed;
 }

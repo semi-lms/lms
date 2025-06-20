@@ -11,7 +11,7 @@
 	display: flex;
 	min-height: 100vh;
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	background-color: #f0f0f0;
+	background-color: white;;
 	justify-content: center; /* 가로 중앙 정렬 */
 }
 

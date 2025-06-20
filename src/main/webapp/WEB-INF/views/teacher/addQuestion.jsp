@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: "Segoe UI", sans-serif;
-            background-color: #f0f0f0;
+            background-color: white;;
             padding: 30px;
         }
         .question-buttons {

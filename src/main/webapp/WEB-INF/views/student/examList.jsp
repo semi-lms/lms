@@ -56,7 +56,7 @@
 
   /* 응시불가능 카드 스타일 */
   .card.disabled {
-    background: #f0f0f0;
+    background: white;;
     color: #999;
     cursor: default;
     box-shadow: none;

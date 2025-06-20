@@ -28,7 +28,7 @@
 		display: flex;
 		min-height: 100vh;
 		font-family: 'Segoe UI', sans-serif;
-		background-color: #f0f0f0;
+		background-color: white;;
 	}
 	
 	.main-content {
