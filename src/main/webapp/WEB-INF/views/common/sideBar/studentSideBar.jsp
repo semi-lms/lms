@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
- 	<div class="user-role">${loginUser.role}</div>
+ 	<div class="user-role">학생</div>
     <p class="user-name"><strong>${loginUser.name}</strong> 님</p>
     <p class="title">마이페이지</p>
 
