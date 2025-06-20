@@ -63,11 +63,22 @@ public class TeacherController {
 	
 	// 강사 리스트
 	@GetMapping("/admin/teacherList")
-	public String getTeacherList(@ModelAttribute TeacherDTO teacherDto, Model model) {
-		List<TeacherDTO> teacherList = teacherService.getTeacherList(teacherDto);
+	public String getTeacherList(@RequestParam(value = "filter", required = false, defaultValue = "전체") String filter,
+									Model model) {
+		
+		List<TeacherDTO> teacherList;
+		
+		if (filter.equals("전체")) {
+			teacherList = teacherService.getTeacherList();  // 전체 강사 리스트
+		} else {
+			teacherList = teacherService.getTeacherListByCourseStatus(filter);  // 상태별 조회
+		}
+		
 		List<CourseDTO> courseList = courseService.getCourseNameNotEnded();
+		
 		model.addAttribute("teacherList", teacherList);
 		model.addAttribute("courseList", courseList);
+		model.addAttribute("filter", filter);
 		return "admin/teacherList";
 	}
 	

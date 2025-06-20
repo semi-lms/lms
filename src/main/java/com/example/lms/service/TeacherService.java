@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.lms.dto.TeacherDTO;
 
 public interface TeacherService {
-	List<TeacherDTO> getTeacherList(TeacherDTO teacherDto);
+	List<TeacherDTO> getTeacherList();
 	
 	int insertTeacher(TeacherDTO teacherDto);
 	
@@ -18,4 +18,6 @@ public interface TeacherService {
 	boolean isCourseAssigned(int courseId);
 	
 	boolean isCourseAssignedForUpdate(int courseId, int teacherNo);
+	
+	List<TeacherDTO> getTeacherListByCourseStatus(String filter);
 }

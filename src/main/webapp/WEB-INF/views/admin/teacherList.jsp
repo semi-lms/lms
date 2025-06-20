@@ -116,6 +116,13 @@ div[style*="text-align: right"] {
 	<jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
 	<div class="container">
 		<h1>강사 리스트</h1>		
+		<form method="get" action="/admin/teacherList">
+			<button type="submit" name="filter" value="전체" ${filter == '전체' ? 'disabled' : ''}>전체</button>
+			<button type="submit" name="filter" value="예정된 강의" ${filter == '예정된 강의' ? 'disabled' : ''}>예정된 강의</button>
+			<button type="submit" name="filter" value="진행중인 강의" ${filter == '진행중인 강의' ? 'disabled' : ''}>진행중인 강의</button>
+			<button type="submit" name="filter" value="종료된 강의" ${filter == '종료된 강의' ? 'disabled' : ''}>종료된 강의</button>
+			<button type="submit" name="filter" value="미정" ${filter == '미정' ? 'disabled' : ''}>미정</button>
+		</form>
 		<table border="1">
 			<tr>
 				<th>이름</th>
@@ -186,7 +193,13 @@ div[style*="text-align: right"] {
 					<th>담당 강의</th>
 					<td>
 						<select name="courseId" id="modalCourseSelect" required>
-							<option value="">미정</option>
+							<!-- 종료된 강의 -->
+							<option value="" id="placeholderOption" disabled>강의를 선택하세요</option>
+							
+							<!-- 미정 -->
+							<option value="0">미정</option>
+							
+							<!-- 진행 중 / 예정 강의 -->
 							<c:forEach var="course" items="${courseList}">
 								<option value="${course.courseId}">${course.courseName}</option>
 							</c:forEach>
@@ -239,7 +252,20 @@ div[style*="text-align: right"] {
 					$("#modalSn").val(teacher.sn || "");
 					$("#modalAddress").val(teacher.address || "");
 					$("#modalEmail").val(teacher.email || "");
-					$("#modalCourseSelect").val(teacher.courseId || "");
+					
+					// 담당 강의
+					const select = $("#modalCourseSelect");
+					if (!teacher.courseId || teacher.courseId == 0) {
+						// courseId가 null, '', 또는 0일 경우 -> 미정
+						select.val("0");
+					} else if (select.find("option[value='" + teacher.courseId + "']").length == 0) {
+						// 종료된 강의라 드롭다운에 없는 경우
+						select.val(""); // value="" 선택
+						select.find("option[value='']").text("강의를 선택하세요");
+					} else {
+						select.val(teacher.courseId);
+					}
+					
 					$("#teacherModal").show();  // 모달창 보이기
 				});
 			});

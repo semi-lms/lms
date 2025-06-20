@@ -15,8 +15,8 @@ public class TeacherServiceImpl implements TeacherService {
 	@Autowired private TeacherMapper teacherMapper;
 	
 	@Override
-	public List<TeacherDTO> getTeacherList(TeacherDTO teacherDto) {
-		return teacherMapper.getTeacherList(teacherDto);
+	public List<TeacherDTO> getTeacherList() {
+		return teacherMapper.getTeacherList();
 	}
 	
 	@Override
@@ -48,5 +48,10 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public boolean isCourseAssignedForUpdate(int courseId, int teacherNo) {
 		return teacherMapper.isCourseAssignedForUpdate(courseId, teacherNo);
+	}
+
+	@Override
+	public List<TeacherDTO> getTeacherListByCourseStatus(String filter) {
+		return teacherMapper.getTeacherListByCourseStatus(filter);
 	}
 }
