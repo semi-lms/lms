@@ -20,9 +20,6 @@
 		</div>
     <a href="/admin/attendanceStatistics"><button class="sidebar-btn">출석통계</button></a><br><br>
     <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
-    <a href="/admin/courseList"><button class="sidebar-btn">강의목록</button></a><br><br>
-    <a href="/admin/teacherList"><button class="sidebar-btn">강사목록</button></a><br><br>
-    <a href="/admin/studentList"><button class="sidebar-btn">학생목록</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/file/fileBoardList"><button class="sidebar-btn">자료실</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
