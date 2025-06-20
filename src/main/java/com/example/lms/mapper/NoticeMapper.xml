@@ -42,7 +42,7 @@
 	<!-- 작성 -->
 	<insert id="insertNotice" parameterType="com.example.lms.dto.NoticeDTO">
 		INSERT INTO notice (title, content, admin_id, create_date)
-			VALUES(#{title}, #{content}, #{adminId}, NOW())
+			VALUES(#{title}, #{content}, #{adminId}, NOW() + INTERVAL 9 HOUR)
 	</insert>
 	
 	<!-- 상세보기 -->

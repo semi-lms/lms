@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice.css">
 </head>
 <body>
+<fmt:setTimeZone value="Asia/Seoul" />
   <div class="sidebar">
     <jsp:include page="/WEB-INF/views/common/sideBar/${loginUser.role}SideBar.jsp" />
   </div>
@@ -44,7 +46,7 @@
             <c:otherwise>${notice.adminId}</c:otherwise>
           </c:choose>
         </td>
-        <td>${notice.createDate}</td>
+        <td><fmt:formatDate value="${notice.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
       </tr>
     </c:forEach>
   </table>

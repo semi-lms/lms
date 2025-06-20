@@ -158,6 +158,10 @@ public class QnaController {
 		        return "redirect:/qna/qnaList";
 		    }
 
+		    // commentCount 조회 추가
+		    int commentCount = qnaCommentService.countComments(qnaId);
+		    model.addAttribute("commentCount", commentCount);
+		    
 		    Integer loginStudentNo = loginUser.getStudentNo();  // Integer 타입
 		    Integer writerStudentNo = qnaDto.getStudentNo();    // Integer 타입
 		    // 비밀글인데 로그인한 사용자가 학생이면 접근 불가 -> 차단 후 리스트로 되돌린다
