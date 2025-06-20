@@ -281,10 +281,10 @@ public class StudentController {
 		map.put("rowPerPage", rowPerPage);     // 한 페이지에 보여줄 행 개수
 
 		// 학생 리스트 조회 (Map에 담은 조건으로 조회)
-		List<StudentDTO> list = studentService.getStudentList(map);
+		List<StudentDTO> studentlist = studentService.getStudentList(map);
 
 		// 조회 결과와 페이징 정보, 검색 옵션 등을 뷰로 전달
-		model.addAttribute("studentList", list);     // 학생 목록 데이터
+		model.addAttribute("studentList", studentlist);     // 학생 목록 데이터
 		model.addAttribute("page", page);            // 페이징 객체
 		model.addAttribute("searchOption", searchOption); // 검색 옵션 값
 		model.addAttribute("keyword", keyword);           // 검색 키워드 값

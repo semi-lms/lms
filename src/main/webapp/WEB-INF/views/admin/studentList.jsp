@@ -147,6 +147,39 @@
     font-weight: 600;
     cursor: default;
   }
+  #studentModal {
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 20%;
+	transform: translate(-50%, 0);
+	background-color: #fff;
+	border: 1px solid #aaa;
+	padding: 30px;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+	z-index: 999;
+	width: 480px;
+}
+
+#studentModal table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#studentModal th,
+#studentModal td {
+	padding: 8px;
+	text-align: left;
+}
+
+#studentModal input,
+#studentModal select {
+	width: 100%;
+	padding: 6px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
 </style>
 </head>
 <body>
@@ -184,25 +217,25 @@
           </tr>
         </thead>
         <tbody>
-          <c:forEach var="sList" items="${studentList}">
+          <c:forEach var="student" items="${studentList}">
             <tr>
-              <td>${sList.name}</td>
-              <td>${sList.phone}</td>
+              <td>${student.name}</td>
+              <td>${student.phone}</td>
               <td>
                 <c:choose>
-                  <c:when test="${fn:length(sList.sn) == 13}">
-                    <c:out value="${fn:substring(sList.sn, 0, 6)}" />-*******
+                  <c:when test="${fn:length(student.sn) == 13}">
+                    <c:out value="${fn:substring(student.sn, 0, 6)}" />-*******
                   </c:when>
                   <c:otherwise>
-                    ${sList.sn}
+                    ${student.sn}
                   </c:otherwise>
                 </c:choose>
               </td>
-              <td>${sList.address}</td>
-              <td>${sList.email}</td>
-              <td>${sList.studentId}</td>
-              <td>${sList.courseName}</td>
-              <td><input type="checkbox" class="selectStudent" value="${sList.studentNo}" /></td>
+              <td>${student.address}</td>
+              <td>${student.email}</td>
+              <td>${student.studentId}</td>
+              <td>${student.courseName}</td>
+              <td><input type="checkbox" class="selectStudent" value="${student.studentNo}" /></td>
             </tr>
           </c:forEach>
         </tbody>
@@ -217,7 +250,40 @@
         <button type="button" id="removeBtn">❌ 삭제</button>
       </c:if>
     </div>
-
+	<!-- 모달 -->
+	<div id="studentModal" style="display:none; position:fixed; left:50%; top:30%; transform:translate(-50%,0); background:#fff; border:1px solid #888; padding:32px; z-index:999;">
+    <form id="studentForm">
+        <input type="hidden" name="studentNo" id="modalStudentNo">
+         <input type="hidden" name="studentId" id="modalStudentId">
+         <input type="hidden" name="password" id="modalPassword">
+        <table border="1">
+            <tr>
+                <th>이름</th>
+                <td><input type="text" name="name" id="modalName" required></td>
+            </tr>
+            <tr>
+                <th>전화번호</th>
+                <td><input type="text" name="phone" id="modalPhone" required></td>
+            </tr>
+            <tr>
+                <th>주민번호</th>
+                <td><input type="text" name="sn" id="modalSn" required></td>
+            </tr>
+            <tr>
+                <th>주소</th>
+                <td><input type="text" name="address" id="modalAddress" required></td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td><input type="email" name="email" id="modalEmail" required></td>
+            </tr>
+            
+        </table>
+        <button type="button" id="saveStudentBtn">저장</button>
+        <button type="button" id="closeStudentModalBtn">닫기</button>
+    </form>
+</div>
+	
     <!-- 페이징 -->
     <div class="pagination">
       <c:if test="${page.lastPage > 1}">
@@ -243,61 +309,100 @@
 </div>
 
 <script>
-  $(function () {
-    $("#insertStudent").click(function () {
-      window.location = "insertStudent";
+$(function(){
+    $("#insertStudent").click(function(){
+        window.location = "insertStudent";
     });
 
     $("#modifyBtn").click(function () {
-      const checked = $(".selectStudent:checked");
-      if (checked.length === 0) {
-        alert("수정할 학생을 선택하세요.");
-        return;
-      }
-      if (checked.length > 1) {
-        alert("하나만 선택 가능합니다.");
-        return;
-      }
-      const studentNo = checked.val();
-
-      $.getJSON("/admin/getStudentDetail", { studentNo: studentNo }, function (student) {
-        if (!student) {
-          alert("학생 정보를 불러올 수 없습니다.");
-          return;
+        const checked = $(".selectStudent:checked");
+        if (checked.length === 0) {
+            alert("수정할 학생을 선택하세요.");
+            return;
         }
-        // Modal 열기 등 추가 로직 필요시 작성
-        alert("학생 수정 기능은 모달 구현 후 연결해주세요.");
-      });
+        if (checked.length > 1) {
+            alert("하나만 선택 가능합니다.");
+            return;
+        }
+        const studentNo = checked.val();
+        console.log("선택한 studentNo =", studentNo);
+        
+        $.getJSON("/admin/getStudentDetail", {studentNo: studentNo}, function(student) {
+           console.log("조회된 student", student);
+           if(!student) {
+                alert("학생 정보를 불러올 수 없습니다.");
+                return;
+            }
+           console.log("민혁아 모달창이 안떠");
+            $("#modalName").val(student.name || "");
+            $("#modalPhone").val(student.phone || "");
+            $("#modalSn").val(student.sn || "");
+            $("#modalAddress").val(student.address || "");
+            $("#modalEmail").val(student.email || "");
+            $("#modalStudentIdView").val(student.studentId || "");
+            $("#modalStudentNo").val(student.studentNo);
+            $("#modalStudentId").val(student.studentId || "");
+            $("#modalPassword").val(student.password || "");
+            $("#studentModal").show();
+        });
     });
 
-    $("#removeBtn").click(function () {
-      const checked = $(".selectStudent:checked");
-      if (checked.length === 0) {
-        alert("삭제할 학생을 선택하세요.");
-        return;
-      }
-      if (!confirm("정말 삭제하시겠습니까?")) return;
-
-      let studentIds = [];
-      checked.each(function () {
-        studentIds.push($(this).val());
-      });
-
-      $.ajax({
-        url: "/admin/deleteStudents",
-        type: "POST",
-        traditional: true,
-        data: { studentIds: studentIds },
-        success: function (result) {
-          alert("삭제 완료");
-          location.reload();
-        },
-        error: function () {
-          alert("삭제 실패");
-        },
-      });
+    $("#saveStudentBtn").off('click').on('click', function(){
+       var email = $("#modalEmail").val().trim();
+       var emailReg = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+        if (!emailReg.test(email)) {
+            alert("이메일 형식이 올바르지 않습니다.");
+            return;
+        }
+        
+        $.ajax({
+            url: "/admin/updateStudent",
+            type: "POST",
+            data: $("#studentForm").serialize(),
+            success: function(result) {
+                alert("수정 완료");
+                location.reload();
+            },
+            error: function() {
+                alert("수정 실패");
+            }
+        });
     });
-  });
+
+    $("#closeStudentModalBtn").click(function() {
+        $("#studentModal").hide();
+    });
+
+    // [삭제] 기능 구현
+    $("#removeBtn").click(function(){
+        const checked = $(".selectStudent:checked");
+        if (checked.length === 0) {
+            alert("삭제할 학생을 선택하세요.");
+            return;
+        }
+        if(!confirm("정말 삭제하시겠습니까?")) return;
+
+        let studentIds = [];
+        checked.each(function(){
+            studentIds.push($(this).val());
+        });
+
+        $.ajax({
+            url: "/admin/deleteStudents",
+            type: "POST",
+            traditional: true,
+            data: {studentIds: studentIds},
+            success: function(result){
+                alert("삭제 완료");
+                location.reload();
+            },
+            error: function(){
+                alert("삭제 실패");
+            }
+        });
+    });
+});
 </script>
+
 </body>
 </html>
