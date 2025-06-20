@@ -31,14 +31,6 @@
 		background-color: #f0f0f0;
 	}
 	
-	.sidebar {
-		width: 220px;
-		background-color: #333;
-		color: white;
-		padding: 20px;
-		box-sizing: border-box;
-	}
-	
 	.main-content {
 		margin-left: 230px;
 		flex-grow: 1;

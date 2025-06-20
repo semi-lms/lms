@@ -187,7 +187,7 @@
             <input type="hidden" name="qnaId" value="${qna.qnaId}">
             <input type="hidden" name="parentCommentId" value="${comment.commentId}">
             <input type="text" name="content" placeholder="답글 작성" style="width: 300px;">
-            <button type="submit">등록</button>
+            <button type="submit">➕ 등록</button>
              <button type="button" onclick="cancelReplyForm(${comment.commentId})">취소</button>
           </form>
         </div>
@@ -200,7 +200,7 @@
     <form method="post" action="${pageContext.request.contextPath}/qna/insertQnaComment" onsubmit="saveScrollAndSubmit(this)">
       <input type="hidden" name="qnaId" value="${qna.qnaId}">
       <textarea name="content" rows="4" cols="60" placeholder="댓글을 입력하세요" required></textarea><br>
-      <button type="submit">댓글 등록</button>
+      <button type="submit">➕ 댓글 등록</button>
     </form>
   </c:if>
 

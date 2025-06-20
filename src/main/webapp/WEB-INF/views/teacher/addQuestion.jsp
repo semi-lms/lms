@@ -109,7 +109,7 @@
     </form>
 </div>
 
-<button class="submit-btn" onclick="submitAll()">등록하기</button>
+<button class="submit-btn" onclick="submitAll()">➕ 등록</button>
 
 <script>
 	

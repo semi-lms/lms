@@ -59,7 +59,7 @@
 	<div class="btn-group">
     <!-- 등록 버튼 -->
     <div class="form-group">
-      <button type="submit" class="btn-submit">등록</button>
+      <button type="submit" class="btn-submit">➕ 등록</button>
     </div>
     
     <!-- 돌아가기 버튼 -->

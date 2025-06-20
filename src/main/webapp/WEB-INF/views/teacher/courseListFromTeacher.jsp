@@ -19,14 +19,6 @@ body {
   min-height: 100vh;
 }
 
-/* 사이드바 */
-.sidebar {
-  min-width: 240px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  padding: 20px 10px;
-  box-shadow: 2px 0 4px rgba(0,0,0,0.05);
-}
 
 /* 본문 */
 .main-content {
@@ -50,9 +42,9 @@ form {
 form button {
   padding: 8px 18px;
   margin-right: 10px;
-  border: none;
-  background-color: #3498db;
-  color: #fff;
+  border: 1px solid black;
+  background-color: white;
+  color: black;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
@@ -60,11 +52,11 @@ form button {
 }
 
 form button:hover {
-  background-color: #2980b9;
+  background-color: #ccc;
 }
 
 form button:disabled {
-  background-color: #95a5a6;
+  background-color: #ccc;
   cursor: default;
 }
 

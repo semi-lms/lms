@@ -31,13 +31,6 @@
 		background-color: #f0f0f0;
 	}
 	
-	.sidebar {
-		width: 220px;
-		background-color: #333;
-		color: white;
-		padding: 20px;
-		box-sizing: border-box;
-	}
 	
 	.main-content {
 		margin-left: 230px;
@@ -118,7 +111,7 @@
 			</c:forEach>
 		</c:if>
 		<c:if test="${qCnt == 0}">
-			<button type="button" onclick="location.href='/addQuestion?examId=${examId}'">문제 등록</button>
+			<button type="button" onclick="location.href='/addQuestion?examId=${examId}'">➕ 문제 등록</button>
 		</c:if>
 	</div>
 </div>

@@ -17,16 +17,7 @@
     align-items: flex-start; /* 사이드바와 본문 위쪽 맞춤 */
     min-height: 100vh;
   }
-  .sidebar {
-    min-width: 220px; /* 사이드바 고정폭 */
-    max-width: 260px;
-    background: #fff; /* 사이드바 배경색 */
-    border-right: 1px solid #ddd;
-    z-index: 2;
-    height: 100vh;
-    position: sticky;
-    top: 0;
-  }
+ 
   .main-content {
     flex: 1;
     padding: 32px 24px 24px 300px; /* 좌우여백 */

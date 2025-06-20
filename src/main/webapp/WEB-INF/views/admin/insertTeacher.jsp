@@ -69,7 +69,7 @@
 			</tr>		
 		</table>
 		<br>
-		<button type="submit">등록</button>
+		<button type="submit">➕ 등록</button>
 	</form>
 	
 	<script>

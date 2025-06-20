@@ -7,19 +7,107 @@
 	<title>강사 리스트</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<style>
-		.container {
-	 		display: flex;
-	    	flex-direction: column;
-	    	align-items: center;
-	    	margin-top: 30px;
-	  	}
-	  
-		#teacherModal input,
-		#teacherModal select {
-			width: 300px;
-		  	padding: 5px;
-		  	box-sizing: border-box;
-		}
+	body {
+	font-family: 'Segoe UI', sans-serif;
+	background-color: #f9f9f9;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	margin-left: 260px; /* sidebar 너비 + 여백 */
+	padding: 30px 40px;
+}
+
+h1 {
+	font-size: 28px;
+	margin-bottom: 20px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	background-color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+	font-size: 14px;
+}
+
+th {
+	background-color: #2c3e50;
+	color: white;
+}
+
+
+input[type="checkbox"] {
+	transform: scale(1.2);
+	cursor: pointer;
+}
+
+/* 공통 버튼 스타일 - 흰 배경 + 검은 테두리 */
+button {
+	margin-right: 8px;
+	padding: 6px 14px;
+	font-size: 14px;
+	cursor: pointer;
+	border: 1px solid #333;
+	border-radius: 6px;
+	background-color: #fff;
+	color: #333;
+	transition: background-color 0.2s ease;
+}
+
+button:hover {
+	background-color: #eaeaea;
+}
+
+/* 버튼 영역 정렬 */
+div[style*="text-align: right"] {
+	width: 100%;
+	text-align: right;
+	margin-top: 10px;
+}
+
+/* 모달 스타일 */
+#teacherModal {
+	display: none;
+	position: fixed;
+	left: 50%;
+	top: 20%;
+	transform: translate(-50%, 0);
+	background-color: #fff;
+	border: 1px solid #aaa;
+	padding: 30px;
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+	z-index: 999;
+	width: 480px;
+}
+
+#teacherModal table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#teacherModal th,
+#teacherModal td {
+	padding: 8px;
+	text-align: left;
+}
+
+#teacherModal input,
+#teacherModal select {
+	width: 100%;
+	padding: 6px;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
 	</style>
 </head>
 <body>

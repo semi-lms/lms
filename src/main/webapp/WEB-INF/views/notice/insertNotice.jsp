@@ -28,7 +28,7 @@
         <textarea id="content" name="content" rows="10" class="form-control" placeholder="내용을 입력해주세요."></textarea>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn-submit">등록</button>
+        <button type="submit" class="btn-submit">➕ 등록</button>
         <a href="${pageContext.request.contextPath}/notice/noticeList" class="btn-submit">돌아가기</a>
       </div>
     </form>

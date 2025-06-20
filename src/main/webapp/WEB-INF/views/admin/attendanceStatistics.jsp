@@ -26,14 +26,6 @@ body {
   min-height: 100vh;
 }
 
-/* 사이드바 */
-.sidebar {
-  min-width: 240px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  padding: 20px 10px;
-  box-shadow: 2px 0 4px rgba(0,0,0,0.05);
-}
 
 /* 본문 영역 */
 .main-content {

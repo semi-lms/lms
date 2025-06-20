@@ -59,9 +59,9 @@
             </table>
 
             <div class="button-group">
-                <button type="button" id="insertCourse">강의 등록</button>
-                <button type="button" id="modifyBtn">수정</button>
-                <button type="button" id="removeBtn">삭제</button>
+                <button type="button" id="insertCourse">❌ 강의 등록</button>
+                <button type="button" id="modifyBtn">💾 수정</button>
+                <button type="button" id="removeBtn">❌ 삭제</button>
             </div>
 
         </form>

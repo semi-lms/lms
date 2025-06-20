@@ -13,11 +13,6 @@
 	align-items: flex-start;
 }
 
-.sidebar {
-	min-width: 200px;
-	margin-right: 30px;
-}
-
 .main-content {
 	flex: 1;
 	padding: 32px 24px 24px 300px;
@@ -82,7 +77,7 @@
 						<td><input type="text" name="maxPerson" id="maxPerson" readonly></td>
 					</tr>
 				</table>
-				<button type="button" id="insertBtn">강의 등록</button>
+				<button type="button" id="insertBtn">➕ 강의 등록</button>
 			</form>
 		</div>
 	</div>

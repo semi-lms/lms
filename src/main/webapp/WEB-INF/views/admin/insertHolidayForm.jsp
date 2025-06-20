@@ -19,7 +19,7 @@
 			<input type="date" name="date" id="holidayDate" required>
 		</p>
 		<p>
-			<button type="submit">등록</button>
+			<button type="submit">➕ 등록</button>
 		</p>
 	</form>
 	

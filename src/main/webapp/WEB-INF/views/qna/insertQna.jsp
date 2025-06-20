@@ -50,7 +50,7 @@
     </div>
 
     <div class="form-group button-group">
-      <button type="submit" class="btn-submit">등록</button>
+      <button type="submit" class="btn-submit">➕ 등록</button>
       <a href="${pageContext.request.contextPath}/qna/qnaList" class="btn-submit">돌아가기</a>
     </div>
     

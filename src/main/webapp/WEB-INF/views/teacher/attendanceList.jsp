@@ -31,16 +31,6 @@
 	background: #f4f6f9;
 }
 
-/* 사이드바 영역 */
-.sidebar {
-	width: 240px;
-	background: #fff;
-	border-right: 1px solid #ddd;
-	position: sticky;
-	top: 0;
-	height: 100vh;
-	z-index: 2;
-}
 
 /* 본문 영역 */
 .main-content {

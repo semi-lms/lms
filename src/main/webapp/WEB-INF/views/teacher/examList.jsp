@@ -14,13 +14,6 @@
 		background-color: #f0f0f0;
 	}
 
-	.sidebar {
-		width: 220px;
-		background-color: #333;
-		color: white;
-		padding: 20px;
-		box-sizing: border-box;
-	}
 
 	.main-content {
 		margin-left: 230px;
@@ -205,7 +198,7 @@ button:hover {
 			</c:choose>
 		</c:forEach>
 		<p>
-		<button type="button" onclick="openPopup()">시험등록</button>
+		<button type="button" onclick="openPopup()">➕ 시험등록</button>
 		
 		<!-- 등록용 모달 폼 -->
 		<div id="examPopup" style="display:none; position:fixed; top:30%; left:40%; background:white; padding:20px; border:1px solid #ccc; box-shadow: 2px 2px 10px rgba(0,0,0,0.3); z-index:1000;">
@@ -215,7 +208,7 @@ button:hover {
 				<label>시작일: <input type="date" name="examStartDate" id="insertStartDate" required></label><br><br>
 				<label>종료일: <input type="date" name="examEndDate" id="insertEndDate" required></label><br><br>
 				<input type="hidden" name="courseId" value="${courseId}">
-				<button type="submit">등록</button>
+				<button type="submit">➕ 등록</button>
 				<button type="button" onclick="closePopup()">닫기</button>
 			</form>
 		</div>

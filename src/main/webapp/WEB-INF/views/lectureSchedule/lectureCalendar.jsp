@@ -104,7 +104,7 @@
 					
       
          <c:if test="${loginUser.role == 'teacher'}">
-    <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">일정 등록</button>
+    <button class="register-button" onclick="location.href='/lectureSchedule/lectureScheduleForm?courseId=${courseId}'">➕ 일정 등록</button>
 </c:if>
    
     </div>

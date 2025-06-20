@@ -17,11 +17,6 @@ body {
 	width: 100%;
 }
 
-.sidebar {
-	min-width: 220px;
-	background: #fafafa;
-	height: 100vh;
-}
 
 .chart-container {
 	margin-top: 32px;
@@ -96,7 +91,7 @@ body {
 					</tbody>
 				</table>
 				<button type="button" id="insertRowBtn">행 추가</button>
-				<button type="submit">등록하기</button>
+				<button type="submit">➕ 등록</button>
 			</form>
 		</div>
 	</div>
