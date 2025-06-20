@@ -39,7 +39,26 @@
 	overflow-x: auto;
 	background: #fafbfc;
 }
+/* 상단 메뉴 공통 스타일 */
+.top-menu a {
+	display: inline-block;
+	padding: 8px 16px;
+	margin-right: 10px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+}
 
+.top-menu a.active {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+.top-menu a.inactive {
+	background-color: #e9ecef;
+	color: #333;
+}
 /* 테이블 기본 스타일 */
 table {
 	margin-left: 8px;
@@ -151,7 +170,7 @@ a:hover {
 		</div>
 		<div class="main-content">
 			<!-- 공통 페이지 상단 메뉴 -->
-			<div style="margin-bottom: 20px;">
+			<div class="top-menu">
 				<c:set var="currentPath" value="${pageContext.request.requestURI}" />
 
 				<a href="/attendanceList?courseId=${courseId}"
@@ -181,6 +200,7 @@ a:hover {
 			</div>
 
 			<h1>${year}년${month}월</h1>
+			<h2>${courseName}</h2>
 			<div>
 				<form method="post" action="insertAttendanceAll"
 					onsubmit="return confirmInsert();">
@@ -205,6 +225,7 @@ a:hover {
 				<c:if test="${prevDateKey >= courseStartKey}">
 					<a href="?courseId=${courseId}&year=${prevYear}&month=${prevMonth}">이전달</a>
 				</c:if>
+				
 				<span style="font-weight: bold;">${year}년 ${month}월</span>
 				<c:if test="${nextDateKey <= courseEndKey}">
 					<a href="?courseId=${courseId}&year=${nextYear}&month=${nextMonth}">다음달</a>

@@ -114,6 +114,26 @@ a:hover {
 	font-weight: bold;
 	cursor: default;
 }
+/* 상단 메뉴 공통 스타일 */
+.top-menu a {
+	display: inline-block;
+	padding: 8px 16px;
+	margin-right: 10px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.top-menu a.active {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+.top-menu a.inactive {
+	background-color: #e9ecef;
+	color: #333;
+}
 </style>
 
 <script>
@@ -135,7 +155,7 @@ a:hover {
 		</div>
 		<div class="main-content">
 			<!-- 공통 페이지 상단 메뉴 -->
-			<div style="margin-bottom: 20px;">
+			<div class="top-menu">
 				<c:set var="currentPath" value="${pageContext.request.requestURI}" />
 
 				<a href="/attendanceList?courseId=${courseId}"
@@ -164,7 +184,7 @@ a:hover {
 					시험 관리 </a>
 			</div>
 
-			<h1>시험 리스트</h1>
+				<h2>${courseName}</h2>
 			<table border="1">
 				<tr>
 					<th>제목</th>

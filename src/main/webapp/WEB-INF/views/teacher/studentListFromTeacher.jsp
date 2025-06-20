@@ -17,13 +17,10 @@
 
 
 .main-content {
-	max-width: 900px;  /* 최대 넓이 제한 */
-	width: 100%;
-	padding: 30px 40px 40px 40px; /* 콘텐츠 여백 */
+	margin-left: 300px;
+	flex-grow: 1;
+	padding: 30px;
 	background-color: white;
-	box-sizing: border-box;
-	min-height: 100vh;
-	margin-left: 20px; /* 사이드바와 간격 */
 }
 
 
@@ -96,7 +93,26 @@ a:hover {
   font-weight: bold;
   pointer-events: none;
 }
+/* 상단 메뉴 공통 스타일 */
+.top-menu a {
+	display: inline-block;
+	padding: 8px 16px;
+	margin-right: 10px;
+	border-radius: 6px;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 14px;
+}
 
+.top-menu a.active {
+	background-color: #cce5ff;
+	color: #004085;
+}
+
+.top-menu a.inactive {
+	background-color: #e9ecef;
+	color: #333;
+}
 </style>
 </head>
 <body>
@@ -104,9 +120,10 @@ a:hover {
 	<div class="sidebar">
 		<jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
 	</div>
-	<div class="main-content">
+	<div class="top-menu">
 		<!-- 공통 페이지 상단 메뉴 -->
-		<div style="margin-bottom: 20px;">
+		<div class="main-content">
+		<div class="top-menu;">
 			<c:set var="currentPath" value="${pageContext.request.requestURI}" />
 
 			<a href="/attendanceList?courseId=${courseId}" 
@@ -140,9 +157,10 @@ a:hover {
 				<c:if test='${!fn:contains(currentPath, "/examList")}'>background-color: #e9ecef; color: #333;</c:if>">
 				시험 관리
 			</a>
-		</div>
-		
-		<h1>반 학생 리스트</h1>
+			</div>
+	
+			</div>
+		<h2>${courseName}</h2> 
 		<table border="1">
 			<tr>
 				<th>이름</th>
@@ -174,7 +192,8 @@ a:hover {
   </c:forEach>
 </div>
 
-	</div>
+
+
 </div>
 </body>
 </html>
