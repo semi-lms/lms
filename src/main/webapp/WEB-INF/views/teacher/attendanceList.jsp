@@ -10,36 +10,31 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-.holiday {
-	color: red;
-	font-weight: bold;
-}
-</style>
-</head>
-<style>
-/* 공휴일 텍스트 스타일 */
-.holiday {
-	color: red;
-	font-weight: bold;
-}
-
-/* 전체 페이지 레이아웃 설정 */
+/* ===== 기본 레이아웃 ===== */
 .container {
 	display: flex;
-	align-items: flex-start;
 	min-height: 100vh;
-	background: #f4f6f9;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f4f6f9;
 }
 
+.sidebar {
+	width: 300px;
+}
 
-/* 본문 영역 */
 .main-content {
-	flex: 1;
-	padding: 32px 24px 24px 360px;
+	margin-left: 300px;
+	flex-grow: 1;
+	padding: 30px;
+	background-color: #fafbfc;
 	overflow-x: auto;
-	background: #fafbfc;
 }
-/* 상단 메뉴 공통 스타일 */
+
+/* ===== 상단 메뉴 (공통 탭) ===== */
+.top-menu {
+	margin-bottom: 20px;
+}
+
 .top-menu a {
 	display: inline-block;
 	padding: 8px 16px;
@@ -59,28 +54,29 @@
 	background-color: #e9ecef;
 	color: #333;
 }
-/* 테이블 기본 스타일 */
+
+/* ===== 테이블 공통 ===== */
 table {
-	margin-left: 8px;
-	margin-right: auto;
 	width: 100%;
-	max-width: 1300px; /* 전체 너비 제한 */
 	border-collapse: collapse;
-	background: #fff;
 	margin-top: 20px;
-	font-size: 14px;
+	background-color: #fff;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	font-size: 14px;
 }
 
 th, td {
 	border: 1px solid #ddd;
 	text-align: center;
-	padding: 8px;
+	padding: 10px;
+	color: #333;
 	white-space: nowrap;
+	word-break: keep-all;
 }
 
 th {
-	background-color: #f1f3f5;
+	background-color: #2c3e50;
+	color: white;
 	font-weight: bold;
 }
 
@@ -88,13 +84,17 @@ tr:nth-child(even) {
 	background-color: #f9f9f9;
 }
 
-/* 버튼 및 링크 스타일 */
+tr:hover {
+	background-color: #e9f0ff;
+}
+
+/* ===== 버튼 및 셀렉트 ===== */
 button, select {
 	padding: 6px 12px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 14px;
-	background: #f8f9fa;
+	background: white;
 	cursor: pointer;
 }
 
@@ -102,6 +102,7 @@ button:hover, select:hover {
 	background: #e9ecef;
 }
 
+/* ===== 링크 ===== */
 a {
 	color: #007bff;
 	text-decoration: none;
@@ -111,43 +112,51 @@ a:hover {
 	text-decoration: underline;
 }
 
-/* 상단 메뉴 버튼 스타일 */
-.main-content>div:first-of-type a {
-	padding: 8px 16px;
-	margin-right: 10px;
+/* ===== 페이징 ===== */
+.paging, .pagination {
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+}
+
+.paging a, .pagination a,
+.paging .current-page, .pagination span {
+	display: inline-block;
+	padding: 8px 12px;
+	border: 1px solid #2c3e50;
 	border-radius: 6px;
 	text-decoration: none;
+	font-size: 14px;
+	color: #2c3e50;
+	font-weight: 500;
+}
+
+.paging a:hover, .pagination a:hover {
+	background-color: #ecf0f1;
+}
+
+.paging .current-page, .pagination .current-page, .pagination .current {
+	background-color: #2c3e50;
+	color: white;
 	font-weight: bold;
-	display: inline-block;
+	cursor: default;
 }
 
-/* 첨부파일 미리보기 이미지 */
-#previewImage {
-	position: absolute;
-	max-width: 300px;
-	max-height: 300px;
-	border: 1px solid #ccc;
-	background: #fff;
-	z-index: 1000;
-	display: none;
-	padding: 5px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* 출결 모달창 스타일 */
+/* ===== 모달 ===== */
 #attendanceModal {
 	display: none;
 	position: fixed;
 	top: 20%;
 	left: 35%;
-	background: #fff;
+	background: white;
 	border: 1px solid #ccc;
 	padding: 20px;
 	z-index: 10;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* 출결 모달 내 파일 업로드 영역 */
+/* ===== 파일 업로드 표시 ===== */
 #fileUploadSection label {
 	display: inline-block;
 	margin-bottom: 5px;
@@ -160,6 +169,25 @@ a:hover {
 	text-decoration: underline;
 	color: blue;
 	font-size: 13px;
+}
+
+/* ===== 미리보기 이미지 ===== */
+#previewImage {
+	position: absolute;
+	max-width: 300px;
+	max-height: 300px;
+	border: 1px solid #ccc;
+	background: #fff;
+	z-index: 1000;
+	display: none;
+	padding: 5px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 휴일 텍스트 ===== */
+.holiday {
+	color: red;
+	font-weight: bold;
 }
 </style>
 
