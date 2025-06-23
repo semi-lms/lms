@@ -5,7 +5,7 @@
 <fmt:formatDate value="${now}" pattern="yyyy" var="currentYear" />
 <fmt:formatDate value="${now}" pattern="M" var="currentMonth" />
     <img src="/img/cursor.png" id="custom-cursor" alt="커서" />
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sidebar.css">
 
 <div class="sidebar">
@@ -31,12 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	    cursorImg.style.top = (e.clientY + 30) + 'px';   
 	  });
 	});
-function toggleSubmenu() {
-	  // 관리목록 버튼과 하위메뉴를 제외한 영역 클릭 시 하위메뉴 숨김
-	  if (!$(e.target).closest('#submenu, .toggle-submenu').length) {
-$('#submenu').slideToggle();  // 클릭할 때마다 메뉴 보이기/숨기기 전환
-}
-});
+
 
 	
 function goToInfo() {

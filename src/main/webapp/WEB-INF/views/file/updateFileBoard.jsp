@@ -49,9 +49,9 @@
 	<!-- 기존 첨부파일 -->
 <c:forEach var="file" items="${fileList}">
   <div>
-    <a href="data:${file.fileType};base64,${file.base64Data}" download="${file.fileName}">
-      ${file.fileName}
-    </a>
+	 <a href="${pageContext.request.contextPath}/file/download?fileName=${file.saveName}" download="${file.fileName}">
+	  ${file.fileName}
+	</a>
     <label>
       <input type="checkbox" name="deleteFileIds" value="${file.fileId}">
       삭제

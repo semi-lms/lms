@@ -1,11 +1,22 @@
 package com.example.lms.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -66,7 +77,7 @@ public class FileBoardController {
     }
     
     
-    // 게시글 + 파일(Base64) 등록
+    // 게시글 + 파일 등록
     @PostMapping("/insertFileBoard")
     public String insertFileBoard(@ModelAttribute FileBoardDTO fileBoardDto,
                                   @RequestParam(value = "uploadFile", required = false) MultipartFile[] uploadFiles,		// 업로드 된 파일들
@@ -81,20 +92,46 @@ public class FileBoardController {
         // 게시글 db에 저장
         fileBoardService.insertFileBoard(fileBoardDto);
 
-        // 파일이 첨부되어 있으면 반복 처리
-        if (uploadFiles != null) {
+        // 파일이 존재할 경우 처리
+        if (uploadFiles != null && uploadFiles.length > 0) {
+
+            // 운영체제별 경로 설정
+        	String os = System.getProperty("os.name").toLowerCase();
+        	String uploadDir = os.contains("win") ? "C:/upload/" : "/home/ubuntu/upload/";
+
+            // 디렉토리 없으면 생성
+            File dir = new File(uploadDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            // 업로드된 각 파일 처리
             for (MultipartFile mf : uploadFiles) {
-                if (!mf.isEmpty()) {		// 파일이 비어있지 않은 경우에만 처리
+                if (mf.isEmpty()) continue;
                     try {
+                        // 1. 원본 파일명
+                        String originalFileName = mf.getOriginalFilename();
+
+                        // 2. UUID로 중복 방지한 저장 이름 생성
+                        String uuid = UUID.randomUUID().toString();
+                        String saveName = uuid + "_" + originalFileName;
+
+                        // 3. 저장 경로 설정
+                        String savePath = uploadDir + saveName;
+                        File dest = new File(savePath);
+                        mf.transferTo(dest); // 파일 실제 저장
+                    	
+                    	// dto 구성
                         FileDTO fileDto = new FileDTO();	// 파일 객체 새성
                         fileDto.setFileBoardNo(fileBoardDto.getFileBoardNo());	// 게시글 번호 설정
                         fileDto.setAdminId(loginUser.getAdminId());		// 업로더 ID 설정
                         fileDto.setFileName(mf.getOriginalFilename());	// 원본 파일명
                         fileDto.setFileType(mf.getContentType());		// 어떤 형식의 파일인지
                         fileDto.setFileSize(mf.getSize());				// 파일 크기
-                        fileDto.setBase64Data(Base64.getEncoder().encodeToString(mf.getBytes()));	// BASE64 인코딩
+                        fileDto.setSaveName(saveName);             // UUID 저장 이름
+                        fileDto.setFilePath(savePath);             // 실제 저장 경로
+                        
+                        // db에 저장
+                        fileService.saveFile(fileDto);
 
-                        fileService.saveFile(fileDto);		// 파일 DB 저장
                     } catch (IOException e) {
                         e.printStackTrace();
                         ra.addFlashAttribute("errorMsg", "파일 업로드 실패");
@@ -102,7 +139,6 @@ public class FileBoardController {
                     }
                 }
             }
-        }
 
         return "redirect:/file/fileBoardList";
     }
@@ -152,7 +188,7 @@ public class FileBoardController {
         // 2. 삭제 체크된 파일 삭제
         if (deleteFileIds != null && !deleteFileIds.isEmpty()) {
             for (Integer fileId : deleteFileIds) {
-                fileService.deleteFileById(fileId);  // 해당 파일 삭제 (Base64 방식이라 DB만 삭제)
+                fileService.deleteFileById(fileId);  // 해당 파일 삭제
             }
         }
         
@@ -161,14 +197,35 @@ public class FileBoardController {
             for (MultipartFile mf : uploadFiles) {
                 if (!mf.isEmpty()) {
                     try {
+                    	 // 1. 원본 파일명
+                        String originalFileName = mf.getOriginalFilename();
+
+                        // 2. UUID를 이용한 저장 이름
+                        String uuid = UUID.randomUUID().toString();
+                        String saveName = uuid + "_" + originalFileName;
+
+                     // 3. 저장 경로 설정 (운영체제별 분기)
+                        String os = System.getProperty("os.name").toLowerCase();
+                        String uploadDir = os.contains("win") ? "C:/upload/" : "/home/ubuntu/upload/";
+                        String savePath = uploadDir + saveName;
+
+                        // 4. 실제 파일 저장
+                        File dest = new File(savePath);
+                        mf.transferTo(dest);
+                        System.out.println("파일 저장 완료: " + dest.getAbsolutePath());
+
+                        // 5. DTO 구성
                         FileDTO fileDto = new FileDTO();
                         fileDto.setFileBoardNo(fileBoardDto.getFileBoardNo());
                         fileDto.setAdminId(loginUser.getAdminId());
-                        fileDto.setFileName(mf.getOriginalFilename());
+                        fileDto.setFileName(originalFileName);
                         fileDto.setFileType(mf.getContentType());
                         fileDto.setFileSize(mf.getSize());
-                        fileDto.setBase64Data(Base64.getEncoder().encodeToString(mf.getBytes()));
-                        fileService.saveFile(fileDto);	// DB에 파일 저장
+                        fileDto.setSaveName(saveName);
+                        fileDto.setFilePath(savePath);
+
+                        // 6. DB 저장
+                        fileService.saveFile(fileDto);
                     
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -211,5 +268,24 @@ public class FileBoardController {
         fileBoardService.deleteFileBoard(fileBoardNo);
         
         return "redirect:/file/fileBoardList";
+    }
+    
+    @GetMapping("/download")
+    public ResponseEntity<Resource> downloadFile(@RequestParam String fileName) throws IOException {
+        String os = System.getProperty("os.name").toLowerCase();
+        String uploadPath = os.contains("win") ? "C:/upload/" : "/home/ubuntu/upload/";
+
+        Path path = Paths.get(uploadPath + fileName);
+        if (!Files.exists(path)) {
+            throw new FileNotFoundException("파일이 존재하지 않습니다.");
+        }
+
+        Resource resource = new UrlResource(path.toUri());
+        String encodedName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedName + "\"")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 }

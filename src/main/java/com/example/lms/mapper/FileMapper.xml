@@ -5,11 +5,23 @@
   <!-- 첨부파일 저장 -->
   <insert id="insertFile" parameterType="com.example.lms.dto.FileDTO">
     INSERT INTO file (
-      file_board_no, admin_id, file_name, upload_date,
-      base64_data, file_type, file_size
+      file_board_no,
+      admin_id,
+      file_name,
+      upload_date,
+      file_type,
+      file_size,
+      file_path,
+      save_name
     ) VALUES (
-      #{fileBoardNo}, #{adminId}, #{fileName}, NOW(),
-      #{base64Data}, #{fileType}, #{fileSize}
+      #{fileBoardNo},
+      #{adminId},
+      #{fileName},
+      NOW() + INTERVAL 9 HOUR,
+      #{fileType},
+      #{fileSize},
+      #{filePath},
+      #{saveName}
     )
   </insert>
 
@@ -20,9 +32,10 @@
            admin_id AS adminId,
            file_name AS fileName,
            upload_date AS uploadDate,
-           base64_data AS base64Data,
            file_type AS fileType,
-           file_size AS fileSize
+           file_size AS fileSize,
+           file_path AS filePath,
+           save_name AS saveName
     FROM file
     WHERE file_board_no = #{fileBoardNo}
   </select>
@@ -34,9 +47,10 @@
            admin_id AS adminId,
            file_name AS fileName,
            upload_date AS uploadDate,
-           base64_data AS base64Data,
            file_type AS fileType,
-           file_size AS fileSize
+           file_size AS fileSize,
+           file_path AS filePath,
+           save_name AS saveName
     FROM file
     WHERE file_id = #{fileId}
   </select>

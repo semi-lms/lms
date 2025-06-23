@@ -71,10 +71,10 @@
       <div class="file-preview-wrapper">
         <span class="file-name">📎 ${file.fileName}</span>
         <div class="img-preview">
-          <img src="data:${file.fileType};base64,${file.base64Data}" alt="미리보기" />
+          <img src="/upload/${file.saveName}" alt="미리보기" />
         </div>
         <a class="download-link"
-           href="data:${file.fileType};base64,${file.base64Data}"
+           href="/upload/${file.saveName}"
            download="${file.fileName}">
           ⬇️ 다운로드
         </a>
@@ -85,7 +85,7 @@
       <div class="file-preview-wrapper">
         <span class="file-name">📎 ${file.fileName}</span>
         <a class="download-link"
-           href="data:${file.fileType};base64,${file.base64Data}"
+           href="/upload/${file.saveName}"
            download="${file.fileName}">
           ⬇️ 다운로드
         </a>
