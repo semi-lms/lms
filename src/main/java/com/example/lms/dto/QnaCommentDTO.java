@@ -11,6 +11,7 @@ public class QnaCommentDTO {
 	private int qnaId;		// qna_id
 	private String writerId;	// writer_id
 	private String writerRole;	// writer_role
+	private String writerName;	// 가공 데이터
 	private String content;		// content
 	private Integer parentCommentId;	// 대댓글인 경우 부모 ID (무결성 때문에 셀프외래키)
 	private Timestamp createDate;	// create_date

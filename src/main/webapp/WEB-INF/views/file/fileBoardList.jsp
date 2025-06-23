@@ -68,7 +68,7 @@
         <c:forEach var="i" begin="${startPage}" end="${endPage}">
           <c:choose>
             <c:when test="${i == page.currentPage}">
-              <span>[${i}]</span>
+              <span>${i}</span>
             </c:when>
             <c:otherwise>
               <a href="/file/fileBoardList?currentPage=${i}&rowPerPage=${page.rowPerPage}&searchOption=${searchOption}&searchFileBoard=${searchFileBoard}">${i}</a>

@@ -33,7 +33,11 @@
 	        create_date AS createDate,
 	        update_date AS updateDate
 		FROM file_board
-		WHERE title LIKE CONCAT('%', #{keyword}, '%')
+		WHERE (
+		((title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%')) AND #{searchOption} = 'all')
+		OR
+		(title LIKE CONCAT('%', #{keyword}, '%') AND #{searchOption} = 'title')
+		)
 		ORDER BY create_date DESC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
@@ -64,22 +68,4 @@
 		WHERE file_board_no = #{fileBoardNo}
 	</update>
 	
-	<!-- 삭제 -->
-	<delete id="deleteFileBoard" parameterType="com.example.lms.dto.FileBoardDTO">
-		DELETE
-		FROM file_board
-		WHERE file_board_no = #{fileBoardNo}
-	</delete>
-
 </mapper>
-
-
-
-
-
-
-
-
-
-
-

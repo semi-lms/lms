@@ -5,15 +5,24 @@
 	<!-- 댓글 리스트 -->
 	<select id="selectQnaCommentList" parameterType="map" resultType="com.example.lms.dto.QnaCommentDTO">
 		SELECT 
-			comment_id AS commentId,
-			qna_id AS qnaId,
-			writer_id AS writerId,
-			writer_role AS writerRole,
-			content,
-			parent_comment_id AS parentCommentId,
-			create_date AS createDate,
-			update_date AS updateDate
-		FROM qna_comment
+			c.comment_id AS commentId,
+			c.qna_id AS qnaId,
+			c.parent_comment_id AS parentCommentId,
+			c.writer_id AS writerId,
+			c.writer_role AS writerRole,
+			-- 작성자 이름 조인
+			CASE 
+				WHEN c.writer_role = 'admin' THEN a.admin_id
+				WHEN c.writer_role = 'teacher' THEN t.name
+				WHEN c.writer_role = 'student' THEN s.name
+				ELSE c.writer_id
+			END AS writerName,
+			c.content,
+			c.create_date AS createDate
+		FROM qna_comment c
+		LEFT JOIN admin a ON c.writer_role = 'admin' AND c.writer_id = a.admin_id
+		LEFT JOIN teacher t ON c.writer_role = 'teacher' AND c.writer_id = t.teacher_id
+		LEFT JOIN student s ON c.writer_role = 'student' AND c.writer_id = s.student_id
 		WHERE qna_id = #{qnaId}
 		ORDER BY create_date ASC
 	</select>

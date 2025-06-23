@@ -42,19 +42,24 @@ public class FileBoardController {
     // 자료실 리스트
     @GetMapping("/fileBoardList")
     public String fileBoardList(Model model,
-                                 @RequestParam(defaultValue = "1") int currentPage,			// 현재 페이지
-                                 @RequestParam(defaultValue = "all") String searchOption,	// 검색 옵션 (제목, 내용 등)
-                                 @RequestParam(defaultValue = "") String keyword,			// 검색어
-                                 @RequestParam(defaultValue = "10") int rowPerPage) {		// 페이지당 글 수
+								@RequestParam(defaultValue = "1") int currentPage,
+								@RequestParam(value="searchOption", required=false, defaultValue="all") String searchOption,
+								@RequestParam(value="keyword", required=false, defaultValue="") String keyword,
+								@RequestParam(defaultValue = "10") int rowPerPage,
+								HttpSession session) {
+    	
+		
 
     	// 전체 게시글 수 계산
         int totalCount = fileBoardService.totalCount(searchOption, keyword);
         
         // 페이지 계산 객체 생성
         Page page = new Page(rowPerPage, currentPage, totalCount, searchOption, keyword);
-
+        int startRow = (currentPage - 1) * rowPerPage;
+        
         // db 조회 맵
         Map<String, Object> param = new HashMap<>();
+        
         param.put("searchOption", searchOption);
         param.put("keyword", keyword);
         param.put("startRow", (currentPage - 1) * rowPerPage);
@@ -63,10 +68,23 @@ public class FileBoardController {
         // 게시글 목록 가져오기
         List<FileBoardDTO> fileBoardList = fileBoardService.selectFileBoardList(param);
 
+        // 페이징 계산
+		int lastPage = (int) Math.ceil((double) totalCount / rowPerPage);
+		int pageSize = 10;
+		int startPage = ((currentPage - 1) / pageSize) * pageSize + 1;
+		int endPage = Math.min(startPage + pageSize - 1, lastPage);
+        
         //JSP에 전달할 데이터
         model.addAttribute("fileBoardList", fileBoardList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("searchOption", searchOption);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("rowPerPage", rowPerPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("lastPage", lastPage);
         model.addAttribute("page", page);
-
+        
         return "file/fileBoardList";		// JSP 페이지 이름 반환
     }
 
@@ -114,8 +132,11 @@ public class FileBoardController {
                         String uuid = UUID.randomUUID().toString();
                         String saveName = uuid + "_" + originalFileName;
 
+                        
                         // 3. 저장 경로 설정
                         String savePath = uploadDir + saveName;
+                        System.out.println("원본 파일명: " + mf.getOriginalFilename());
+                        System.out.println("저장 경로: " + savePath);
                         File dest = new File(savePath);
                         mf.transferTo(dest); // 파일 실제 저장
                     	

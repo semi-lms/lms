@@ -70,7 +70,7 @@
       <div class="qna-comment-wrapper">
       <div class="comment-row">
         <!--  작성자 -->
-        <p><strong>${comment.writerId}</strong> (${comment.writerRole}) <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+        <p><strong>${comment.writerName}</strong> (${comment.writerRole}) <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
         
          <!-- 수정/삭제 -->
          <!-- 관리자는 모든 댓글 삭제 가능 -->
@@ -126,11 +126,11 @@
             <div class="reply-box">
               <!-- 작성자/날짜 + 수정/삭제 버튼을 flex로 나눔 -->
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>↳ <strong>${reply.writerId}</strong> (${reply.writerRole}) <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></div>
+                <div>↳ <strong>${reply.writerName}</strong> (${reply.writerRole}) <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></div>
                 
 				<c:choose>
 				 <%-- 본인이 작성한 대댓글인 경우: 수정/삭제 가능 --%>
-				  <c:when test="${reply.writerId eq loginUserId}">
+				  <c:when test="${reply.writerId  eq loginUserId}">
 				    <div>
 				      <form method="get"
 				            action="${pageContext.request.contextPath}/qna/qnaOne#comment-${reply.commentId}"
