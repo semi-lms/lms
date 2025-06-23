@@ -129,8 +129,23 @@ public class QnaCommentController {
             return "redirect:/qna/qnaList";
         }
 
+        // 현재 로그인한 유저의 ID (역할에 따라 다르게 가져옴)
+        String userId = null;
+        
+        // 역할에 따라 ID를 설정
+        if ("student".equals(loginUser.getRole())) {
+        	userId = loginUser.getStudentId(); // 학생인 경
+        } else if ("teacher".equals(loginUser.getRole())) {
+        	userId = loginUser.getTeacherId();
+        } else if ("admin".equals(loginUser.getRole())) {
+        	userId = loginUser.getAdminId(); // 관리자일 경우
+        }
+        
+        // 본인 여부 확인 (작성자 역할과 ID 모두 일치해야함)
         boolean isOwner = loginUser.getRole().equals(original.getWriterRole()) &&
-                          loginUser.getStudentId().equals(original.getWriterId());
+        				  userId != null &&
+        				  userId.equals(original.getWriterId());
+        
         boolean isAdminOrTeacher = "admin".equals(loginUser.getRole()) || "teacher".equals(loginUser.getRole());
 
         if (!(isOwner || isAdminOrTeacher)) {
