@@ -27,22 +27,33 @@ body {
 }
 
 .student-card {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 15px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-    width: 70%;
+    margin-bottom: 15px;
+    width: auto;
+}
+
+.student-card input {
+    width: 130px;
+    padding: 6px 8px;
+    font-size: 14px;
+}
+.student-card input[readonly] {
+    background: #eee;
 }
 .remove-row-btn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background-color: transparent;  /* 배경 투명 */
-    border: 2px solid black;         /* 검정 테두리 */
-    color: black;                    /* 글자 검정 */
+    background-color: transparent;
+    border: 2px solid black;
+    color: black;
     font-size: 20px;
     cursor: pointer;
     padding: 0 6px;
@@ -50,22 +61,12 @@ body {
     line-height: 1;
     transition: background-color 0.3s, color 0.3s;
 }
-
 .remove-row-btn:hover {
-    background-color: black;         /* hover 시 검정 배경 */
-    color: white;                    /* hover 시 글자 흰색 */
+    background-color: black;
+    color: white;
     border-color: black;
 }
-.student-card input {
-    width: calc(50% - 10px);
-    margin: 5px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-.student-card input[readonly] {
-    background: #eee;
-}
+
 .btn-area {
     margin: 20px 0;
 }
@@ -79,13 +80,11 @@ body {
     color: black;
     transition: background-color 0.3s, color 0.3s;
 }
-
 #insertRowBtn:hover, button[type="submit"]:hover {
     background-color: black;
     color: white;
     border-color: black;
 }
-
 </style>
 </head>
 <body>
@@ -103,17 +102,17 @@ body {
                 </c:forEach>
             </select>
           
-<div id="studentCardContainer">
-    <div class="student-card" data-index="0">
-        <input type="text" name="studentList[0].name" placeholder="이름">
-        <input type="text" name="studentList[0].phone" placeholder="전화번호" class="phone-input">
-        <input type="text" name="studentList[0].sn" placeholder="주민번호">
-        <input type="text" name="studentList[0].address" placeholder="주소">
-        <input type="email" name="studentList[0].email" placeholder="이메일">
-        <input type="text" name="studentList[0].studentId" placeholder="초기 아이디" readonly>
-        <input type="text" name="studentList[0].password" placeholder="초기 비밀번호" readonly>
-    </div>
-</div>
+            <div id="studentCardContainer">
+                <div class="student-card" data-index="0">
+                    <input type="text" name="studentList[0].name" placeholder="이름">
+                    <input type="text" name="studentList[0].phone" placeholder="전화번호" class="phone-input">
+                    <input type="text" name="studentList[0].sn" placeholder="주민번호">
+                    <input type="text" name="studentList[0].address" placeholder="주소">
+                    <input type="email" name="studentList[0].email" placeholder="이메일">
+                    <input type="text" name="studentList[0].studentId" placeholder="초기 아이디" readonly>
+                    <input type="text" name="studentList[0].password" placeholder="초기 비밀번호" readonly>
+                </div>
+            </div>
             <div class="btn-area">
                 <button type="button" id="insertRowBtn">행 추가</button>
                 <button type="submit">➕ 등록</button>
@@ -138,16 +137,16 @@ $(function(){
     $("#insertRowBtn").click(function(){
         const idx = rowIdx++;
         const card = $(`
-            <div class="student-card" data-index="${idx}">
-                <button type="button" class="remove-row-btn" title="행 삭제">&times;</button>
-                <input type="text" name="studentList[${idx}].name" placeholder="이름">
-                <input type="text" name="studentList[${idx}].phone" placeholder="전화번호" class="phone-input">
-                <input type="text" name="studentList[${idx}].sn" placeholder="주민번호">
-                <input type="text" name="studentList[${idx}].address" placeholder="주소">
-                <input type="email" name="studentList[${idx}].email" placeholder="이메일">
-                <input type="text" name="studentList[${idx}].studentId" placeholder="초기 아이디" readonly>
-                <input type="text" name="studentList[${idx}].password" placeholder="초기 비밀번호" readonly>
-            </div>
+        		<div class="student-card" data-index="0">
+        	    <input type="text" name="studentList[0].name" placeholder="이름">
+        	    <input type="text" name="studentList[0].phone" placeholder="전화번호" class="phone-input">
+        	    <input type="text" name="studentList[0].sn" placeholder="주민번호">
+        	    <input type="text" name="studentList[0].address" placeholder="주소">
+        	    <input type="email" name="studentList[0].email" placeholder="이메일">
+        	    <input type="text" name="studentList[0].studentId" placeholder="초기 아이디" readonly>
+        	    <input type="text" name="studentList[0].password" placeholder="초기 비밀번호" readonly>
+        	    <button type="button" class="remove-row-btn" title="행 삭제">&times;</button>
+        	</div>
         `);
         $("#studentCardContainer").append(card);
     });
