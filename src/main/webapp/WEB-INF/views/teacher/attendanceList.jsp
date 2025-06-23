@@ -18,9 +18,7 @@
 	background-color: #f4f6f9;
 }
 
-.sidebar {
-	width: 300px;
-}
+
 
 .main-content {
 	margin-left: 300px;
