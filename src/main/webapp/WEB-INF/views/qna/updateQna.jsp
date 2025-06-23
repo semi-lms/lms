@@ -56,6 +56,7 @@
   </form>
 </div>
 <script>
+/*
   // 한번만 비우기용
   function clearOnFirstFocus(el) {
     if (!el.dataset.cleared) {
@@ -72,6 +73,7 @@
       el.dataset.cleared = ""; // 다시 초기화 가능하게 할 수도 있음
     }
   }
+  */
 
   // 적용
   window.addEventListener("DOMContentLoaded", function () {

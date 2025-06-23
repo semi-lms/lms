@@ -267,6 +267,7 @@
 		    }
 		  }
 		}
+		/*
 		// 내용칸 클릭하면 기존 글 삭제
 		 function clearOnFirstFocus(el) {
 			    // 한 번만 비우도록 체크
@@ -275,6 +276,7 @@
 			      el.value = "";
 			    }
 			  }
+		*/
 		
 		// 현재 스크롤 위치 저장한 후 폼 제출 (페이지 새로고침 시 해당 위치 유지)
 		  function saveScrollAndSubmit(form) {

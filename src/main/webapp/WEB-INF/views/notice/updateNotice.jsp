@@ -72,32 +72,7 @@
       return true;
     }
     
-    function setupAutoClearRestore(id, originalValue) {
-        const input = document.getElementById(id);
-        let cleared = false;
 
-        input.addEventListener("focus", function () {
-          if (!cleared && input.value === originalValue) {
-            input.value = "";
-            cleared = true;
-          }
-        });
-
-        input.addEventListener("blur", function () {
-          if (input.value.trim() === "") {
-            input.value = originalValue;
-            cleared = false;
-          }
-        });
-      }
-
-      window.addEventListener("DOMContentLoaded", function () {
-        // 제목 필드에 동작 연결
-        setupAutoClearRestore("title", "${fn:escapeXml(notice.title)}");
-
-        // 내용 필드에 동작 연결 (textarea)
-        setupAutoClearRestore("content", "${fn:escapeXml(notice.content)}");
-      });
   </script>
 </body>
 </html>
