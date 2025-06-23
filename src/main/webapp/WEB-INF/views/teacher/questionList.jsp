@@ -87,7 +87,7 @@
 					font-weight: bold;
 				<c:if test='${fn:contains(currentPath, "/questionList")}'>background-color: #cce5ff; color: #004085;</c:if>
 				<c:if test='${!fn:contains(currentPath, "/questionList")}'>background-color: #e9ecef; color: #333;</c:if>">
-				시험 관리
+				문제 관리
 			</a>
 
 			<a href="/scoreList?examId=${examId}" 

@@ -61,7 +61,7 @@
 					font-weight: bold;
 				<c:if test='${fn:contains(currentPath, "/questionList")}'>background-color: #cce5ff; color: #004085;</c:if>
 				<c:if test='${!fn:contains(currentPath, "/questionList")}'>background-color: #e9ecef; color: #333;</c:if>">
-				시험 관리
+				문제 관리
 			</a>
 
 			<a href="/scoreList?examId=${examId}" 
@@ -97,7 +97,7 @@
 					<td>
 						<c:choose>
 							<c:when test="${sc.score != null}">
-								<a href="/scoreOne?submissionId=${sc.submissionId}" 
+								<a href="/scoreOne?examId=${examId}&submissionId=${sc.submissionId}" 
 								   style="text-decoration: none; color: #007bff; cursor: pointer;">
 									${sc.score}
 								</a>

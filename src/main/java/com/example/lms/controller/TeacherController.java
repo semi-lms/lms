@@ -341,11 +341,12 @@ public class TeacherController {
 	// 성적 상세 페이지
 		@GetMapping("/scoreOne")
 		public String scoreOne(@RequestParam(name = "submissionId", required = false, defaultValue = "1") int submissionId
-									, Model model) {
+								, Model model
+								, @RequestParam(name = "examId", required = false) int examId) {
 			
 			List<ExamAnswerDTO> questions = examService.getExamAnswersWithCorrect(submissionId);
 			model.addAttribute("questions", questions);
-			
+			model.addAttribute("examId", examId);			
 			
 			
 			return "/teacher/scoreOne";
