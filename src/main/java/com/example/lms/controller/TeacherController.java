@@ -415,8 +415,9 @@ public class TeacherController {
 	
 	@PostMapping("/removeExam")
 	public String removeExam(@RequestParam("examId") int examId) {
+		int courseId = examService.getCourseIdByExamId(examId);
 		examService.deleteExamQuestionOption(examId);
-		return "redirect:/examList?courseId="+examId;
+		return "redirect:/examList?courseId="+courseId;
 	}
 	
 	@PostMapping("/insertExam")
