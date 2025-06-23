@@ -47,4 +47,7 @@ public interface CourseMapper {
 	
 	int updateTeacherCourseId(@Param("teacherNo") int teacherNo,
             @Param("courseId") int courseId);
+	
+	// 특정 강사와 강의 연결 해제
+	void unassignTeacher(int teacherNo);
 }

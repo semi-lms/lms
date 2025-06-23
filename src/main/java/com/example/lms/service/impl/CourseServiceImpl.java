@@ -105,4 +105,9 @@ public class CourseServiceImpl implements CourseService{
         
 		return courseMapper.updateTeacherCourseId(teacherNo, courseId);
     }
+	
+	@Override
+	public void unassignTeacherFromCourse(int teacherNo) {
+	    courseMapper.unassignTeacher(teacherNo);
+	}
 }

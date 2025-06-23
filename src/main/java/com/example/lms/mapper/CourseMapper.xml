@@ -231,4 +231,11 @@
 		WHERE end_date >= CURDATE()  <!-- 종료되지 않은 강의만 조회 -->
 		ORDER BY course_name ASC;
 	</select>
+	
+	<!-- 강사에서 강의 수정 시 강사-강의 연결 해제 -->
+	<update id="unassignTeacher" parameterType="int">
+	    UPDATE course
+	    SET teacher_no = NULL
+	    WHERE teacher_no = #{teacherNo}
+	</update>
 </mapper>

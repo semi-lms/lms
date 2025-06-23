@@ -122,11 +122,11 @@
 			email = #{email},
 			course_id =
 				<choose>
-					<when test="courseId != null and courseId != ''">
+					<when test="courseId != null and courseId != 0">
 						#{courseId}
 					</when>
 					<otherwise>
-		  				NULL			
+						NULL
 					</otherwise>
 				</choose>
 		WHERE teacher_no = #{teacherNo}

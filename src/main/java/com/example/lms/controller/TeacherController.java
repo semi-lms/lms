@@ -150,10 +150,16 @@ public class TeacherController {
 		}
 		
 		teacherService.updateTeacher(teacherDto);
+		
+		// 특정 강사와 강의 연결 해제
+		if (courseId == null || courseId == 0) {
+	        courseService.unassignTeacherFromCourse(teacherDto.getTeacherNo());
+	    }
+		
 		result.put("success", true);
 		return result;
 	}
-	
+
 	
 	// 강사 상세 조회 (수정 모달용)
 	@GetMapping("/admin/getTeacherDetail")

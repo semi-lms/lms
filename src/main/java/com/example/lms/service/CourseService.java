@@ -40,4 +40,6 @@ public interface CourseService {
 	List<CourseDTO> getCourseNameNotEnded();
 	
 	int updateTeacherCourseId(int teacherNo, int courseId);
+	
+	void unassignTeacherFromCourse(int teacherNo);
 }
