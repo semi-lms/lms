@@ -7,7 +7,7 @@
 
 <div class="sidebar">
 	<div class="user-role">강사</div>
-    <p class="user-name"><strong>${loginUser.name}</strong> 님</p>
+    <p class="user-name"><strong>${loginUser.name}</strong> 강사님</p>
     <p class="title">마이페이지</p>
 
     <a href="/main"><button class="sidebar-btn home">🏠 홈</button></a><br><br>
@@ -24,6 +24,7 @@
      <a href="/notice/noticeList"><button class="sidebar-btn">공지사항</button></a><br><br>
     <a href="/qna/qnaList"><button class="sidebar-btn">QNA</button></a><br><br>
     <a href="/file/fileBoardList"><button class="sidebar-btn">자료실</button></a><br><br>
+   <a href="/attendanceList?courseId=${loginUser.courseId}"><button class="sidebar-btn">출결관리</button></a><br><br>
     <a href="/logout"><button class="sidebar-btn">로그아웃</button></a>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
