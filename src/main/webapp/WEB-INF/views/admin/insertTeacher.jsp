@@ -76,6 +76,32 @@
 		$("form").on("submit", function (e) {
 			e.preventDefault();  // 기본 전송 막기
 			
+			let valid = true;
+
+			const phone = $("input[name='phone']").val().replace(/-/g, "");
+			const sn = $("input[name='sn']").val().trim();
+			const email = $("input[name='email']").val().trim();
+
+			// 전화번호 유효성 검사
+			if (!/^01[016789][0-9]{7,8}$/.test(phone)) {
+				alert("전화번호 형식이 올바르지 않습니다.");
+				valid = false;
+			}
+
+			// 주민번호 유효성 검사
+			if (!/^[0-9]{6}-?[0-9]{7}$/.test(sn)) {
+				alert("주민번호 형식이 올바르지 않습니다.");
+				valid = false;
+			}
+
+			// 이메일 유효성 검사
+			if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+				alert("이메일 형식이 올바르지 않습니다.");
+				valid = false;
+			}
+
+			if (!valid) return;
+			
 			const formData = $(this).serialize();
 			
 			$.ajax({
@@ -96,6 +122,7 @@
 			});
 		});
 	
+		
 		// 아이디 6자리로 랜덤하게 부여
 		function randomId(length = 6) {
 			const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -106,16 +133,38 @@
 			return result;
 		}
 
-		// 전화번호 입력 시 자동 ID/비밀번호 설정
+		
+		// 전화번호 자동 하이픈
 		$("#phoneInput").on("input", function () {
-			const phone = this.value.replace(/[^0-9]/g, "");
-			if (phone.length >= 4) {
-				const pw = phone.slice(-4);
+			let v = $(this).val().replace(/[^0-9]/g, "");
+			let formatted = v;
+			if (v.length < 4) formatted = v;
+			else if (v.length < 8) formatted = v.substr(0, 3) + "-" + v.substr(3);
+			else if (v.length <= 11) formatted = v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7);
+			else formatted = v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7, 4);
+			$(this).val(formatted);
+
+			// ID/비밀번호 자동 설정
+			if (v.length >= 4) {
+				const pw = v.slice(-4);
 				$("#password").val(pw);
 				$("#teacherId").val(randomId(6));
 			} else {
 				$("#password").val('');
 				$("#teacherId").val('');
+			}
+		});
+		
+		
+		// 주민번호 자동 하이픈
+		$("input[name='sn']").on("input", function () {
+			let val = $(this).val().replace(/[^0-9]/g, ""); // 숫자만
+			if (val.length <= 6) {
+				$(this).val(val);
+			} else if (val.length <= 13) {
+				$(this).val(val.substr(0, 6) + "-" + val.substr(6));
+			} else {
+				$(this).val(val.substr(0, 6) + "-" + val.substr(6, 7));
 			}
 		});
 	</script>

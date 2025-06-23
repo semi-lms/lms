@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -138,7 +139,17 @@ div[style*="text-align: right"] {
 				<tr>
 					<td>${teacher.name}</td>
 					<td>${teacher.phone}</td>
-					<td>${teacher.sn}</td>
+					<td>
+						<c:set var="cleanSn" value="${fn:replace(teacher.sn, '-', '')}" />
+					    <c:choose>
+					      	 <c:when test="${fn:length(cleanSn) == 13}">
+					            <c:out value="${fn:substring(cleanSn, 0, 6)}" />-*******
+					    	</c:when>
+					    	<c:otherwise>
+					        	${teacher.sn}
+					    	</c:otherwise>
+					  	</c:choose>
+					</td>
 					<td>${teacher.address}</td>
 					<td>${teacher.email}</td>
 					<td>${teacher.teacherId}</td>
@@ -248,10 +259,26 @@ div[style*="text-align: right"] {
 					// 모달에 정보 채우기
 					$("#modalTeacherNo").val(teacher.teacherNo || "");
 					$("#modalName").val(teacher.name || "");
-					$("#modalPhone").val(teacher.phone || "");
-					$("#modalSn").val(teacher.sn || "");
+					$("#modalPhone").val(formatPhone(teacher.phone || ""));
+					$("#modalSn").val(formatSn(teacher.sn || ""));
 					$("#modalAddress").val(teacher.address || "");
 					$("#modalEmail").val(teacher.email || "");
+					
+					// 하이픈 붙이기
+					function formatPhone(p) {
+						let v = p.replace(/[^0-9]/g, "");
+						if (v.length < 4) return v;
+						else if (v.length < 8) return v.substr(0, 3) + "-" + v.substr(3);
+						else if (v.length <= 11) return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7);
+						else return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7, 4);
+					}
+
+					function formatSn(s) {
+						let val = s.replace(/[^0-9]/g, "");
+						if (val.length <= 6) return val;
+						else return val.substr(0, 6) + "-" + val.substr(6, 7);
+					}
+					
 					
 					// 담당 강의
 					const select = $("#modalCourseSelect");
