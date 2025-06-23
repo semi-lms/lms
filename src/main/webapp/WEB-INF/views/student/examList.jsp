@@ -8,7 +8,6 @@
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fafb;
     margin: 0;
     padding: 20px;
     display: flex;
@@ -30,7 +29,6 @@
     color: #333;
   }
 
-  /* 카드 컨테이너 */
   .card-list {
     display: flex;
     flex-wrap: wrap;
@@ -38,7 +36,6 @@
     justify-content: center;
   }
 
-  /* 카드 하나 */
   .card {
     background: white;
     border: 1px solid #ddd;
@@ -54,9 +51,8 @@
     box-shadow: 0 6px 12px rgba(0,0,0,0.15);
   }
 
-  /* 응시불가능 카드 스타일 */
   .card.disabled {
-    background: white;;
+    background: white;
     color: #999;
     cursor: default;
     box-shadow: none;
@@ -85,23 +81,30 @@
     color: #999;
   }
 
-  /* pagination */
   .pagination {
     text-align: center;
     margin-top: 30px;
   }
+
   .pagination span {
     font-weight: 600;
     color: #555;
     margin: 0 6px;
   }
+
   .pagination a {
     text-decoration: none;
     color: #007BFF;
     font-weight: 600;
   }
+
   .pagination a:hover {
     text-decoration: underline;
+  }
+
+  .text-success {
+    color: #28a745;
+    font-weight: 600;
   }
 </style>
 </head>
@@ -109,13 +112,13 @@
 <div class="sidebar">
   <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
 </div>
+
 <div class="container">
   <h1>${loginUser.name}님의 시험 목록</h1>
 
   <div class="card-list">
     <c:forEach var="exam" items="${exams}">
       <c:choose>
-     
         <c:when test="${exam.status == '불가' and exam.submitStatus != '응시완료'}">
           <div class="card disabled">
             <h3>${exam.title}</h3>
@@ -126,15 +129,30 @@
             <p>점수: ${exam.score}</p>
           </div>
         </c:when>
-
-       
         <c:otherwise>
           <div class="card" onclick="location.href='/student/takeExam?studentNo=${studentNo}&examId=${exam.examId}&page=1'">
             <h3>${exam.title}</h3>
             <p>시작일: ${exam.examStartDate}</p>
             <p>종료일: ${exam.examEndDate}</p>
-            <p>응시여부: ${exam.submitStatus}</p>
-            <p>응시가능여부: ${exam.status}</p>
+
+            <c:choose>
+              <c:when test="${exam.submitStatus == '응시완료'}">
+                <p class="text-success">응시여부: ${exam.submitStatus}</p>
+              </c:when>
+              <c:otherwise>
+                <p>응시여부: ${exam.submitStatus}</p>
+              </c:otherwise>
+            </c:choose>
+
+            <c:choose>
+              <c:when test="${exam.status == '가능'}">
+                <p class="text-success">응시가능여부: ${exam.status}</p>
+              </c:when>
+              <c:otherwise>
+                <p>응시가능여부: ${exam.status}</p>
+              </c:otherwise>
+            </c:choose>
+
             <p>점수: ${exam.score}</p>
           </div>
         </c:otherwise>
@@ -155,6 +173,5 @@
     </c:forEach>
   </div>
 </div>
-
 </body>
 </html>

@@ -19,12 +19,12 @@ body {
   min-height: 100vh;
 }
 
-
-/* 본문 */
 .main-content {
   flex: 1;
   padding: 40px 60px 60px 300px;
   background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 /* 제목 */
@@ -32,6 +32,7 @@ body {
   font-size: 26px;
   margin-bottom: 30px;
   color: #2c3e50;
+  text-align: center;
 }
 
 /* 필터 버튼 */
@@ -42,9 +43,9 @@ form {
 form button {
   padding: 8px 18px;
   margin-right: 10px;
-  border: 1px solid black;
+  border: 1.5px solid #333;
   background-color: white;
-  color: black;
+  color: #333;
   border-radius: 5px;
   font-weight: 600;
   cursor: pointer;
@@ -52,7 +53,8 @@ form button {
 }
 
 form button:hover {
-  background-color: #ccc;
+  background-color: #333;
+  color: white;
 }
 
 form button:disabled {
@@ -62,13 +64,11 @@ form button:disabled {
 
 /* 테이블 */
 table {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
+  margin: 0 auto 30px auto; /* 중앙 정렬 + 하단 여백 */
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
   background-color: #fff;
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  margin-bottom: 30px;
 }
 
 th, td {
@@ -79,8 +79,9 @@ th, td {
 }
 
 th {
-  background-color: #34495e;
+  background-color: #2c3e50;
   color: #fff;
+  font-weight: 600;
 }
 
 tr:hover {
@@ -89,54 +90,47 @@ tr:hover {
 
 a {
   text-decoration: none;
-  color : black;
-  
+  color: #2c3e50;
+  font-weight: 600;
+  margin: 0 5px;
 }
 
 a:hover {
   text-decoration: underline;
+  color: #1abc9c;
 }
 
 /* 페이징 */
-.main-content > span,
-.main-content > a {
-  margin-right: 6px;
-  font-size: 15px;
-  color: #333;
-}
-
-.main-content > span {
-  font-weight: bold;
-  color: #3498db;
-}
-	.pagination {
+.pagination {
   margin-top: 30px;
   display: flex;
-  justify-content: center; /* 가운데 정렬 핵심 */
-  gap: 8px; /* 버튼 사이 간격 */
+  justify-content: center;
+  gap: 8px;
 }
 
 .pagination a,
 .pagination span {
   display: inline-block;
   padding: 8px 12px;
-  border: 1px solid #343e4a;
+  border: 1px solid #2c3e50;
   border-radius: 6px;
-  color: #343e4a;
+  color: #2c3e50;
   text-decoration: none;
   font-weight: 500;
 }
 
 .pagination a:hover {
-  background-color: #d6dce2; 
+  background-color: #d6dce2;
 }
 
 .pagination .current {
-  background-color: #343e4a;
+  background-color: #2c3e50;
   color: white;
   font-weight: bold;
   pointer-events: none;
 }
+
+
 </style>
 </head>
 <body>
@@ -171,16 +165,19 @@ a:hover {
 				</tr>
 			</c:forEach>
 		</table>
-		<c:forEach var="i" begin="${startPage}" end="${endPage}">
-    <c:choose>
-      <c:when test="${i == currentPage}">
-        <span class="current">${i}</span>
-      </c:when>
-      <c:otherwise>
-        <a href="?currentPage=${i}&searchOption=${searchOption}&keyword=${keyword}">${i}</a>
-      </c:otherwise>
-    </c:choose>
-  </c:forEach>
+	 <div class="pagination">
+    <c:forEach var="i" begin="${startPage}" end="${endPage}">
+      <c:choose>
+        <c:when test="${i == currentPage}">
+          <span class="current">${i}</span>
+        </c:when>
+        <c:otherwise>
+          <a href="?currentPage=${i}&filter=${param.filter}">${i}</a>
+        </c:otherwise>
+      </c:choose>
+    </c:forEach>
+  </div>
+</div>
 	</div>
 </div>
 </body>

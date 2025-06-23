@@ -35,8 +35,6 @@ body {
 <jsp:include page="/WEB-INF/views/common/sideBar/studentSideBar.jsp" />
 <br>
 
-<p>시험 ID: ${examId}</p>
-<p>응시자번호: ${loginUser.studentNo}</p>
 
 <form id="examForm" method="post" action="/student/submitExam">
 	<input type="hidden" name="examId" value="${examId}" />

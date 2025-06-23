@@ -74,16 +74,16 @@
         <a href="?currentPage=${startPage - 1}&searchOption=${searchOption}&keyword=${searchQna}">[이전]</a>
       </c:if>
 
-      <c:forEach var="i" begin="${startPage}" end="${endPage}">
-        <c:choose>
-          <c:when test="${i == page.currentPage}">
-            <span class="current">${i}</span>
-          </c:when>
-          <c:otherwise>
-            <a href="?currentPage=${i}&searchOption=${searchOption}&keyword=${searchQna}">${i}</a>
-          </c:otherwise>
-        </c:choose>
-      </c:forEach>
+       <c:forEach var="i" begin="${startPage}" end="${endPage}">
+      <c:choose>
+        <c:when test="${i == currentPage}">
+          <span class="current">${i}</span>
+        </c:when>
+        <c:otherwise>
+          <a href="?currentPage=${i}&filter=${param.filter}">${i}</a>
+        </c:otherwise>
+      </c:choose>
+    </c:forEach>
 
       <c:if test="${endPage < page.lastPage}">
         <a href="?currentPage=${endPage + 1}&searchOption=${searchOption}&keyword=${searchQna}">[다음]</a>
