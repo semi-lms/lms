@@ -1,6 +1,5 @@
 package com.example.lms.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -42,4 +41,6 @@ public interface CourseService {
 	int updateTeacherCourseId(int teacherNo, int courseId);
 	
 	void unassignTeacherFromCourse(int teacherNo);
+	
+	void assignTeacherToCourse(int courseId, int teacherNo);
 }

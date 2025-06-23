@@ -38,7 +38,7 @@ public interface TeacherMapper {
 	int isCourseAssigned(@Param("courseId") int courseId);
 	
 	// 강사 수정 시 본인을 제외하고 해당 강의에 배정된 강사가 있는지 확인
-	boolean isCourseAssignedForUpdate(@Param("courseId") int courseId, 
+	int isCourseAssignedForUpdate(@Param("courseId") int courseId, 
 										@Param("teacherNo") int teacherNo);
 	
 	// 강의 상태별 강사 리스트

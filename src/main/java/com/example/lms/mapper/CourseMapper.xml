@@ -232,10 +232,17 @@
 		ORDER BY course_name ASC;
 	</select>
 	
-	<!-- 강사에서 강의 수정 시 강사-강의 연결 해제 -->
+	<!-- course.teacher_no 값을 NULL로 변겅 (강사 연결 해제) -->
 	<update id="unassignTeacher" parameterType="int">
 	    UPDATE course
 	    SET teacher_no = NULL
 	    WHERE teacher_no = #{teacherNo}
+	</update>
+	
+	<!-- course.teacher_no에 강사 번호 설정 (강사 연결) -->
+	<update id="assignTeacher" parameterType="map">
+	    UPDATE course
+	    SET teacher_no = #{teacherNo}
+	    WHERE course_id = #{courseId}
 	</update>
 </mapper>

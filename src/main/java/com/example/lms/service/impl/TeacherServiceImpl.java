@@ -47,7 +47,8 @@ public class TeacherServiceImpl implements TeacherService {
 
 	@Override
 	public boolean isCourseAssignedForUpdate(int courseId, int teacherNo) {
-		return teacherMapper.isCourseAssignedForUpdate(courseId, teacherNo);
+		int count = teacherMapper.isCourseAssignedForUpdate(courseId, teacherNo);
+		return count > 0;
 	}
 
 	@Override

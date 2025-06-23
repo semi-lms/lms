@@ -48,6 +48,10 @@ public interface CourseMapper {
 	int updateTeacherCourseId(@Param("teacherNo") int teacherNo,
             @Param("courseId") int courseId);
 	
-	// 특정 강사와 강의 연결 해제
+	// course 테이블에서 해당 강사의 연결 해제
 	void unassignTeacher(int teacherNo);
+	
+	// course 테이블에 강사 연결
+	void assignTeacher(@Param("courseId") int courseId,
+            @Param("teacherNo") int teacherNo);
 }

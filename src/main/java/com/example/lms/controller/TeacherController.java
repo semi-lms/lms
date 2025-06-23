@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,20 +139,26 @@ public class TeacherController {
 	public Map<String, Object> updateTeacher(@ModelAttribute TeacherDTO teacherDto) {
 		Map<String, Object> result = new HashMap<>();
 		
-		// 수정 시 본인을 제외한 중복 배정 검사
 		Integer courseId = teacherDto.getCourseId();
-		if (courseId != null && teacherDto.getCourseId() > 0 
-				&& teacherService.isCourseAssignedForUpdate(teacherDto.getCourseId(), teacherDto.getTeacherNo())) {
-			result.put("success", false);
-			result.put("message", "해당 강의에는 이미 다른 강사가 배정되어 있습니다.");
-			return result;
-		}
+		int teacherNo = teacherDto.getTeacherNo();
 		
+		// 수정 시 본인을 제외한 중복 배정 검사
+		if (courseId != null && courseId > 0 
+	            && teacherService.isCourseAssignedForUpdate(courseId, teacherNo)) {
+	        result.put("success", false);
+	        result.put("message", "해당 강의에는 이미 다른 강사가 배정되어 있습니다.");
+	        return result;
+	    }
+		
+		// 강사 테이블 수정
 		teacherService.updateTeacher(teacherDto);
 		
-		// 특정 강사와 강의 연결 해제
-		if (courseId == null || courseId == 0) {
-	        courseService.unassignTeacherFromCourse(teacherDto.getTeacherNo());
+	    if (courseId == null || courseId == 0) {
+	    	// 담당 강의 제거 시 course 테이블도 해제
+	        courseService.unassignTeacherFromCourse(teacherNo);
+	    } else {
+	    	// 강사에게 새로 강의가 배정되면 course 테이블도 갱신
+	        courseService.assignTeacherToCourse(courseId, teacherNo);
 	    }
 		
 		result.put("success", true);
