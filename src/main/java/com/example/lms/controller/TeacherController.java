@@ -569,7 +569,7 @@ public class TeacherController {
 		
 		// 공결 + 파일 존재 시 파일 저장
 	    if ("공결".equals(attendanceDto.getStatus()) && proofDoc != null && !proofDoc.isEmpty()) {
-	    	String uploadDir = "/C:/upload"; // 실제 서버 경로
+	    	String uploadDir = "/home/ubuntu/upload"; // 실제 서버 경로
 	    	String originalFileName = proofDoc.getOriginalFilename();
 	    	String newFileName = UUID.randomUUID().toString() + "_" + originalFileName;
 			
@@ -614,7 +614,7 @@ public class TeacherController {
 	        return;
 	    }
 
-	    File file = new File("/C:/upload", fileDto.getFilePath());
+	    File file = new File("/home/ubuntu/upload", fileDto.getFilePath());
 	    if (!file.exists()) {
 	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	        return;
@@ -638,7 +638,7 @@ public class TeacherController {
 	        return;
 	    }
 
-	    File file = new File("/C:/upload", fileDto.getFilePath());
+	    File file = new File("/home/ubuntu/upload", fileDto.getFilePath());
 	    if (!file.exists()) {
 	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	        return;
