@@ -37,6 +37,7 @@ body {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     margin-bottom: 15px;
     width: auto;
+    position: relative; /* 추가 */
 }
 
 .student-card input {
@@ -48,11 +49,23 @@ body {
     background: #eee;
 }
 .student-card input[name$=".address"] {
-    flex-grow: 1;
+    flex-grow: 0.8;
     min-width: 250px;
 }
+.student-card input[name$=".email"] {
+	flex-grow: 0.1;
+	min-width: 100px;
+}
+.student-card input[name$=".studentId"],
+.student-card input[name$=".password"] {
+    min-width: 100px;
+}
 .remove-row-btn {
-    margin-left: auto;
+    position: absolute;  /* 추가 */
+    right: 8px;          /* 추가 */
+    top: 50%;            /* 추가 */
+    transform: translateY(-50%); /* 추가 */
+    margin-left: 0;      /* auto 삭제 */
     background-color: transparent;
     border: 2px solid black;
     color: black;
@@ -63,8 +76,8 @@ body {
     line-height: 1;
     transition: background-color 0.3s, color 0.3s;
     height: 36px;
+    flex-shrink: 0;
 }
-
 .remove-row-btn:hover {
     background-color: black;
     color: white;
