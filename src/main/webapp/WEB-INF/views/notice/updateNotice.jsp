@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,6 +71,33 @@
       }
       return true;
     }
+    
+    function setupAutoClearRestore(id, originalValue) {
+        const input = document.getElementById(id);
+        let cleared = false;
+
+        input.addEventListener("focus", function () {
+          if (!cleared && input.value === originalValue) {
+            input.value = "";
+            cleared = true;
+          }
+        });
+
+        input.addEventListener("blur", function () {
+          if (input.value.trim() === "") {
+            input.value = originalValue;
+            cleared = false;
+          }
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", function () {
+        // 제목 필드에 동작 연결
+        setupAutoClearRestore("title", "${fn:escapeXml(notice.title)}");
+
+        // 내용 필드에 동작 연결 (textarea)
+        setupAutoClearRestore("content", "${fn:escapeXml(notice.content)}");
+      });
   </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,13 +38,13 @@
     <!-- 제목 -->
     <div class="form-group">
       <label for="title">제목</label>
-      <input type="text" id="title" name="title" value="${fileBoard.title}" class="form-control">
+      <input type="text" id="title" name="title" value="${fileBoard.title}" class="form-control" placeholder="제목을 입력해주세요.">
     </div>
 
     <!-- 내용 -->
 	<div class="form-group">
 	  <label for="content">내용</label>
-	  <textarea id="content" name="content" rows="10" cols="50">${fileBoard.content}</textarea>
+	  <textarea id="content" name="content" rows="10" cols="50" placeholder="내용을 입력해주세요.">${fileBoard.content}</textarea>
 	</div>
 	
 	<!-- 기존 첨부파일 -->
@@ -95,6 +96,33 @@
 	
 	  return true; // 정상 제출
 	}
+	
+	   function setupAutoClearRestore(id, originalValue) {
+	        const input = document.getElementById(id);
+	        let cleared = false;
+
+	        input.addEventListener("focus", function () {
+	          if (!cleared && input.value === originalValue) {
+	            input.value = "";
+	            cleared = true;
+	          }
+	        });
+
+	        input.addEventListener("blur", function () {
+	          if (input.value.trim() === "") {
+	            input.value = originalValue;
+	            cleared = false;
+	          }
+	        });
+	      }
+
+	      window.addEventListener("DOMContentLoaded", function () {
+	        // 제목 필드에 동작 연결
+	        setupAutoClearRestore("title", "${fn:escapeXml(fileBoard.title)}");
+
+	        // 내용 필드에 동작 연결 (textarea)
+	        setupAutoClearRestore("content", "${fn:escapeXml(fileBoard.content)}");
+	      });
 	</script>
 </body>
 </html>

@@ -194,6 +194,11 @@ button:hover, .btn-submit:hover, a.btn-submit:hover {
   margin-bottom: 20px;
 }
 
+.writer-admin {
+  color: red;
+  font-weight: bold;
+}
+
 /* 대댓글 내용 박스 */
 .reply-box {
   margin-left: 30px;

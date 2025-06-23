@@ -2,6 +2,7 @@
   max-width: 900px;
   margin: 20px auto;
   padding: 20px;
+   margin-left: 270px !important; /* 추가! 사이드바가 240px라면 여유 있게 260px */
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);

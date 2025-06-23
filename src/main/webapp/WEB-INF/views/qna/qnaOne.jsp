@@ -70,7 +70,20 @@
       <div class="qna-comment-wrapper">
       <div class="comment-row">
         <!--  작성자 -->
-        <p><strong>${comment.writerName}</strong> (${comment.writerRole}) <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></p>
+       <p>
+		  <strong>
+		    <c:choose>
+		      <c:when test="${comment.writerRole eq 'admin'}">
+		       <strong><span class="writer-admin">관리자</span></strong>
+		      </c:when>
+		      <c:otherwise>${comment.writerName}</c:otherwise>
+		    </c:choose>
+		  </strong>
+		       <c:if test="${comment.writerRole ne 'admin'}">
+			    (${comment.writerRole})
+			  </c:if>
+		  <fmt:formatDate value="${comment.createDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+		</p>
         
          <!-- 수정/삭제 -->
          <!-- 관리자는 모든 댓글 삭제 가능 -->
@@ -126,7 +139,18 @@
             <div class="reply-box">
               <!-- 작성자/날짜 + 수정/삭제 버튼을 flex로 나눔 -->
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div>↳ <strong>${reply.writerName}</strong> (${reply.writerRole}) <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" /></div>
+                     <div>
+				        ↳ <strong>
+				          <c:choose>
+				            <c:when test="${reply.writerRole eq 'admin'}">
+				             <strong><span class="writer-admin">관리자</span></strong>
+				            </c:when>
+				            <c:otherwise>${reply.writerName}</c:otherwise>
+				          </c:choose>
+				        </strong>
+				        <c:if test="${reply.writerRole ne 'admin'}">(${reply.writerRole})</c:if>
+				        <fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss" />
+				      </div>
                 
 				<c:choose>
 				 <%-- 본인이 작성한 대댓글인 경우: 수정/삭제 가능 --%>
