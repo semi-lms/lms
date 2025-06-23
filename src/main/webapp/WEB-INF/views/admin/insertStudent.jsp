@@ -51,21 +51,20 @@ body {
     flex-grow: 1;
     min-width: 250px;
 }
-
 .remove-row-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    margin-left: auto;
     background-color: transparent;
     border: 2px solid black;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
     cursor: pointer;
-    padding: 0 6px;
+    padding: 0 8px;
     border-radius: 4px;
     line-height: 1;
     transition: background-color 0.3s, color 0.3s;
+    height: 36px;
 }
+
 .remove-row-btn:hover {
     background-color: black;
     color: white;
@@ -150,7 +149,8 @@ $(function(){
         	    <input type="email" name="studentList[0].email" placeholder="이메일">
         	    <input type="text" name="studentList[0].studentId" placeholder="초기 아이디" readonly>
         	    <input type="text" name="studentList[0].password" placeholder="초기 비밀번호" readonly>
-        	    <button type="button" class="remove-row-btn" title="행 삭제">&times;</button>
+        	    <button type="button" class="remove-row-btn" title="행 삭제">✖</button>
+        	    
         	</div>
         `);
         $("#studentCardContainer").append(card);
