@@ -112,11 +112,27 @@ public class CourseController {
 	    return course.getCourseOne(courseId);
 	}
 
-	// 강의 수정
 	@PostMapping("/admin/updateCourse")
 	@ResponseBody
 	public String updateCourse(CourseDTO dto) {
-		course.updateCourse(dto);
+	    // 1. 기존 담당 강사 정보 가져오기 (수정 전)
+	    CourseDTO prev = course.getCourseOne(dto.getCourseId());
+
+	    // 2. course 테이블 수정
+	    course.updateCourse(dto);
+
+	    Integer prevTeacherNo = prev != null ? prev.getTeacherNo() : null;
+	    Integer newTeacherNo = dto.getTeacherNo();
+
+	    if (prevTeacherNo != null && !prevTeacherNo.equals(newTeacherNo)) {
+	        // 이전 강사에게 담당 강의 해제
+	        course.updateTeacherCourseId(prevTeacherNo, null);
+	    }
+	    if (newTeacherNo != null) {
+	        // 새 강사에게 담당 강의 설정
+	        course.updateTeacherCourseId(newTeacherNo, dto.getCourseId());
+	    }
+
 	    return "success";
 	}
 	

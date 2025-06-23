@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class TeacherDTO {
-	private int teacherNo;		 // teacher_no
+	private Integer teacherNo;		 // teacher_no
 	private Integer courseId;	 // course_id	
 	private String teacherId;	 // teacher_id
 	private String password;	 // password

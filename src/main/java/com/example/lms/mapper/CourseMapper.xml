@@ -20,38 +20,36 @@
     <result property="maxPerson" column="max_person"/>
 </resultMap>
 
-	<select id="selectCourseList"
-		resultType="com.example.lms.dto.CourseDTO" parameterType="map">
-		SELECT
+<select id="selectCourseList"
+	resultType="com.example.lms.dto.CourseDTO" parameterType="map">
+	SELECT
 		t.`name` AS teacherName,
 		c.course_name AS courseName,
 		cl.classroom as classroom,
 		c.course_id AS courseId,
 		CONCAT(c.start_date,' ~ ',c.end_date) AS startDate,
 		CONCAT(COUNT(ca.course_id),' / ',cl.max_person) AS applyPerson
-		FROM course c
-		INNER JOIN class cl ON c.class_no = cl.class_no
-		INNER JOIN teacher t ON c.teacher_no = t.teacher_no
-		LEFT JOIN course_apply ca ON c.course_id = ca.course_id
-		<where>
-			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
-				AND (t.name LIKE CONCAT('%', #{keyword}, '%')
-				OR
-				c.course_name LIKE CONCAT('%', #{keyword}, '%'))
-			</if>
-			<if
-				test="searchOption == 'teacherName' and keyword != null and keyword != '' ">
-				AND t.name LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-			<if
-				test="searchOption == 'courseName' and keyword != null and keyword != '' ">
-				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
-			</if>
-		</where>
-		GROUP BY c.course_id
-		ORDER BY c.end_date DESC
-    	LIMIT #{startRow}, #{rowPerPage}
-	</select>
+	FROM course c
+	INNER JOIN class cl ON c.class_no = cl.class_no
+	LEFT JOIN teacher t ON c.teacher_no = t.teacher_no
+	LEFT JOIN course_apply ca ON c.course_id = ca.course_id
+	<where>
+		<if test="searchOption == 'all' and keyword != null and keyword != '' ">
+			AND (t.name LIKE CONCAT('%', #{keyword}, '%')
+			OR
+			c.course_name LIKE CONCAT('%', #{keyword}, '%'))
+		</if>
+		<if test="searchOption == 'teacherName' and keyword != null and keyword != '' ">
+			AND t.name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="searchOption == 'courseName' and keyword != null and keyword != '' ">
+			AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+	</where>
+	GROUP BY c.course_id
+	ORDER BY c.end_date DESC
+	LIMIT #{startRow}, #{rowPerPage}
+</select>
 
 	<insert id="insertCourse" parameterType="com.example.lms.dto.CourseDTO"
         useGeneratedKeys="true" keyProperty="courseId">
@@ -67,11 +65,12 @@
     WHERE teacher_no = #{teacherNo}
 	</update>
 
-	<select id="selectTeacherList" parameterType="map">
-		select teacher_no AS teacherNo,
-		name
-		from teacher
-	</select>
+<select id="selectTeacherList" parameterType="map">
+    select teacher_no AS teacherNo,
+           name,
+           course_id AS courseId   <!-- 이 부분 꼭 추가 -->
+    from teacher
+</select>
 
 	<select id="selectClassList" parameterType="map" resultMap="classMap">
 		SELECT cl.class_no, cl.classroom, cl.max_person
@@ -105,7 +104,7 @@
 		SELECT COUNT(*)
 		FROM course c
 		INNER JOIN class cl ON c.class_no = cl.class_no
-    	INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+    	LEFT JOIN teacher t ON c.teacher_no = t.teacher_no
 		<where>
 			<if test="searchOption == 'all' and keyword != null and keyword != '' ">
 				AND (t.name LIKE CONCAT('%', #{keyword}, '%')
@@ -198,7 +197,7 @@
 	        cl.classroom AS classroom,
 	        cl.max_person AS max_person
 	    FROM course c 
-	    INNER JOIN teacher t ON c.teacher_no = t.teacher_no
+	    LEFT JOIN teacher t ON c.teacher_no = t.teacher_no
 	    INNER JOIN class cl ON c.class_no = cl.class_no
 	    WHERE c.course_id = #{courseId}
 	</select>

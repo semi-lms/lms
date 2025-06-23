@@ -99,9 +99,10 @@ public class CourseServiceImpl implements CourseService{
 	public List<CourseDTO> getCourseNameNotEnded() {
 		return courseMapper.getCourseNameNotEnded();
 	}
+	
 	@Transactional
     @Override
-    public int updateTeacherCourseId(int teacherNo, int courseId) {
+    public int updateTeacherCourseId(int teacherNo, Integer courseId) {
         
 		return courseMapper.updateTeacherCourseId(teacherNo, courseId);
     }

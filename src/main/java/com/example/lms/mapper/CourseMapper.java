@@ -46,7 +46,7 @@ public interface CourseMapper {
 	List<CourseDTO> getCourseNameNotEnded();
 	
 	int updateTeacherCourseId(@Param("teacherNo") int teacherNo,
-            @Param("courseId") int courseId);
+            @Param("courseId") Integer courseId);
 	
 	// course 테이블에서 해당 강사의 연결 해제
 	void unassignTeacher(int teacherNo);
