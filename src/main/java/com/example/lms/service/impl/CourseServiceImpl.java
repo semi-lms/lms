@@ -1,11 +1,11 @@
 package com.example.lms.service.impl;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.lms.dto.ClassDTO;
 import com.example.lms.dto.CourseDTO;
@@ -24,7 +24,7 @@ public class CourseServiceImpl implements CourseService{
 		
 		return courseMapper.selectCourseList(param);
 	}
-	
+	@Transactional
 	@Override
 	public int insertCourse(CourseDTO courseDto) {
 		
@@ -99,4 +99,10 @@ public class CourseServiceImpl implements CourseService{
 	public List<CourseDTO> getCourseNameNotEnded() {
 		return courseMapper.getCourseNameNotEnded();
 	}
+	@Transactional
+    @Override
+    public int updateTeacherCourseId(int teacherNo, int courseId) {
+        
+		return courseMapper.updateTeacherCourseId(teacherNo, courseId);
+    }
 }

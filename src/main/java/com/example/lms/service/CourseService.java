@@ -38,4 +38,6 @@ public interface CourseService {
 	int getOverlapCount(int classNo, String startDate, String endDate);
 	
 	List<CourseDTO> getCourseNameNotEnded();
+	
+	int updateTeacherCourseId(int teacherNo, int courseId);
 }

@@ -90,7 +90,18 @@ public class CourseController {
 	    if (overlapCount > 0) {
 	        return "overlap";
 	    }
+
 	    course.insertCourse(courseDto);
+
+	    int courseId = courseDto.getCourseId();
+	    int teacherNo = courseDto.getTeacherNo();
+
+	    System.out.println("👉 등록된 courseId: " + courseId);
+	    System.out.println("👉 등록 대상 teacherNo: " + teacherNo);
+
+	    int result = course.updateTeacherCourseId(teacherNo, courseId);
+	    System.out.println("👉 teacher 테이블 업데이트 결과: " + result); // 1이면 정상, 0이면 실패
+
 	    return "success";
 	}
 	

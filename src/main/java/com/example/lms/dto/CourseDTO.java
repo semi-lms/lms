@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class CourseDTO {
-	private int courseId;
+	private Integer courseId;
 	private String courseName;
 	private String description;
 	private int classNo;

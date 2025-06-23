@@ -53,14 +53,19 @@
     	LIMIT #{startRow}, #{rowPerPage}
 	</select>
 
-	<insert id="insertCourse">
-		INSERT INTO course
-		(course_name, description,class_no
-		,start_date, end_date, teacher_no)
-		VALUES
-		(#{courseName}, #{description}, #{classNo}
-		, #{startDate}, #{endDate}, #{teacherNo})
+	<insert id="insertCourse" parameterType="com.example.lms.dto.CourseDTO"
+        useGeneratedKeys="true" keyProperty="courseId">
+	    INSERT INTO course
+	    (course_name, description, class_no, start_date, end_date, teacher_no)
+	    VALUES
+	    (#{courseName}, #{description}, #{classNo}, #{startDate}, #{endDate}, #{teacherNo})
 	</insert>
+	
+	<update id="updateTeacherCourseId">
+    UPDATE teacher
+    SET course_id = #{courseId}
+    WHERE teacher_no = #{teacherNo}
+	</update>
 
 	<select id="selectTeacherList" parameterType="map">
 		select teacher_no AS teacherNo,

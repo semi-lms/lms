@@ -44,4 +44,7 @@ public interface CourseMapper {
 	
 	// 강사 등록 시 선택할 강의명 조회
 	List<CourseDTO> getCourseNameNotEnded();
+	
+	int updateTeacherCourseId(@Param("teacherNo") int teacherNo,
+            @Param("courseId") int courseId);
 }
