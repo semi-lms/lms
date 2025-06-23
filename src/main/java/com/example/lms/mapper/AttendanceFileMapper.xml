@@ -7,8 +7,8 @@
 	</delete>
 	<!-- 등록 -->
 	<insert id="insertAttendanceFile" parameterType="com.example.lms.dto.AttendanceFileDTO">
-		INSERT INTO attendance_file (teacher_no, attendance_no, file_name, base64_data)
-		VALUES (#{teacherNo}, #{attendanceNo}, #{fileName}, #{base64Data})
+		INSERT INTO attendance_file (teacher_no, attendance_no, file_name, file_path)
+		VALUES (#{teacherNo}, #{attendanceNo}, #{fileName}, #{filePath})
 	</insert>
 		
 	<select id="getAttendanceFileByCourse" parameterType="int" resultType="com.example.lms.dto.AttendanceFileDTO">
@@ -17,7 +17,7 @@
 			f.teacher_no teacherNo,
 			f.attendance_no attendanceNo,
 			f.file_name fileName,
-			f.base64_data base64Data,
+			f.file_path filePath,
 			f.upload_date uploadDate,
 			a.student_no studentNo,
 			a.date
@@ -28,7 +28,7 @@
 	
 	<!-- 미리보기/다운로드용 파일 아이디로 정보조회 -->
 	<select id="getFileById" parameterType="int" resultType="com.example.lms.dto.AttendanceFileDTO">
-		SELECT file_id fileId, teacher_no teacherNo, attendance_no attendanceNo, file_name fileName, base64_data base64Data, upload_date uploadDate
+		SELECT file_id fileId, teacher_no teacherNo, attendance_no attendanceNo, file_name fileName, file_path filePath, upload_date uploadDate
 		FROM attendance_file
 		WHERE file_id = #{fileId}
 	</select>

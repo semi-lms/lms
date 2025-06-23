@@ -10,7 +10,7 @@ public class AttendanceFileDTO {
 	private int teacherNo;
 	private int attendanceNo;
 	private String fileName;
-	private String base64Data;
+	private String filePath;
 	private String uploadDate;
 	
 	// 조회 시에만 사용

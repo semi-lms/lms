@@ -1,8 +1,10 @@
 package com.example.lms.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +13,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -560,17 +563,27 @@ public class TeacherController {
 		
 		// 공결 + 파일 존재 시 파일 저장
 	    if ("공결".equals(attendanceDto.getStatus()) && proofDoc != null && !proofDoc.isEmpty()) {
-			AttendanceFileDTO fileDto = new AttendanceFileDTO();
-			fileDto.setAttendanceNo(attendanceService.getAttendanceNo(attendanceDto)); // DB insert 시 생성된 값 필요할 경우 서비스에서 리턴받기
-			fileDto.setTeacherNo(loginUser.getTeacherNo()); // 로그인 정보 기반
-			fileDto.setFileName(proofDoc.getOriginalFilename());
-			fileDto.setUploadDate(LocalDate.now().toString());
+	    	String uploadDir = "/C:/upload"; // 실제 서버 경로
+	    	String originalFileName = proofDoc.getOriginalFilename();
+	    	String newFileName = UUID.randomUUID().toString() + "_" + originalFileName;
 			
-			// base64 인코딩 처리
-			String base64 = Base64.getEncoder().encodeToString(proofDoc.getBytes());
-			fileDto.setBase64Data(base64);
-			
-			attendanceFileService.saveProofFile(fileDto);
+	    	// 디렉터리 없으면 생성
+	    	File dir = new File(uploadDir);
+	    	if (!dir.exists()) dir.mkdirs();
+
+	    	// 파일 저장
+	    	File dest = new File(dir, newFileName);
+	    	proofDoc.transferTo(dest);
+
+	    	// DTO 저장
+	    	AttendanceFileDTO fileDto = new AttendanceFileDTO();
+	    	fileDto.setAttendanceNo(attendanceService.getAttendanceNo(attendanceDto));
+	    	fileDto.setTeacherNo(loginUser.getTeacherNo());
+	    	fileDto.setFileName(originalFileName);
+	    	fileDto.setFilePath(newFileName); // 실제 파일명만 저장
+	    	fileDto.setUploadDate(LocalDate.now().toString());
+
+	    	attendanceFileService.saveProofFile(fileDto);
 	    }
 		int courseId = attendanceDto.getCourseId();
 		return "redirect:/attendanceList?courseId="+courseId;
@@ -590,19 +603,22 @@ public class TeacherController {
 	public void previewFile(@RequestParam("fileId") int fileId, HttpServletResponse response) throws IOException {
 	    AttendanceFileDTO fileDto = attendanceFileService.getFileById(fileId);
 	    
-	    if (fileDto == null || fileDto.getBase64Data() == null) {
+	    if (fileDto == null || fileDto.getFilePath() == null) {
 	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	        return;
 	    }
 
-	    String fileName = fileDto.getFileName();
-	    String contentType = URLConnection.guessContentTypeFromName(fileName); // 예: image/jpeg, application/pdf
+	    File file = new File("/C:/upload", fileDto.getFilePath());
+	    if (!file.exists()) {
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
 
-	    byte[] fileBytes = Base64.getDecoder().decode(fileDto.getBase64Data());
-
+	    String contentType = URLConnection.guessContentTypeFromName(fileDto.getFileName());
 	    response.setContentType(contentType != null ? contentType : "application/octet-stream");
-	    response.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(fileName, "UTF-8") + "\"");
-	    response.getOutputStream().write(fileBytes);
+	    response.setHeader("Content-Disposition", "inline; filename=\"" + URLEncoder.encode(fileDto.getFileName(), "UTF-8") + "\"");
+
+	    Files.copy(file.toPath(), response.getOutputStream());
 	    response.getOutputStream().flush();
 	}
 	
@@ -611,20 +627,22 @@ public class TeacherController {
 	public void downloadFile(@RequestParam("fileId") int fileId, HttpServletResponse response) throws IOException {
 	    AttendanceFileDTO fileDto = attendanceFileService.getFileById(fileId);
 	    
-	    if (fileDto == null || fileDto.getBase64Data() == null) {
+	    if (fileDto == null || fileDto.getFilePath() == null) {
 	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	        return;
 	    }
 
-	    // 파일 이름 인코딩
-	    String fileName = URLEncoder.encode(fileDto.getFileName(), "UTF-8").replaceAll("\\+", "%20");
+	    File file = new File("/C:/upload", fileDto.getFilePath());
+	    if (!file.exists()) {
+	        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	        return;
+	    }
 
-	    // Base64 → byte[]
-	    byte[] fileBytes = Base64.getDecoder().decode(fileDto.getBase64Data());
-
+	    String encodedFileName = URLEncoder.encode(fileDto.getFileName(), "UTF-8").replaceAll("\\+", "%20");
 	    response.setContentType("application/octet-stream");
-	    response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-	    response.getOutputStream().write(fileBytes);
+	    response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
+
+	    Files.copy(file.toPath(), response.getOutputStream());
 	    response.getOutputStream().flush();
 	}
 	
