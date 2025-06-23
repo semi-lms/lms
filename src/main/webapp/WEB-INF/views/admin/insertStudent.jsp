@@ -47,6 +47,11 @@ body {
 .student-card input[readonly] {
     background: #eee;
 }
+.student-card input[name$=".address"] {
+    flex-grow: 1;
+    min-width: 250px;
+}
+
 .remove-row-btn {
     position: absolute;
     top: 10px;
