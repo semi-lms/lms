@@ -7,18 +7,121 @@
 <title>강의 등록</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fafbfc;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+    color: #2c3e50;
+}
+
+table {
+  width: 100%;
+  max-width: 700px;
+  border-collapse: separate; /* 각 셀 간 간격 주기 위해 */
+  border-spacing: 0 12px; /* 행 사이 여백 */
+  margin-bottom: 32px;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+th, td {
+  padding: 14px 18px;
+  vertical-align: middle;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+th {
+  width: 160px;
+  background-color: #e9ecef;
+  color: #495057;
+  font-weight: 600;
+  text-align: left;
+  box-shadow: none; /* 헤더는 그림자 제거해서 더 깔끔하게 */
+  border-radius: 8px 0 0 8px;
+}
+
+td {
+  border-radius: 0 8px 8px 0;
+}
+
+tr {
+  /* 행 전체의 배경은 흰색이고, 아래 여백은 border-spacing으로 처리 */
+}
+
+tbody tr:hover td {
+  background-color: #f1f3f5;
+  transition: background-color 0.3s ease;
+}
+
+input[type="text"], input[type="date"], select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="date"]:focus, select:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+}
+
+input[readonly] {
+    background-color: #f4f6f8;
+    color: #777;
+    cursor: not-allowed;
+}
+
+button#insertBtn {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    user-select: none;
+}
+
+button#insertBtn:hover {
+    background-color: #2980b9;
+}
+
 .container {
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: #2c3e50;
+    min-height: 100vh;
 }
 
 .main-content {
-	flex: 1;
-	padding: 32px 24px 24px 300px;
-	overflow-x: auto;
-	background: #fafbfc;
+    flex: 1;
+    padding: 32px 24px 24px 32px;
+    overflow-x: auto;
+    background: #fafbfc;
+    margin-left: 280px;
 }
+
 </style>
 </head>
 <body>
