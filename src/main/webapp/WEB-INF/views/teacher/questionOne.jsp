@@ -4,17 +4,113 @@
 <html>
 <head>
 	<title>문제 상세</title>
-	<style>
-		.container { max-width: 800px; margin: 0 auto; padding: 20px; font-family: Segoe UI, sans-serif; }
-		.option { margin-left: 20px; }
-		.view-mode, .edit-mode { margin-top: 20px; }
-		.edit-mode { display: none; }
-		label { display: block; margin-top: 10px; }
-		input[type="text"], textarea { width: 100%; padding: 6px; margin-top: 4px; }
-	</style>
+		<style>
+	body {
+		background-color: #f4f6f8;
+		margin: 0;
+		padding: 0;
+		font-family: 'Segoe UI', sans-serif;
+	}
+
+	.container {
+		max-width: 800px;
+		margin: 40px auto;
+		padding: 30px;
+		background-color: #fff;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		border-radius: 8px;
+	}
+
+	h2 {
+		margin-top: 0;
+		color: #333;
+	}
+
+	h3, h4 {
+		color: #444;
+	}
+
+	p {
+		line-height: 1.6;
+		color: #555;
+	}
+
+	.option {
+		margin-left: 20px;
+		padding: 6px 0;
+	}
+
+	.view-mode, .edit-mode {
+		margin-top: 20px;
+	}
+
+	.edit-mode {
+		display: none;
+	}
+
+	label {
+		display: block;
+		margin-top: 15px;
+		font-weight: 600;
+		color: #333;
+	}
+
+	input[type="text"],
+	input[type="number"],
+	textarea {
+		width: 100%;
+		padding: 10px;
+		margin-top: 5px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		font-size: 15px;
+		box-sizing: border-box;
+		transition: border-color 0.3s ease;
+	}
+
+	input:focus,
+	textarea:focus {
+		border-color: #4a90e2;
+		outline: none;
+	}
+
+	button {
+		margin-top: 20px;
+		margin-right: 10px;
+		padding: 10px 20px;
+		background-color: #4a90e2;
+		color: white;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 14px;
+		transition: background-color 0.3s ease;
+	}
+
+	button:hover {
+		background-color: #357ab8;
+	}
+
+	button[type="button"] {
+		background-color: #aaa;
+	}
+
+	button[type="button"]:hover {
+		background-color: #888;
+	}
+
+	.sidebar {
+		margin-bottom: 20px;
+	}
+</style>
+
+	
 </head>
 <body>
 <div class="container">
+	<div class="sidebar">
+			<jsp:include page="/WEB-INF/views/common/sideBar/teacherSideBar.jsp" />
+		</div>
 	<h2>문제 ${question.questionNo}번</h2>
 
 	<!-- 👁 보기 모드 -->
