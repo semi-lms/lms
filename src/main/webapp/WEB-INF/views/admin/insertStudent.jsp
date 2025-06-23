@@ -5,276 +5,231 @@
 <head>
 <meta charset="UTF-8">
 <title>학생 등록 페이지</title>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
 body {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
-
 .container {
-	display: flex;
-	width: 100%;
+    display: flex;
+}
+.sidebar {
+    width: 250px;
+    background: #333;
+    color: #fff;
+    min-height: 100vh;
+}
+.main {
+    flex: 1;
+    padding: 40px;
+    margin-left: 300px;
 }
 
-
-.chart-container {
-	margin-top: 32px;
+.student-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    width: 70%;
 }
-
-.main-content {
-	flex: 1;
-	background: #fff;
-	padding: 40px 40px 40px 300px;
-}
-
 .remove-row-btn {
-	background: none;
-	border: none;
-	color: #f44336;
-	font-size: 20px;
-	cursor: pointer;
-	padding: 0 8px;
-	line-height: 1;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;  /* 배경 투명 */
+    border: 2px solid black;         /* 검정 테두리 */
+    color: black;                    /* 글자 검정 */
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 6px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .remove-row-btn:hover {
-	color: #b71c1c;
+    background-color: black;         /* hover 시 검정 배경 */
+    color: white;                    /* hover 시 글자 흰색 */
+    border-color: black;
 }
+.student-card input {
+    width: calc(50% - 10px);
+    margin: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.student-card input[readonly] {
+    background: #eee;
+}
+.btn-area {
+    margin: 20px 0;
+}
+#insertRowBtn, button[type="submit"] {
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#insertRowBtn:hover, button[type="submit"]:hover {
+    background-color: black;
+    color: white;
+    border-color: black;
+}
+
 </style>
 </head>
 <body>
-	<div class="container">
-		<div class="sidebar">
-			<jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp" />
-		</div>
-		<div class="main-content">
-			<h1>학생 등록 페이지</h1>
-			<form action="/admin/insertStudent" method="post" onsubmit="return validateForm()">
-				<select name="courseId" required>
-					<!-- 등록된 강의 선택 -->
-					<option value="">강의 선택</option>
-					<c:forEach var="course" items="${course}">
-						<option value="${course.courseId}">${course.courseName}</option>
-					</c:forEach>
-				</select>
-				<table border="1" id="studentTable">
-					<thead>
-						<tr>
-							<th></th>
-							<th>이름</th>
-							<th>전화번호</th>
-							<th>주민번호</th>
-							<th>주소</th>
-							<th>이메일</th>
-							<th>초기 아이디</th>
-							<th>초기 비밀번호</th>
-						</tr>
-					</thead>
-					<tbody id="studentTableBody">
-						<%
-                			for(int i=0; i<5; i++){	
-                		%>
-							<tr>
-								<td></td>
-								<td><input type="text" name="studentList[<%=i%>].name"></td>
-								<td><input type="text" name="studentList[<%=i%>].phone" class="phone-input"></td>
-								<td><input type="text" name="studentList[<%=i%>].sn"></td>
-								<td><input type="text" name="studentList[<%=i%>].address"></td>
-								<td><input type="email" name="studentList[<%=i%>].email"></td>
-								<td><input type="text" name="studentList[<%=i%>].studentId"	readonly></td>
-								<td><input type="text" name="studentList[<%=i%>].password" readonly></td>
-							</tr>
-						<%					
-			               	}
-						%>
-					</tbody>
-				</table>
-				<button type="button" id="insertRowBtn">행 추가</button>
-				<button type="submit">➕ 등록</button>
-			</form>
-		</div>
-	</div>
+<div class="container">
+    <div class="sidebar">
+        <jsp:include page="/WEB-INF/views/common/sideBar/adminSideBar.jsp"/>
+    </div>
+    <div class="main">
+        <h1>학생 등록 페이지</h1>
+        <form action="/admin/insertStudent" method="post" onsubmit="return validateForm()">
+            <select name="courseId" required>
+                <option value="">강의 선택</option>
+                <c:forEach var="course" items="${course}">
+                    <option value="${course.courseId}">${course.courseName}</option>
+                </c:forEach>
+            </select>
+          
+<div id="studentCardContainer">
+    <div class="student-card" data-index="0">
+        <input type="text" name="studentList[0].name" placeholder="이름">
+        <input type="text" name="studentList[0].phone" placeholder="전화번호" class="phone-input">
+        <input type="text" name="studentList[0].sn" placeholder="주민번호">
+        <input type="text" name="studentList[0].address" placeholder="주소">
+        <input type="email" name="studentList[0].email" placeholder="이메일">
+        <input type="text" name="studentList[0].studentId" placeholder="초기 아이디" readonly>
+        <input type="text" name="studentList[0].password" placeholder="초기 비밀번호" readonly>
+    </div>
+</div>
+            <div class="btn-area">
+                <button type="button" id="insertRowBtn">행 추가</button>
+                <button type="submit">➕ 등록</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-	let rowIdx = 5;
+let rowIdx = 1;
 
-	// 아이디 6자리로 랜덤하게 부여
-	function randomId(length = 6) {
-	    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-	    let result = "";
-	    for (let i = 0; i < length; i++) {
-	        result += chars.charAt(Math.floor(Math.random() * chars.length));
-	    }
-	    return result;
-	}
-	
-	$(function () {
-	    // 행 추가 버튼 클릭하면 1행씩 추가
-		$("#insertRowBtn").click(function () {
-		    let html = `
-		        <tr>
-		            <td><button type="button" class="remove-row-btn" title="행 삭제">&times;</button></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].name"></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].phone" class="phone-input"></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].sn"></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].address"></td>
-		            <td><input type="email" name="studentList[\${rowIdx}].email"></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].studentId" readonly></td>
-		            <td><input type="text" name="studentList[\${rowIdx}].password" readonly></td>
-		        </tr>
-		    `;
-		    $("#studentTableBody").append(html);
-		    rowIdx++;
-		});
-	
-	    // 행 삭제
-	    $("#studentTableBody").on("click", ".remove-row-btn", function () {
-	        $(this).closest("tr").remove();
-	    });
-	
-	    // 전화번호 입력 시 자동 ID/비밀번호 세팅
-	    $("#studentTableBody").on("input", ".phone-input", function () {
-	        // 1. 자동 하이픈
-	        let value = $(this).val().replace(/[^0-9]/g, "");
-	        let result = "";
+function randomId(length = 6) {
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
 
-	        if (value.length < 4) {
-	            result = value;
-	        } else if (value.length < 8) {
-	            result = value.substr(0, 3) + "-" + value.substr(3);
-	        } else if (value.length <= 11) {
-	            result = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7);
-	        } else {
-	            result = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7, 4);
-	        }
-	        $(this).val(result);
-	    	
-	        const $row = $(this).closest("tr");
-	        const phone = this.value.replace(/[^0-9]/g, "");
-	        if (phone.length >= 4) {
-				// 휴대폰 번호 뒤 4자리를 비밀번호로 설정
-	            let pw = phone.slice(-4);
-	            $row.find("input[name$='.password']").val(pw);
-	            $row.find("input[name$='.studentId']").val(randomId(6));
-	        } else {
-	            $row.find("input[name$='.password']").val('');
-	            $row.find("input[name$='.studentId']").val('');
-	        }
-	    });
-	});
-	$("#studentTableBody").on("input", "input[name$='.sn']", function() {
-	    let value = $(this).val().replace(/[^0-9]/g, "");
-	    let result = "";
+$(function(){
+    $("#insertRowBtn").click(function(){
+        const idx = rowIdx++;
+        const card = $(`
+            <div class="student-card" data-index="${idx}">
+                <button type="button" class="remove-row-btn" title="행 삭제">&times;</button>
+                <input type="text" name="studentList[${idx}].name" placeholder="이름">
+                <input type="text" name="studentList[${idx}].phone" placeholder="전화번호" class="phone-input">
+                <input type="text" name="studentList[${idx}].sn" placeholder="주민번호">
+                <input type="text" name="studentList[${idx}].address" placeholder="주소">
+                <input type="email" name="studentList[${idx}].email" placeholder="이메일">
+                <input type="text" name="studentList[${idx}].studentId" placeholder="초기 아이디" readonly>
+                <input type="text" name="studentList[${idx}].password" placeholder="초기 비밀번호" readonly>
+            </div>
+        `);
+        $("#studentCardContainer").append(card);
+    });
 
-	    if (value.length <= 6) {
-	        result = value;
-	    } else if (value.length <= 13) {
-	        result = value.substr(0, 6) + "-" + value.substr(6);
-	    } else {
-	        result = value.substr(0, 6) + "-" + value.substr(6, 7);
-	    }
-	    $(this).val(result);
-	});
-	
-	
-	function validateForm() {
-	    let isAnyRowInvalid = false;
-	    let hasAtLeastOneRow = false;
+    $("#studentCardContainer").on("click", ".remove-row-btn", function(){
+        $(this).closest(".student-card").remove();
+    });
 
-	    $("#studentTableBody tr").each(function (index) {
-	        const $inputs = $(this).find("input[type='text']:not([readonly]), input[type='email']");
-	        let rowHasValue = false;
-	        let rowIsValid = true;
+    $("#studentCardContainer").on("input", ".phone-input", function(){
+        let v = $(this).val().replace(/[^0-9]/g,"");
+        let formatted = v;
+        if(v.length<4) formatted=v;
+        else if(v.length<8) formatted = v.substr(0,3)+"-"+v.substr(3);
+        else if(v.length<=11) formatted = v.substr(0,3)+"-"+v.substr(3,4)+"-"+v.substr(7);
+        else formatted = v.substr(0,3)+"-"+v.substr(3,4)+"-"+v.substr(7,4);
+        $(this).val(formatted);
 
-	        $inputs.each(function () {
-	            const val = $(this).val().trim();
-	            if (!val) {
-	                rowIsValid = false;
-	                $(this).css("border", "2px solid red");
-	            } else {
-	                rowHasValue = true;
-	                $(this).css("border", "");
-	            }
-	        });
+        const row = $(this).closest(".student-card");
+        const num = v;
+        if(num.length >= 4){
+            row.find("input[name$='.password']").val(num.slice(-4));
+            row.find("input[name$='.studentId']").val(randomId());
+        } else {
+            row.find("input[name$='.password']").val("");
+            row.find("input[name$='.studentId']").val("");
+        }
+    });
 
-	        // 이메일 형식 검사 추가
-	        const $emailInput = $(this).find("input[type='email']");
-	        if ($emailInput.length && $emailInput.val().trim()) {
-	            var email = $emailInput.val().trim();
-	            var emailReg = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-	            if (!emailReg.test(email)) {
-	                rowIsValid = false;
-	                $emailInput.css("border", "2px solid red");
-	                alert("이메일 형식이 올바르지 않습니다.");
-	            }
-	        }
+    $("#studentCardContainer").on("input", "input[name$='.sn']", function(){
+        let v = $(this).val().replace(/[^0-9]/g,"");
+        if(v.length<=6) $(this).val(v);
+        else if(v.length<=13) $(this).val(v.substr(0,6)+"-"+v.substr(6));
+        else $(this).val(v.substr(0,6)+"-"+v.substr(6,7));
+    });
+});
 
-	        // 전화번호 형식 검사 추가 (예: 01012345678 또는 010-1234-5678)
-	        const $phoneInput = $(this).find("input[name$='.phone']");
-	        if ($phoneInput.length && $phoneInput.val().trim()) {
-	            var phone = $phoneInput.val().replace(/-/g, "");
-	            var phoneReg = /^01[016789][0-9]{7,8}$/;
-	            if (!phoneReg.test(phone)) {
-	                rowIsValid = false;
-	                $phoneInput.css("border", "2px solid red");
-	                alert("전화번호 형식이 올바르지 않습니다.");
-	            }
-	        }
-
-	        // 주민번호 형식 검사 추가 (예: 6자리-7자리)
-	        const $snInput = $(this).find("input[name$='.sn']");
-	        if ($snInput.length && $snInput.val().trim()) {
-	            var sn = $snInput.val().trim();
-	            var snReg = /^[0-9]{6}-?[0-9]{7}$/;
-	            if (!snReg.test(sn)) {
-	                rowIsValid = false;
-	                $snInput.css("border", "2px solid red");
-	                alert("주민번호 형식이 올바르지 않습니다.");
-	            }
-	        }
-
-	        if (rowHasValue && rowIsValid) {
-	            hasAtLeastOneRow = true;
-	        }
-	        if (rowHasValue && !rowIsValid) {
-	            isAnyRowInvalid = true;
-	        }
-	    });
-
-	    if (isAnyRowInvalid) {
-	        // 이미 alert로 안내했으므로 추가 alert 생략
-	        return false;
-	    }
-
-	    if (!hasAtLeastOneRow) {
-	        alert("최소 1명의 학생 정보를 모두 입력하세요.");
-	        return false;
-	    }
-
-	    // ... (이하 기존 코드 동일)
-	    // 모든 칸이 비어있는 row는 name 속성 제거 (Spring에서 무시됨)
-	    $("#studentTableBody tr").each(function () {
-	        let allEmpty = true;
-	        $(this).find("input[type='text']:not([readonly]), input[type='email']").each(function () {
-	            if ($(this).val().trim()) {
-	                allEmpty = false;
-	            }
-	        });
-	        if (allEmpty) {
-	            $(this).find("input").removeAttr("name");
-	        }
-	    });
-	    
-	    $("#studentTableBody tr").each(function () {
-	        $(this).find("input").each(function () {
-	            var name = $(this).attr("name");
-	            if (name && name.match(/studentList\[\]/)) {
-	                $(this).removeAttr("name");
-	            }
-	        });
-	    });
-	    return true;
-	}
+function validateForm(){
+    let valid = true, anyFilled=false;
+    $(".student-card").each(function(){
+        const inputs = $(this).find("input[type=text]:not([readonly]), input[type=email]");
+        let filled=false;
+        inputs.each(function(){
+            const val = $(this).val().trim();
+            if(val) filled=true;
+        });
+        if(!filled) {
+            inputs.removeAttr("name");
+            return;
+        }
+        anyFilled=true;
+        inputs.each(function(){
+            const $this = $(this);
+            const val = $this.val().trim();
+            if(!val){
+                valid=false;
+                $this.css("border","2px solid red");
+            } else {
+                $this.css("border","");
+            }
+        });
+        const email = $(this).find("input[type=email]").val().trim();
+        if(email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){
+            alert("이메일 형식이 올바르지 않습니다.");
+            valid=false;
+        }
+        const phone = $(this).find(".phone-input").val().replace(/-/g,"");
+        if(phone && !/^01[016789][0-9]{7,8}$/.test(phone)){
+            alert("전화번호 형식이 올바르지 않습니다.");
+            valid=false;
+        }
+        const sn = $(this).find("input[name$='.sn']").val().trim();
+        if(sn && !/^[0-9]{6}-?[0-9]{7}$/.test(sn)){
+            alert("주민번호 형식이 올바르지 않습니다.");
+            valid=false;
+        }
+    });
+    if(!anyFilled){
+        alert("최소 1명의 학생 정보를 모두 입력하세요.");
+        return false;
+    }
+    return valid;
+}
 </script>
 </body>
 </html>

@@ -83,6 +83,6 @@
     width: 50px !important;
     height: 50px !important;
     pointer-events: none !important;
-    z-index: 9999 !important;
+    z-index: 2147483647 !important; 
     transition: transform 0.1s ease !important;
 }
