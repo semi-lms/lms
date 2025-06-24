@@ -80,4 +80,7 @@ public interface ExamService {
 	
 	// 문제 삭제
 	void deleteExamQuestionOption(int examId);
+	
+	// 시험ID가져오기
+	int getExamIdByQuestionId(int questionId);
 }

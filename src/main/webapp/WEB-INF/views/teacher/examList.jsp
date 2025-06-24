@@ -299,13 +299,15 @@ a:hover {
 		}
 	
 		function validateEditForm(form) {
-			const start = form.querySelector("[name='examStartDate']").value;
-			const end = form.querySelector("[name='examEndDate']").value;
-			if (start > end) {
-				alert("시작일은 종료일보다 빠르거나 같아야 합니다.");
-				return false;
+			const startDate = new Date(form.examStartDate.value);
+			const endDate = new Date(form.examEndDate.value);
+			
+			if (startDate > endDate) {
+				alert("시험 시작일은 종료일보다 빠르거나 같아야 합니다.");
+				return false; // 폼 제출 막기
 			}
-			return true;
+			
+			return true; // 유효하면 제출 허용
 		}
 	</script>
 </body>

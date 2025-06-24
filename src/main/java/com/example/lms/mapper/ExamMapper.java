@@ -94,4 +94,7 @@ public interface ExamMapper {
     void deleteExamOptionByExamId(int examId);
     void deleteExamQuestionByExamId(int examId);
     void deleteExamByExamId(int examId);
+    
+    // 시험 ID 가져오기
+    int getExamIdByQuestionId(int questionId);
 }

@@ -253,7 +253,7 @@ public class TeacherController {
 	
 	// 학생 리스트
 	@GetMapping("/studentListFromTeacher")
-	public String studentListFromTeacher(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
+	public String studentListFromTeacher(@RequestParam(name = "courseId", required = false) int courseId
 										, @RequestParam(defaultValue = "1") int currentPage
 										, @RequestParam(defaultValue = "10") int rowPerPage
 										, Model model) {
@@ -294,7 +294,7 @@ public class TeacherController {
 	
 	// 성적 리스트
 	@GetMapping("/scoreList")
-	public String scoreList(@RequestParam(name = "examId", required = false, defaultValue = "1") int examId
+	public String scoreList(@RequestParam(name = "examId", required = false) int examId
 							, @RequestParam(defaultValue = "1") int currentPage
 							, @RequestParam(defaultValue = "10") int rowPerPage
 							, @RequestParam(value = "filter", required = false, defaultValue = "전체") String filter
@@ -340,7 +340,7 @@ public class TeacherController {
 	
 	// 성적 상세 페이지
 		@GetMapping("/scoreOne")
-		public String scoreOne(@RequestParam(name = "submissionId", required = false, defaultValue = "1") int submissionId
+		public String scoreOne(@RequestParam(name = "submissionId", required = false) int submissionId
 								, Model model
 								, @RequestParam(name = "examId", required = false) int examId) {
 			
@@ -355,7 +355,7 @@ public class TeacherController {
 	
 	// 시험 리스트
 	@GetMapping("/examList")
-	public String examList(@RequestParam(name = "courseId", required = false, defaultValue = "1") int courseId
+	public String examList(@RequestParam(name = "courseId", required = false) int courseId
 							, @RequestParam(defaultValue = "1") int currentPage
 							, @RequestParam(defaultValue = "10") int rowPerPage
 							, Model model) {
@@ -429,7 +429,7 @@ public class TeacherController {
 	// 출결 관리
 	@GetMapping("/attendanceList")
 	public String attendanceByClass(
-		@RequestParam(required = false, defaultValue = "1") int courseId, // 강의/반 ID, URL 파라미터로 받음
+		@RequestParam(required = false) int courseId, // 강의/반 ID, URL 파라미터로 받음
 		@RequestParam(required = false) Integer year,
 		@RequestParam(required = false) Integer month,
 		Model model) {
@@ -662,7 +662,7 @@ public class TeacherController {
 	
 	// 문제 리스트
 	@GetMapping("/questionList")
-	public String questionList(@RequestParam(name = "examId", required = false, defaultValue = "1") int examId
+	public String questionList(@RequestParam(name = "examId", required = false) int examId
 								, Model model) {
 		int qCnt = examService.getQuestionCnt(examId);
 		if(qCnt != 0) {
@@ -685,7 +685,10 @@ public class TeacherController {
 	public String questionOne(@RequestParam int questionId, Model model) {
 		ExamQuestionDTO question = examService.getQuestionByQuestionId(questionId); // 문제 1개
 	    List<ExamOptionDTO> options = examService.getOptionsByQuestionId(questionId); // 보기들
-
+	    
+	    int examId = examService.getExamIdByQuestionId(questionId);
+	    
+	    model.addAttribute("examId", examId);
 	    model.addAttribute("question", question);
 	    model.addAttribute("options", options);
 		

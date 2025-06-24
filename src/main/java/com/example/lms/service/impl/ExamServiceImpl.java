@@ -223,4 +223,9 @@ public class ExamServiceImpl implements ExamService {
 		examMapper.deleteExamQuestionByExamId(examId);
 		examMapper.deleteExamByExamId(examId);
 	}
+	
+	@Override
+	public int getExamIdByQuestionId(int questionId) {
+		return examMapper.getExamIdByQuestionId(questionId);
+	}
 }

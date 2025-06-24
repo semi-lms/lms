@@ -245,4 +245,9 @@
 		DELETE FROM exam
 		WHERE exam_id = #{examId}
 	</delete>
+	
+	<!-- questionId로 examId 받는 쿼리 -->
+	<select id="getExamIdByQuestionId" parameterType="int" resultType="int">
+		SELECT exam_id FROM exam_question WHERE question_id = #{questionId}
+	</select>
 </mapper>
