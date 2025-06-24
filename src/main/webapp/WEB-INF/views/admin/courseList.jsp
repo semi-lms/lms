@@ -49,11 +49,11 @@
 							<tr>
 								<td><c:choose>
 										<c:when test="${empty course.teacherName}">
-      미정
-    </c:when>
+									      미정
+									    </c:when>
 										<c:otherwise>
-      ${course.teacherName}
-    </c:otherwise>
+									      ${course.teacherName}
+									    </c:otherwise>
 									</c:choose></td>
 								<td>${course.courseName}</td>
 								<td>${course.startDate}</td>
@@ -131,7 +131,7 @@
 						<tr>
 							<th>수강정원</th>
 							<td><input type="text" name="maxPerson" id="modalMaxPerson"
-								required></td>
+								required readonly></td>
 						</tr>
 					</table>
 

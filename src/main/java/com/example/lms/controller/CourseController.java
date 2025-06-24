@@ -86,22 +86,17 @@ public class CourseController {
 	@PostMapping("/admin/insertCourse")
 	@ResponseBody
 	public String insertCourse(CourseDTO courseDto) {
-		int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate());
+	    int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate());
 	    if (overlapCount > 0) {
 	        return "overlap";
 	    }
-
 	    course.insertCourse(courseDto);
-
 	    int courseId = courseDto.getCourseId();
 	    int teacherNo = courseDto.getTeacherNo();
-
-	    System.out.println("👉 등록된 courseId: " + courseId);
-	    System.out.println("👉 등록 대상 teacherNo: " + teacherNo);
-
 	    int result = course.updateTeacherCourseId(teacherNo, courseId);
-	    System.out.println("👉 teacher 테이블 업데이트 결과: " + result); // 1이면 정상, 0이면 실패
-
+	    if(result == 0) {
+	        return "fail";
+	    }
 	    return "success";
 	}
 	
