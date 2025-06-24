@@ -67,5 +67,11 @@
 		SET title = #{title}, content = #{content}
 		WHERE file_board_no = #{fileBoardNo}
 	</update>
+		<!-- 삭제 -->
+	<delete id="deleteFileBoard" parameterType="com.example.lms.dto.FileBoardDTO">
+		DELETE
+		FROM file_board
+		WHERE file_board_no = #{fileBoardNo}
+	</delete>
 	
 </mapper>

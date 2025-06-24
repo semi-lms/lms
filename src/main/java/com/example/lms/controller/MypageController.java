@@ -82,6 +82,7 @@ public class MypageController {
 		// count == 0 이면 사용 가능 -> false(중복 아님)
 		boolean exists = count > 0;
 		
+		result.put("exists", exists);
 		} else if (body.containsKey("studentId")) {
 			int count = mypageService.isStudentIdExist(body.get("studentId"));
 	        result.put("exists", count > 0);
