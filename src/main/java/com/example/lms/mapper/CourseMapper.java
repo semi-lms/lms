@@ -37,10 +37,11 @@ public interface CourseMapper {
 
 	int deleteCourses(List<Integer> courseIds);
 
-	int getOverlapCount(@Param("classNo") int classNo,
-			            @Param("startDate") String startDate,
-			            @Param("endDate") String endDate,
-			            @Param("courseId") Integer courseId);
+	// 등록용(3개)
+	int getOverlapCount(@Param("classNo") int classNo, @Param("startDate") String startDate, @Param("endDate") String endDate);
+
+	// 수정용(4개)
+	int getOverlapCountForUpdate(@Param("classNo") int classNo, @Param("startDate") String startDate, @Param("endDate") String endDate, @Param("courseId") Integer courseId);
 	
 	// 강사 등록 시 선택할 강의명 조회
 	List<CourseDTO> getCourseNameNotEnded();

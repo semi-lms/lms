@@ -34,6 +34,8 @@ public interface CourseService {
 
 	int deleteCourses(List<Integer> courseIds);
 
+	int getOverlapCount(int classNo, String startDate, String endDate);
+
 	int getOverlapCount(int classNo, String startDate, String endDate, Integer courseId);
 	
 	List<CourseDTO> getCourseNameNotEnded();
@@ -45,4 +47,5 @@ public interface CourseService {
 	void assignTeacherToCourse(int courseId, int teacherNo);
 	
 	List<ClassDTO> selectClassListForUpdate(Map<String, Object> param);
+
 }

@@ -90,11 +90,17 @@ public class CourseServiceImpl implements CourseService{
 		return courseMapper.deleteCourses(courseIds);
 	}
 
+	// 등록용
 	@Override
-	public int getOverlapCount(int classNo, String startDate, String endDate, Integer courseId) {
-	    return courseMapper.getOverlapCount(classNo, startDate, endDate, courseId);
+	public int getOverlapCount(int classNo, String startDate, String endDate) {
+	    return courseMapper.getOverlapCount(classNo, startDate, endDate);
 	}
 
+	// 수정용
+	@Override
+	public int getOverlapCount(int classNo, String startDate, String endDate, Integer courseId) {
+	    return courseMapper.getOverlapCountForUpdate(classNo, startDate, endDate, courseId);
+	}
 	@Override
 	public List<CourseDTO> getCourseNameNotEnded() {
 		return courseMapper.getCourseNameNotEnded();
@@ -116,9 +122,4 @@ public class CourseServiceImpl implements CourseService{
 	public void assignTeacherToCourse(int courseId, int teacherNo) {
 	    courseMapper.assignTeacher(courseId, teacherNo);
 	}
-	
-    @Override
-    public List<ClassDTO> selectClassListForUpdate(Map<String, Object> paramMap) {
-        return courseMapper.selectClassListForUpdate(paramMap);
-    }
 }

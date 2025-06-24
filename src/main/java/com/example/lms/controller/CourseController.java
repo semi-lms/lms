@@ -86,7 +86,7 @@ public class CourseController {
 	@PostMapping("/admin/insertCourse")
 	@ResponseBody
 	public String insertCourse(CourseDTO courseDto) {
-		int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate(), overlapCount);
+		int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate());
 	    if (overlapCount > 0) {
 	        return "overlap";
 	    }

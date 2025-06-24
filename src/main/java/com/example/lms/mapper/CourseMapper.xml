@@ -83,7 +83,16 @@
     )
 	</select>
 
+	<!-- 등록용 -->
 	<select id="getOverlapCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM course
+	    WHERE class_no = #{classNo}
+	      AND (start_date &lt;= #{endDate} AND end_date &gt;= #{startDate})
+	</select>
+	
+	<!-- 수정용 -->
+	<select id="getOverlapCountForUpdate" resultType="int">
 	    SELECT COUNT(*)
 	    FROM course
 	    WHERE class_no = #{classNo}
