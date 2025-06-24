@@ -8,121 +8,104 @@
 <title>강의 등록</title>
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fafbfc;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
+    * {
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 24px;
-    color: #2c3e50;
-}
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+    }
 
-table {
-  width: 100%;
-  max-width: 700px;
-  border-collapse: separate; /* 각 셀 간 간격 주기 위해 */
-  border-spacing: 0 12px; /* 행 사이 여백 */
-  margin-bottom: 32px;
-  font-size: 1rem;
-  font-weight: 400;
-}
+    h1 {
+        text-align: center;
+        margin-top: 30px;
+        color: #333;
+    }
 
-th, td {
-  padding: 14px 18px;
-  vertical-align: middle;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  border-radius: 8px;
-}
+    form {
+        max-width: 700px;
+        margin: 30px auto;
+        background: #fff;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
 
-th {
-  width: 160px;
-  background-color: #e9ecef;
-  color: #495057;
-  font-weight: 600;
-  text-align: left;
-  box-shadow: none; /* 헤더는 그림자 제거해서 더 깔끔하게 */
-  border-radius: 8px 0 0 8px;
-}
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-td {
-  border-radius: 0 8px 8px 0;
-}
+    th, td {
+        padding: 14px 10px;
+        vertical-align: middle;
+    }
 
-tr {
-  /* 행 전체의 배경은 흰색이고, 아래 여백은 border-spacing으로 처리 */
-}
+    th {
+        text-align: left;
+        background-color: #f1f1f1;
+        font-weight: 600;
+        width: 150px;
+        color: #444;
+        border-bottom: 1px solid #ddd;
+    }
 
-tbody tr:hover td {
-  background-color: #f1f3f5;
-  transition: background-color 0.3s ease;
-}
+    td {
+        border-bottom: 1px solid #eee;
+    }
 
-input[type="text"], input[type="date"], select {
+    input[type="text"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 15px;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+button[type="submit"] {
+    margin-top: 25px;
+    padding: 12px 20px;
     width: 100%;
-    box-sizing: border-box;
-    padding: 8px 12px;
-    font-size: 1rem;
-    border: 1.5px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.3s ease;
-}
-
-input[type="text"]:focus, input[type="date"]:focus, select:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
-}
-
-input[readonly] {
-    background-color: #f4f6f8;
-    color: #777;
-    cursor: not-allowed;
-}
-
-button#insertBtn {
-    display: inline-block;
-    background-color: #3498db;
+  	background-color : #2c3e50;
     color: white;
+    font-size: 17px;
+    font-weight: bold;
     border: none;
-    padding: 6px 14px;
-    font-size: 1.1rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    user-select: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: background 0.3s, transform 0.2s;
 }
 
-button#insertBtn:hover {
-    background-color: #2980b9;
+button[type="submit"]:hover {
+    background: linear-gradient(135deg, #375ac2, #2e4bb1);
+    transform: translateY(-1px);
 }
 
-.container {
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
-}
 
-.sidebar {
-    width: 280px;
-    background-color: #2c3e50;
-    min-height: 100vh;
-}
 
-.main-content {
-    flex: 1;
-    padding: 32px 24px 24px 32px;
-    overflow-x: auto;
-    background: #fafbfc;
-    margin-left: 700px;
-}
+    @media (max-width: 768px) {
+        form {
+            padding: 20px;
+        }
 
+        th {
+            width: 120px;
+        }
+    }
 </style>
+
 </head>
 <body>
 	<div class="container">
@@ -180,7 +163,7 @@ button#insertBtn:hover {
 						<td><input type="text" name="maxPerson" id="maxPerson" readonly></td>
 					</tr>
 				</table>
-				<button type="button" id="insertBtn">➕ 강의 등록</button>
+				<button type="submit" id="insertBtn">강의 등록</button>
 			</form>
 		</div>
 	</div>
