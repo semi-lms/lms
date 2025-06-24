@@ -89,7 +89,7 @@
 				AND c.course_name LIKE CONCAT('%', #{keyword}, '%')
 			</if>
 		</where>
-		ORDER BY s.name ASC
+		ORDER BY c.course_name ASC, s.name ASC
 		LIMIT #{startRow}, #{rowPerPage}
 	</select>
 	
