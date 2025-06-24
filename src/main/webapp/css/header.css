@@ -48,7 +48,7 @@
 }
 
 .header .nav a {
-    color:#1C3A3E  ; 
+    color: #2c3e50; 
     text-decoration: none;
     padding: 6px 10px;
     border-radius: 3px;
@@ -57,6 +57,6 @@
 
 .header .nav a:hover,
 .header .nav a:focus {
-    color: #63C285; /* 밝은 연두 */
+    color: #8cc4b6;
     outline: none;
 }
