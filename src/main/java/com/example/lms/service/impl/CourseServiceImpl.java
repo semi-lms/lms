@@ -122,4 +122,9 @@ public class CourseServiceImpl implements CourseService{
 	public void assignTeacherToCourse(int courseId, int teacherNo) {
 	    courseMapper.assignTeacher(courseId, teacherNo);
 	}
+	@Override
+	public List<ClassDTO> selectClassListForUpdate(Map<String, Object> param) {
+
+		return courseMapper.selectClassListForUpdate(param);
+	}
 }
