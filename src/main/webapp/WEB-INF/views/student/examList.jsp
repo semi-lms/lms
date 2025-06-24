@@ -126,7 +126,7 @@
             <p>종료일: ${exam.examEndDate}</p>
             <p>응시여부: ${exam.submitStatus}</p>
             <p>응시가능여부: ${exam.status}</p>
-            <p>점수: ${exam.score}</p>
+            <p>점수: ${exam.score}0점</p>
           </div>
         </c:when>
         <c:otherwise>
@@ -153,7 +153,7 @@
               </c:otherwise>
             </c:choose>
 
-            <p>점수: ${exam.score}</p>
+            <p>점수: ${exam.score}0점</p>
           </div>
         </c:otherwise>
       </c:choose>
