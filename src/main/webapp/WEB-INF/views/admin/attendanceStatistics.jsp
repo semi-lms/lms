@@ -207,7 +207,17 @@ canvas {
         options: {
             responsive: false,
             plugins: {
-                legend: { display: true, position: 'bottom' }
+                legend: { display: true, position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            if (context.dataset.label === "출석률(%)") {
+                                return context.dataset.label + ": " + context.formattedValue + "%";
+                            }
+                            return context.dataset.label + ": " + context.formattedValue + "회";
+                        }
+                    }
+                }
             },
             scales: {
                 y: {
@@ -218,7 +228,7 @@ canvas {
                     position: 'right',
                     beginAtZero: true,
                     min: 0,
-                    max: y1Max, // 여기만 변경
+                    max: 100,
                     title: { display: true, text: '출석률(%)' },
                     grid: { drawOnChartArea: false }
                 }
