@@ -30,7 +30,6 @@ public class AttendanceController {
     @GetMapping("/admin/attendanceStatistics")
     public String getAttendanceStatistics(Model model) {
         LocalDate now = LocalDate.now();
-        // 진행 중인 강의만 조회
         List<CourseDTO> courseList = courseService.selectCourseListNotEnded(now.toString());
         List<String> courseName = new ArrayList<>(); 
         List<String> classNames = new ArrayList<>();
@@ -39,33 +38,42 @@ public class AttendanceController {
         List<Integer> actuals = new ArrayList<>();
         List<Integer> courseIds = new ArrayList<>();
         courseList.sort(Comparator.comparing(CourseDTO::getClassroom));
+
+        // 이번달 1일, 이번달 마지막 날
+        LocalDate monthStart = now.withDayOfMonth(1);
+        LocalDate monthEnd = now.withDayOfMonth(now.lengthOfMonth());
+
         for (CourseDTO course : courseList) {
             int courseId = course.getCourseId();
-            classNames.add(course.getClassroom()); // 반 이름 필드명에 맞게 변경
+            classNames.add(course.getClassroom());
             courseIds.add(courseId);
             courseName.add(course.getCourseName());
             int studentCount = attendanceService.getStudentCount(courseId);
+
+            // 개강일 기준
+            LocalDate courseStart = LocalDate.parse(course.getStartDate());
+
+            // 구간 시작: 개강일과 월초 중 더 늦은 날
+            LocalDate realStart = courseStart.isAfter(monthStart) ? courseStart : monthStart;
+            // 구간 끝: 오늘과 월말 중 더 이른 날 (오늘이 월말이면 월말, 아니면 오늘까지만)
+            LocalDate realEnd = now.isBefore(monthEnd) ? now : monthEnd;
+
             int attendanceTotalCount = attendanceService.getAttendanceTotalCount(
-                    now.withDayOfMonth(1).toString(),
-                    now.plusDays(1).toString(),
-                    studentCount,
-                    courseId
+                realStart.toString(),
+                realEnd.plusDays(1).toString(), // 쿼리 endDate는 미포함이니 +1
+                studentCount,
+                courseId
             );
             int actual = attendanceService.getActualAttendance(
-                    now.withDayOfMonth(1).toString(),
-                    now.plusDays(1).toString(),
-                    courseId
+                realStart.toString(),
+                realEnd.plusDays(1).toString(),
+                courseId
             );
             studentCounts.add(studentCount);
             attendanceTotalCounts.add(attendanceTotalCount);
             actuals.add(actual);
         }
 
-        System.out.println("현재 진행 중인 강의 개수: " + courseList.size());
-        for (CourseDTO course : courseList) {
-            System.out.println(course);
-        }
-        
         model.addAttribute("classNames", classNames);
         model.addAttribute("studentCounts", studentCounts);
         model.addAttribute("attendanceTotalCounts", attendanceTotalCounts);
