@@ -231,6 +231,22 @@ div[style*="text-align: right"] {
 			});
 			
 			
+			// 자동 하이픈 입력 설정 
+			function formatPhone(p) {
+				let v = p.replace(/[^0-9]/g, "");
+				if (v.length < 4) return v;
+				else if (v.length < 8) return v.substr(0, 3) + "-" + v.substr(3);
+				else if (v.length <= 11) return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7);
+				else return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7, 4);
+			}
+
+			function formatSn(s) {
+				let val = s.replace(/[^0-9]/g, "");
+				if (val.length <= 6) return val;
+				else return val.substr(0, 6) + "-" + val.substr(6, 7);
+			}
+			
+			
 			// 강사 정보 수정
 			$("#modifyBtn").click(function () {
 				const checked = $(".selectTeacher:checked");
@@ -256,29 +272,13 @@ div[style*="text-align: right"] {
 						return;
 					}
 					
-					// 모달에 정보 채우기
+					// 모달에 정보 채우기 (전화번호/주민번호 하이픈 자동 적용)
 					$("#modalTeacherNo").val(teacher.teacherNo || "");
 					$("#modalName").val(teacher.name || "");
 					$("#modalPhone").val(formatPhone(teacher.phone || ""));
 					$("#modalSn").val(formatSn(teacher.sn || ""));
 					$("#modalAddress").val(teacher.address || "");
 					$("#modalEmail").val(teacher.email || "");
-					
-					// 하이픈 붙이기
-					function formatPhone(p) {
-						let v = p.replace(/[^0-9]/g, "");
-						if (v.length < 4) return v;
-						else if (v.length < 8) return v.substr(0, 3) + "-" + v.substr(3);
-						else if (v.length <= 11) return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7);
-						else return v.substr(0, 3) + "-" + v.substr(3, 4) + "-" + v.substr(7, 4);
-					}
-
-					function formatSn(s) {
-						let val = s.replace(/[^0-9]/g, "");
-						if (val.length <= 6) return val;
-						else return val.substr(0, 6) + "-" + val.substr(6, 7);
-					}
-					
 					
 					// 담당 강의
 					const select = $("#modalCourseSelect");
@@ -294,6 +294,16 @@ div[style*="text-align: right"] {
 					}
 					
 					$("#teacherModal").show();  // 모달창 보이기
+					
+					
+					// 입력 중에도 하이픈 자동 적용
+					$("#modalPhone").on("input", function () {
+						$(this).val(formatPhone($(this).val()));
+					});
+
+					$("#modalSn").on("input", function () {
+						$(this).val(formatSn($(this).val()));
+					});
 				});
 			});
 		});
@@ -301,13 +311,32 @@ div[style*="text-align: right"] {
 		
 		// 모달 저장 버튼
 		$("#saveTeacherBtn").off('click').on('click', function () {
-
-			// 전화번호/주민번호 하이픈 제거 (DB 저장용)
-			const rawPhone = $("#modalPhone").val().replace(/-/g, '');
-			const rawSn = $("#modalSn").val().replace(/-/g, '');
-			$("#modalPhone").val(rawPhone);
-			$("#modalSn").val(rawSn);
+			const phone = $("#modalPhone").val().replace(/-/g, "");
+			const sn = $("#modalSn").val().replace(/-/g, "").trim();
+			const email = $("#modalEmail").val().trim();
 			
+			// 전화번호 유효성 검사
+			if (!/^01[016789][0-9]{7,8}$/.test(phone)) {
+				alert("전화번호 형식이 올바르지 않습니다.");
+				return false;
+			}
+
+			// 주민번호 유효성 검사
+			if (!/^[0-9]{6}-?[0-9]{7}$/.test(sn)) {
+				alert("주민번호 형식이 올바르지 않습니다.");
+				return false;
+			}
+
+			// 이메일 유효성 검사
+			if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+				alert("이메일 형식이 올바르지 않습니다.");
+				return false;
+			}
+			
+			
+			// 전화번호/주민번호 하이픈 제거 (DB 저장용)
+			$("#modalPhone").val(phone);
+			$("#modalSn").val(sn);
 			
 			$.ajax({
 				url: "/admin/updateTeacher",
@@ -360,7 +389,7 @@ div[style*="text-align: right"] {
 					location.reload();  // 목록 새로고침
 				},
 				error: function () {
-					alert("삭제 실패");
+					alert("배정된 강의가 존재하여 삭제가 불가능합니다.");
 				}
 			});
 		});
