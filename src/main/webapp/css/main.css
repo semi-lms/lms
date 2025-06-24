@@ -50,7 +50,7 @@ body {
 	flex: 1;
 	max-width: 320px;
 	border: 1px solid #ccc;
-	background-color: #FEFFFE;
+	background-color: white;
 	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 	border-radius: 12px;
 	padding: 30px 20px;
@@ -72,7 +72,7 @@ body {
 .card.stats-box {
 	flex: 1;
 	max-width: 320px;
-	background-color: #FEFFFE;
+	background-color: white;
 	box-shadow: 0 4px 15px rgba(30, 100, 30, 0.1);
 	border-radius: 12px;
 	padding: 30px 20px;
@@ -196,7 +196,7 @@ canvas {
 .common-card {
 	flex: 1;
 	min-width: 280px;
-	background: #FEFFFE;
+	background: white;
 	border-radius: 12px;
 	padding: 20px 25px;
 	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
