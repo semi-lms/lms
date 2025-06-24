@@ -144,111 +144,217 @@
 			<!-- 모달 폼 끝 -->
 		</div>
 	</div>
-	<script>
-		$(function() {
-			$("#insertCourse").click(function() {
-				window.location = "insertCourse";
-			});
+<script>
+function reloadClassListForUpdate(courseId, startDate, endDate, originalClassNo) {
+    $.getJSON("/admin/selectClassListForUpdate", {
+        courseId: courseId,
+        startDate: startDate,
+        endDate: endDate,
+        originalClassNo: originalClassNo // 기존 강의실 번호를 originalClassNo로 넘김
+    }, function(classList) {
+        var $select = $("#modalClassNo");
+        $select.empty();
+        $select.append('<option value="">강의실 선택</option>');
+        $.each(classList, function(i, classroom) {
+            var selected = (classroom.classNo == originalClassNo) ? "selected" : "";
+            $select.append('<option value="' + classroom.classNo + '" ' + selected + '>' + classroom.classroom + '</option>');
+        });
+        // 강의실 옵션 바뀌었으니, maxPerson도 새로고침
+        if (originalClassNo) {
+            $.get('/admin/getMaxPerson', { classNo: originalClassNo }, function(data) {
+                $("#modalMaxPerson").val(data);
+            });
+        } else {
+            $("#modalMaxPerson").val("");
+        }
+    });
+}
 
-			// 강의실 변경 시 수강정원 자동 입력
-			$('#modalClassNo').change(function() {
-				const classNo = $(this).val();
-				if (classNo) {
-					$.get('/admin/getMaxPerson', {
-						classNo : classNo
-					}, function(data) {
-						$("#modalMaxPerson").val(data);
-					});
-				} else {
-					$("#modalMaxPerson").val("");
-				}
-			});
+$(function() {
+    $("#insertCourse").click(function() {
+        window.location = "insertCourse";
+    });
 
-			// 수정 버튼 클릭
-			$("#modifyBtn").click(function() {
-				const checked = $(".select-course:checked");
-				if (checked.length === 0) {
-					alert("수정할 강의를 선택하세요.");
-					return;
-				}
-				if (checked.length > 1) {
-					alert("하나만 선택 가능합니다.");
-					return;
-				}
-				const courseId = checked.val();
+    // 강의실 변경 시 수강정원 자동 입력
+    $('#modalClassNo').change(function() {
+        const classNo = $(this).val();
+        if (classNo) {
+            $.get('/admin/getMaxPerson', {
+                classNo: classNo
+            }, function(data) {
+                $("#modalMaxPerson").val(data);
+            });
+        } else {
+            $("#modalMaxPerson").val("");
+        }
+    });
 
-				$.getJSON("/admin/getCourseDetail", {
-					courseId : courseId
-				}, function(course) {
-					if (!course) {
-						alert("강의 정보를 불러올 수 없습니다.");
-						return;
-					}
-					$("#modalCourseId").val(course.courseId || "");
-					$("#modalCourseName").val(course.courseName || "");
-					$("#modalDescription").val(course.description || "");
-					$("#modalStartDate").val(course.startDate || "");
-					$("#modalEndDate").val(course.endDate || "");
-					$("#modalTeacherNo").val(course.teacherNo || "");
-					$("#modalClassNo").val(course.classNo || "");
-					$("#modalMaxPerson").val(course.maxPerson || "");
-					$("#courseModal").show();
-				});
-			});
+    // 수정 버튼 클릭 - 강의실 목록 동적 로딩
+    $("#modifyBtn").click(function() {
+        const checked = $(".select-course:checked");
+        if (checked.length === 0) {
+            alert("수정할 강의를 선택하세요.");
+            return;
+        }
+        if (checked.length > 1) {
+            alert("하나만 선택 가능합니다.");
+            return;
+        }
+        const courseId = checked.val();
 
-			// 저장 버튼 클릭
-			$("#saveCourseBtn").click(function() {
-				$.ajax({
-					url : "/admin/updateCourse",
-					type : "POST",
-					data : $("#courseForm").serialize(),
-					success : function() {
-						alert("수정 완료");
-						location.reload();
-					},
-					error : function() {
-						alert("수정 실패");
-					}
-				});
-			});
+        $.getJSON("/admin/getCourseDetail", { courseId: courseId }, function(course) {
+            if (!course) {
+                alert("강의 정보를 불러올 수 없습니다.");
+                return;
+            }
+            $("#modalCourseId").val(course.courseId || "");
+            $("#modalCourseName").val(course.courseName || "");
+            $("#modalDescription").val(course.description || "");
+            $("#modalStartDate").val(course.startDate || "");
+            $("#modalEndDate").val(course.endDate || "");
+            $("#modalTeacherNo").val(course.teacherNo || "");
+            $("#modalMaxPerson").val(course.maxPerson || "");
 
-			// 모달 닫기
-			$("#closeModalBtn").click(function() {
-				$("#courseModal").hide();
-			});
+            // 강의실 목록 동적 로딩 (기존 강의실 번호를 originalClassNo로 넘김)
+            reloadClassListForUpdate(
+                course.courseId,
+                course.startDate,
+                course.endDate,
+                course.classNo
+            );
 
-			// 삭제 버튼 클릭
-			$("#removeBtn").click(function() {
-				const checked = $(".select-course:checked");
-				if (checked.length === 0) {
-					alert("삭제할 강의를 선택하세요.");
-					return;
-				}
-				if (!confirm("정말 삭제하시겠습니까?"))
-					return;
+            // 강의실 번호를 hidden input에 임시 저장
+            $("#modalClassNo").data("originalClassNo", course.classNo);
 
-				const courseIds = checked.map(function() {
-					return $(this).val();
-				}).get();
+            $("#courseModal").show();
+        });
+    });
 
-				$.ajax({
-					url : "/admin/deleteCourses",
-					type : "POST",
-					traditional : true,
-					data : {
-						courseIds : courseIds
-					},
-					success : function() {
-						alert("삭제 완료");
-						location.reload();
-					},
-					error : function() {
-						alert("삭제 실패");
-					}
-				});
-			});
-		});
+    // 시작일/종료일이 바뀔 때마다 강의실 목록 새로고침
+    $("#modalStartDate, #modalEndDate").on("change", function() {
+        var courseId = $("#modalCourseId").val();
+        var startDate = $("#modalStartDate").val();
+        var endDate = $("#modalEndDate").val();
+        // 현재 선택된 강의실 번호 (원본을 계속 넘겨야 함)
+        var originalClassNo = $("#modalClassNo").data("originalClassNo") || $("#modalClassNo").val();
+        if (courseId && startDate && endDate && originalClassNo) {
+            reloadClassListForUpdate(courseId, startDate, endDate, originalClassNo);
+        }
+    });
+
+    // 저장 버튼 클릭(유효성 검사 포함)
+    $("#saveCourseBtn").click(function() {
+        // 값 읽기
+        var teacherNo = $("#modalTeacherNo").val();
+        var courseName = $("#modalCourseName").val().trim();
+        var description = $("#modalDescription").val().trim();
+        var startDate = $("#modalStartDate").val();
+        var endDate = $("#modalEndDate").val();
+        var classNo = $("#modalClassNo").val();
+        var maxPerson = $("#modalMaxPerson").val().trim();
+
+        // 유효성 검사
+        if (!teacherNo) {
+            alert("담당 강사를 선택하세요.");
+            $("#modalTeacherNo").focus();
+            return;
+        }
+        if (!courseName) {
+            alert("강의명을 입력하세요.");
+            $("#modalCourseName").focus();
+            return;
+        }
+        if (!description) {
+            alert("강의 설명을 입력하세요.");
+            $("#modalDescription").focus();
+            return;
+        }
+        if (description.length < 5) {
+            alert("강의 설명은 5자 이상 입력하세요.");
+            $("#modalDescription").focus();
+            return;
+        }
+        if (!startDate) {
+            alert("시작일을 선택하세요.");
+            $("#modalStartDate").focus();
+            return;
+        }
+        if (!endDate) {
+            alert("종료일을 선택하세요.");
+            $("#modalEndDate").focus();
+            return;
+        }
+        if (endDate < startDate) {
+            alert("종료일은 시작일보다 빠를 수 없습니다.");
+            $("#modalEndDate").focus();
+            return;
+        }
+        if (!classNo) {
+            alert("강의실을 선택하세요.");
+            $("#modalClassNo").focus();
+            return;
+        }
+        if (!maxPerson || isNaN(maxPerson) || parseInt(maxPerson) <= 0) {
+            alert("수강정원은 1명 이상의 숫자로 입력하세요.");
+            $("#modalMaxPerson").focus();
+            return;
+        }
+
+        // 통과 시 AJAX 저장
+        $.ajax({
+            url : "/admin/updateCourse",
+            type : "POST",
+            data : $("#courseForm").serialize(),
+            success : function(result) {
+                if(result == "overlap") {
+                    alert("해당 기간에 이미 사용 중인 강의실입니다.");
+                    return;
+                }
+                alert("수정 완료");
+                location.reload();
+            },
+            error : function() {
+                alert("수정 실패");
+            }
+        });
+    });
+
+    // 모달 닫기
+    $("#closeModalBtn").click(function() {
+        $("#courseModal").hide();
+    });
+
+    // 삭제 버튼 클릭
+    $("#removeBtn").click(function() {
+        const checked = $(".select-course:checked");
+        if (checked.length === 0) {
+            alert("삭제할 강의를 선택하세요.");
+            return;
+        }
+        if (!confirm("정말 삭제하시겠습니까?"))
+            return;
+
+        const courseIds = checked.map(function() {
+            return $(this).val();
+        }).get();
+
+        $.ajax({
+            url : "/admin/deleteCourses",
+            type : "POST",
+            traditional : true,
+            data : {
+                courseIds : courseIds
+            },
+            success : function() {
+                alert("삭제 완료");
+                location.reload();
+            },
+            error : function() {
+            	alert("담당 강사가 배정된 강의는 삭제할 수 없습니다.");
+            }
+        });
+    });
+});
 	</script>
-
 </body>
 </html>

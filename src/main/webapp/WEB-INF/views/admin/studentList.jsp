@@ -310,6 +310,41 @@
 
 <script>
 $(function(){
+	// 주민번호 자동 하이픈 + 입력 완료시 다음칸 이동
+	$("#modalSn").on("input", function() {
+	    let value = $(this).val().replace(/[^0-9]/g, "");
+	    if (value.length > 6) {
+	        value = value.substr(0, 6) + "-" + value.substr(6, 7);
+	    }
+	    $(this).val(value);
+
+	    // 14자리(6+1+7) 다 입력하면 다음 칸 이동
+	    if ($(this).val().length === 14) {
+	        $("#modalAddress").focus();
+	    }
+	});
+
+	// 전화번호 자동 하이픈 + 입력 완료시 다음칸 이동
+	$("#modalPhone").on("input", function() {
+	    let value = $(this).val().replace(/[^0-9]/g, "");
+	    let formatted = "";
+	    if (value.length < 4) {
+	        formatted = value;
+	    } else if (value.length < 8) {
+	        formatted = value.substr(0, 3) + "-" + value.substr(3);
+	    } else if (value.length <= 11) {
+	        formatted = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7, 4);
+	    } else {
+	        formatted = value.substr(0, 3) + "-" + value.substr(3, 4) + "-" + value.substr(7, 4);
+	    }
+	    $(this).val(formatted);
+
+	    // 휴대폰 번호가 13자리면 자동으로 주민번호로 포커스 이동
+	    if ($(this).val().length === 13) {
+	        $("#modalSn").focus();
+	    }
+	});
+    
     $("#insertStudent").click(function(){
         window.location = "insertStudent";
     });
@@ -324,8 +359,6 @@ $(function(){
             alert("하나만 선택 가능합니다.");
             return;
         }
-        const studentNo = checked.val();
-        console.log("선택한 studentNo =", studentNo);
         
         $.getJSON("/admin/getStudentDetail", {studentNo: studentNo}, function(student) {
            console.log("조회된 student", student);
@@ -333,7 +366,6 @@ $(function(){
                 alert("학생 정보를 불러올 수 없습니다.");
                 return;
             }
-           console.log("민혁아 모달창이 안떠");
             $("#modalName").val(student.name || "");
             $("#modalPhone").val(student.phone || "");
             $("#modalSn").val(student.sn || "");
@@ -348,13 +380,41 @@ $(function(){
     });
 
     $("#saveStudentBtn").off('click').on('click', function(){
-       var email = $("#modalEmail").val().trim();
-       var emailReg = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-        if (!emailReg.test(email)) {
-            alert("이메일 형식이 올바르지 않습니다.");
+        // 1. 값 읽기
+        var name = $("#modalName").val().trim();
+        var phone = $("#modalPhone").val().replace(/-/g, "").trim();
+        var sn = $("#modalSn").val().trim();
+        var address = $("#modalAddress").val().trim();
+        var email = $("#modalEmail").val().trim();
+
+        // 2. 유효성 검사
+        if (!name) {
+            alert("이름을 입력하세요.");
+            $("#modalName").focus();
             return;
         }
-        
+        if (!phone || !/^01[016789][0-9]{7,8}$/.test(phone)) {
+            alert("전화번호 형식이 올바르지 않습니다.");
+            $("#modalPhone").focus();
+            return;
+        }
+        if (!sn || !/^[0-9]{6}-?[0-9]{7}$/.test(sn)) {
+            alert("주민번호 형식이 올바르지 않습니다.");
+            $("#modalSn").focus();
+            return;
+        }     
+        if (!address) {
+            alert("주소를 입력하세요.");
+            $("#modalAddress").focus();
+            return;
+        }
+        if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+            alert("이메일 형식이 올바르지 않습니다.");
+            $("#modalEmail").focus();
+            return;
+        }
+
+        // 3. 통과 시 AJAX로 저장
         $.ajax({
             url: "/admin/updateStudent",
             type: "POST",

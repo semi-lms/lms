@@ -86,7 +86,7 @@ public class CourseController {
 	@PostMapping("/admin/insertCourse")
 	@ResponseBody
 	public String insertCourse(CourseDTO courseDto) {
-	    int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate());
+		int overlapCount = course.getOverlapCount(courseDto.getClassNo(), courseDto.getStartDate(), courseDto.getEndDate(), overlapCount);
 	    if (overlapCount > 0) {
 	        return "overlap";
 	    }
@@ -115,10 +115,15 @@ public class CourseController {
 	@PostMapping("/admin/updateCourse")
 	@ResponseBody
 	public String updateCourse(CourseDTO dto) {
-	    // 1. 기존 담당 강사 정보 가져오기 (수정 전)
+	    // 1. 겹치는 강의실 체크 (본인 courseId는 제외)
+	    int overlapCount = course.getOverlapCount(dto.getClassNo(), dto.getStartDate(), dto.getEndDate(), dto.getCourseId());
+	    if (overlapCount > 0) {
+	        return "overlap"; // 프론트에서 alert 띄우면 됨
+	    }
+	    // 2. 기존 담당 강사 정보 가져오기 (수정 전)
 	    CourseDTO prev = course.getCourseOne(dto.getCourseId());
 
-	    // 2. course 테이블 수정
+	    // 3. course 테이블 수정
 	    course.updateCourse(dto);
 
 	    Integer prevTeacherNo = prev != null ? prev.getTeacherNo() : null;
@@ -142,4 +147,17 @@ public class CourseController {
 	public int deleteCourses(@RequestParam("courseIds") List<Integer> courseIds) {
 	    return course.deleteCourses(courseIds);
 	}
+	
+    @GetMapping("/admin/selectClassListForUpdate")
+    public List<ClassDTO> selectClassListForUpdate(@RequestParam int courseId
+									             ,@RequestParam String startDate
+									             ,@RequestParam String endDate
+									             ,@RequestParam int originalClassNo) {
+        Map<String, Object> param = new HashMap<>();
+        param.put("courseId", courseId);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        param.put("originalClassNo", originalClassNo);
+        return course.selectClassListForUpdate(param);
+    }
 }

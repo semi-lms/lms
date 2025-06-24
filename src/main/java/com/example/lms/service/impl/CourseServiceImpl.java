@@ -91,8 +91,8 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	public int getOverlapCount(int classNo, String string, String string2) {
-	    return courseMapper.getOverlapCount(classNo, string, string2);
+	public int getOverlapCount(int classNo, String startDate, String endDate, Integer courseId) {
+	    return courseMapper.getOverlapCount(classNo, startDate, endDate, courseId);
 	}
 
 	@Override
@@ -116,4 +116,9 @@ public class CourseServiceImpl implements CourseService{
 	public void assignTeacherToCourse(int courseId, int teacherNo) {
 	    courseMapper.assignTeacher(courseId, teacherNo);
 	}
+	
+    @Override
+    public List<ClassDTO> selectClassListForUpdate(Map<String, Object> paramMap) {
+        return courseMapper.selectClassListForUpdate(paramMap);
+    }
 }

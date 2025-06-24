@@ -73,23 +73,21 @@
 </select>
 
 	<select id="selectClassList" parameterType="map" resultMap="classMap">
-		SELECT cl.class_no, cl.classroom, cl.max_person
-		FROM class cl
-		LEFT JOIN (
-		    SELECT class_no, MAX(end_date) AS last_end_date
-		    FROM course
-		    GROUP BY class_no
-		) c ON cl.class_no = c.class_no
-		WHERE
-		    c.class_no IS NULL
-		    OR
-		    c.last_end_date &lt;= DATE_ADD(CURDATE(), INTERVAL 2 MONTH)
+    SELECT cl.class_no, cl.classroom, cl.max_person
+    FROM class cl
+    WHERE cl.class_no NOT IN (
+        SELECT c.class_no
+        FROM course c
+        WHERE
+            (c.start_date &lt;= #{endDate} AND c.end_date &gt;= #{startDate})
+    )
 	</select>
 
 	<select id="getOverlapCount" resultType="int">
 	    SELECT COUNT(*)
 	    FROM course
 	    WHERE class_no = #{classNo}
+	      AND course_id != #{courseId}
 	      AND (start_date &lt;= #{endDate} AND end_date &gt;= #{startDate})
 	</select>
 
@@ -244,4 +242,20 @@
 	    SET teacher_no = #{teacherNo}
 	    WHERE course_id = #{courseId}
 	</update>
+	
+	<select id="selectClassListForUpdate" parameterType="map" resultMap="classMap">
+	    SELECT cl.class_no, cl.classroom, cl.max_person
+	    FROM class cl
+	    WHERE cl.class_no NOT IN (
+	        SELECT c.class_no
+	        FROM course c
+	        WHERE
+	            c.course_id != #{courseId}
+	            AND (c.start_date &lt;= #{endDate} AND c.end_date &gt;= #{startDate})
+	    )
+	    UNION
+	    SELECT cl.class_no, cl.classroom, cl.max_person
+	    FROM class cl
+	    WHERE cl.class_no = #{originalClassNo}
+	</select>
 </mapper>

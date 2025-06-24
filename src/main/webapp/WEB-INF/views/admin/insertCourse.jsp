@@ -188,13 +188,19 @@ button#insertBtn:hover {
 	function validateCourseForm() {
 		// 강의명
 		var courseName = $("input[name='courseName']").val().trim();
+		var description = $("input[name='description']").val().trim();
+		var teacherNo = $("select[name='teacherNo']").val();
+		var classNo = $("select[name='classNo']").val();
+		var startDate = $("input[name='startDate']").val();
+		var endDate = $("input[name='endDate']").val();
+		var maxPerson = $("input[name='maxPerson']").val().trim();
+		// 강의명
 		if (!courseName) {
 			alert("강의명을 입력하세요.");
 			$("input[name='courseName']").focus();
 			return false;
 		}
 		// 강의 설명
-		var description = $("input[name='description']").val().trim();
 		if (!description) {
 			alert("강의 설명을 입력하세요.");
 			$("input[name='description']").focus();
@@ -206,7 +212,6 @@ button#insertBtn:hover {
 			return false;
 		}
 		// 담당 강사
-		var teacherNo = $("select[name='teacherNo']").val();
 		if (!teacherNo) {
 			alert("담당 강사를 선택하세요.");
 			$("select[name='teacherNo']").focus();
@@ -214,7 +219,6 @@ button#insertBtn:hover {
 		}
 
 		// 강의실
-		var classNo = $("select[name='classNo']").val();
 		if (!classNo) {
 			alert("강의실을 선택하세요.");
 			$("select[name='classNo']").focus();
@@ -222,19 +226,20 @@ button#insertBtn:hover {
 		}
 
 		// 기간
-		var startDate = $("input[name='startDate']").val();
-		var endDate = $("input[name='endDate']").val();
-		if (!startDate || !endDate) {
-			alert("강의 시작일과 종료일을 모두 입력하세요.");
+		if (!startDate) {
+			alert("시작일을 선택하세요.");
 			return false;
 		}
-		if (startDate > endDate) {
-			alert("시작일이 종료일보다 늦을 수 없습니다.");
+		if (!endDate) {
+			alert("종료일을 선택하세요");
+			return false;
+		}
+		if (endDate < startDate) {
+		    alert("종료일은 시작일보다 빠를 수 없습니다.");
 			return false;
 		}
 
 		// 정원
-		var maxPerson = $("input[name='maxPerson']").val().trim();
 		if (!maxPerson || isNaN(maxPerson) || parseInt(maxPerson) < 1) {
 			alert("수강정원은 1 이상의 숫자로 입력하세요.");
 			$("input[name='maxPerson']").focus();
