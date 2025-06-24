@@ -159,6 +159,11 @@ canvas {
     // 출석률(%) 계산 (정수 + 소수 1자리)
     const rates = actuals.map((v, i) => totals[i] > 0 ? Math.round(v / totals[i] * 1000) / 10 : 0);
 
+    const courseIds = [
+        <c:forEach var="id" items="${courseIds}" varStatus="s">
+            ${id}<c:if test="${!s.last}">,</c:if>
+        </c:forEach>
+    ];
     // y1축(출석률) 최대값 동적 계산: 100 넘는 데이터는 없으니, 최대값에 +5~10 (최소 100은 유지)
     const maxRate = Math.max(...rates, 100); // 최소 100
     const y1Max = Math.ceil(maxRate / 10) * 10 + 5; // 100~115, 105~115, 110~120 등
