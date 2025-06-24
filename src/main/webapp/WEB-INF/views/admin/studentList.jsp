@@ -359,7 +359,7 @@ $(function(){
             alert("하나만 선택 가능합니다.");
             return;
         }
-        
+        const studentNo = checked.val();
         $.getJSON("/admin/getStudentDetail", {studentNo: studentNo}, function(student) {
            console.log("조회된 student", student);
            if(!student) {
