@@ -74,6 +74,15 @@
 				<c:if test='${!fn:contains(currentPath, "/scoreList")}'>background-color: #e9ecef; color: #333;</c:if>">
 				성적 관리
 			</a>
+			<a href="/examList?courseId=${courseId}"
+					style="padding: 8px 16px; 
+					border-radius: 6px; 
+					text-decoration: none; 
+					font-weight: bold;
+				<c:if test='${fn:contains(currentPath, "/examList")}'>background-color: #cce5ff; color: #004085;</c:if>
+				<c:if test='${!fn:contains(currentPath, "/examList")}'>background-color: #e9ecef; color: #333;</c:if>">
+					시험 관리 
+			</a>
 		</div>
 			
 		<h1>성적 리스트</h1>

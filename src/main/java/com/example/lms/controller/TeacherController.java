@@ -672,7 +672,10 @@ public class TeacherController {
 		
 		String title = examService.getExamTitle(examId);
 		log.info("qCnt:"+qCnt);
+		int courseId = examService.getCourseIdByExamId(examId);
 		
+		
+		model.addAttribute("courseId", courseId);
 		model.addAttribute("examId", examId);
 		model.addAttribute("title", title);
 		model.addAttribute("qCnt", qCnt);
