@@ -157,7 +157,7 @@ canvas {
         </c:forEach>
     ];
     // 출석률(%) 계산 (정수 + 소수 1자리)
-    const rates = actuals.map((v, i) => totals[i] > 0 ? Math.round(v / totals[i] * 1000) / 10 : 0);
+    const rates = actuals.map((v, i) => totals[i] > 0 ? Math.floor(v / totals[i] * 1000) / 10 : 0);
 
     const courseIds = [
         <c:forEach var="id" items="${courseIds}" varStatus="s">
