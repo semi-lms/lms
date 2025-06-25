@@ -73,23 +73,23 @@ public class MypageController {
 	public Map<String, Boolean> checkTeacherId(@RequestBody Map<String, String> body) {
 		Map<String, Boolean> result = new HashMap<>();
 		
-		// loginService를 통해 해당 teacherId가 DB에 존재하는지 확인
-		// 내부적으로는 SELECT COUNT(*) 쿼리를 실행(0 또는 1 이상 반환)
-		if (body.containsKey("teacherId")) {
-		int count = mypageService.isTeacherIdExist(body.get("teacherId"));
-		
-		// count > 0 이면 이미 존재하는 아이디 -> true (중복)
-		// count == 0 이면 사용 가능 -> false(중복 아님)
-		boolean exists = count > 0;
-		
-		result.put("exists", exists);
-		} else if (body.containsKey("studentId")) {
-			int count = mypageService.isStudentIdExist(body.get("studentId"));
-	        result.put("exists", count > 0);
-	 	} else {
-	        result.put("exists", true); // key가 없으면 무조건 중복 처리
+	    // teacherId나 studentId 중 전달된 값을 추출
+	    String id = body.get("teacherId") != null ? body.get("teacherId") : body.get("studentId");
+
+	    // 아이디가 없으면 중복 처리
+	    if (id == null || id.isBlank()) {
+	        result.put("exists", true);
+	        return result;
 	    }
-		return result;
+
+	    // 두 테이블에서 모두 검사
+	    int teacherCount = mypageService.isTeacherIdExist(id);
+	    int studentCount = mypageService.isStudentIdExist(id);
+
+	    boolean exists = teacherCount > 0 || studentCount > 0;
+	    result.put("exists", exists);
+
+	    return result;
 		
 		//Map을 반환하면 json 형식으로 자동 변환되어 응답됨
 	}

@@ -49,7 +49,8 @@ function loadContent(url) {
 	  const role = '${loginUser.role}';
 	  const updateUrl = role === 'student' ? '/mypage/updateStudentInfo' : '/mypage/updateTeacherInfo';
 	  let idCleared = false;
-
+	  let idCheckPassed = false;
+	  
 	  // 아이디 클릭 시 수정 가능
 	  $('#userIdInput').on('click', function () {
 	    if (!idCleared) {
@@ -65,17 +66,34 @@ function loadContent(url) {
 	  $('#checkBtn').on('click', function () {
 	    const id = $('#userIdInput').val().trim();
 	    if (!id) return alert("아이디를 입력하세요.");
+	    
+	 	// role에 따라 전송할 필드 이름 설정
+	    const role = '${loginUser.role}';
+	    const idKey = role === 'student' ? 'studentId' : 'teacherId';
+
+	    // 동적으로 key 설정된 객체 만들기
+	    const requestData = {};
+	    requestData[idKey] = id;
 
 	    $.ajax({
 	      url: '/mypage/check-id',
 	      type: 'POST',
 	      contentType: 'application/json',
-	      data: JSON.stringify({ teacherId: id }),
+	      data: JSON.stringify(requestData),
 	      success: (data) => {
-	        alert(data.exists ? "이미 존재하는 아이디입니다." : "사용 가능한 아이디입니다.");
-	      },
-	      error: () => alert("중복 확인 중 오류 발생")
-	    });
+	    	    if (data.exists) {
+	    	      alert("이미 존재하는 아이디입니다.");
+	    	      idCheckPassed = false;
+	    	    } else {
+	    	      alert("사용 가능한 아이디입니다.");
+	    	      idCheckPassed = true;
+	    	    }
+	    	  },
+	    	  error: () => {
+	    	    alert("중복 확인 중 오류 발생");
+	    	    idCheckPassed = false;
+	    	  }
+	    	});
 	  });
 
 	  // 실시간 비밀번호 검사
@@ -161,10 +179,17 @@ function loadContent(url) {
 	  const pw = $('#newPassword').val().trim();
 	  const confirm = $('#confirmPassword').val().trim();
 	  const currentPw = $('#currentPassword').val().trim();
+	  const currentId = $('#userIdInput').val().trim();
+	  const originalId = '${loginUser.teacherId != null ? loginUser.teacherId : loginUser.studentId}'; // 현재 로그인한 사용자 아이디
 
 	  clearErrors();
 	  let hasError = false;
 
+	  if (currentId !== originalId && !idCheckPassed) {
+		  alert("아이디 중복 확인을 해주세요.");
+		  return;
+		}
+	  
 	  if (isPwChanging()) {
 	    if (!currentPw) {
 	      setError('#currentPwError', '현재 비밀번호를 입력하세요.');
