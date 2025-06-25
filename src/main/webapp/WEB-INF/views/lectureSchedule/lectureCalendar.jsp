@@ -32,7 +32,7 @@
     function deleteMemo(event, dateNo) {
         event.stopPropagation();
         if (!isTeacher) return;
-        if (!confirm('정말 삭제할시겠습니까?')) return;
+        if (!confirm('정말 삭제하시겠습니까?')) return;
         fetch('/lectureSchedule/delete?dateNo=' + dateNo + '&courseId=' + courseId, { method: 'POST' })
             .then(res => {
                 if (res.ok) {
