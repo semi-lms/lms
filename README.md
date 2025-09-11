@@ -1,6 +1,96 @@
-# gdj91 b조 semi project
+# 🎓 gdj91 B조 LMS Semi Project
 
-국비지원 코딩 학원을 베이스로 한 lms 세미프로젝트입니다.
+국비지원 코딩 학원을 베이스로 한 LMS 세미 프로젝트입니다.
+학생, 강사, 관리자 각각의 역할에 맞춘 기능을 통해 학원 운영을 효율적으로 관리할 수 있도록 구현했습니다.
+--
+# 🧩 프로젝트 개요
+## 개발 목적
+
+학원 관리 시스템을 웹 기반으로 구축하여 효율화
+
+학생/강사/관리자 별 역할 기반 서비스 제공
+
+출결, 시험, 성적, 자료 관리 등 학원 운영에 필요한 기능 통합
+
+## 주요 특징
+
+강의 개설 및 수강 신청 관리
+
+학생 출결 관리 (출석, 지각, 결석)
+
+시험 출제 및 성적 관리
+
+게시판 / 자료실 / Q&A
+
+학사 일정 캘린더
+
+# 🏗️ 기술 스택
+구분 | 기술  
+------|------  
+Language | Java 17 <br>  
+Backend | Spring Boot <br>  
+Frontend | JSP, JSTL, EL, jQuery, Bootstrap <br>  
+Database | MySQL, Oracle <br>  
+ORM | MyBatis <br>  
+Build Tool | Maven <br>  
+Server | Embedded Tomcat <br>  
+Tools | Lombok, GitHub <br>
+
+# 📂 프로젝트 구조
+```
+lms-master/
+├── src/
+│   ├── main/java/com/example/lms/
+│   │   ├── config/        # 설정 (보안, 인터셉터 등)
+│   │   ├── controller/    # 컨트롤러 계층
+│   │   ├── dto/           # DTO 객체
+│   │   └── service/       # 서비스 계층
+│   └── resources/
+│       ├── application.properties
+│       └── templates/ (JSP)
+├── pom.xml
+└── mvnw / .gitignore / ...
+```
+# 🧾 주요 기능
+## 📌 관리자
+
+회원(학생/강사) 관리
+
+강의 개설 및 배정
+
+출결/성적 데이터 관리
+
+일정/공지사항 관리
+
+## 👨‍🏫 강사
+
+강의 출결 관리
+
+시험 출제 및 성적 관리
+
+자료 업로드 및 학생 관리
+
+## 👨‍🎓 학생
+
+수강 신청 / 강의 조회
+
+출결 현황 조회
+
+시험 응시 및 성적 확인
+
+게시판 / 자료실 / Q&A 참여
+
+## 🗃️ 데이터베이스 설계
+
+user : 사용자 정보 (학생/강사/관리자)
+
+course : 강의 정보
+
+attendance : 출결 기록
+
+exam / exam_question / exam_submission : 시험 관리
+
+board / notice / qna : 게시판, 공지사항, Q&A
 
 ## 역할 분담
 
@@ -12,3 +102,8 @@
 | 노민혁   | 관리자 관련 페이지 - 출석 통계, 강의 관리 |
 | 김예진    | 관리자 관련 페이지 - 일정 관리, 강사 관리            |
 ---
+
+# 📌 라이선스
+본 프로젝트는 학습 및 포트폴리오 목적의 샘플 프로젝트입니다.
+상업적 사용은 제한됩니다.
+
