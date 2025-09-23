@@ -80,18 +80,6 @@ lms-master/
 
 게시판 / 자료실 / Q&A 참여
 
-## 🗃️ 데이터베이스 설계
-
-user : 사용자 정보 (학생/강사/관리자)
-
-course : 강의 정보
-
-attendance : 출결 기록
-
-exam / exam_question / exam_submission : 시험 관리
-
-board / notice / qna : 게시판, 공지사항, Q&A
-
 ## 역할 분담
 
 | 팀원  | 역할                           |
