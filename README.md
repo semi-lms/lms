@@ -30,7 +30,7 @@
 Language | Java 17 <br>  
 Backend | Spring Boot <br>  
 Frontend | JSP, JSTL, EL, jQuery, Bootstrap <br>  
-Database | MySQL, Oracle <br>  
+Database | MySQL <br>  
 ORM | MyBatis <br>  
 Build Tool | Maven <br>  
 Server | Embedded Tomcat <br>  
